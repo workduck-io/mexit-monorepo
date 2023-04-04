@@ -54,15 +54,17 @@ export const useQuery = () => {
       if (filters !== undefined && filters.length > 0) {
         const filterQuery = generateFilterQuery(filters)
         queryArray.push(...filterQuery)
+
+        const searchQuery: QueryUnit = { type: 'query', query: queryArray }
+
+        if (entities?.length > 0 && currentIndex === filterSets.length - 1) {
+          searchQuery.entities = entities
+        }
+
+        return [...prev, searchQuery]
       }
 
-      const searchQuery: QueryUnit = { type: 'query', query: queryArray }
-
-      if (entities?.length > 0 && currentIndex === filterSets.length - 1) {
-        searchQuery.entities = entities
-      }
-
-      return [...prev, searchQuery]
+      return prev
     }, [] as ISearchQuery)
 
     return querySets

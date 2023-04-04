@@ -9,6 +9,7 @@ import { Entities } from '@workduck-io/mex-search'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
+  createEntityPath,
   Filter,
   generateTaskViewId,
   getPathNum,
@@ -39,6 +40,8 @@ interface ViewProperties {
   groupBy?: string
 }
 
+export type ViewParentType = { id: string; path: string }
+
 export type ViewCreateType = 'new' | 'update' | 'clone' | 'save-as'
 
 interface TaskViewModalState {
@@ -47,7 +50,7 @@ interface TaskViewModalState {
   updateViewId?: string
   // If present, title, description will be cloned from the view with viewid
   cloneViewId?: string
-  parent?: string
+  parent?: ViewParentType
   filters: Filter[]
   properties?: ViewProperties
   type?: ViewCreateType
@@ -55,7 +58,7 @@ interface TaskViewModalState {
   openModal: (args: {
     filters: Filter[]
     type?: ViewCreateType
-    parent?: string | undefined
+    parent?: ViewParentType | undefined
     updateViewId?: string
     cloneViewId?: string
     properties: ViewProperties
@@ -167,11 +170,12 @@ const TaskViewModal = () => {
       await updateView(newView)
       goTo(ROUTE_PATHS.view, NavigationType.push, newView.id)
     } else {
-      const parent = useTaskViewModalStore.getState().parent
+      const parentDetails = useTaskViewModalStore.getState().parent
+      const path = createEntityPath('view', parentDetails?.id, parentDetails?.path)
 
       const view: View = {
         title: data.title,
-        parent,
+        path,
         description: data.description,
         filters,
         id: generateTaskViewId(),

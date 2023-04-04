@@ -1,18 +1,15 @@
+import { StoreIdentifier } from '../Types/Store'
 import { View } from '../Types/View'
+import { getLocalStorage } from '../Utils/storage'
+import { createStore } from '../Utils/storeCreator'
 
 const getDefaultViewStoreState = () => ({
   views: [] as View[],
   currentView: undefined
 })
 
-export const viewStoreConstructor = (set, get) => ({
+export const viewStoreConfig = (set, get) => ({
   ...getDefaultViewStoreState(),
-  _hasHydrated: false,
-  setHasHydrated: (state) => {
-    set({
-      _hasHydrated: state
-    })
-  },
   clear: () => set(getDefaultViewStoreState()),
   setCurrentView: (view: View) =>
     set((state) => ({
@@ -29,11 +26,17 @@ export const viewStoreConstructor = (set, get) => ({
     set({ views: [...existing.filter((v) => v.id !== view.id), view] })
   },
   removeView: (id: string) => {
-    const existing = get().views
-    set({ views: [...existing.filter((v) => v.id !== id)] })
+    const existing = get().views as View[]
+    set({ views: [...existing.filter((v) => v.id !== id && !v.path?.includes(id))] })
   },
   updateView: (view: View) => {
     const existing = get().views
     set({ views: [...existing.filter((v) => v.id !== view.id), view] })
+  }
+})
+
+export const useViewStore = createStore(viewStoreConfig, StoreIdentifier.VIEW, true, {
+  storage: {
+    web: getLocalStorage()
   }
 })

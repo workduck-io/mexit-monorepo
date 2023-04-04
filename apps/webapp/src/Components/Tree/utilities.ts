@@ -106,15 +106,15 @@ const updateNode = (
   const parentId = node?.parentId ?? options.root
   const parent = nodes[parentId] ?? findItem(allItems, parentId)
 
-  if (!nodes[id]) {
-    const updatedNode: TreeItem = {
-      id,
-      children: [],
-      properties: node.properties,
-      isStub: options.isStub,
-      collapsed: options.collapsed
-    }
+  const updatedNode: TreeItem = {
+    id,
+    children: [],
+    properties: node.properties,
+    isStub: options.isStub,
+    collapsed: options.collapsed
+  }
 
+  if (!nodes[id]) {
     nodes[id] = updatedNode
     parent?.children?.push(updatedNode)
   }
@@ -123,7 +123,6 @@ const updateNode = (
 export function buildPartialTree(items: FlattenedItem[], allItems: FlattenedItem[]) {
   const root: TreeItem = { id: 'root', children: [], properties: {} }
   const nodes: Record<string, TreeItem> = { [root.id]: root }
-
   for (const item of items) {
     const parents = getAllEntities(item.properties.path)
 
@@ -150,7 +149,7 @@ export function buildTree(flattenedItems: FlattenedItem[]): TreeItems {
 
     if (!nodes[id]) {
       nodes[id] = { id, children }
-      parent.children.push(item)
+      parent?.children?.push(item)
     }
   }
 

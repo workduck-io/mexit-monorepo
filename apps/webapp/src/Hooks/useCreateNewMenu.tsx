@@ -63,7 +63,6 @@ export const useCreateNewMenu = () => {
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const toggleModal = useModalStore((store) => store.toggleOpen)
   const { addDefaultNewNamespace, getDefaultNamespaceId } = useNamespaces()
-  const setCurrentView = useViewStore((store) => store.setCurrentView)
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
   const openShareModal = useShareModalStore((store) => store.openModal)
@@ -213,16 +212,21 @@ export const useCreateNewMenu = () => {
   const handleCreateChildView = () => {
     const view = useLayoutStore.getState().contextMenu?.item?.data
 
-    openTaskViewModal({
-      filters: view.filters,
-      parent: view.id,
-      properties: {
-        viewType: view.viewType,
-        sortOrder: view.sortOrder,
-        sortType: view.sortType,
-        globalJoin: view.globalJoin
-      }
-    })
+    if (view) {
+      openTaskViewModal({
+        filters: [],
+        parent: {
+          id: view.id,
+          path: view.path
+        },
+        properties: {
+          viewType: view.viewType,
+          sortOrder: view.sortOrder,
+          sortType: view.sortType,
+          globalJoin: view.globalJoin
+        }
+      })
+    }
   }
 
   /**

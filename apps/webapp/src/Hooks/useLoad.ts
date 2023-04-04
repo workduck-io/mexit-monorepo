@@ -69,16 +69,12 @@ const useLoad = () => {
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
 
   const setLoadingNodeid = useEditorStore((store) => store.setLoadingNodeid)
-  // const { push } = useNavigation()
-  // const clearLoadingNodeid = useEditorStore((store) => store.clearLoadingNodeid)
   const expandNodes = useTreeStore((store) => store.expandNodes)
 
   // const quitFullscreenGraph = useGraphStore((store) => store.quitFullscreen)
 
-  // const { saveNodeAPIandFs } = useDataSaverFromContent()
   const { saveAndClearBuffer } = useEditorBuffer()
   const { execRefactorAsync } = useRefactor()
-  // const { saveQ } = useSaveQ()
 
   const saveNodeName = (nodeId: string, title?: string) => {
     if (nodeId !== useAnalysisStore.getState().analysis?.nodeid) return

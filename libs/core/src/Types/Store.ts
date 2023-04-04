@@ -36,6 +36,7 @@ export enum StoreIdentifier {
   DESCRIPTIONS = 'description',
   HIGHLIGHTS = 'highlight',
   LINKS = 'link',
+  VIEW = 'view',
   MENTIONS = 'mention',
   METADATA = 'metadata',
   PREFERENCES = 'preference',

@@ -1,4 +1,12 @@
-import { API, generateFilterId, GET_REQUEST_MINIMUM_GAP_IN_MS, mog, useAuthStore, View } from '@mexit/core'
+import {
+  API,
+  generateFilterId,
+  GET_REQUEST_MINIMUM_GAP_IN_MS,
+  getParentEntity,
+  mog,
+  useAuthStore,
+  View
+} from '@mexit/core'
 
 import { useViewStore } from '../../Stores/useViewStore'
 
@@ -7,7 +15,8 @@ export const useViewAPI = () => {
   const setViews = useViewStore((store) => store.setViews)
 
   const saveView = async (view: View) => {
-    const { id: entityId, parent, filters, ...properties } = view
+    const { id: entityId, filters, path, ...properties } = view
+    const parent = getParentEntity(path)?.parent
 
     const reqData = {
       workspaceId: getWorkspaceId(),

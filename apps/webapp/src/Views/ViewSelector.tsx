@@ -22,13 +22,6 @@ const viewIcons = {
 }
 
 const ViewSelector = ({ onChangeView, availableViews = defaultEntries, currentView }: ViewSelectorProps) => {
-  // mog('ViewSelector', {
-  //   currentView,
-  //   entries: Object.entries(View),
-  //   availableViews,
-  //   entriesAvailable: Object.entries(availableViews)
-  // })
-
   return (
     <ViewSelectorWrapper>
       {availableViews.map((view) => (
