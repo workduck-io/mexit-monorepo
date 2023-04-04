@@ -34,4 +34,8 @@ export const viewStoreConfig = (set, get) => ({
   }
 })
 
-export const useViewStore = createStore(viewStoreConfig, StoreIdentifier.VIEW, true)
+export const useViewStore = createStore(viewStoreConfig, StoreIdentifier.VIEW, true, {
+  storage: {
+    web: typeof window !== 'undefined' ? localStorage : undefined
+  }
+})
