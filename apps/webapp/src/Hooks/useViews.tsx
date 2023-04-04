@@ -1,8 +1,7 @@
 import { Entities } from '@workduck-io/mex-search'
 
-import { createEntityPath, Filter, getAllEntities, useDataStore, View, ViewType } from '@mexit/core'
+import { Filter, getAllEntities, useDataStore, View, ViewType } from '@mexit/core'
 
-import { ViewParentType } from '../Components/TaskViewModal'
 import { useViewStore } from '../Stores/useViewStore'
 
 import { useViewAPI } from './API/useViewsAPI'
@@ -100,23 +99,19 @@ export const useViews = () => {
     return parent ? `${parent}.${getView(id)?.title}` : getView(id)?.title
   }
 
-  const addView = async (view: View, parentDetails: ViewParentType, onSuccess: (id: string) => void) => {
+  const addView = async (view: View, onSuccess: (id: string) => void) => {
     await saveView(view)
-    const { parent, ...restView } = view
-    const path = createEntityPath('view', parent, parentDetails?.path)
     onSuccess(view.id)
-    addViewStore({ ...restView, path })
+    addViewStore(view)
   }
 
   const updateView = async (view: View) => {
-    const resp = await saveView(view)
-    // mog('After update via saving that view', { resp })
+    await saveView(view)
     updateViewStore(view)
   }
 
   const deleteView = async (viewid: string) => {
-    const resp = await deleteViewApi(viewid)
-    // mog('After deleting that view', { resp })
+    await deleteViewApi(viewid)
     removeViewStore(viewid)
   }
 

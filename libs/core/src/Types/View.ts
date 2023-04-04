@@ -11,7 +11,6 @@ export interface View {
   title: string
   description?: string
   path?: string // * Starts with 'view|'
-  parent?: string
 
   // FIXME: This should use new Filter type
   filters: Filter[]

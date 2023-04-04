@@ -214,7 +214,7 @@ export const useCreateNewMenu = () => {
 
     if (view) {
       openTaskViewModal({
-        filters: view.filters,
+        filters: [],
         parent: {
           id: view.id,
           path: view.path

@@ -129,7 +129,7 @@ export const isReservedOrClash = (path: string, paths: string[]) => {
 export const createEntityPath = (type: 'view', id: string, parentPath?: string, SEPARATOR = '|') => {
   if (!id) return `${type}${SEPARATOR}`
 
-  return `${parentPath ?? type}${SEPARATOR}${id}${SEPARATOR}`
+  return `${parentPath ?? `${type}${SEPARATOR}`}${id}${SEPARATOR}`
 }
 
 export const getAllParentIds = (id: string) =>

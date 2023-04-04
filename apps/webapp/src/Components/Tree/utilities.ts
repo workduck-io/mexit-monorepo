@@ -123,7 +123,6 @@ const updateNode = (
 export function buildPartialTree(items: FlattenedItem[], allItems: FlattenedItem[]) {
   const root: TreeItem = { id: 'root', children: [], properties: {} }
   const nodes: Record<string, TreeItem> = { [root.id]: root }
-
   for (const item of items) {
     const parents = getAllEntities(item.properties.path)
 
@@ -150,7 +149,7 @@ export function buildTree(flattenedItems: FlattenedItem[]): TreeItems {
 
     if (!nodes[id]) {
       nodes[id] = { id, children }
-      parent.children.push(item)
+      parent?.children?.push(item)
     }
   }
 

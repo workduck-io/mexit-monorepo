@@ -9,6 +9,7 @@ import { Entities } from '@workduck-io/mex-search'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
+  createEntityPath,
   Filter,
   generateTaskViewId,
   getPathNum,
@@ -169,18 +170,19 @@ const TaskViewModal = () => {
       await updateView(newView)
       goTo(ROUTE_PATHS.view, NavigationType.push, newView.id)
     } else {
-      const parent = useTaskViewModalStore.getState().parent
+      const parentDetails = useTaskViewModalStore.getState().parent
+      const path = createEntityPath('view', parentDetails?.id, parentDetails?.path)
 
       const view: View = {
         title: data.title,
-        parent: parent?.id,
+        path,
         description: data.description,
         filters,
         id: generateTaskViewId(),
         ...properties
       }
 
-      await addView(view, parent, expandNode)
+      await addView(view, expandNode)
       goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
     }
     handleClose()
