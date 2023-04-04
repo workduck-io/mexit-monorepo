@@ -217,6 +217,7 @@ export function useActionExecutor() {
           case ActionType.MAGICAL: {
             const strippedURL = window.location.origin + window.location.pathname
             const captureConfig = getMatchingConfig(strippedURL)
+            console.log(captureConfig, strippedURL);
             if (!captureConfig) toast.error('No data available for extracting')
             else {
               try {

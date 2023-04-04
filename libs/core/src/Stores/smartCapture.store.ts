@@ -1,5 +1,6 @@
 import { SmartCaptureConfig } from '../Types/SmartCapture'
 import { StoreIdentifier } from '../Types/Store'
+import { mog } from '../Utils/mog'
 import { createStore } from '../Utils/storeCreator'
 
 export const smartCaptureStoreConfig = (set, get) => ({
@@ -11,6 +12,7 @@ export const smartCaptureStoreConfig = (set, get) => ({
     return get().config.find((c) => c.entityId === configId)
   },
   getMatchingURLConfig: (url: string) => {
+    mog("config for smart", { json: get().config } );
     return get().config.find((c) => url.match(c.regex))
   },
   clear: () => {

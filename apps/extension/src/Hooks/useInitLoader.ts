@@ -19,7 +19,7 @@ import {
   useLinkStore,
   useSmartCaptureStore,
   useSnippetStore} from '@mexit/core'
-import { useSlashCommands } from '@mexit/shared'
+import { data, useSlashCommands } from '@mexit/shared'
 
 import {
   getSearchIndexInitState,
@@ -154,6 +154,7 @@ export const useInitLoader = () => {
 
   const getAllSmartCaptures = async () => {
     const d = await wInitSmartCaptures()
+    const d1 = data as any
     setConfig(d)
   }
 
