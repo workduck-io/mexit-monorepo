@@ -71,7 +71,6 @@ export const SearchLink = styled(NavLink)`
   background-color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.1);
   margin-bottom: ${({ theme }) => theme.spacing.medium};
   color: ${({ theme }) => theme.tokens.colors.primary.default};
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   svg {
     color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
@@ -88,7 +87,7 @@ export const SearchLink = styled(NavLink)`
 
 export const Link = styled(NavLink)`
   ${ButtonOrLinkStyles}
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.tiny}`};
 
   &.active {
     ${({ theme }) => generateStyle(theme.sidebar.nav.link.main.selected)}
@@ -110,22 +109,16 @@ export const NavDivider = styled.div`
 
 export const MainLinkContainer = styled.div`
   width: 100%;
-  padding: ${({ theme }) => theme.spacing.small};
+  padding: ${({ theme }) => theme.spacing.tiny};
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
 `
 
-export const EndLinkContainer = styled.div`
+export const EndLinkContainer = styled(MainLinkContainer)`
   border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
-  padding: ${({ theme }) => theme.spacing.small};
-  width: 100%;
   margin: 1rem 0 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.small};
 `
 
 export const ComingSoon = styled.div`
@@ -204,7 +197,7 @@ export const NavButton = styled.div<{ primary?: boolean }>`
 
     &::-webkit-scrollbar-thumb {
     background: ${({ theme }) => theme.tokens.surfaces.s[3]};
-    border-radius: 6px;
+    border-radius: ${({ theme }) => theme.borderRadius.small};
     border: 2px solid rgba(0, 0, 0, 0);
     background-clip: content-box;
     min-width: 10px;

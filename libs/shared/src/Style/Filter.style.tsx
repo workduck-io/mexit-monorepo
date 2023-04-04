@@ -46,6 +46,7 @@ export const FilterDescription = styled.div`
 export const FilterMenuDiv = styled(GenericFlex)<{ noBorder?: boolean }>`
   padding: ${({ theme }) => theme.spacing.tiny};
   box-sizing: border-box;
+  ${BodyFont}
 
   ${({ noBorder }) =>
     !noBorder &&

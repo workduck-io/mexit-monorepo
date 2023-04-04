@@ -79,9 +79,11 @@ const ViewBlock = (props: any) => {
                 </GroupHeader>
               </GenericFlex>
             )}
-            <StyledTasksKanbanBlock>
-              {view && <ViewContainer viewId={viewid} withFilters={false} />}
-            </StyledTasksKanbanBlock>
+            {view && (
+              <StyledTasksKanbanBlock>
+                <ViewContainer viewId={viewid} withFilters={false} />
+              </StyledTasksKanbanBlock>
+            )}
           </StyledViewBlockPreview>
         </ContentBlockContainer>
       </StyledViewBlock>

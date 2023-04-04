@@ -51,8 +51,7 @@ export const useRouting = () => {
   }
 
   const getParams = (path: string) => {
-    const match = matchPath(location.pathname, path)
-
+    const match = matchPath(path, location.pathname)
     return match?.params
   }
 

@@ -2,20 +2,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import trashIcon from '@iconify/icons-codicon/trash'
-import dragMove2Fill from '@iconify/icons-ri/drag-move-2-fill'
 import edit2Line from '@iconify/icons-ri/edit-2-line'
 import fileCopyLine from '@iconify/icons-ri/file-copy-line'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
-import { DisplayShortcut, IconButton, LoadingButton, ToolbarTooltip } from '@workduck-io/mex-components'
+import { IconButton, LoadingButton, ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
   PrimaryText,
-  ShortcutToken,
-  ShortcutTokens,
   TaskHeader as StyledTaskHeader,
   TaskHeaderTitleSection,
   TaskViewControls,
@@ -212,19 +209,6 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
             </TaskViewHeaderWrapper>
           )}
         </TaskHeaderTitleSection>
-        <ShortcutTokens>
-          <ShortcutToken>
-            Select Card:
-            <Icon icon={dragMove2Fill} />
-          </ShortcutToken>
-
-          {currentFilters.length > 0 && (
-            <ShortcutToken>
-              Remove Filter:
-              <DisplayShortcut shortcut="Shift+F" />
-            </ShortcutToken>
-          )}
-        </ShortcutTokens>
       </StyledTaskHeader>
     </>
   )

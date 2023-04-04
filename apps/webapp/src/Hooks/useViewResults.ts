@@ -5,14 +5,12 @@ import { Indexes, SearchResult } from '@workduck-io/mex-search'
 import { useContentStore } from '@mexit/core'
 import { groupItems, keysToExcludeInGrouping, keysToExcludeInSorting, useQuery } from '@mexit/shared'
 
-import { useViewStore } from '../Stores/useViewStore'
-
 import { useViewFilterStore } from './todo/useTodoFilters'
 import { useSearch } from './useSearch'
 import { useViewFilters } from './useViewFilters'
 import { useViews } from './useViews'
 
-const useViewResults = () => {
+const useViewResults = (path: string) => {
   const [results, setResults] = useState<SearchResult[]>([])
 
   const { queryIndex } = useSearch()
@@ -44,10 +42,8 @@ const useViewResults = () => {
   }, [groupedBy, sortBy, sortOrder, results])
 
   useEffect(() => {
-    const path = useViewStore.getState().currentView?.path
     const parentFilters = getParentViewFilters(path)?.map((v) => v.filters)
-    const filterSetQuery = currentFilters.length > 0 ? [...parentFilters, currentFilters] : parentFilters
-
+    const filterSetQuery = currentFilters?.length > 0 ? [...parentFilters, currentFilters] : parentFilters
     const query = generateFilterSetQuery(filterSetQuery, entities)
 
     queryIndex(Indexes.MAIN, query).then((queryResult) => {

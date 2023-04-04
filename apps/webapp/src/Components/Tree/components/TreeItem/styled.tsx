@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { BodyFont } from '@mexit/shared'
+
 export const TreeListItem = styled.li<{
   clone?: boolean
   ghost?: boolean
@@ -14,8 +16,9 @@ export const TreeListItem = styled.li<{
   box-sizing: border-box;
   padding: 0 ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  opacity: 0.8;
   padding-left: var(--spacing);
+  ${BodyFont}
+  color: ${({ theme }) => theme.tokens.text.fade};
 
   ${({ isHighlighted, theme }) =>
     isHighlighted &&
@@ -38,18 +41,12 @@ export const TreeListItem = styled.li<{
   ${({ active, theme }) =>
     active
       ? css`
-          opacity: 1;
-
-          color: ${theme.sidebar.tree.item.wrapper.selected.textColor};
-          background: ${theme.sidebar.tree.item.wrapper.selected.surface};
-
-          svg {
-            color: ${theme.sidebar.tree.item.wrapper.selected.textColor};
-          }
+          background: ${theme.sidebar.tree.item.wrapper.active.surface};
+          color: ${theme.tokens.text.default};
+          font-weight: bold;
         `
       : css`
           :hover {
-            color: ${({ theme }) => theme.sidebar.tree.item.wrapper.hover.textColor};
             background: ${({ theme }) => theme.sidebar.tree.item.wrapper.hover.surface};
           }
         `}

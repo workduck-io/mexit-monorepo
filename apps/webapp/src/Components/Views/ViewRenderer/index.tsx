@@ -23,8 +23,7 @@ export type GroupedResult = {
 
 const ViewTypeRenderer: React.FC<ViewRendererProps> = (props) => {
   const viewType = useViewFilterStore((s) => s.viewType)
-
-  const results = useViewResults()
+  const results = useViewResults(props?.view?.path)
 
   switch (viewType) {
     case ViewType.Kanban:

@@ -62,10 +62,13 @@ export const Input = styled.input<InputProps>`
     `}
 
   ${({ fontSize }) =>
-    fontSize &&
-    css`
-      font-size: ${fontSize};
-    `}
+    fontSize
+      ? css`
+          font-size: ${fontSize};
+        `
+      : css`
+          font-size: 14px;
+        `}
 
   ${({ theme, error }) =>
     error &&

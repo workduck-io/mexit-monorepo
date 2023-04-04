@@ -62,7 +62,7 @@ const ItemTitleWithAnalysis = ({ item }: { item: TreeItem }) => {
 
   return (
     <ItemTitle>
-      <IconDisplay icon={icon} />
+      <IconDisplay size={14} icon={icon} />
       {/* <Icon icon={item.data.mex_icon ?? fileList2Line} /> */}
       <ItemTitleText>{title}</ItemTitleText>
     </ItemTitle>

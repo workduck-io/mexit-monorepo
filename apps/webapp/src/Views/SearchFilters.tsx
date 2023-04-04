@@ -89,6 +89,7 @@ const SearchFilters = ({
             )
           })}
         </FilterValuesWrapper>
+
         <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
       </SearchFiltersWrapper>
       <SearchFilterLabel flexStart>

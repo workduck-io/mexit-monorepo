@@ -19,10 +19,9 @@ export const Links = styled.a`
 export const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
   width: 100%;
   height: 100%;
-  gap: ${({ theme }) => theme.spacing.medium};
+  gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
 `
 
@@ -57,8 +56,6 @@ export const LinkTitleWrapper = styled.div`
     -webkit-box-orient: vertical;
   }
 
-  font-size: 1.2rem;
-
   img {
     border-radius: 50%;
   }
@@ -75,6 +72,8 @@ export const LinkMetadataAndDelete = styled.div`
     opacity: 0.5;
     color: ${({ theme }) => theme.tokens.colors.red};
   }
+
+  ${BodyFont}
 
   &:hover {
     ${Button} {

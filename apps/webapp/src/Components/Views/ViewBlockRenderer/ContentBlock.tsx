@@ -91,7 +91,7 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
           </VerticalStretch>
           <BlockContent isOpen={isOpen}>{content}</BlockContent>
         </Group>
-        {canOpen && <Chevron isOpen={isOpen} $noHover height={24} width={24} cursor="pointer" icon={arrowLeftSLine} />}
+        {canOpen && <Chevron isOpen={isOpen} $noHover height={20} width={20} cursor="pointer" icon={arrowLeftSLine} />}
       </BlockHeader>
     </ContentBlockContainer>
   )
