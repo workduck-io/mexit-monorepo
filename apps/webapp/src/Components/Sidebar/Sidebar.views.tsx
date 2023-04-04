@@ -29,6 +29,11 @@ import { buildTree, flattenTree } from '../Tree/utilities'
 
 const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
   const [source, target] = useSingleton()
+  const [tree, setTree] = useState([])
+  const [filtered, setFiltered] = useState<{ filteredTree: any; matchedFlatItems: any }>({
+    filteredTree: undefined,
+    matchedFlatItems: []
+  })
 
   const views = useViewStore((store) => store.views)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -41,7 +46,7 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
     setSearch(e.target.value)
   }
 
-  const tree = useMemo(() => {
+  useEffect(() => {
     const items = views.reduce((acc, view) => {
       const parent = getParentEntity(view.path)?.parent
       const expanded = useTreeStore.getState().expanded
@@ -62,17 +67,17 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
       ]
     }, [] as FlattenedItem[])
 
-    return buildTree(items)
+    setTree(buildTree(items))
   }, [views])
 
-  const { filteredTree, matchedFlatItems } = useMemo(() => {
+  useEffect(() => {
     if (search !== '') {
       const items = flattenTree(tree)
       const matchedFlatItems = fuzzySearch(items, search, (item) => item.properties.label)
       const filteredTree = buildTree(matchedFlatItems)
-      return { filteredTree, matchedFlatItems }
+      setFiltered({ filteredTree, matchedFlatItems })
     } else {
-      return { filteredTree: undefined, matchedFlatItems: [] }
+      setFiltered({ filteredTree: undefined, matchedFlatItems: [] })
     }
   }, [search, tree])
 
@@ -84,10 +89,10 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
   }
 
   const selectedItem = useMemo(() => {
-    if (selected >= 0 && matchedFlatItems.length > 0 && matchedFlatItems.length > selected) {
-      return matchedFlatItems[selected]
+    if (selected >= 0 && filtered.matchedFlatItems.length > 0 && filtered.matchedFlatItems.length > selected) {
+      return filtered.matchedFlatItems[selected]
     } else return undefined
-  }, [selected, matchedFlatItems])
+  }, [selected, filtered.matchedFlatItems])
 
   useEffect(() => {
     if (inputRef.current) {
@@ -109,7 +114,7 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
           event.stopPropagation()
           event.preventDefault()
           // Circular increment
-          const newSelected = (selected + 1) % matchedFlatItems.length
+          const newSelected = (selected + 1) % filtered.matchedFlatItems.length
           if (newSelected >= 0) {
             setSelected(newSelected)
           }
@@ -119,7 +124,7 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
 
           event.stopPropagation()
           // Circular decrement with no negative
-          const newSelected = (selected - 1 + matchedFlatItems.length) % matchedFlatItems.length
+          const newSelected = (selected - 1 + filtered.matchedFlatItems.length) % filtered.matchedFlatItems.length
           if (newSelected >= 0) {
             setSelected(newSelected)
           }
@@ -130,7 +135,7 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
         unsubscribe()
       }
     }
-  }, [matchedFlatItems, selected])
+  }, [filtered.matchedFlatItems, selected])
 
   useEffect(() => {
     if (!inputRef.current?.isContentEditable) {
@@ -176,11 +181,11 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
 
       <FilteredItemsWrapper hasDefault={!!defaultItems}>
         <SortableTree
-          key={`wd-mexit-tree-${views?.length}-${search}`}
-          defaultItems={filteredTree ?? tree}
+          items={filtered.filteredTree ?? tree}
+          setItems={setTree}
           onClick={onClick}
           activeId={activeId}
-          highlightedId={matchedFlatItems[selected]?.id}
+          highlightedId={filtered.matchedFlatItems[selected]?.id}
           onContextMenu={onContextMenu}
           collapsible
           indicator

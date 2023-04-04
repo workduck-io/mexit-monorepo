@@ -100,7 +100,13 @@ const ViewChangeStatus = ({ viewId }) => {
 const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
   const [deleting, setDeleting] = useState(false)
 
-  const view = useViewStore((store) => store.currentView)
+  const currentView = useViewStore((store) => store.currentView)
+  const views = useViewStore((store) => store.views)
+
+  const view = useMemo(() => {
+    return views?.find((view) => view.id === currentView?.id)
+  }, [currentView, views])
+
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
 
   const isDefault = ['tasks', 'reminders'].includes(view?.id)

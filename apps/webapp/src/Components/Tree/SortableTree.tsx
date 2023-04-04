@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 
 import { UniqueIdentifier } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -11,7 +11,8 @@ import { flattenTree, removeChildrenOf, removeItem, setProperty } from './utilit
 
 interface Props {
   collapsible?: boolean
-  defaultItems?: TreeItems
+  items?: TreeItems
+  setItems: any
   indentationWidth?: number
   onContextMenu?: any
   highlightedId?: UniqueIdentifier | undefined
@@ -23,7 +24,8 @@ interface Props {
 
 export const SortableTree = ({
   collapsible,
-  defaultItems = [],
+  items = [],
+  setItems,
   indicator = false,
   activeId,
   indentationWidth = 20,
@@ -32,7 +34,6 @@ export const SortableTree = ({
   highlightedId,
   removable
 }: Props) => {
-  const [items, setItems] = useState(defaultItems)
   const expandNode = useTreeStore((state) => state.expandNode)
   const collapseNode = useTreeStore((state) => state.collapseNode)
 
