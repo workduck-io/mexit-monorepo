@@ -5,6 +5,8 @@ import { ViewType } from '@mexit/core'
 import { useViewFilters } from '../../Hooks/todo/useTodoFilters'
 import SearchFilters from '../../Views/SearchFilters'
 
+import ParentFilters from './ParentFilters'
+
 const ViewSearchFilters = () => {
   const {
     sortOrder,
@@ -27,37 +29,41 @@ const ViewSearchFilters = () => {
   } = useViewFilters()
 
   return (
-    <SearchFilters
-      addCurrentFilter={addCurrentFilter}
-      removeCurrentFilter={removeCurrentFilter}
-      changeCurrentFilter={changeCurrentFilter}
-      resetCurrentFilters={resetCurrentFilters}
-      filters={filters}
-      onEntityFilterChange={(entity: Entities) => {
-        if (entities.includes(entity)) {
-          onChangeEntities(entities.filter((e) => e !== entity))
-        } else {
-          onChangeEntities([...entities, entity])
-        }
-      }}
-      currentFilters={currentFilters}
-      globalJoin={globalJoin}
-      setGlobalJoin={setGlobalJoin}
-      onGroupByChange={onGroupByChange}
-      viewSelectorProps={{
-        currentView: viewType,
-        onChangeView: (viewType) => {
-          onViewTypeChange(viewType)
-        },
-        availableViews: [ViewType.Kanban, ViewType.List]
-      }}
-      sortMenuProps={{
-        sortOrder,
-        sortType,
-        onSortTypeChange,
-        onSortOrderChange
-      }}
-    />
+    <>
+      <ParentFilters />
+      <SearchFilters
+        key={entities.length}
+        addCurrentFilter={addCurrentFilter}
+        removeCurrentFilter={removeCurrentFilter}
+        changeCurrentFilter={changeCurrentFilter}
+        resetCurrentFilters={resetCurrentFilters}
+        filters={filters}
+        onEntityFilterChange={(entity: Entities) => {
+          if (entities.includes(entity)) {
+            onChangeEntities(entities.filter((e) => e !== entity))
+          } else {
+            onChangeEntities([...entities, entity])
+          }
+        }}
+        currentFilters={currentFilters}
+        globalJoin={globalJoin}
+        setGlobalJoin={setGlobalJoin}
+        onGroupByChange={onGroupByChange}
+        viewSelectorProps={{
+          currentView: viewType,
+          onChangeView: (viewType) => {
+            onViewTypeChange(viewType)
+          },
+          availableViews: [ViewType.Kanban, ViewType.List]
+        }}
+        sortMenuProps={{
+          sortOrder,
+          sortType,
+          onSortTypeChange,
+          onSortOrderChange
+        }}
+      />
+    </>
   )
 }
 

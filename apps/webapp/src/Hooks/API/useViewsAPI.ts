@@ -7,12 +7,13 @@ export const useViewAPI = () => {
   const setViews = useViewStore((store) => store.setViews)
 
   const saveView = async (view: View) => {
-    const { id: entityId, filters, ...properties } = view
+    const { id: entityId, parent, filters, ...properties } = view
 
     const reqData = {
       workspaceId: getWorkspaceId(),
       properties,
       entityId,
+      parent,
       filters
     }
 
@@ -45,11 +46,12 @@ export const useViewAPI = () => {
     })
 
     return {
+      ...view.properties,
       title: view.properties.title,
       description: view.properties.description,
       filters: newFilters,
-      id: view.entityId,
-      ...view.properties
+      path: view.path,
+      id: view.entityId
     }
   }
 

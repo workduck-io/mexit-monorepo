@@ -62,7 +62,6 @@ export const useSnippets = () => {
 
     chrome.runtime.sendMessage(request, (response) => {
       const { message, error } = response
-
       if (error) {
         console.error('An Error Occured. Please try again.')
       } else {

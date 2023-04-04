@@ -47,6 +47,27 @@ export const useQuery = () => {
     return transformedQueries
   }
 
+  const generateFilterSetQuery = (filterSets: Array<Array<Filter>>, entities: Array<Entities>): any => {
+    const querySets = filterSets.reduce((prev, filters, currentIndex) => {
+      const queryArray: ISearchQuery = []
+
+      if (filters !== undefined && filters.length > 0) {
+        const filterQuery = generateFilterQuery(filters)
+        queryArray.push(...filterQuery)
+      }
+
+      const searchQuery: QueryUnit = { type: 'query', query: queryArray }
+
+      if (entities?.length > 0 && currentIndex === filterSets.length - 1) {
+        searchQuery.entities = entities
+      }
+
+      return [...prev, searchQuery]
+    }, [] as ISearchQuery)
+
+    return querySets
+  }
+
   const generateSearchQuery = (text: string, filters?: Array<Filter>, entities?: Array<Entities>): ISearchQuery => {
     const queryArray: ISearchQuery = []
 
@@ -71,6 +92,7 @@ export const useQuery = () => {
 
   return {
     generateFilterQuery,
-    generateSearchQuery
+    generateSearchQuery,
+    generateFilterSetQuery
   }
 }

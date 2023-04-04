@@ -56,8 +56,6 @@ export const useTodoKanban = () => {
       updateBlocks({
         id: todo.nodeid,
         contents: [updatedBlock]
-      }).then(() => {
-        console.log('Updated block in search index')
       })
     }
   }

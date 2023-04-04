@@ -16,7 +16,6 @@ interface IconDisplayProps {
 }
 
 const resolveIconURL = (value: string) => {
-  console.log('VALUE', { value })
   if (chrome && chrome.runtime) return chrome.runtime.getURL(value)
 
   return `/${value}`

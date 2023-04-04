@@ -25,7 +25,7 @@ export const ALIAS_REG = /^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/
 
 export const getWrongEmails = (emailsRaw: string): string[] => {
   const emails = emailsRaw.split(',').map((email) => email.trim())
-  console.log('EMAILS ARE', { emails })
+  // console.log('EMAILS ARE', { emails })
   const wrongEmails = emails.filter((email: string): boolean => {
     const cond = email.match(EMAIL_REG)?.length > 0
     return !cond

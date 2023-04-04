@@ -7,11 +7,9 @@ import { SILinkRoot, TaskSLink } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useViews } from '../../../Hooks/useViews'
-import { useViewStore } from '../../../Stores/useViewStore'
 
 const TaskViewLink = (props: any) => {
-  const { getView } = useViews()
-  const setCurrentView = useViewStore((store) => store.setCurrentView)
+  const { getView, getViewNamedPath } = useViews()
   const { goTo } = useRouting()
 
   const viewid = props.element.value
@@ -21,12 +19,13 @@ const TaskViewLink = (props: any) => {
   const openTaskView = (ev: any) => {
     ev.preventDefault()
     if (view) {
-      setCurrentView(view)
-      goTo(ROUTE_PATHS.tasks, NavigationType.push, view.id)
+      goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
     }
   }
 
   const selected = useSelected()
+
+  const title = view ? getViewNamedPath(view.id, view.path) : 'Private/Missing'
 
   return (
     <SILinkRoot
@@ -39,7 +38,7 @@ const TaskViewLink = (props: any) => {
       <TaskSLink onClick={openTaskView} $selected={selected} $archived={!view}>
         <Icon icon={stackLine} />
         <span className="ILink_decoration ILink_decoration_left">[[</span>
-        <span className="ILink_decoration ILink_decoration_value"> {view ? view?.title : 'Private/Missing'}</span>
+        <span className="ILink_decoration ILink_decoration_value">{title}</span>
         <span className="ILink_decoration ILink_decoration_right">]]</span>
       </TaskSLink>
       {props.children}

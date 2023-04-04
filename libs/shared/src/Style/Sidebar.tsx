@@ -216,12 +216,13 @@ export const StyledTreeItem = styled.div<{
       }
     `}
 
-  ${({ isStub }) =>
+    ${({ isStub }) =>
     isStub &&
     css`
-      color: ${({ theme }) => theme.colors.gray[5]};
+      opacity: 0.8;
+      color: ${({ theme }) => theme.tokens.text.disabled};
       svg {
-        color: ${({ theme }) => theme.colors.gray[5]};
+        color: ${({ theme }) => theme.tokens.text.disabled};
       }
       background-color: transparent;
     `}

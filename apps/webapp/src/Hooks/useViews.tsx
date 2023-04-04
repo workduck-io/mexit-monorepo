@@ -1,6 +1,6 @@
 import { Entities } from '@workduck-io/mex-search'
 
-import { Filter, useDataStore, View, ViewType } from '@mexit/core'
+import { createEntityPath, Filter, getAllEntities, useDataStore, View, ViewType } from '@mexit/core'
 
 import { useViewStore } from '../Stores/useViewStore'
 
@@ -30,6 +30,22 @@ export const useViews = () => {
         ]
       }
     }
+  }
+
+  const getParentViewFilters = (path: string) => {
+    const entities = getAllEntities(path)
+
+    const filters = entities.reduce((acc, entityId) => {
+      const view = getView(entityId)
+
+      if (view?.filters) {
+        acc.push({ id: entityId, label: view.title, filters: view.filters })
+      }
+
+      return acc
+    }, [] as Array<{ id: string; label: string; filters: Array<Filter> }>)
+
+    return filters
   }
 
   const getView = (id: string): View | undefined => {
@@ -66,10 +82,29 @@ export const useViews = () => {
     }
   }
 
-  const addView = async (view: View) => {
-    const resp = await saveView(view)
-    // mog('After Saving that view', { resp })
-    addViewStore(view)
+  const getViewNamedPath = (id: string, parentPath: string) => {
+    const entities = getAllEntities(parentPath)
+
+    const parent = entities.reduce((parent, entityId) => {
+      const view = getView(entityId)
+
+      if (view) {
+        if (parent.length === 0) parent = `${view.title}`
+        else parent.concat(`.${view.title}`)
+      }
+
+      return parent
+    }, '')
+
+    return parent ? `${parent}.${getView(id)?.title}` : getView(id)?.title
+  }
+
+  const addView = async (view: View, onSuccess: (id: string) => void) => {
+    await saveView(view)
+    const { parent, ...restView } = view
+    const path = createEntityPath('view', parent, view.path)
+    onSuccess(view.id)
+    addViewStore({ ...restView, path })
   }
 
   const updateView = async (view: View) => {
@@ -84,5 +119,5 @@ export const useViews = () => {
     removeViewStore(viewid)
   }
 
-  return { getView, addView, updateView, deleteView }
+  return { getView, getViewNamedPath, addView, updateView, deleteView, getParentViewFilters }
 }

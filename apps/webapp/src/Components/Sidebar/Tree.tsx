@@ -180,8 +180,7 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: TreeItem) => {
     if (e.button === 0) {
-      expandNode(item.data.path)
-      onOpenItem(item.id as string, item.data.nodeid)
+      goToNodeId(item.data.nodeid)
     }
   }
 

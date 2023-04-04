@@ -127,7 +127,7 @@ export const TaskHeaderTitleSection = styled.div`
 `
 
 export const TaskHeader = styled(MainHeader)`
-  margin: ${({ theme }) => theme.spacing.large} 0;
+  margin: ${({ theme }) => theme.spacing.small} 0;
   ${TaskHeaderTitleSection} {
     flex-grow: 1;
   }
@@ -142,6 +142,7 @@ export const TaskHeaderIcon = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+
   svg {
     width: 1.5rem;
     height: 1.5rem;
@@ -198,6 +199,8 @@ export const ShortcutToken = styled.div`
   background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   font-size: 0.9rem;
+
+  pointer-events: none;
 
   svg {
     width: 1.3rem;

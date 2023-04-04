@@ -17,8 +17,7 @@ import {
   useModalStore,
   userPreferenceStore as useUserPreferenceStore,
   useShareModalStore,
-  useSnippetStore,
-  View
+  useSnippetStore
 } from '@mexit/core'
 import { DefaultMIcons, getMIcon, InteractiveToast } from '@mexit/shared'
 
@@ -185,19 +184,38 @@ export const useCreateNewMenu = () => {
     }
   }
 
-  const handleViewDelete = async (view: View) => {
+  const handleViewDelete = async () => {
+    const view = useLayoutStore.getState().contextMenu?.item?.data
     const currentView = useViewStore.getState().currentView
     await deleteView(view.id)
+
     if (currentView?.id === view.id) {
-      setCurrentView(undefined)
       goTo(ROUTE_PATHS.tasks, NavigationType.push)
     }
   }
 
-  const handleViewClone = (view: View) => {
+  const handleViewClone = () => {
+    const view = useLayoutStore.getState().contextMenu?.item?.data
+
+    if (view)
+      openTaskViewModal({
+        filters: view.filters,
+        cloneViewId: view.id,
+        properties: {
+          viewType: view.viewType,
+          sortOrder: view.sortOrder,
+          sortType: view.sortType,
+          globalJoin: view.globalJoin
+        }
+      })
+  }
+
+  const handleCreateChildView = () => {
+    const view = useLayoutStore.getState().contextMenu?.item?.data
+
     openTaskViewModal({
       filters: view.filters,
-      cloneViewId: view.id,
+      parent: view.id,
       properties: {
         viewType: view.viewType,
         sortOrder: view.sortOrder,
@@ -253,11 +271,10 @@ export const useCreateNewMenu = () => {
   }
 
   const getViewMenuItems = (): MenuListItemType[] => {
-    const item = useLayoutStore.getState().contextMenu?.item
-
     return [
-      getMenuItem('Clone', () => handleViewClone(item?.data), false, DefaultMIcons.COPY),
-      getMenuItem('Delete', () => handleViewDelete(item?.data), false, DefaultMIcons.DELETE)
+      getMenuItem('Add View', handleCreateChildView, false, DefaultMIcons.ADD),
+      getMenuItem('Clone', handleViewClone, false, DefaultMIcons.COPY),
+      getMenuItem('Delete', handleViewDelete, false, DefaultMIcons.DELETE)
     ]
   }
 

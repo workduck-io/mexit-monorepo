@@ -45,8 +45,6 @@ const searchWorker = {
     searchX = new SearchX()
   },
   addDoc: (doc: IUpdateDoc) => {
-    if (doc.indexKey === Indexes.ARCHIVE) console.log('Adding Archive Doc', { id: doc.id, contents: doc.contents })
-
     searchX.addOrUpdateDocument({
       ...doc,
       contents: doc.contents?.map((item) => ({ ...item, metadata: item.metadata ?? {} }))
@@ -59,8 +57,6 @@ const searchWorker = {
     })
   },
   updateDoc: (doc: IUpdateDoc) => {
-    if (doc.indexKey === Indexes.ARCHIVE) console.log('Updating Archive Doc', { id: doc.id, contents: doc.contents })
-
     searchX.addOrUpdateDocument({
       ...doc,
       contents: doc.contents?.map((item) => ({ ...item, metadata: item.metadata ?? {} }))
