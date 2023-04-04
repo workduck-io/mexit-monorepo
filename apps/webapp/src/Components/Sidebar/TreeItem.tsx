@@ -2,11 +2,12 @@ import React, { useEffect, useRef } from 'react'
 import { PathMatch } from 'react-router-dom'
 
 import { ItemId, RenderItemParams, TreeItem } from '@atlaskit/tree'
+import arrowLeftSLine from '@iconify/icons-ri/arrow-down-s-line'
 // import { complexTree } from '../mockdata/complexTree'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 
-import { ContextMenuType, DRAFT_NODE, IS_DEV, useLayoutStore , useMetadataStore } from '@mexit/core'
+import { ContextMenuType, DRAFT_NODE, IS_DEV, useLayoutStore, useMetadataStore } from '@mexit/core'
 import {
   IconDisplay,
   ItemContent,
@@ -19,6 +20,8 @@ import {
   TooltipContentWrapper,
   TooltipCount
 } from '@mexit/shared'
+
+import { Chevron } from '../Views/ViewBlockRenderer/BlockContainer'
 
 const defaultSnap = {
   isDragging: false,
@@ -74,17 +77,14 @@ interface GetIconProps {
 
 export const GetIcon = ({ item, onCollapse, onExpand }: GetIconProps) => {
   if (item.children && item.children.length > 0) {
-    return item?.isExpanded ? (
-      <StyledTreeItemSwitcher onClick={() => onCollapse(item.id)}>
-        <Icon icon={'ri:arrow-down-s-line'} />
-      </StyledTreeItemSwitcher>
-    ) : (
-      <StyledTreeItemSwitcher onClick={() => onExpand(item.id)}>
-        <Icon icon={'ri:arrow-right-s-line'} />
+    return (
+      <StyledTreeItemSwitcher onClick={() => (item?.isExpanded ? onCollapse(item.id) : onExpand(item.id))}>
+        <Chevron cursor="pointer" height={16} width={16} icon={arrowLeftSLine} isOpen={!item?.isExpanded} />
       </StyledTreeItemSwitcher>
     )
   }
-  return <StyledTreeSwitcher></StyledTreeSwitcher>
+
+  return <StyledTreeSwitcher />
 }
 
 interface TreeItemProps extends RenderItemParams {
@@ -105,8 +105,6 @@ export const RenderTreeItem = ({
   provided,
   snapshot,
   target,
-  contextOpenNodeId,
-  setContextOpenNodeId,
   isInEditor,
   readOnly,
   isHighlighted,

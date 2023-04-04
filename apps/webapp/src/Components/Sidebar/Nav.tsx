@@ -8,7 +8,7 @@ import { useSingleton } from '@tippyjs/react'
 
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 
-import { useDataStore, useEditorStore, useHelpStore,useLayoutStore  } from '@mexit/core'
+import { useDataStore, useEditorStore, useHelpStore, useLayoutStore } from '@mexit/core'
 import {
   ComingSoon,
   Count,
@@ -155,7 +155,7 @@ const Nav = () => {
             <NavTooltip key={shortcuts.showHome.title} singleton={target} content={<TitleWithShortcut title="Home" />}>
               <NavLogoWrapper>
                 <NavLink to={ROUTE_PATHS.home}>
-                  <WDLogo height={'56'} width={'56'} />
+                  <WDLogo height={'40'} width={'40'} />
                 </NavLink>
               </NavLogoWrapper>
             </NavTooltip>

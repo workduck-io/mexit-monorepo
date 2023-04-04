@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import trashIcon from '@iconify/icons-codicon/trash'
-import arrowLeftRightLine from '@iconify/icons-ri/arrow-left-right-line'
 import dragMove2Fill from '@iconify/icons-ri/drag-move-2-fill'
 import edit2Line from '@iconify/icons-ri/edit-2-line'
 import fileCopyLine from '@iconify/icons-ri/file-copy-line'
@@ -10,7 +9,7 @@ import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
-import { Button, DisplayShortcut, IconButton, LoadingButton, ToolbarTooltip } from '@workduck-io/mex-components'
+import { DisplayShortcut, IconButton, LoadingButton, ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
@@ -29,6 +28,7 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useViews } from '../Hooks/useViews'
 import { useViewStore } from '../Stores/useViewStore'
 
+import ViewBreadcrumbs from './Views/ViewBreadcrumbs'
 import { useTaskViewModalStore } from './TaskViewModal'
 
 interface ViewHeaderProps {
@@ -167,77 +167,60 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
   }
 
   return (
-    <StyledTaskHeader>
-      <TaskHeaderTitleSection>
-        <ToolbarTooltip singleton={source} />
-        {view && (
-          <TaskViewHeaderWrapper>
-            <TaskViewTitle>
-              <Icon icon={stackLine} />
-              <span>{view?.title}</span>
-              {view?.id && !isDefault && <ViewChangeStatus viewId={view?.id} />}
-            </TaskViewTitle>
-            <TaskViewControls>
-              {!isDefault && (
-                <Button onClick={handleUpdateView} disabled={currentFilters.length === 0}>
-                  <Icon icon={edit2Line} />
-                  Update View
-                </Button>
-              )}
-              <IconButton
-                title="Clone View"
-                onClick={handleCloneView}
-                disabled={currentFilters.length === 0}
-                singleton={target}
-                icon={fileCopyLine}
-              />
-              <IconButton
-                title="Save as"
-                onClick={handleSaveAsView}
-                disabled={currentFilters.length === 0}
-                singleton={target}
-                icon="fluent:save-copy-24-regular"
-              />
-              {!isDefault && (
-                <LoadingButton title="Delete View" loading={deleting} onClick={onDeleteView} singleton={target}>
-                  <Icon icon={trashIcon} />
-                </LoadingButton>
-              )}
-            </TaskViewControls>
-          </TaskViewHeaderWrapper>
-        )}
-      </TaskHeaderTitleSection>
-      <ShortcutTokens>
-        <ShortcutToken>
-          Select Card:
-          <Icon icon={dragMove2Fill} />
-        </ShortcutToken>
-        {cardSelected && (
-          <>
-            <ShortcutToken>
-              Open:
-              <DisplayShortcut shortcut="$mod+Enter" />
-            </ShortcutToken>
-            <ShortcutToken>
-              Move:
-              <DisplayShortcut shortcut="Shift" />
-              <Icon icon={arrowLeftRightLine} />
-            </ShortcutToken>
-            <ShortcutToken>
-              Priority:
-              <DisplayShortcut shortcut="$mod+0-3" />
-            </ShortcutToken>
-          </>
-        )}
-        {currentFilters.length > 0 && (
+    <>
+      <ViewBreadcrumbs path={view?.path} />
+      <StyledTaskHeader>
+        <TaskHeaderTitleSection>
+          <ToolbarTooltip singleton={source} />
+          {view && (
+            <TaskViewHeaderWrapper>
+              <TaskViewTitle>
+                <Icon icon={stackLine} />
+                <span>{view?.title}</span>
+                {view?.id && !isDefault && <ViewChangeStatus viewId={view?.id} />}
+              </TaskViewTitle>
+              <TaskViewControls>
+                {!isDefault && (
+                  <IconButton title="Update View" onClick={handleUpdateView} singleton={target} icon={edit2Line} />
+                )}
+                <IconButton
+                  title="Clone View"
+                  onClick={handleCloneView}
+                  disabled={currentFilters.length === 0}
+                  singleton={target}
+                  icon={fileCopyLine}
+                />
+                <IconButton
+                  title="Save as"
+                  onClick={handleSaveAsView}
+                  disabled={currentFilters.length === 0}
+                  singleton={target}
+                  icon="fluent:save-copy-24-regular"
+                />
+                {!isDefault && (
+                  <LoadingButton title="Delete View" loading={deleting} onClick={onDeleteView} singleton={target}>
+                    <Icon icon={trashIcon} />
+                  </LoadingButton>
+                )}
+              </TaskViewControls>
+            </TaskViewHeaderWrapper>
+          )}
+        </TaskHeaderTitleSection>
+        <ShortcutTokens>
           <ShortcutToken>
-            Remove Filter:
-            <DisplayShortcut shortcut="Shift+F" />
+            Select Card:
+            <Icon icon={dragMove2Fill} />
           </ShortcutToken>
-        )}
-      </ShortcutTokens>
-      {/* <Infobox text={TasksHelp} /> */}
-    </StyledTaskHeader>
+
+          {currentFilters.length > 0 && (
+            <ShortcutToken>
+              Remove Filter:
+              <DisplayShortcut shortcut="Shift+F" />
+            </ShortcutToken>
+          )}
+        </ShortcutTokens>
+      </StyledTaskHeader>
+    </>
   )
 }
 

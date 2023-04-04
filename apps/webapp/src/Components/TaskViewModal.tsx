@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import Modal from 'react-modal'
 
@@ -6,6 +6,7 @@ import create from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 import { Entities } from '@workduck-io/mex-search'
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
   Filter,
@@ -14,10 +15,11 @@ import {
   GlobalFilterJoin,
   SortOrder,
   SortType,
+  useTreeStore,
   View,
   ViewType
 } from '@mexit/core'
-import { Label, SearchFilterListCurrent, TextAreaBlock, TextFieldHeight } from '@mexit/shared'
+import { DisplayShortcut, Label, SearchFilterListCurrent, TextAreaBlock, TextFieldHeight } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useViews } from '../Hooks/useViews'
@@ -45,6 +47,7 @@ interface TaskViewModalState {
   updateViewId?: string
   // If present, title, description will be cloned from the view with viewid
   cloneViewId?: string
+  parent?: string
   filters: Filter[]
   properties?: ViewProperties
   type?: ViewCreateType
@@ -52,6 +55,7 @@ interface TaskViewModalState {
   openModal: (args: {
     filters: Filter[]
     type?: ViewCreateType
+    parent?: string | undefined
     updateViewId?: string
     cloneViewId?: string
     properties: ViewProperties
@@ -64,6 +68,7 @@ const getInitialState = () => ({
   open: false,
   filters: [],
   type: 'new' as ViewCreateType,
+  parent: undefined,
   updateViewId: undefined,
   cloneViewId: undefined,
   properties: {
@@ -95,6 +100,7 @@ const TaskViewModal = () => {
   const filters = useTaskViewModalStore((store) => store.filters)
   const type = useTaskViewModalStore((store) => store.type)
 
+  const expandNode = useTreeStore((store) => store.expandNode)
   const closeModal = useTaskViewModalStore((store) => store.closeModal)
 
   const { getView, addView, updateView } = useViews()
@@ -157,22 +163,40 @@ const TaskViewModal = () => {
         description: data.description ?? oldview.description,
         filters
       }
+
       await updateView(newView)
       goTo(ROUTE_PATHS.view, NavigationType.push, newView.id)
     } else {
+      const parent = useTaskViewModalStore.getState().parent
+
       const view: View = {
         title: data.title,
+        parent,
         description: data.description,
         filters,
         id: generateTaskViewId(),
         ...properties
       }
-      await addView(view)
-      // saveData()
+
+      await addView(view, expandNode)
       goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
     }
     handleClose()
   }
+
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      '$mod+Enter': (event) => {
+        if (open) {
+          event.preventDefault()
+          handleSubmit(onSubmit)()
+        }
+      }
+    })
+    return () => {
+      unsubscribe()
+    }
+  }, [open])
 
   const handleClose = () => {
     reset()
@@ -229,7 +253,8 @@ const TaskViewModal = () => {
             Cancel
           </Button>
           <LoadingButton loading={isSubmitting} type="submit" primary large>
-            {updateViewId ? 'Update' : cloneViewId ? 'Clone' : 'Create'} View
+            {updateViewId ? 'Update' : cloneViewId ? 'Clone' : 'Create'}
+            <DisplayShortcut shortcut={'$mod+Enter'} />
           </LoadingButton>
         </ModalControls>
       </form>

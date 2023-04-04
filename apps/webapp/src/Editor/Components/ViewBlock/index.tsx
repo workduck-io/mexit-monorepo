@@ -20,6 +20,7 @@ import { DisplayFilter } from '../../../Components/Filters/Filter'
 import { DisplayGroupBy } from '../../../Components/Filters/GroupBy'
 import { RenderSort } from '../../../Components/Filters/SortMenu'
 import { ViewContainer } from '../../../Components/Views'
+import ParentFilters from '../../../Components/Views/ParentFilters'
 import { GroupHeader } from '../../../Components/Views/ViewBlockRenderer/BlockContainer'
 import { ContentBlockContainer } from '../../../Components/Views/ViewBlockRenderer/ContentBlock'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
@@ -32,7 +33,7 @@ const ViewBlock = (props: any) => {
 
   const { goTo } = useRouting()
   const theme = useTheme()
-  const { getView } = useViews()
+  const { getView, getViewNamedPath } = useViews()
 
   const view = useMemo(() => getView(viewid), [viewid])
 
@@ -47,6 +48,7 @@ const ViewBlock = (props: any) => {
   }
 
   const selected = useSelected()
+  const title = view ? getViewNamedPath(view.id, view.path) : 'Embeded View'
 
   return (
     <RootElement {...props.attributes}>
@@ -55,11 +57,11 @@ const ViewBlock = (props: any) => {
           <GroupHeader>
             <Group>
               <Icon icon={stackLine} />
-              <InlineBlockText>{view?.title ?? 'Embeded View'}</InlineBlockText>
+              <InlineBlockText>{title}</InlineBlockText>
             </Group>
             <Chip onClick={openView}>Open</Chip>
           </GroupHeader>
-
+          <ParentFilters currentViewId={viewid} noMargin />
           <StyledViewBlockPreview>
             {view?.filters.length > 0 && (
               <GenericFlex>

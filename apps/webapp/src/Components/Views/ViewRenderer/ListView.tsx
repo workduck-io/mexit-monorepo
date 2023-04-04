@@ -112,6 +112,26 @@ const ListView: React.FC<{ results: Record<string, any> }> = ({ results }) => {
     }
   }, [isModalOpen, atViews, isPreviewEditors, selectNewCard])
 
+  const hasResults = Object.values(results)?.flat(1)?.length !== 0
+
+  if (hasResults)
+    return (
+      <TaskListWrapper>
+        {Object.entries(results)?.map(([group, items]: [string, Array<SearchResult>]) => (
+          <ResultGroup key={group} label={group} count={items.length}>
+            {items.map((block, i) => (
+              <ViewBlockRenderer
+                key={`${block?.id}-${block?.parent}-${i}`}
+                selectedBlockId={selectedCardId}
+                block={block}
+                onClick={(card: SearchResult) => setSelectedCardId(card.id)}
+              />
+            ))}
+          </ResultGroup>
+        ))}
+      </TaskListWrapper>
+    )
+
   if (!currentFilters.length)
     return (
       <TaskListWrapper>
@@ -120,7 +140,7 @@ const ListView: React.FC<{ results: Record<string, any> }> = ({ results }) => {
       </TaskListWrapper>
     )
 
-  if (!Object.values(results)?.flat(1)?.length)
+  if (!hasResults)
     return (
       <TaskListWrapper>
         <Description>
@@ -128,23 +148,6 @@ const ListView: React.FC<{ results: Record<string, any> }> = ({ results }) => {
         </Description>
       </TaskListWrapper>
     )
-
-  return (
-    <TaskListWrapper>
-      {Object.entries(results)?.map(([group, items]: [string, Array<SearchResult>]) => (
-        <ResultGroup key={group} label={group} count={items.length}>
-          {items.map((block) => (
-            <ViewBlockRenderer
-              key={`${block?.id}-${block?.parent}`}
-              selectedBlockId={selectedCardId}
-              block={block}
-              onClick={(card: SearchResult) => setSelectedCardId(card.id)}
-            />
-          ))}
-        </ResultGroup>
-      ))}
-    </TaskListWrapper>
-  )
 }
 
 export default ListView

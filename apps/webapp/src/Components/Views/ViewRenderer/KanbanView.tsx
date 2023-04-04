@@ -226,7 +226,7 @@ const KanbanView: React.FC<any> = (props) => {
 
   const eventWrapper = (fn: (event) => void): ((event) => void) => {
     return (e) => {
-      console.log('event', { e })
+      // console.log('event', { e })
       enableShortcutHandler(() => {
         e.preventDefault()
         fn(e)

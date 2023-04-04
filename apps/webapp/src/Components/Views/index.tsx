@@ -1,5 +1,7 @@
 import { useEffect, useMemo } from 'react'
 
+import styled from 'styled-components'
+
 import { useDataStore, View } from '@mexit/core'
 import { PageContainer, ViewSection } from '@mexit/shared'
 
@@ -16,6 +18,10 @@ type ViewProps = {
   viewId: string
   withFilters?: boolean
 }
+
+export const ViewPageContainer = styled(PageContainer)`
+  margin: ${({ theme }) => theme.spacing.large};
+`
 
 export const ViewContainer: React.FC<ViewProps> = ({ viewId, withFilters = true }) => {
   const _hasHydrated = useDataStore((s) => s._hasHydrated)
@@ -57,18 +63,18 @@ export const ViewContainer: React.FC<ViewProps> = ({ viewId, withFilters = true 
 
   return (
     <View>
-      <ViewRenderer view={activeView} />
+      <ViewRenderer key={activeView?.id} view={activeView} />
     </View>
   )
 }
 
 const View = ({ children }) => {
   return (
-    <PageContainer fade>
+    <ViewPageContainer fade>
       <ViewHeader />
       <ViewSearchFilters />
       <ViewSection>{children}</ViewSection>
-    </PageContainer>
+    </ViewPageContainer>
   )
 }
 

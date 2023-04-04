@@ -175,17 +175,19 @@ const SidebarList = ({
     <SidebarListWrapper noMargin={noMargin}>
       <Tippy theme="mex" placement="right" singleton={source} />
 
-      {defaultItems &&
-        defaultItems.map((defaultItem) => (
-          <StyledTreeItem key={defaultItem.id} noSwitcher selected={selectedItemId === defaultItem.id}>
-            <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
-              <ItemTitle>
-                <IconDisplay icon={defaultItem.icon} />
-                <span>{defaultItem.label}</span>
-              </ItemTitle>
-            </ItemContent>
-          </StyledTreeItem>
-        ))}
+      <div>
+        {defaultItems &&
+          defaultItems.map((defaultItem) => (
+            <StyledTreeItem key={defaultItem.id} noSwitcher selected={selectedItemId === defaultItem.id}>
+              <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
+                <ItemTitle>
+                  <IconDisplay icon={defaultItem.icon} />
+                  <span>{defaultItem.label}</span>
+                </ItemTitle>
+              </ItemContent>
+            </StyledTreeItem>
+          ))}
+      </div>
 
       {showSearch && items.length > 0 && (
         <SidebarListFilter noMargin={noMargin}>

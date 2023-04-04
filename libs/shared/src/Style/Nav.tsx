@@ -278,7 +278,7 @@ const sidebarPos = ({ $overlaySidebar, theme, $side, $publicNamespace, $isMobile
         position: fixed;
         top: ${theme.additional.hasBlocks ? '2rem' : '0'};
         right: ${theme.additional.hasBlocks ? '1rem' : '0'};
-        background: rgba(${theme.rgbTokens.surfaces.sidebar}, 0.5);
+        background: rgba(${theme.rgbTokens.surfaces.sidebar}, 0.7);
         backdrop-filter: blur(10px);
       `
     : css`

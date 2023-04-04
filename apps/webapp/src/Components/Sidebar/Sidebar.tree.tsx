@@ -8,7 +8,7 @@ import { useTheme } from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { defaultContent, fuzzySearch, ILink, useEditorStore, useLayoutStore, usePublicNodeStore } from '@mexit/core'
+import { defaultContent, fuzzySearch, ILink, useLayoutStore } from '@mexit/core'
 import { Input, isOnEditableElement, MexIcon, SidebarListFilter } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
@@ -40,9 +40,7 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
    * - MultiSelect
    * - Drop to Different space
    */
-  const editorNode = useEditorStore((store) => store.node)
-  const publicNode = usePublicNodeStore((store) => store.currentNode)
-  const node = publicILink ? publicNode : editorNode
+
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<number>(-1)
   const { goTo } = useRouting()

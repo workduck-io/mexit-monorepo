@@ -19,8 +19,10 @@ import {
   useAuthStore,
   useDataStore,
   useEditorStore,
-useLinkStore , useMentionStore,  useShareModalStore
- } from '@mexit/core'
+  useLinkStore,
+  useMentionStore,
+  useShareModalStore
+} from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
@@ -29,6 +31,7 @@ import { useMentions } from '../../Hooks/useMentions'
 import usePrompts from '../../Hooks/usePrompts'
 import { useRouting } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
+import { useViews } from '../../Hooks/useViews'
 import { useViewStore } from '../../Stores/useViewStore'
 import { QuickLinkComboboxItem } from '../Components/QuickLink/QuickLinkComboboxItem'
 import { SlashComboboxItem } from '../Components/SlashCommands/SlashComboboxItem'
@@ -63,6 +66,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const getWorkspaceId = useAuthStore((s) => s.getWorkspaceId)
 
   const { allPrompts } = usePrompts()
+  const { getViewNamedPath } = useViews()
 
   const { createNewNote } = useCreateNewNote()
 
@@ -89,6 +93,12 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       icon: l.icon ?? DefaultMIcons.NOTE,
       type: QuickLinkType.backlink
     })),
+    ...views.map((l) => ({
+      value: l.id,
+      text: getViewNamedPath(l.id, l.path),
+      icon: { type: 'ICON', value: 'ri:share-line' },
+      type: QuickLinkType.taskView
+    })),
     ...allPrompts.map((prompt) => ({
       value: prompt.entityId,
       text: prompt.title,
@@ -101,12 +111,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       text: l.path,
       icon: l.icon ?? DefaultMIcons.SHARED_NOTE,
       type: QuickLinkType.backlink
-    })),
-    ...views.map((l) => ({
-      value: l.id,
-      text: l.title,
-      icon: { type: 'ICON', value: 'ri:share-line' },
-      type: QuickLinkType.taskView
     })),
     ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type })),
     ...webLinks.map((l) => ({

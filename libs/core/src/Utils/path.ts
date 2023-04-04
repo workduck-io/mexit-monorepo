@@ -126,6 +126,12 @@ export const isReservedOrClash = (path: string, paths: string[]) => {
   return isReserved(path) || isClash(path, paths)
 }
 
+export const createEntityPath = (type: 'view', id: string, parentPath?: string, SEPARATOR = '|') => {
+  if (!id) return `${type}${SEPARATOR}`
+
+  return `${parentPath ?? type}${SEPARATOR}${id}${SEPARATOR}`
+}
+
 export const getAllParentIds = (id: string) =>
   id
     ?.split(SEPARATOR)
@@ -150,4 +156,38 @@ export const getParentBreadcrumbs = (node: { path: string; namespace?: string },
   }, [])
 
   return parents
+}
+
+// * Entities
+
+export const getAllEntities = (path: string, SEPARATOR = '|') => {
+  if (!path) return []
+
+  return path.split(SEPARATOR).filter((e, i) => e && i !== 0)
+}
+
+/**
+ *
+ * @param path Starts with entity type and ends with a separator
+ * For example, 'view|Task_dgGd2|'
+ *  type = view, Separator = '|'
+ * @param SEPARATOR
+ * @returns
+ */
+export const getParentEntity = (path: string, SEPARATOR = '|'): { type: string; parent: string } | undefined => {
+  if (!path) return undefined
+
+  const entries = path.split(SEPARATOR)
+
+  if (entries.length >= 3) {
+    const type = entries[0]
+    const parent = entries.at(-2)
+
+    return {
+      type,
+      parent
+    }
+  }
+
+  return undefined
 }

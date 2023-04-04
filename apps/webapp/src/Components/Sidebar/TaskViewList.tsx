@@ -1,9 +1,10 @@
 import React from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import stackLine from '@iconify/icons-ri/stack-line'
 
-import { ContextMenuType, getMIcon, ReminderViewData, useLayoutStore, ViewType } from '@mexit/core'
-import { DefaultMIcons, IconDisplay } from '@mexit/shared'
+import { ContextMenuType, ReminderViewData, useLayoutStore, ViewType } from '@mexit/core'
+import { DefaultMIcons, getMIcon, IconDisplay } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { getBlockFieldIcon } from '../../Hooks/useSortIcons'
@@ -12,11 +13,9 @@ import { useTaskViewModalStore } from '../TaskViewModal'
 
 import { SidebarHeaderLite } from './Sidebar.space.header'
 import { CreateNewNoteSidebarButton, SidebarWrapper, VerticalSpace } from './Sidebar.style'
-import SidebarList from './SidebarList'
+import SidebarViewTree from './Sidebar.views'
 
 const ViewList = () => {
-  const views = useViewStore((store) => store.views)
-  const currentView = useViewStore((store) => store.currentView)
   const setContextMenu = useLayoutStore((store) => store.setContextMenu)
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
 
@@ -26,29 +25,12 @@ const ViewList = () => {
     goTo(ROUTE_PATHS.view, NavigationType.push, viewid)
   }
 
-  const sortedViews = React.useMemo(() => {
-    return views
-      .sort((a, b) => {
-        if (a.title < b.title) {
-          return -1
-        }
-        if (a.title > b.title) {
-          return 1
-        }
-        return 0
-      })
-      .map(({ title, ...t }) => ({
-        ...t,
-        label: title,
-        data: t,
-        icon: DefaultMIcons.VIEW
-      }))
-  }, [views])
-
-  const handleContextMenu = (item, event) => {
+  const handleContextMenu = (id: string, event) => {
+    const view = useViewStore.getState().views?.find((view) => view.id === id)
+    console.log('VIEW LIST', { view, id, views: useViewStore.getState().views })
     setContextMenu({
       type: ContextMenuType.VIEW_LIST,
-      item,
+      item: { data: view },
       coords: {
         x: event.clientX,
         y: event.clientY
@@ -78,28 +60,26 @@ const ViewList = () => {
         </CreateNewNoteSidebarButton>
       </VerticalSpace>
 
-      <SidebarList
-        items={sortedViews}
-        onContextMenu={handleContextMenu}
-        onClick={(item) => onOpenView(item)}
-        selectedItemId={currentView?.id || 'tasks'}
-        showSearch
-        searchPlaceholder="Filter Views..."
-        defaultItems={[
-          {
-            label: 'Tasks',
-            id: 'tasks',
-            icon: getBlockFieldIcon('status'),
-            data: {}
-          },
-          {
-            label: 'Reminders',
-            id: ReminderViewData.id,
-            icon: getMIcon('ICON', 'ri:timer-flash-line'),
-            data: {}
-          }
-        ]}
-      />
+      <ErrorBoundary fallbackRender={() => <></>}>
+        <SidebarViewTree
+          onContextMenu={handleContextMenu}
+          onClick={(item) => onOpenView(item)}
+          defaultItems={[
+            {
+              label: 'Tasks',
+              id: 'tasks',
+              icon: getBlockFieldIcon('status'),
+              data: {}
+            },
+            {
+              label: 'Reminders',
+              id: ReminderViewData.id,
+              icon: getMIcon('ICON', 'ri:timer-flash-line'),
+              data: {}
+            }
+          ]}
+        />
+      </ErrorBoundary>
     </SidebarWrapper>
   )
 }

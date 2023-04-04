@@ -22,6 +22,7 @@ const StyledResultGroup = styled.div`
 
 export const Chevron = styled(MexIcon)<{ isOpen?: boolean }>`
   transition: all 0.2s linear;
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
   min-width: 16px;
   min-height: auto;
   ${({ isOpen }) =>
