@@ -51,7 +51,7 @@ export const SortableTree = ({
 
   return (
     <SortableContext items={sortedIds} strategy={verticalListSortingStrategy}>
-      {flattenedItems.map(({ id, children, properties, collapsed, depth }) => (
+      {flattenedItems.map(({ id, children, properties, isStub, collapsed, depth }) => (
         <SortableTreeItem
           key={id}
           id={id}
@@ -64,6 +64,7 @@ export const SortableTree = ({
           indentationWidth={indentationWidth}
           indicator={indicator}
           childCount={children.length}
+          isStub={isStub}
           collapsed={Boolean(collapsed && children.length)}
           onCollapse={collapsible && children.length ? () => handleCollapse(id) : undefined}
           activeId={activeId}

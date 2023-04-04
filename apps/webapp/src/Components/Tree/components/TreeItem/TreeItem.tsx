@@ -23,6 +23,7 @@ export interface Props extends Omit<HTMLAttributes<HTMLLIElement>, 'id'> {
   childCount?: number
   clone?: boolean
   collapsed?: boolean
+  isStub?: boolean
   depth: number
   disableInteraction?: boolean
   disableSelection?: boolean
@@ -44,6 +45,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
   (
     {
       childCount,
+      isStub,
       clone,
       depth,
       disableSelection,
@@ -72,6 +74,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
         ghost={ghost}
         isHighlighted={value.id === highlightedId}
         indicator={indicator}
+        isStub={isStub}
         active={value.id === activeId}
         disableSelection={!!disableSelection}
         onContextMenu={(e) => {

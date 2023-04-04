@@ -6,6 +6,7 @@ export interface TreeItem {
   id: UniqueIdentifier
   children: TreeItem[]
   collapsed?: boolean
+  isStub?: boolean
   properties?: Record<string, any>
 }
 

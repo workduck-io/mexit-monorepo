@@ -27,7 +27,7 @@ const ViewList = () => {
 
   const handleContextMenu = (id: string, event) => {
     const view = useViewStore.getState().views?.find((view) => view.id === id)
-    console.log('VIEW LIST', { view, id, views: useViewStore.getState().views })
+
     setContextMenu({
       type: ContextMenuType.VIEW_LIST,
       item: { data: view },

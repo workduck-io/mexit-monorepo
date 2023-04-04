@@ -1,6 +1,8 @@
 import { UniqueIdentifier } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 
+import { getAllEntities } from '@mexit/core'
+
 import type { FlattenedItem, TreeItem, TreeItems } from './types'
 
 export const iOS = /iPad|iPhone|iPod/.test(navigator.platform)
@@ -86,20 +88,51 @@ export function flattenTree(items: TreeItems): FlattenedItem[] {
   return flatten(items)
 }
 
+const updateNode = (
+  node: FlattenedItem,
+  nodes: Record<string, TreeItem>,
+  allItems: FlattenedItem[],
+  options: Partial<{
+    root: UniqueIdentifier
+    isStub: boolean
+    collapsed: boolean
+  }> = {
+    root: 'root',
+    isStub: false,
+    collapsed: false
+  }
+) => {
+  const id = node.id
+  const parentId = node?.parentId ?? options.root
+  const parent = nodes[parentId] ?? findItem(allItems, parentId)
+
+  if (!nodes[id]) {
+    const updatedNode: TreeItem = {
+      id,
+      children: [],
+      properties: node.properties,
+      isStub: options.isStub,
+      collapsed: options.collapsed
+    }
+
+    nodes[id] = updatedNode
+    parent?.children?.push(updatedNode)
+  }
+}
+
 export function buildPartialTree(items: FlattenedItem[], allItems: FlattenedItem[]) {
   const root: TreeItem = { id: 'root', children: [], properties: {} }
   const nodes: Record<string, TreeItem> = { [root.id]: root }
 
   for (const item of items) {
-    const { id, children } = item
-    const parentId = item.parentId ?? root.id
-    const parent = nodes[parentId] ?? findItem(allItems, parentId)
+    const parents = getAllEntities(item.properties.path)
 
-    nodes[id] = { id, children }
-    if (parent) {
-      console.log('parent', { parent, item, allItems })
-      parent.children.push(item)
+    for (const id of parents) {
+      const node = nodes[id] ?? (findItem(allItems, id) as any)
+      updateNode(node, nodes, allItems, { root: root.id, isStub: true })
     }
+
+    updateNode(item, nodes, allItems)
   }
 
   return root.children
@@ -111,12 +144,14 @@ export function buildTree(flattenedItems: FlattenedItem[]): TreeItems {
   const items = flattenedItems.map((item) => ({ ...item, children: [] }))
 
   for (const item of items) {
-    const { id, children, properties } = item
+    const { id, children } = item
     const parentId = item.parentId ?? root.id
     const parent = nodes[parentId] ?? findItem(items, parentId)
 
-    nodes[id] = { id, children }
-    if (parent) parent.children.push(item)
+    if (!nodes[id]) {
+      nodes[id] = { id, children }
+      parent.children.push(item)
+    }
   }
 
   return root.children

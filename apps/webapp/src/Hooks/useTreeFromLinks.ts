@@ -51,7 +51,5 @@ export const getPartialTreeFromLinks = (matchedLinks: ILink[], allLinks: ILink[]
     .filter((i) => tree.items[i].data.stub === false)
     .map((i) => tree.items[i])
 
-  // mog('Made the partialTree From Links', { matchedLinks, allLinks, tree, treeFlatItems })
-
   return { tree, matchedFlatItems }
 }

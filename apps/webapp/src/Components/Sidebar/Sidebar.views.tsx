@@ -21,11 +21,10 @@ import {
   StyledTreeItem
 } from '@mexit/shared'
 
-import { useViews } from '../../Hooks/useViews'
 import { useViewStore } from '../../Stores/useViewStore'
 import { SortableTree } from '../Tree'
 import { FlattenedItem } from '../Tree/types'
-import { buildTree, flattenTree } from '../Tree/utilities'
+import { buildPartialTree, buildTree, flattenTree } from '../Tree/utilities'
 
 const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
   const [source, target] = useSingleton()
@@ -41,7 +40,6 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
   const [search, setSearch] = useState('')
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
   const [selected, setSelected] = useState<number>(-1)
-  const { getViewNamedPath } = useViews()
   const onSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearch(e.target.value)
   }
@@ -57,7 +55,8 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
           id: view.id,
           parentId: parent,
           properties: {
-            label: view.title
+            label: view.title,
+            path: view.path
           },
           depth: 0,
           index: 0,
@@ -74,12 +73,13 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
     if (search !== '') {
       const items = flattenTree(tree)
       const matchedFlatItems = fuzzySearch(items, search, (item) => item.properties.label)
-      const filteredTree = buildTree(matchedFlatItems)
+      const filteredTree = buildPartialTree(matchedFlatItems, items)
+
       setFiltered({ filteredTree, matchedFlatItems })
     } else {
       setFiltered({ filteredTree: undefined, matchedFlatItems: [] })
     }
-  }, [search, tree])
+  }, [search])
 
   const reset = () => {
     setSearch('')

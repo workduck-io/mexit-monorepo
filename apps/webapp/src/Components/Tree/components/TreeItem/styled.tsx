@@ -6,6 +6,7 @@ export const TreeListItem = styled.li<{
   indicator?: boolean
   disableSelection?: boolean
   active?: boolean
+  isStub?: boolean
   isHighlighted?: boolean
   disableInteraction?: boolean
 }>`
@@ -21,6 +22,17 @@ export const TreeListItem = styled.li<{
     css`
       background: ${theme.sidebar.tree.item.wrapper.active.surface};
       color: ${theme.sidebar.tree.item.wrapper.active.textColor};
+    `}
+
+  ${({ isStub }) =>
+    isStub &&
+    css`
+      opacity: 0.8;
+      color: ${({ theme }) => theme.tokens.text.disabled};
+      svg {
+        color: ${({ theme }) => theme.tokens.text.disabled};
+      }
+      background-color: transparent;
     `}
 
   ${({ active, theme }) =>
