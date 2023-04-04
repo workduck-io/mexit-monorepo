@@ -36,7 +36,7 @@ import { useViewStore } from '../../Stores/useViewStore'
 import { QuickLinkComboboxItem } from '../Components/QuickLink/QuickLinkComboboxItem'
 import { SlashComboboxItem } from '../Components/SlashCommands/SlashComboboxItem'
 import { TagComboboxItem } from '../Components/Tags/TagComboboxItem'
-import { CategoryType, QuickLinkType } from '../constants'
+import { AI_RENDER_TYPE, CategoryType, QuickLinkType } from '../constants'
 import { PluginOptionType } from '../Plugins'
 import { ComboboxKey } from '../Types/Combobox'
 import { ComboboxConfig, ComboConfigData } from '../Types/MultiCombobox'
@@ -252,6 +252,10 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         options: {
           url: 'https://example.com/'
         }
+      },
+      ai: {
+        slateElementType: AI_RENDER_TYPE,
+        command: 'ai'
       },
       task: {
         slateElementType: ELEMENT_TODO_LI,

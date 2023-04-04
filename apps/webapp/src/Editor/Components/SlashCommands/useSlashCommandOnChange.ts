@@ -9,7 +9,7 @@ import {
   TElement
 } from '@udecode/plate'
 
-import { isElder, useComboboxStore } from '@mexit/core'
+import { isElder, mog, useComboboxStore } from '@mexit/core'
 
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { IComboboxItem, SlashCommandConfig } from '../../Types/Combobox'
@@ -21,7 +21,7 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
   return (editor: PlateEditor, item: IComboboxItem) => {
     const targetRange = useComboboxStore.getState().targetRange
     const commandKey = Object.keys(keys).filter((k) => keys[k].command === item.key)[0]
-
+    console.log('ITEM', { item })
     const commandConfig = keys[commandKey]
     if (targetRange) {
       try {
@@ -31,6 +31,8 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
             select(editor, targetRange)
             insertNodes<TElement>(editor, content)
           }
+        } else if (item.key === 'ai') {
+          mog("AI command isn't implemented yet")
         } else if (item.key === 'table') {
           select(editor, targetRange)
           insertTable(editor, { rowCount: 3 })
