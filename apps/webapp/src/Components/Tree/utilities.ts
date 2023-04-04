@@ -106,15 +106,15 @@ const updateNode = (
   const parentId = node?.parentId ?? options.root
   const parent = nodes[parentId] ?? findItem(allItems, parentId)
 
-  if (!nodes[id]) {
-    const updatedNode: TreeItem = {
-      id,
-      children: [],
-      properties: node.properties,
-      isStub: options.isStub,
-      collapsed: options.collapsed
-    }
+  const updatedNode: TreeItem = {
+    id,
+    children: [],
+    properties: node.properties,
+    isStub: options.isStub,
+    collapsed: options.collapsed
+  }
 
+  if (!nodes[id]) {
     nodes[id] = updatedNode
     parent?.children?.push(updatedNode)
   }

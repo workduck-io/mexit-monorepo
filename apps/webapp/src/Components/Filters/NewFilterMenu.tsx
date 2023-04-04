@@ -132,18 +132,3 @@ const NewFilterMenu = ({ addFilter, filters, removeLastFilter }: NewFilterMenuPr
 }
 
 export default NewFilterMenu
-
-//////// Testing things
-//
-// const valueOptions = (k: string): FilterValue[] =>
-//   duplicateTimes([`${k} Test 1`, `${k} Test 2`, `${k} Test 3`, `${k} Test 4`, `${k} Test 5`], 20).map((value, i) => ({
-//     id: `${value}_${i}`,
-//     label: `${value}_${i}`,
-//     value
-//   }))
-//
-// const TypeOptions = ['note', 'tag', 'mention', 'space'].map((type) => ({
-//   label: capitalize(type),
-//   value: type as FilterType,
-//   options: valueOptions(type)
-// }))

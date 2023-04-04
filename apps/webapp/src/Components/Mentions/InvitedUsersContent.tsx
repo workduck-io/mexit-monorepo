@@ -5,7 +5,17 @@ import repeatLine from '@iconify/icons-ri/repeat-line'
 
 import { IconButton, PrimaryButton } from '@workduck-io/mex-components'
 
-import { AccessLevel, DefaultPermissionValue, InvitedUser, mog, permissionOptions, useEditorStore, useMentionStore , userPreferenceStore as useUserPreferenceStore,useShareModalStore  } from '@mexit/core'
+import {
+  AccessLevel,
+  DefaultPermissionValue,
+  InvitedUser,
+  mog,
+  permissionOptions,
+  useEditorStore,
+  useMentionStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useShareModalStore
+} from '@mexit/core'
 import { StyledCreatatbleSelect } from '@mexit/shared'
 
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
@@ -177,16 +187,6 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
         acc.push(user.email)
         return acc
       }, [])
-
-    // const applyPermissions = async () => {
-    //   const userChangePerm = await changeUserPermission(node.nodeid, newPermissions)
-    //   const userRevoke = await revokeUserAccess(node.nodeid, revokedUsers)
-    //   mog('set new permissions', { userChangePerm, userRevoke })
-    // }
-
-    // await applyPermissions()
-
-    // closeModal()
 
     mog('onSave', { changedIUsers, newPermissions, newAliases, revokedUsers })
   }

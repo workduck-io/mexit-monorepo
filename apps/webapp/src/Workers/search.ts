@@ -33,12 +33,6 @@ const searchWorker = {
     } catch (err) {
       console.log('Error initializing search', err)
     }
-
-    // // searchX.initializeHighlights(fileData.highlights)
-    // const { idx, nbMap } = createSearchIndex(fileData)
-
-    // globalSearchIndex = idx
-    // nodeBlockMapping = nbMap
   },
   reset: () => {
     hasInitialized = false
@@ -93,7 +87,6 @@ const searchWorker = {
     })
   },
 
-  // TODO: Figure out tags with this OR approach
   searchIndexWithRanking: (indexKey: Indexes, query: ISearchQuery, tags?: Array<string>) => {
     try {
       const searchResults = searchX.search({ options: query, indexKey })
@@ -111,78 +104,6 @@ const searchWorker = {
       }, [] as SearchResult[])
 
       return groupedResults
-
-      // * TODO: Enable multi query search
-      // const words = query.split(' ')
-      // const searchItems = []
-
-      // indexedFields.forEach((field) => {
-      //   words.forEach((w) => {
-      //     const t = {
-      //       field,
-      //       query: w
-      //     }
-      //     searchItems.push(t)
-      //   })
-      // })
-
-      // const searchQuery = {
-      //   index: searchItems,
-      //   enrich: true
-      // }
-
-      // let response: any[] = []
-
-      // if (typeof key === 'string') {
-      //   response = globalSearchIndex[key].search(searchQuery)
-      // } else {
-      //   key.forEach((k) => {
-      //     response = [...response, ...globalSearchIndex[k].search(searchQuery)]
-      //   })
-      // }
-
-      // const results = new Array<any>()
-      // const rankingMap: { [k: string]: number } = {}
-
-      // response.forEach((entry) => {
-      //   const matchField = entry.field
-      //   entry.result.forEach((i) => {
-      //     const { nodeId, blockId } = getNodeAndBlockIdFromCompositeKey(i.id)
-      //     if (rankingMap[nodeId]) rankingMap[nodeId]++
-      //     else rankingMap[nodeId] = 1
-      //     results.push({ id: nodeId, data: i.doc?.data, blockId, text: i.doc?.text?.slice(0, 100), matchField })
-      //   })
-      // })
-
-      // const combinedResults = new Array<GenericSearchResult>()
-      // results.forEach(function (item) {
-      //   const existing = combinedResults.filter(function (v, i) {
-      //     return v.id === item.id
-      //   })
-      //   if (existing.length) {
-      //     const existingIndex = combinedResults.indexOf(existing[0])
-      //     if (!combinedResults[existingIndex].matchField.includes(item.matchField))
-      //       combinedResults[existingIndex].matchField = combinedResults[existingIndex].matchField.concat(
-      //         item.matchField
-      //       )
-      //   } else {
-      //     if (typeof item.matchField == 'string') item.matchField = [item.matchField]
-      //     combinedResults.push(item)
-      //   }
-      // })
-
-      // const sortedResults = combinedResults.sort((a, b) => {
-      //   const titleBumpA = a.matchField.includes('title') ? TITLE_RANK_BUMP : 0
-      //   const titleBumpB = b.matchField.includes('title') ? TITLE_RANK_BUMP : 0
-      //   const rankA = rankingMap[a.id] + titleBumpA
-      //   const rankB = rankingMap[b.id] + titleBumpB
-
-      //   if (rankA > rankB) return -1
-      //   else if (rankA < rankB) return 1
-      //   else return a.matchField.length >= b.matchField.length ? -1 : 1
-      // })
-
-      // return sortedResults.slice(0, SEARCH_RESULTS_LIMIT)
     } catch (e) {
       mog('Searching Broke:', { e })
       return []

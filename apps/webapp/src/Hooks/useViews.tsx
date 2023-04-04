@@ -2,6 +2,7 @@ import { Entities } from '@workduck-io/mex-search'
 
 import { createEntityPath, Filter, getAllEntities, useDataStore, View, ViewType } from '@mexit/core'
 
+import { ViewParentType } from '../Components/TaskViewModal'
 import { useViewStore } from '../Stores/useViewStore'
 
 import { useViewAPI } from './API/useViewsAPI'
@@ -99,10 +100,10 @@ export const useViews = () => {
     return parent ? `${parent}.${getView(id)?.title}` : getView(id)?.title
   }
 
-  const addView = async (view: View, onSuccess: (id: string) => void) => {
+  const addView = async (view: View, parentDetails: ViewParentType, onSuccess: (id: string) => void) => {
     await saveView(view)
     const { parent, ...restView } = view
-    const path = createEntityPath('view', parent, view.path)
+    const path = createEntityPath('view', parent, parentDetails?.path)
     onSuccess(view.id)
     addViewStore({ ...restView, path })
   }

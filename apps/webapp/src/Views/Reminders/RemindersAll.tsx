@@ -227,8 +227,6 @@ const useReminderFilters = () => {
       })
     }
 
-    // mog('Filters', { filters })
-
     return filters
   }
 

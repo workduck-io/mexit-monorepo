@@ -39,6 +39,8 @@ interface ViewProperties {
   groupBy?: string
 }
 
+export type ViewParentType = { id: string; path: string }
+
 export type ViewCreateType = 'new' | 'update' | 'clone' | 'save-as'
 
 interface TaskViewModalState {
@@ -47,7 +49,7 @@ interface TaskViewModalState {
   updateViewId?: string
   // If present, title, description will be cloned from the view with viewid
   cloneViewId?: string
-  parent?: string
+  parent?: ViewParentType
   filters: Filter[]
   properties?: ViewProperties
   type?: ViewCreateType
@@ -55,7 +57,7 @@ interface TaskViewModalState {
   openModal: (args: {
     filters: Filter[]
     type?: ViewCreateType
-    parent?: string | undefined
+    parent?: ViewParentType | undefined
     updateViewId?: string
     cloneViewId?: string
     properties: ViewProperties
@@ -171,14 +173,14 @@ const TaskViewModal = () => {
 
       const view: View = {
         title: data.title,
-        parent,
+        parent: parent?.id,
         description: data.description,
         filters,
         id: generateTaskViewId(),
         ...properties
       }
 
-      await addView(view, expandNode)
+      await addView(view, parent, expandNode)
       goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
     }
     handleClose()
