@@ -7,6 +7,7 @@ import { generateStyle } from '@workduck-io/mex-themes'
 
 import { FocusModeProp, focusStyles } from './Editor'
 import { ThinScrollbar } from './Helpers'
+import { BodyFont } from './Search'
 
 export const Sicon = styled(Icon)`
   height: 26px;
@@ -170,7 +171,12 @@ export const StyledTreeItem = styled.div<{
 
   &:hover {
     transition: 0s ease;
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
+
+  ${BodyFont};
+
+  color: ${({ theme }) => theme.tokens.text.fade};
 
   transition: 0.25s ease;
 
@@ -193,18 +199,16 @@ export const StyledTreeItem = styled.div<{
       color: ${theme.sidebar.tree.item.wrapper.active.textColor};
     `}
 
+  /* opacity: 0.7; */
+  
 
   ${({ selected, hasMenuOpen, theme }) =>
     selected &&
     css`
-      ${({ theme }) => generateStyle(theme.sidebar.tree.item.wrapper.selected)};
-      ${ItemCount}, svg {
-        color: ${theme.tokens.colors.primary.text};
-      }
-      :hover {
-        color: ${theme.tokens.colors.primary.text};
-        background: ${theme.tokens.colors.primary.hover};
-      }
+      /* ${({ theme }) => generateStyle(theme.sidebar.tree.item.wrapper)}; */
+      background: ${theme.sidebar.tree.item.wrapper.active.surface};
+      color: ${theme.tokens.text.default};
+      font-weight: bold;
       ${hasMenuOpen &&
       css`
         color: ${theme.tokens.colors.primary.text};
@@ -216,7 +220,7 @@ export const StyledTreeItem = styled.div<{
       }
     `}
 
-    ${({ isStub }) =>
+  ${({ isStub }) =>
     isStub &&
     css`
       opacity: 0.8;

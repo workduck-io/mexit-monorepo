@@ -12,7 +12,7 @@ export const SidebarListWrapper = styled.div<SidebarListWrapperProps>`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.small};
+  gap: ${({ theme }) => theme.spacing.medium};
 `
 
 export const EmptyMessage = styled.div`

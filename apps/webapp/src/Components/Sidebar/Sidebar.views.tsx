@@ -155,7 +155,7 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
   }, [])
 
   return (
-    <SidebarListWrapper>
+    <SidebarListWrapper noMargin>
       <Tippy theme="mex" placement="right" singleton={source} />
 
       <div>
@@ -173,7 +173,7 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
       </div>
 
       {tree.length > 0 && (
-        <SidebarListFilter>
+        <SidebarListFilter noMargin>
           <Icon icon={searchLine} />
           <Input placeholder={'Find Views...'} onChange={debounce((e) => onSearchChange(e), 250)} ref={inputRef} />
         </SidebarListFilter>

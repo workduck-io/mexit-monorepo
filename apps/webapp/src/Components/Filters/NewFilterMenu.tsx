@@ -2,12 +2,12 @@ import React, { useEffect } from 'react'
 
 import { Icon } from '@iconify/react'
 
-import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Filter, Filters, FilterType, FilterValue, generateFilterId } from '@mexit/core'
 import {
   DefaultMIcons,
+  DisplayShortcut,
   FilterMenuDiv,
   FilterTypeIcons,
   GenericFlex,
@@ -94,7 +94,7 @@ const NewFilterMenu = ({ addFilter, filters, removeLastFilter }: NewFilterMenuPr
           <IconDisplay size={14} icon={DefaultMIcons.ADD} />
           <Group>
             <span>Add Filter</span>
-            <DisplayShortcut shortcut={'F'} />
+            <DisplayShortcut shortcut="F" />
           </Group>
         </FilterMenuDiv>
       }

@@ -70,7 +70,7 @@ export const SearchHeader = styled.div`
   gap: ${({ theme }) => theme.spacing.medium};
   background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
+  padding: ${({ theme }) => theme.spacing.medium};
   ${InputWrapper} {
     display: flex;
     align-items: center;
@@ -385,8 +385,8 @@ export const ResultHeader = styled.div<{ active?: boolean; $paddingSize?: 'small
 export const ResultDesc = styled.div`
   flex-shrink: 1;
   color: ${({ theme }) => theme.tokens.text.fade};
-  font-size: ${BodyFont};
   max-width: 20rem;
+  ${BodyFont}
 
   ${Ellipsis}
 `

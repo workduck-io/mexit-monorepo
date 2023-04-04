@@ -1,5 +1,6 @@
 import create from 'zustand'
 import createContext from 'zustand/context'
+import { devtools } from 'zustand/middleware'
 
 import { Entities } from '@workduck-io/mex-search'
 
@@ -11,37 +12,44 @@ import { FilterStore } from '../useFilters'
 export const { Provider: ViewFilterProvider, useStore: useViewFilterStore } = createContext<FilterStore>()
 
 export const createViewFilterStore = () =>
-  create<FilterStore>((set) => ({
-    filters: [],
-    currentFilters: [],
-    setCurrentFilters: (filters: Filter[]) => set({ currentFilters: filters }),
-    globalJoin: 'all',
-    sortType: 'status',
-    sortOrder: 'ascending',
-    entities: [],
-    setEntities: (entities: Array<Entities>) => set({ entities }),
-    initializeState: (view: View) => {
-      set({
-        entities: view.entities ?? [],
-        currentFilters: view.filters,
-        globalJoin: view.globalJoin,
-        viewType: view.viewType,
-        groupBy: view.groupBy,
-        sortOrder: view.sortOrder ?? 'ascending'
-      })
-    },
-    setGroupBy: (groupBy: string) => set({ groupBy }),
-    setGroupingOptions: (groupingOptions: SearchEntityType[]) => set({ groupingOptions }),
-    setSortOptions: (sortOptions: SearchEntityType[]) => set({ sortOptions }),
-    setGlobalJoin: (join: GlobalFilterJoin) => set({ globalJoin: join }),
-    indexes: [],
-    setIndexes: () => undefined,
-    viewType: ViewType.List,
-    setViewType: (viewType: ViewType) => set({ viewType }),
-    setFilters: (filters: Filters) => set({ filters }),
-    setSortType: (sortType) => set((state) => ({ ...state, sortType })),
-    setSortOrder: (sortOrder) => set((state) => ({ ...state, sortOrder }))
-  }))
+  create<FilterStore>(
+    devtools(
+      (set) => ({
+        filters: [],
+        currentFilters: [],
+        setCurrentFilters: (filters: Filter[]) => set({ currentFilters: filters }),
+        globalJoin: 'all',
+        sortType: 'status',
+        sortOrder: 'ascending',
+        entities: [],
+        setEntities: (entities: Array<Entities>) => set({ entities }),
+        initializeState: (view: View) => {
+          set({
+            entities: view.entities ?? [],
+            currentFilters: view.filters,
+            globalJoin: view.globalJoin,
+            viewType: view.viewType,
+            groupBy: view.groupBy,
+            sortOrder: view.sortOrder ?? 'ascending'
+          })
+        },
+        setGroupBy: (groupBy: string) => set({ groupBy }),
+        setGroupingOptions: (groupingOptions: SearchEntityType[]) => set({ groupingOptions }),
+        setSortOptions: (sortOptions: SearchEntityType[]) => set({ sortOptions }),
+        setGlobalJoin: (join: GlobalFilterJoin) => set({ globalJoin: join }),
+        indexes: [],
+        setIndexes: () => undefined,
+        viewType: ViewType.List,
+        setViewType: (viewType: ViewType) => set({ viewType }),
+        setFilters: (filters: Filters) => set({ filters }),
+        setSortType: (sortType) => set((state) => ({ ...state, sortType })),
+        setSortOrder: (sortOrder) => set((state) => ({ ...state, sortOrder }))
+      }),
+      {
+        name: 'mexit-view-filters-store'
+      }
+    )
+  )
 
 export const useViewFilters = () => {
   const filters = useViewFilterStore((state) => state.filters)

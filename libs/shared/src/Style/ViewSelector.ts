@@ -5,7 +5,7 @@ export const ViewSelectorWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing.small};
+  /* padding: ${({ theme }) => theme.spacing.small}; */
   gap: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 `

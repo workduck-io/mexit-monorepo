@@ -38,6 +38,7 @@ import {
   ResultRow,
   ResultTitle,
   SearchPreviewWrapper,
+  ServiceDescription,
   SnippetHelp,
   SnippetsSearchContainer,
   SplitSearchPreviewWrapper,
@@ -267,7 +268,7 @@ const Snippets = () => {
           <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.parent}_${randId}`}>
             <Title onMouseUp={(e) => onDoubleClick(e, item.parent, snip?.title)}>
               <IconDisplay icon={icon} size={24} />
-              <span className="title">{snip.title}</span>
+              <span className="title">{snip?.title}</span>
               {snip?.template && (
                 <ItemTag large>
                   <Icon icon={magicLine} />
@@ -277,7 +278,7 @@ const Snippets = () => {
             </Title>
             <EditorPreviewRenderer
               readOnly
-              onDoubleClick={(e) => onDoubleClick(e, item.parent, snip.title)}
+              onDoubleClick={(e) => onDoubleClick(e, item.parent, snip?.title)}
               content={snip.content}
               editorId={`${item.parent}_Snippet_Preview_Editor`}
             />
@@ -286,11 +287,12 @@ const Snippets = () => {
 
       if (!isSnippet && prompt) {
         return (
-          <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}_${randId}`}>
-            <Title onMouseUp={(e) => onDoubleClick(e, item.parent, snip.title)}>
+          <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.parent}_${randId}`}>
+            <Title onMouseUp={(e) => onDoubleClick(e, item.parent, prompt?.title)}>
               <IconDisplay icon={icon} size={24} />
-              <span className="title">{snip.title}</span>
+              <span className="title">{prompt?.title}</span>
             </Title>
+            <ServiceDescription>{prompt.description}</ServiceDescription>
           </SplitSearchPreviewWrapper>
         )
       }

@@ -19,7 +19,9 @@ import {
   useDataStore,
   useEditorStore,
   useLayoutStore,
-userPreferenceStore as useUserPreferenceStore,  useTreeStore } from '@mexit/core'
+  userPreferenceStore as useUserPreferenceStore,
+  useTreeStore
+} from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 
@@ -81,7 +83,6 @@ const useLoad = () => {
   const saveNodeName = (nodeId: string, title?: string) => {
     if (nodeId !== useAnalysisStore.getState().analysis?.nodeid) return
     const draftNodeTitle = title ?? useAnalysisStore.getState().analysis?.title
-    mog('SAVE NODE NAME', { draftNodeTitle })
     if (!draftNodeTitle) return
 
     const node = getLinkFromNodeIdHookless(nodeId)

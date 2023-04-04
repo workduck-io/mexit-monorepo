@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 import { Button, Ellipsis, LoadingButton } from '@workduck-io/mex-components'
 import { generateStyle } from '@workduck-io/mex-themes'
 
-import { IconWrapper, Input, SidebarListWrapper, TagsFlex } from '@mexit/shared'
+import { BodyFont, IconWrapper, Input, SidebarListWrapper, TagsFlex } from '@mexit/shared'
 
 export const SidebarWrapper = styled.div`
   display: flex;
@@ -14,6 +14,7 @@ export const SidebarWrapper = styled.div`
   flex-grow: 1;
   height: 100%;
   padding: ${({ theme }) => theme.spacing.small};
+  gap: ${({ theme }) => theme.spacing.small};
 
   ${SidebarListWrapper} {
     height: 90%;
@@ -21,7 +22,7 @@ export const SidebarWrapper = styled.div`
 `
 
 export const VerticalSpace = styled.div`
-  margin: ${({ theme }) => `${theme.spacing.medium} 0 ${theme.spacing.small} 0`};
+  margin: ${({ theme }) => `${theme.spacing.small} 0`};
 `
 
 export const SpaceWrapper = styled(SidebarWrapper)`
@@ -359,11 +360,13 @@ export const CreateNewMenuItemWrapper = styled.div`
 const SpecialNoteStyle = css`
   background: ${({ theme }) => theme.sidebar.tree.item.wrapper.surface};
   border: 1px dashed ${({ theme }) => theme.tokens.surfaces.s[3]};
-  padding: 0.5rem;
+  padding: ${({ theme }) => theme.spacing.tiny};
   justify-content: flex-start;
   box-shadow: none;
   color: ${({ theme }) => theme.tokens.text.fade};
   width: 100%;
+  ${BodyFont}
+
   span {
     ${Ellipsis}
   }

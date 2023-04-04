@@ -14,9 +14,9 @@ export const ShortcutMid = styled.div`
   opacity: 0.66;
 `
 const ShortcutBox = styled.div`
-  font-size: 0.7rem;
-  padding: 4px ${({ theme }) => theme.spacing.tiny};
-  border-radius: 4px;
+  font-size: 10px;
+  padding: ${({ theme }) => `calc(${theme.spacing.tiny}/2) ${theme.spacing.tiny}`};
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
   background-color: ${({ theme }) => theme.tokens.surfaces.modal};
   color: ${({ theme }) => theme.colors.primary};
 `
@@ -32,7 +32,6 @@ export const DisplayShortcut = ({ shortcut }: DisplayShortcutProps) => {
       {keys.map((k, i) => (
         <ShortcutWrapper key={k}>
           <ShortcutBox>{k}</ShortcutBox>
-          {/* {i !== keys.length - 1 && <ShortcutMid>+</ShortcutMid>} */}
         </ShortcutWrapper>
       ))}
     </ShortcutWrapper>

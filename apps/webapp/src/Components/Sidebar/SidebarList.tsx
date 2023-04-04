@@ -175,9 +175,9 @@ const SidebarList = ({
     <SidebarListWrapper noMargin={noMargin}>
       <Tippy theme="mex" placement="right" singleton={source} />
 
-      <div>
-        {defaultItems &&
-          defaultItems.map((defaultItem) => (
+      {defaultItems && (
+        <div>
+          {defaultItems.map((defaultItem) => (
             <StyledTreeItem key={defaultItem.id} noSwitcher selected={selectedItemId === defaultItem.id}>
               <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
                 <ItemTitle>
@@ -187,7 +187,8 @@ const SidebarList = ({
               </ItemContent>
             </StyledTreeItem>
           ))}
-      </div>
+        </div>
+      )}
 
       {showSearch && items.length > 0 && (
         <SidebarListFilter noMargin={noMargin}>

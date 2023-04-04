@@ -1,20 +1,18 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 
 import { DefaultMIcons } from '@mexit/shared'
 
 import usePrompts from '../../Hooks/usePrompts'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 
-import { SidebarWrapper } from './Sidebar.style'
 import SidebarList from './SidebarList'
 
 const PromptList = () => {
   const { allPrompts } = usePrompts()
-  const params = useParams()
-  const promptId = params?.promptId
 
-  const { goTo } = useRouting()
+  const { goTo, getParams } = useRouting()
+  const params = getParams(`${ROUTE_PATHS.prompt}/:promptId`)
+  const promptId = params?.promptId ?? ''
 
   const sortedPrompts = allPrompts
     .map((l) => ({
@@ -30,18 +28,15 @@ const PromptList = () => {
   }
 
   return (
-    <SidebarWrapper>
-      {/* <SidebarHeaderLite title={`Snippets (${sortedPrompts.length})`} icon={quillPenLine} /> */}
-      <SidebarList
-        noMargin
-        items={sortedPrompts}
-        onClick={onOpenPrompt}
-        selectedItemId={promptId ?? ''}
-        showSearch
-        searchPlaceholder="Filter Prompts..."
-        emptyMessage="No Prompts Found"
-      />
-    </SidebarWrapper>
+    <SidebarList
+      noMargin
+      items={sortedPrompts}
+      onClick={onOpenPrompt}
+      selectedItemId={promptId}
+      showSearch
+      searchPlaceholder="Filter Prompts..."
+      emptyMessage="No Prompts Found"
+    />
   )
 }
 

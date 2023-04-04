@@ -7,7 +7,14 @@ import Tippy from '@tippyjs/react'
 import { IconButton, TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { MIcon, RESERVED_NAMESPACES, useDataStore, useEditorStore, useLayoutStore,useShareModalStore  } from '@mexit/core'
+import {
+  MIcon,
+  RESERVED_NAMESPACES,
+  useDataStore,
+  useEditorStore,
+  useLayoutStore,
+  useShareModalStore
+} from '@mexit/core'
 import { Input, LinkShortenAndTagsWrapper, TagsLabel, Tooltip } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
@@ -180,9 +187,11 @@ const Header = ({
             </SidebarToggle>
           </Tippy>
         </SpaceTitleWrapper>
-        <LinkShortenAndTagsWrapper>
-          {showTags && <TagsLabel tags={space?.popularTags} onClick={onTagClick} />}
-        </LinkShortenAndTagsWrapper>
+        {showTags && (
+          <LinkShortenAndTagsWrapper>
+            <TagsLabel tags={space?.popularTags} onClick={onTagClick} />
+          </LinkShortenAndTagsWrapper>
+        )}
       </SpaceHeader>
       {showSeparator && <SpaceSeparator />}
     </>

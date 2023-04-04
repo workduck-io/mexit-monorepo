@@ -242,7 +242,7 @@ const KanbanView: React.FC<any> = (props) => {
 
   useEffect(() => {
     const shorcutConfig = (): KeyBindingMap => {
-      if (isModalOpen !== undefined) return {}
+      if (isModalOpen !== undefined || !atViews) return {}
 
       return wrapEvents({
         Escape: () => {
@@ -273,7 +273,7 @@ const KanbanView: React.FC<any> = (props) => {
         unsubscribe()
       }
     }
-  }, [board, selectedCard, isModalOpen, isPreviewEditors])
+  }, [board, selectedCard, isModalOpen, isPreviewEditors, atViews])
 
   const RenderCard = (block, { dragging }: { dragging: boolean }) => {
     return (

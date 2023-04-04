@@ -2,7 +2,6 @@ import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 
 import archiveLine from '@iconify/icons-ri/archive-line'
-import searchLine from '@iconify/icons-ri/search-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
 import { useSingleton } from '@tippyjs/react'
 
@@ -19,7 +18,6 @@ import {
   NavLogoWrapper,
   NavTitle,
   NavWrapper,
-  SearchLink,
   SideNav,
   WDLogo
 } from '@mexit/shared'
@@ -37,24 +35,9 @@ const NavHeader: React.FC<{ target: any }> = ({ target }) => {
   const { getLinks } = useNavlinks()
 
   const links = getLinks()
-  const shortcuts = useHelpStore((store) => store.shortcuts)
 
   return (
     <MainLinkContainer onMouseUp={(e) => e.stopPropagation()}>
-      <NavTooltip
-        key={ROUTE_PATHS.search}
-        singleton={target}
-        content={<TitleWithShortcut title="Search" shortcut={shortcuts.showSearch.keystrokes} />}
-      >
-        <SearchLink
-          tabIndex={-1}
-          className={(s) => (s.isActive ? 'active' : '')}
-          to={ROUTE_PATHS.search}
-          key={`nav_search`}
-        >
-          {GetIcon(searchLine)}
-        </SearchLink>
-      </NavTooltip>
       {links.map((l) =>
         l.isComingSoon ? (
           <NavTooltip key={l.path} singleton={target} content={`${l.title} (Stay Tuned! 👀  )`}>

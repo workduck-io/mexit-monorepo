@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 
-import { checkIfUntitledDraftNode, getParentNodePath, mog } from '@mexit/core'
+import { checkIfUntitledDraftNode, getParentNodePath } from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 
@@ -27,7 +27,6 @@ export const useSaveNodeName = () => {
 
     if (newNodePath !== nodePath)
       try {
-        mog('SAVE NODE NAME, 2', { nodeId, title, nodePath, newNodePath, isUntitled, draftNodeTitle })
         execRefactorAsync(
           { path: nodePath, namespaceID: namespace },
           { path: newNodePath, namespaceID: namespace },

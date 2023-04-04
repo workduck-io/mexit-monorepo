@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
 import { ViewType } from '@mexit/core'
-import { EditorStyles, fadeIn, KANBAN_CARD_WIDTH, TodoContainer } from '@mexit/shared'
+import { BodyFont, EditorStyles, fadeIn, KANBAN_CARD_WIDTH, TodoContainer } from '@mexit/shared'
 
 export const ViewBlockContainer = styled.div<{
   dragging?: boolean
@@ -11,7 +11,9 @@ export const ViewBlockContainer = styled.div<{
   viewType?: ViewType
 }>`
   box-sizing: border-box;
-  padding: ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
+
+  ${BodyFont}
 
   width: ${({ sidebarExpanded, theme, viewType }) =>
     viewType !== ViewType.Kanban

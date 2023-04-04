@@ -174,8 +174,8 @@ export const removeDoc = async (indexKey: Indexes, id: string) => {
 export const searchIndex = async (key: Indexes, query: ISearchQuery) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
-
-    const results = await withTimeout(searchWorker.searchIndex(key, query), 500, 'Could not search')
+    console.log('QUERY', { key, query })
+    const results = await withTimeout(searchWorker.searchIndex(key, query), 1000, 'Could not search')
     return results
   } catch (error) {
     mog('SearchIndexError', { error })
