@@ -13,7 +13,7 @@ const AIBlockPopover = () => {
 
   const { getAIMenuItems } = useCreateNewMenu()
 
-  if (!floatElementState) {
+  if (!floatElementState || !floatingElement) {
     return null
   }
 

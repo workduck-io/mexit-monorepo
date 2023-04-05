@@ -57,7 +57,7 @@ export const FloaterContainer = styled.div`
   backdrop-filter: blur(2rem);
   transform-origin: top;
   border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
-  animation: ${float} 250ms ease-out forwards;
+  animation: ${float} 5s ease-out forwards;
   will-change: transform;
 `
 

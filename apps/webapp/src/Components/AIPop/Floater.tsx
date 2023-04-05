@@ -2,9 +2,13 @@ import { useEffect, useRef } from 'react'
 
 import {
   arrow,
+  autoUpdate,
+  flip,
   FloatingArrow,
   FloatingFocusManager,
   FloatingPortal,
+  offset,
+  shift,
   useClick,
   useDismiss,
   useFloating,
@@ -32,11 +36,15 @@ const Floater = () => {
       setIsOpen(isOpen ? FloatingElementType.AI_TOOLTIP : null)
     },
     middleware: [
-      // autoPlacement(),
       arrow({
         element: arrowRef
-      })
-    ]
+      }),
+      offset({ mainAxis: 5, alignmentAxis: 0 }),
+      flip(),
+      shift()
+    ],
+    placement: 'bottom-start',
+    whileElementsMounted: autoUpdate
   })
 
   const click = useClick(context)
@@ -57,7 +65,7 @@ const Floater = () => {
 
   return (
     <FloatingPortal>
-      {
+      {open && (
         <FloatingFocusManager context={context} modal={false}>
           <FloaterContainer
             ref={refs.setFloating}
@@ -82,7 +90,7 @@ const Floater = () => {
             <AIBlockPopover />
           </FloaterContainer>
         </FloatingFocusManager>
-      }
+      )}
     </FloatingPortal>
   )
 }
