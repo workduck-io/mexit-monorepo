@@ -14,7 +14,8 @@ import {
   useFloating,
   useId,
   useInteractions,
-  useRole} from '@floating-ui/react-dom-interactions'
+  useRole
+} from '@floating-ui/react-dom-interactions'
 
 import { PopoverWrapper } from './Popover.style'
 
@@ -53,7 +54,7 @@ export const Popover = ({ children, onClose, render, placement, transparent, roo
     useClick(context),
     useRole(context),
     useDismiss(context, {
-      referencePointerDown: false
+      referencePress: false
     })
   ])
 

@@ -204,7 +204,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       }),
       useClick(context, {
         toggle: !nested && !multiSelect,
-        pointerDown: true,
+        event: 'mousedown',
         ignoreMouse: nested
       }),
       useDismiss(context, {
