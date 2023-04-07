@@ -14,6 +14,15 @@ export interface ListItemType {
   extras?: Partial<ItemExtraType>
 }
 
+export interface MenuListItemType {
+  id: string
+  label: string
+  disabled?: boolean
+  icon?: MIcon
+  onSelect: any
+  options?: Array<MenuListItemType>
+}
+
 export interface ItemExtraType {
   nodeid: string
   blockid: string

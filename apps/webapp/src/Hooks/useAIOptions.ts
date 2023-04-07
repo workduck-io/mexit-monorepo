@@ -1,35 +1,39 @@
-import { deserializeMd, getPlateEditorRef } from '@udecode/plate'
+import { toast } from 'react-hot-toast'
 
-import { API, ELEMENT_PARAGRAPH, mog, NodeEditorContent } from '@mexit/core'
-
-import parseToMarkdown from '../Editor/utils'
+import { AIEvent, API, SupportedAIEventTypes, useHistoryStore } from '@mexit/core'
 
 export const useAIOptions = () => {
-  const summarize = async (): Promise<NodeEditorContent | undefined> => {
-    const editor = getPlateEditorRef()
+  const addInAIEventsHistory = useHistoryStore((store) => store.addInAIHistory)
 
-    if (!editor.selection) return
+  const performAIAction = async (type: SupportedAIEventTypes, content?: string): Promise<void> => {
+    const aiEventsHistory = useHistoryStore.getState().ai
+    const userQuery: AIEvent = {
+      role: 'user',
+      type
+    }
 
-    const nodeFragments = editor.getFragment()
-    const selectedText = parseToMarkdown({ children: nodeFragments, type: ELEMENT_PARAGRAPH })?.trim()
+    if (content) {
+      userQuery.content = content
+    }
+
+    const reqData = {
+      context: [...aiEventsHistory.flat().filter((item) => item), userQuery]
+    }
 
     try {
-      const summary = await API.ai.perform('summarize', {
-        context: selectedText,
-        type: 'markdown'
-      })
+      const assistantResponse = await API.ai.perform(reqData)
 
-      const summaryInPlateFormat = deserializeMd(editor, summary)
-
-      return summaryInPlateFormat
-
-      mog('Selected text', { selectedText, nodeFragments })
+      if (assistantResponse?.content) {
+        addInAIEventsHistory(userQuery, assistantResponse)
+      }
     } catch (err) {
-      mog('SummarizationError', { err })
+      // * Write cute error message
+      toast('Something went wrong!')
+      console.error('Unable to perform AI action', err)
     }
   }
 
   return {
-    summarize
+    performAIAction
   }
 }

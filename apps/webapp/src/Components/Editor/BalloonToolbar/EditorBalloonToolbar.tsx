@@ -32,21 +32,17 @@ import {
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
   MarkToolbarButton,
+  ToolbarButton,
   ToolbarButtonProps,
   usePlateEditorRef
 } from '@udecode/plate'
 import { useTheme } from 'styled-components'
+import Highlighter from 'web-highlighter'
 
-import {
-  ButtonSeparator,
-  DefaultMIcons,
-  GenericFlex,
-  getMIcon,
-  IconDisplay,
-  useBalloonToolbarStore
-} from '@mexit/shared'
+import { FloatingElementType, useFloatingStore, useHistoryStore } from '@mexit/core'
+import { ButtonSeparator, DefaultMIcons, getMIcon, IconDisplay, useBalloonToolbarStore } from '@mexit/shared'
 
-import { useCreateNewMenu } from '../../../Hooks/useCreateNewMenu'
+import useUpdateBlock from '../../../Editor/Hooks/useUpdateBlock'
 
 import { SelectionToNode, SelectionToNodeInput } from './components/SelectionToNode'
 import { SelectionToSnippet, SelectionToSnippetInput } from './components/SelectionToSnippet'
@@ -57,13 +53,39 @@ import { BalloonToolbar } from './BalloonToolbar'
 const BallonMarkToolbarButtons = () => {
   const [isOptionOpen, setIsOptionOpen] = React.useState<string | null>(null)
 
-  const toolbarState = useBalloonToolbarStore((s) => s.toolbarState)
   const theme = useTheme()
   const editor = usePlateEditorRef()
-  const { getAIMenuItems } = useCreateNewMenu()
+  const { getSelectionInMarkdown } = useUpdateBlock()
+  const addAIEvent = useHistoryStore((store) => store.addInitialEvent)
+  const toolbarState = useBalloonToolbarStore((s) => s.toolbarState)
+  const setFloatingElement = useFloatingStore((s) => s.setFloatingElement)
 
   const handleOpenOption = (id: string) => {
     setIsOptionOpen(id)
+  }
+
+  const handleOpenAIPreview = (event) => {
+    event.preventDefault()
+
+    const content = getSelectionInMarkdown()
+    const selection = window.getSelection()
+
+    if (content) {
+      addAIEvent({ role: 'assistant', content })
+    }
+
+    const highlight = new Highlighter({
+      style: {
+        className: 'highlight'
+      }
+    })
+
+    const range = selection.getRangeAt(0)
+    highlight.fromRange(range)
+
+    setFloatingElement(FloatingElementType.AI_POPOVER, {
+      range
+    })
   }
 
   const arrow = false
@@ -89,21 +111,14 @@ const BallonMarkToolbarButtons = () => {
         {
           normal: (
             <>
-              <BallonOptionsUnwrapper
-                id="ai-actions"
-                icon={DefaultMIcons.AI}
-                color={theme.tokens.colors.primary.default}
-                active={isOptionOpen}
-                onClick={handleOpenOption}
-              >
-                {getAIMenuItems().map((item) => (
-                  <Icon key={item.id} onClick={item.onSelect} height={20} icon={item.icon.value} />
-                ))}
-              </BallonOptionsUnwrapper>
+              <ToolbarButton
+                tooltip={{ content: 'Ask AI anything...', ...tooltip }}
+                icon={<IconDisplay size={20} icon={DefaultMIcons.AI} />}
+                onMouseDown={handleOpenAIPreview}
+              />
               <ButtonSeparator />
-
               <BallonOptionsUnwrapper
-                id="headings"
+                id="Headings"
                 icon={DefaultMIcons.ADD}
                 active={isOptionOpen}
                 onClick={handleOpenOption}
@@ -129,7 +144,7 @@ const BallonMarkToolbarButtons = () => {
               <ButtonSeparator />
 
               <BallonOptionsUnwrapper
-                id="align-items"
+                id="Alignment Modifiers"
                 icon={DefaultMIcons.ADD}
                 active={isOptionOpen}
                 onClick={handleOpenOption}
@@ -154,7 +169,7 @@ const BallonMarkToolbarButtons = () => {
               <ButtonSeparator />
 
               <BallonOptionsUnwrapper
-                id="block-modifiers"
+                id="Block Modifiers"
                 icon={DefaultMIcons.ADD}
                 active={isOptionOpen}
                 onClick={handleOpenOption}
@@ -181,7 +196,7 @@ const BallonMarkToolbarButtons = () => {
               <ButtonSeparator />
 
               <BallonOptionsUnwrapper
-                id="font-modifiers"
+                id="Font Modifiers"
                 icon={DefaultMIcons.ADD}
                 active={isOptionOpen}
                 onClick={handleOpenOption}
@@ -214,7 +229,12 @@ const BallonMarkToolbarButtons = () => {
 
               <ButtonSeparator />
 
-              <GenericFlex>
+              <BallonOptionsUnwrapper
+                id="Create New"
+                icon={DefaultMIcons.ADD}
+                active={isOptionOpen}
+                onClick={handleOpenOption}
+              >
                 <SelectionToTask
                   icon={<IconDisplay size={16} icon={getMIcon('ICON', 'mex:task-progress')} />}
                   tooltip={{ content: 'Convert to Task', ...tooltip }}
@@ -229,7 +249,7 @@ const BallonMarkToolbarButtons = () => {
                   icon={<IconDisplay size={20} icon={DefaultMIcons.SNIPPET} />}
                   tooltip={{ content: 'Convert to Snippet', ...tooltip }}
                 />
-              </GenericFlex>
+              </BallonOptionsUnwrapper>
             </>
           ),
           'new-note': <SelectionToNodeInput />,

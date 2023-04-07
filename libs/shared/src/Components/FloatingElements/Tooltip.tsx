@@ -12,7 +12,8 @@ import {
   useFloating,
   useHover,
   useInteractions,
-  useRole} from '@floating-ui/react-dom-interactions'
+  useRole
+} from '@floating-ui/react-dom-interactions'
 
 import { TooltipWrapper } from './Tooltip.style'
 

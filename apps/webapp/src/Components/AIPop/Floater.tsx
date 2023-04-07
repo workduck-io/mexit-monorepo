@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import {
   arrow,
@@ -7,7 +8,6 @@ import {
   FloatingArrow,
   FloatingFocusManager,
   FloatingPortal,
-  offset,
   shift,
   useClick,
   useDismiss,
@@ -18,13 +18,13 @@ import {
 import { getSelectionBoundingClientRect } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
-import { FloatingElementType, useFloatingStore } from '@mexit/core'
+import { FloatingElementType, mog, useFloatingStore, useHistoryStore } from '@mexit/core'
 
 import { FloaterContainer } from './styled'
 import AIBlockPopover from '.'
 
-const Floater = () => {
-  const isOpen = useFloatingStore((store) => store.floatingElement === FloatingElementType.AI_TOOLTIP)
+const DefaultFloater = ({ onClose }) => {
+  const isOpen = useFloatingStore((store) => store.floatingElement === FloatingElementType.AI_POPOVER)
   const setIsOpen = useFloatingStore((store) => store.setFloatingElement)
 
   const theme = useTheme()
@@ -33,17 +33,25 @@ const Floater = () => {
   const { x, y, strategy, refs, context } = useFloating({
     open: isOpen,
     onOpenChange: (isOpen) => {
-      setIsOpen(isOpen ? FloatingElementType.AI_TOOLTIP : null)
+      const state = isOpen ? FloatingElementType.AI_POPOVER : null
+
+      if (!state && onClose) {
+        mog('called')
+        onClose()
+      }
+      setIsOpen(state)
     },
     middleware: [
-      arrow({
-        element: arrowRef
+      shift({
+        crossAxis: true,
+        padding: 10
       }),
-      offset({ mainAxis: 5, alignmentAxis: 0 }),
       flip(),
-      shift()
+      arrow({
+        element: arrowRef,
+        padding: 10
+      })
     ],
-    placement: 'bottom-start',
     whileElementsMounted: autoUpdate
   })
 
@@ -51,7 +59,7 @@ const Floater = () => {
   const dismiss = useDismiss(context)
   const role = useRole(context)
 
-  const { getFloatingProps, getItemProps } = useInteractions([click, dismiss, role])
+  const { getFloatingProps } = useInteractions([click, dismiss, role])
 
   useEffect(() => {
     const coords = getSelectionBoundingClientRect()
@@ -65,8 +73,8 @@ const Floater = () => {
 
   return (
     <FloatingPortal>
-      {open && (
-        <FloatingFocusManager context={context} modal={false}>
+      {isOpen && (
+        <FloatingFocusManager context={context} closeOnFocusOut>
           <FloaterContainer
             ref={refs.setFloating}
             style={{
@@ -92,6 +100,16 @@ const Floater = () => {
         </FloatingFocusManager>
       )}
     </FloatingPortal>
+  )
+}
+
+const Floater = () => {
+  const clearAIEventsHistory = useHistoryStore((s) => s.clearAIHistory)
+
+  return (
+    <ErrorBoundary FallbackComponent={() => <></>}>
+      <DefaultFloater onClose={clearAIEventsHistory} />
+    </ErrorBoundary>
   )
 }
 

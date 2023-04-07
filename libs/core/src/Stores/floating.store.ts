@@ -3,7 +3,7 @@ import { createStore } from '../Utils/storeCreator'
 
 export enum FloatingElementType {
   BALLON_TOOLBAR = 'BALLON_TOOLBAR',
-  AI_TOOLTIP = 'AI_TOOLTIP'
+  AI_POPOVER = 'AI_POPOVER'
 }
 
 const floatingStoreConfig = (set, get) => ({
@@ -18,7 +18,8 @@ const floatingStoreConfig = (set, get) => ({
     if (state) {
       set({ floatingElement: element, state: { ...get().state, [element]: state } })
     } else {
-      set({ floatingElement: element })
+      const { [element]: _, ...rest } = get().state
+      set({ floatingElement: element, state: rest })
     }
   }
 })

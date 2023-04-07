@@ -82,7 +82,7 @@ export const TableContainer = styled.section`
   display: block;
   max-height: 16rem;
   height: 16rem;
-  width: 40vw;
+  width: 100%;
   max-width: 660px;
   overflow: hidden auto;
   backdrop-filter: blur(8px);

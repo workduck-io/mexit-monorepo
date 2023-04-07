@@ -262,7 +262,6 @@ interface RenderPlatelessProps {
 
 const RenderPlateless = React.memo<RenderPlatelessProps>(
   ({ content, typeMap, multiline = false }: RenderPlatelessProps) => {
-    // mog('Plateless', { content })
     const childrenRender =
       content &&
       content.map((node) => {

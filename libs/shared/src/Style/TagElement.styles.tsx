@@ -1,14 +1,13 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
-export const STagRoot = styled.div`
-  display: inline-block;
+export const STagRoot = styled.span`
   line-height: 1.2;
 
   /* outline: selectedFocused ? rgb(0, 120, 212) auto 1px : undefined, */
 `
 
-export const STag = styled.div<{ selected: boolean }>`
+export const STag = styled.span<{ selected: boolean }>`
   color: ${({ theme }) => theme.colors.secondary};
   ${({ selected, theme }) =>
     selected &&

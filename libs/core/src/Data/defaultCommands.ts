@@ -4,7 +4,7 @@ import { getMIcon } from '../Types/Store'
 export const defaultCommands: SlashCommand[] = [
   {
     command: 'ai',
-    text: 'Ask AI',
+    text: 'Start with AI',
     icon: getMIcon('ICON', 'fluent:text-grammar-wand-24-filled'),
     type: CategoryType.action
   },

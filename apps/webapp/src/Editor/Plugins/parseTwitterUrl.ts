@@ -1,12 +1,9 @@
 import { MediaPlugin } from '@udecode/plate'
 import { getPluginOptions, PlateEditor, RenderFunction, Value } from '@udecode/plate-core'
 
-import { mog } from '@mexit/core'
-
 const twitterRegex = /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(?<id>\d+)/
 
 export const parseTwitterUrl = (url: string): EmbedUrlData | undefined => {
-  mog('URL IS', { url })
   if (url?.match(twitterRegex)) {
     return {
       provider: 'twitter',

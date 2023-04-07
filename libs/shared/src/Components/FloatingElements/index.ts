@@ -1,3 +1,4 @@
+export * from './Autocomplete'
 export * from './Dropdown'
 export * from './Dropdown.classes'
 export * from './Dropdown.style'

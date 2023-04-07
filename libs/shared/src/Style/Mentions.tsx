@@ -3,8 +3,7 @@ import styled, { css } from 'styled-components'
 import { CardShadow } from './Helpers'
 import { BodyFont } from './Search'
 
-export const SMentionRoot = styled.div<{ type?: 'mentionable' | 'invite' | 'self' }>`
-  display: inline-block;
+export const SMentionRoot = styled.span<{ type?: 'mentionable' | 'invite' | 'self' }>`
   line-height: 1.2;
   background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};

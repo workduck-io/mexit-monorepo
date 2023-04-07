@@ -4,7 +4,7 @@ import { getPreventDefaultHandler } from '@udecode/plate'
 import styled, { css } from 'styled-components'
 
 import { MIcon } from '@mexit/core'
-import { fadeIn } from '@mexit/shared'
+import { fadeIn, Tooltip } from '@mexit/shared'
 
 type BallonOptionsUnwrapperProps = {
   id: string
@@ -29,6 +29,7 @@ const BallonOptionContainer = styled.div<{ length?: number; active?: boolean }>`
           width: calc(${length * 2}rem + 2rem);
           background: ${theme.tokens.surfaces.s[3]};
           transform: scale(1.1) translateY(-0.5rem);
+          transform-origin: 100% 0;
           box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
           margin: 0 ${theme.spacing.small};
         `
@@ -37,6 +38,10 @@ const BallonOptionContainer = styled.div<{ length?: number; active?: boolean }>`
           transform: scale(1) translateY(0);
           box-shadow: none;
           background: none;
+
+          :hover {
+            background: ${theme.tokens.surfaces.s[3]};
+          }
         `}
 
   cursor: pointer;
@@ -81,29 +86,31 @@ const BallonOptionsUnwrapper: React.FC<BallonOptionsUnwrapperProps> = ({
   }
 
   return (
-    <BallonOptionContainer
-      ref={ref}
-      onClick={getPreventDefaultHandler()}
-      onMouseDown={handleOnClick}
-      id={id}
-      length={children.length}
-      active={isActive}
-    >
-      {React.Children.map(children, (child, i) => {
-        const isMiddleElement = i === Math.floor(children.length / 2)
+    <Tooltip content={isActive ? null : id}>
+      <BallonOptionContainer
+        ref={ref}
+        onClick={getPreventDefaultHandler()}
+        onMouseDown={handleOnClick}
+        id={id}
+        length={children.length}
+        active={isActive}
+      >
+        {React.Children.map(children, (child, i) => {
+          const isMiddleElement = i === Math.floor(children.length / 2)
 
-        return (
-          <StyledOption
-            key={`${id}-${i}-${isActive}`}
-            isMiddleActive={isMiddleElement && !isActive}
-            active={isMiddleElement || isActive}
-            index={i}
-          >
-            {child}
-          </StyledOption>
-        )
-      })}
-    </BallonOptionContainer>
+          return (
+            <StyledOption
+              key={`${id}-${i}-${isActive}`}
+              isMiddleActive={isMiddleElement && !isActive}
+              active={isMiddleElement || isActive}
+              index={i}
+            >
+              {child}
+            </StyledOption>
+          )
+        })}
+      </BallonOptionContainer>
+    </Tooltip>
   )
 }
 

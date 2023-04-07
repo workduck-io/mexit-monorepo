@@ -7,13 +7,12 @@ import generateName from 'project-name-generator'
 import {
   defaultContent,
   DRAFT_NODE,
-  FloatingElementType,
   generateSnippetId,
   isReservedNamespace,
   MIcon,
   ModalsType,
+  SupportedAIEventTypes,
   useDataStore,
-  useFloatingStore,
   useLayoutStore,
   useMetadataStore,
   useModalStore,
@@ -27,6 +26,7 @@ import { useDeleteStore } from '../Components/Refactor/DeleteModal'
 import { doesLinkRemain } from '../Components/Refactor/doesLinkRemain'
 import { useTaskViewModalStore } from '../Components/TaskViewModal'
 import { useBlockMenu } from '../Editor/Components/useBlockMenu'
+import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
 import { useViewStore } from '../Stores/useViewStore'
 
 import { useAIOptions } from './useAIOptions'
@@ -68,8 +68,6 @@ export const useCreateNewMenu = () => {
   const { addDefaultNewNamespace, getDefaultNamespaceId } = useNamespaces()
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
-  const setFloatingElement = useFloatingStore((s) => s.setFloatingElement)
-  const updateFloatingElementState = useFloatingStore((s) => s.updateFloatingElementState)
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
   const openShareModal = useShareModalStore((store) => store.openModal)
   const openDeleteModal = useDeleteStore((store) => store.openModal)
@@ -78,10 +76,11 @@ export const useCreateNewMenu = () => {
   const deleteNamespace = useDataStore((store) => store.deleteNamespace)
 
   const { goTo } = useRouting()
+  const { getSelectionInMarkdown } = useUpdateBlock()
   const { push } = useNavigation()
   const { deleteView } = useViews()
   const { addSnippet } = useSnippets()
-  const { summarize } = useAIOptions()
+  const { performAIAction } = useAIOptions()
   const { execRefactorAsync } = useRefactor()
   const { createNewNote } = useCreateNewNote()
   const blockMenuItems = useBlockMenu()
@@ -231,18 +230,6 @@ export const useCreateNewMenu = () => {
     })
   }
 
-  // * AI functions
-  const handleSummarize = () => {
-    setFloatingElement(FloatingElementType.AI_TOOLTIP, {
-      type: 'summarize',
-      label: 'Summarize'
-    })
-
-    summarize().then((result) => {
-      if (result) updateFloatingElementState(FloatingElementType.AI_TOOLTIP, { result })
-    })
-  }
-
   /**
    * Menu Items Getter Functions
    * @returns Array<MenuListItemType>
@@ -343,11 +330,34 @@ export const useCreateNewMenu = () => {
     ]
   }
 
+  // * AI functions
+  const handleAIQuery = async (type: SupportedAIEventTypes, callback: any) => {
+    performAIAction(type).then((res) => {
+      callback(res)
+    })
+  }
+
   const getAIMenuItems = () => {
     return [
-      getMenuItem('Continue', handleSummarize, false, getMIcon('ICON', 'system-uicons:write')),
-      getMenuItem('Summarize', handleSummarize, false, DefaultMIcons.AI),
-      getMenuItem('Explain', handleSummarize, false, getMIcon('ICON', 'heroicons-solid:question-mark-circle'))
+      getMenuItem(
+        'Continue',
+        (c) => handleAIQuery(SupportedAIEventTypes.EXPAND, c),
+        false,
+        getMIcon('ICON', 'system-uicons:write')
+      ),
+      getMenuItem(
+        'Explain',
+        (c) => handleAIQuery(SupportedAIEventTypes.EXPLAIN, c),
+        false,
+        getMIcon('ICON', 'ri:question-line')
+      ),
+      getMenuItem('Summarize', (c) => handleAIQuery(SupportedAIEventTypes.SUMMARIZE, c), false, DefaultMIcons.AI),
+      getMenuItem(
+        'Actionable',
+        (c) => handleAIQuery(SupportedAIEventTypes.ACTIONABLE, c),
+        false,
+        getMIcon('ICON', 'ic:round-view-list')
+      )
     ]
   }
 
@@ -359,6 +369,7 @@ export const useCreateNewMenu = () => {
     getTreeMenuItems,
     getViewMenuItems,
     getAIMenuItems,
+
     // * Handlers
     handleCreateSnippet,
     handleCreateNote,

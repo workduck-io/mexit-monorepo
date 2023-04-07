@@ -6,7 +6,17 @@ import { focusEditor, getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getContent, useBlockStore, useContentStore, useDataStore, useEditorStore, useHelpStore,useLayoutStore, useModalStore  } from '@mexit/core'
+import {
+  getContent,
+  useBlockStore,
+  useContentStore,
+  useDataStore,
+  useEditorStore,
+  useFloatingStore,
+  useHelpStore,
+  useLayoutStore,
+  useModalStore
+} from '@mexit/core'
 import { EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
@@ -107,7 +117,12 @@ const ContentEditor = () => {
         })
       },
       Enter: (event) => {
-        if (!isOnEditableElement(event) && !useModalStore.getState().open && !useLayoutStore.getState().contextMenu) {
+        if (
+          !isOnEditableElement(event) &&
+          !useModalStore.getState().open &&
+          !useLayoutStore.getState().contextMenu &&
+          !useFloatingStore.getState().floatingElement
+        ) {
           event.preventDefault()
           const editorRef = getPlateEditorRef(nodeid) ?? getPlateEditorRef()
           focusEditor(editorRef)

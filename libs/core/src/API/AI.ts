@@ -2,6 +2,7 @@ import { type Options } from 'ky'
 
 import { type KYClient } from '@workduck-io/dwindle'
 
+import { AIEvent } from '../Types'
 import { apiURLs } from '../Utils/routes'
 
 export class AiAPI {
@@ -10,11 +11,7 @@ export class AiAPI {
     this.client = client
   }
 
-  async perform(action: string, data: any, options?: Options) {
+  async perform(data: any, options?: Options): Promise<AIEvent> {
     return await this.client.post(apiURLs.openAi.perform, data, options)
   }
-
-  //   async getAll(cacheConfig?: CacheConfig, options?: Options) {
-  //     return await this.client.get(apiURLs.bookmarks.getAll, cacheConfig, options)
-  //   }
 }

@@ -58,14 +58,19 @@ export const MenuItem = forwardRef<
   {
     label: string
     icon: MIcon
+    tabIndex?: number
+    role?: string
+    className?: string
     count?: number
+    fontSize?: 'small' | 'regular'
     multiSelect?: boolean
+    isActive?: boolean
     selected?: boolean
     disabled?: boolean
     color?: string
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   }
->(({ label, disabled, count, color, icon, multiSelect, selected, ...props }, ref) => {
+>(({ label, disabled, count, color, fontSize, icon, multiSelect, selected, ...props }, ref) => {
   return (
     <MenuItemWrapper {...props} ref={ref} role="menuitem" disabled={disabled}>
       <FilterMenuDiv>
@@ -75,7 +80,7 @@ export const MenuItem = forwardRef<
           </MultiSelectIcon>
         )}
         <IconDisplay icon={icon} color={color} />
-        <ItemLabel>{label}</ItemLabel>
+        <ItemLabel fontSize={fontSize}>{label}</ItemLabel>
       </FilterMenuDiv>
       {count && <MenuItemCount>{count}</MenuItemCount>}
     </MenuItemWrapper>
