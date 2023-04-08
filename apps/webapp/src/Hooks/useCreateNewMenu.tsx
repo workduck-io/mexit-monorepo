@@ -11,6 +11,7 @@ import {
   isReservedNamespace,
   MIcon,
   ModalsType,
+  SupportedAIEventTypes,
   useDataStore,
   useLayoutStore,
   useMetadataStore,
@@ -25,8 +26,10 @@ import { useDeleteStore } from '../Components/Refactor/DeleteModal'
 import { doesLinkRemain } from '../Components/Refactor/doesLinkRemain'
 import { useTaskViewModalStore } from '../Components/TaskViewModal'
 import { useBlockMenu } from '../Editor/Components/useBlockMenu'
+import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
 import { useViewStore } from '../Stores/useViewStore'
 
+import { useAIOptions } from './useAIOptions'
 import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'
 import { useNavigation } from './useNavigation'
@@ -72,9 +75,11 @@ export const useCreateNewMenu = () => {
   const deleteNamespace = useDataStore((store) => store.deleteNamespace)
 
   const { goTo } = useRouting()
+  const { getSelectionInMarkdown } = useUpdateBlock()
   const { push } = useNavigation()
   const { deleteView } = useViews()
   const { addSnippet } = useSnippets()
+  const { performAIAction } = useAIOptions()
   const { execRefactorAsync } = useRefactor()
   const { createNewNote } = useCreateNewNote()
   const blockMenuItems = useBlockMenu()
@@ -329,6 +334,37 @@ export const useCreateNewMenu = () => {
     ]
   }
 
+  // * AI functions
+  const handleAIQuery = async (type: SupportedAIEventTypes, callback: any) => {
+    performAIAction(type).then((res) => {
+      callback(res)
+    })
+  }
+
+  const getAIMenuItems = () => {
+    return [
+      getMenuItem(
+        'Continue',
+        (c) => handleAIQuery(SupportedAIEventTypes.EXPAND, c),
+        false,
+        getMIcon('ICON', 'system-uicons:write')
+      ),
+      getMenuItem(
+        'Explain',
+        (c) => handleAIQuery(SupportedAIEventTypes.EXPLAIN, c),
+        false,
+        getMIcon('ICON', 'ri:question-line')
+      ),
+      getMenuItem('Summarize', (c) => handleAIQuery(SupportedAIEventTypes.SUMMARIZE, c), false, DefaultMIcons.AI),
+      getMenuItem(
+        'Actionable',
+        (c) => handleAIQuery(SupportedAIEventTypes.ACTIONABLE, c),
+        false,
+        getMIcon('ICON', 'ic:round-view-list')
+      )
+    ]
+  }
+
   return {
     getCreateNewMenuItems,
     getSnippetsMenuItems,
@@ -336,6 +372,7 @@ export const useCreateNewMenu = () => {
     getBlockMenuItems,
     getTreeMenuItems,
     getViewMenuItems,
+    getAIMenuItems,
 
     // * Handlers
     handleCreateSnippet,

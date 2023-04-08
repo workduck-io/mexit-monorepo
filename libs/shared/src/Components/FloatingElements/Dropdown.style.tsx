@@ -5,6 +5,7 @@ import { generateStyle } from '@workduck-io/mex-themes'
 import { GenericFlex } from '../../Style/Filter.style'
 import { ScrollStyles } from '../../Style/Helpers'
 import { Ellipsis } from '../../Style/NodeSelect.style'
+import { BodyFont, MainFont } from '../../Style/Search'
 
 import { MenuItemClassName } from './Dropdown.classes'
 
@@ -58,9 +59,23 @@ const MenuItemStyles = css`
   }
 `
 
-export const ItemLabel = styled.div`
+export const ItemLabel = styled.div<{ fontSize?: 'small' | 'regular' }>`
   ${Ellipsis}
   max-width: 12rem;
+
+  ${({ fontSize }) => {
+    switch (fontSize) {
+      case 'small':
+        return css`
+          ${BodyFont}
+        `
+      case 'regular':
+      default:
+        return css`
+          ${MainFont}
+        `
+    }
+  }}
 `
 
 export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolean; noBackground?: boolean }>`
@@ -121,6 +136,12 @@ export const MenuWrapper = styled.div`
   ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[0])}
 `
 
-export const MenuItemWrapper = styled.button`
+export const MenuItemWrapper = styled.button<{ isActive?: boolean }>`
   ${MenuItemStyles}
+
+  ${({ isActive, theme }) =>
+    isActive &&
+    css`
+      background: ${theme.tokens.surfaces.s[3]};
+    `}
 `

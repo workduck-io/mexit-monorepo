@@ -12,6 +12,8 @@ export enum CategoryType {
   tag = 'Tags'
 }
 
+export const AI_RENDER_TYPE = 'ai-render-type'
+
 export enum QuickLinkType {
   backlink = 'Backlinks',
   publicNotes = 'Public Notes',

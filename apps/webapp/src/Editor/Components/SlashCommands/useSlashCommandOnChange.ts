@@ -9,7 +9,7 @@ import {
   TElement
 } from '@udecode/plate'
 
-import { isElder, useComboboxStore } from '@mexit/core'
+import { camelCase, FloatingElementType, isElder, useComboboxStore, useFloatingStore } from '@mexit/core'
 
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { IComboboxItem, SlashCommandConfig } from '../../Types/Combobox'
@@ -17,12 +17,13 @@ import { IComboboxItem, SlashCommandConfig } from '../../Types/Combobox'
 export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConfig }) => {
   const closeMenu = useComboboxStore((state) => state.closeMenu)
   const { getSnippetContent } = useSnippets()
+  const setFloatingElement = useFloatingStore((s) => s.setFloatingElement)
 
   return (editor: PlateEditor, item: IComboboxItem) => {
     const targetRange = useComboboxStore.getState().targetRange
     const commandKey = Object.keys(keys).filter((k) => keys[k].command === item.key)[0]
-
     const commandConfig = keys[commandKey]
+
     if (targetRange) {
       try {
         if (isElder(commandKey, 'snip')) {
@@ -31,6 +32,18 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
             select(editor, targetRange)
             insertNodes<TElement>(editor, content)
           }
+        } else if (item.key === 'ai') {
+          const aiFloatingElement = FloatingElementType.AI_POPOVER
+          select(editor, targetRange)
+          deleteText(editor)
+
+          setTimeout(() => {
+            setFloatingElement(aiFloatingElement, {
+              label: camelCase(aiFloatingElement),
+              type: aiFloatingElement,
+              disableMenu: true
+            })
+          }, 1)
         } else if (item.key === 'table') {
           select(editor, targetRange)
           insertTable(editor, { rowCount: 3 })
@@ -60,6 +73,7 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
       } catch (e) {
         console.error(e)
       }
+
       return closeMenu()
     }
 

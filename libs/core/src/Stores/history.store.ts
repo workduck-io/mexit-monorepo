@@ -1,3 +1,4 @@
+import { AIEvent, AIEventsHistory } from '../Types/History'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
@@ -6,6 +7,35 @@ const MAX_HISTORY_SIZE = 25
 export const historyStoreConfig = (set, get) => ({
   stack: [] as Array<string>,
   currentNodeIndex: -1,
+  ai: [] as AIEventsHistory,
+  activeEventIndex: -1,
+  setActiveEventIndex: (index: number) => set({ activeEventIndex: index }),
+  addInitialEvent: (event: AIEvent) => {
+    set({ ai: [[event, undefined]] })
+  },
+  addInAIHistory: (userQuery: AIEvent, assistantResponse: AIEvent) => {
+    const aiEventsHistory = get().ai as AIEventsHistory
+    const activeEventIndex = get().activeEventIndex
+    const lastEvent = aiEventsHistory.at(activeEventIndex)?.[0]
+    set({
+      ai: [...aiEventsHistory.slice(0, activeEventIndex), [lastEvent, userQuery], [assistantResponse, undefined]],
+      activeEventIndex: -1
+    })
+  },
+  clearAIResponses: () => {
+    const aiEventsHistory = get().ai as AIEventsHistory
+    if (aiEventsHistory?.length) {
+      const initialEvent = aiEventsHistory[0]
+      set({ ai: [[initialEvent[0], undefined]], activeEventIndex: -1 })
+    }
+  },
+  clearAIHistory: () => set({ ai: [], activeEventIndex: -1 }),
+  getLastEvent: (): string | undefined => {
+    const aiHistory = get().ai as AIEventsHistory
+    const lastEvent = aiHistory.at(-1)?.at(-1)
+
+    return lastEvent?.content
+  },
 
   /**
    * Push will remove all elements above the currentNodeIndex

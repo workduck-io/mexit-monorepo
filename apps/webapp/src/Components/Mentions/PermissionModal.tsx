@@ -11,8 +11,10 @@ import {
   permissionOptions,
   useAuthStore,
   useEditorStore,
-useMentionStore , userPreferenceStore as useUserPreferenceStore,  useShareModalStore
- } from '@mexit/core'
+  useMentionStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useShareModalStore
+} from '@mexit/core'
 import {
   Center,
   copyTextToClipboard,

@@ -1,9 +1,10 @@
 import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
-import { useContentStore } from '@mexit/core'
+import { ELEMENT_PARAGRAPH, useContentStore } from '@mexit/core'
 
 import { useBufferStore } from '../../Hooks/useEditorBuffer'
 import { useUpdater } from '../../Hooks/useUpdater'
+import parseToMarkdown from '../utils'
 
 type BlockDataType = Record<string, any>
 
@@ -68,6 +69,16 @@ const useUpdateBlock = () => {
     }
   }
 
+  const getSelectionInMarkdown = () => {
+    const editor = getPlateEditorRef()
+    if (!editor.selection) return
+
+    const nodeFragments = editor.getFragment()
+    const selectedText = parseToMarkdown({ children: nodeFragments, type: ELEMENT_PARAGRAPH })?.trim()
+
+    return selectedText
+  }
+
   const addBlockInContent = (noteId: string, block: BlockDataType) => {
     const bufferContent = useBufferStore.getState().getBuffer(noteId)
     const existingContent = useContentStore.getState().getContent(noteId)?.content
@@ -83,7 +94,8 @@ const useUpdateBlock = () => {
   return {
     insertInEditor,
     setInfoOfBlockInContent,
-    addBlockInContent
+    addBlockInContent,
+    getSelectionInMarkdown
   }
 }
 

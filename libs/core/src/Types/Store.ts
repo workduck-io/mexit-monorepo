@@ -49,6 +49,7 @@ export enum StoreIdentifier {
   API = 'api',
   AUTH = 'auth',
   BLOCK = 'block',
+  FLOATING = 'floating',
   COMMENTS = 'comments',
   HELP = 'help',
   HISTORY = 'history',

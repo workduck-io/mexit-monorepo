@@ -1,8 +1,7 @@
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
-export const SILinkRoot = styled.div`
-  display: inline-block;
+export const SILinkRoot = styled.span`
   line-height: 1.2;
   vertical-align: middle;
 `
@@ -16,7 +15,7 @@ export const StyledIcon = styled(Icon)`
   margin-right: 4px;
 `
 
-export const SILink = styled.div<SILinkProps>`
+export const SILink = styled.span<SILinkProps>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
