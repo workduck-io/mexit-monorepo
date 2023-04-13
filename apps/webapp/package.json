@@ -52,7 +52,6 @@
     "ky": "^0.32.2",
     "lodash": "^4.17.21",
     "lottie-react": "^2.2.1",
-    "markdown-to-jsx": "^7.1.9",
     "match-sorter": "^6.3.1",
     "md5": "2.3.0",
     "mixpanel-browser": "^2.43.0",
