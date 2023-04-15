@@ -115,7 +115,7 @@ export const MexEditorBase = (props: MexEditorProps) => {
         {props.options?.withGlobalListener !== false && <GlobalEditorListener />}
       </Plate>
       {props.debug && <pre>{JSON.stringify(content, null, 2)}</pre>}
-      <AIPreviewContainer />
+      <AIPreviewContainer id={props.editorId} />
     </>
   )
 }

@@ -55,6 +55,7 @@ const AIResponse = ({ aiResponse, index, plugins }) => {
       <AIResponseContainer>
         <EditorStyles>
           <Plate
+            editableProps={{ autoFocus: false }}
             value={deserialize}
             plugins={plugins}
             onChange={(e) => onChange(e)}

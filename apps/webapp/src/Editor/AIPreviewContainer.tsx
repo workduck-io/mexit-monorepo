@@ -5,11 +5,11 @@ import { useCreateNewMenu } from '../Hooks/useCreateNewMenu'
 import components from './Components/EditorPreviewComponents'
 import { generateEditorPluginsWithComponents } from './Plugins'
 
-const AIPreviewContainer = () => {
+const AIPreviewContainer = ({ id }) => {
   const { getAIMenuItems } = useCreateNewMenu()
   const plugins = generateEditorPluginsWithComponents(components, { exclude: { dnd: true } })
 
-  return <AIPreview allowReplace insertInNote={false} plugins={plugins} getDefaultItems={getAIMenuItems} />
+  return <AIPreview id={id} allowReplace insertInNote={false} plugins={plugins} getDefaultItems={getAIMenuItems} />
 }
 
 export default AIPreviewContainer

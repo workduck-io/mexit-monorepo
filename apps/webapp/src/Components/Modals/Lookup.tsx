@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { QuickLinkType, useHelpStore, useSnippetStore } from '@mexit/core'
+import { QuickLinkType, useFloatingStore, useHelpStore, useSnippetStore } from '@mexit/core'
 import { blurEditableElement, Input, StyledCombobox, StyledInputWrapper } from '@mexit/shared'
 
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
@@ -50,6 +50,7 @@ const InputWrapper = styled.div`
 
 const Lookup = () => {
   const [open, setOpen] = useState(false)
+  const setFloatingElement = useFloatingStore((s) => s.setFloatingElement)
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
 
   const { goTo, location } = useRouting()
@@ -58,6 +59,7 @@ const Lookup = () => {
 
   const openModal = () => {
     setOpen(true)
+    setFloatingElement(undefined)
   }
 
   const closeModal = () => {

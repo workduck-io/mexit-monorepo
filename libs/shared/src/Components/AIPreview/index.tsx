@@ -47,7 +47,7 @@ const AIPreviewContainer: React.FC<AIPreviewProps> = (props) => {
   }
 
   const insertContent = (content: string, replace = true) => {
-    const editor = getPlateEditorRef()
+    const editor = getPlateEditorRef(props.id)
     const deserializedContent = getContent(content)
 
     if (Array.isArray(deserializedContent) && deserializedContent.length > 0) {
