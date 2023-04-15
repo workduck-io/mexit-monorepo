@@ -22,8 +22,8 @@ export const defaultShortcuts = {
     category: 'Actions'
   },
   showTasks: {
-    title: 'Tasks',
-    keystrokes: 'KeyG KeyT',
+    title: 'Views',
+    keystrokes: 'KeyG KeyV',
     category: 'Navigate'
   },
   showHelp: {
@@ -32,8 +32,8 @@ export const defaultShortcuts = {
     category: 'Navigate'
   },
   goToLinks: {
-    title: 'Go to Links',
-    keystrokes: 'KeyG KeyL',
+    title: 'Go to Captures',
+    keystrokes: 'KeyG KeyC',
     category: 'Navigate'
   },
   showIntegrations: {

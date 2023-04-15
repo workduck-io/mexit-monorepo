@@ -264,11 +264,11 @@ const RenderPlateless = React.memo<RenderPlatelessProps>(
   ({ content, typeMap, multiline = false }: RenderPlatelessProps) => {
     const childrenRender =
       content &&
-      content.map((node) => {
+      content.map((node, i) => {
         if (Object.keys(typeMap).includes(node?.type)) {
           const RenderItem = typeMap[node?.type]
           return (
-            <RenderItem node={node}>
+            <RenderItem key={`${node?.type}-${i}`} node={node}>
               <RenderPlateless typeMap={typeMap} content={node.children} multiline={multiline} />
             </RenderItem>
           )

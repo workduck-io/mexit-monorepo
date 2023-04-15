@@ -47,6 +47,10 @@ export const AutoCompleteInput = styled.input`
   width: 100%;
   color: ${({ theme }) => theme.tokens.text.default};
 
+  ::placeholder {
+    color: ${({ theme }) => theme.tokens.text.fade};
+  }
+
   &:focus-visible,
   :hover,
   :focus {

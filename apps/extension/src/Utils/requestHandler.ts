@@ -1,4 +1,4 @@
-import { apiURLs, DEFAULT_NAMESPACE, defaultContent, ListItemType, mog } from '@mexit/core'
+import { AIEvent, apiURLs, DEFAULT_NAMESPACE, defaultContent, ListItemType, mog } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
 
@@ -69,6 +69,23 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
     }
   }
+}
+
+export const handlePerformAIRequest = async ({ data, workspaceId }) => {
+  return await client
+    .post(apiURLs.openAi.perform, {
+      json: data,
+      headers: {
+        'mex-workspace-id': workspaceId
+      }
+    })
+    .json()
+    .then((event: AIEvent) => {
+      return { message: event, error: null }
+    })
+    .catch((error) => {
+      return { message: null, error: error }
+    })
 }
 
 export const handleSnippetRequest = ({ data }) => {

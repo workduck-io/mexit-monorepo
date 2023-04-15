@@ -20,12 +20,15 @@ export interface Link {
 }
 
 export const linkStoreConstructor = (set, get) => ({
-  links: [],
+  links: [] as Link[],
   setLinks: (links: Link[]) => set({ links }),
   addLink: (link: Link) => {
     const oldLinks = get().links
 
     set({ links: [...oldLinks, link] })
+  },
+  reset: () => {
+    set({ links: [] })
   }
 })
 

@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { AIResult, StyledAIResults } from './styled'
 
 type AIResultsProps = {

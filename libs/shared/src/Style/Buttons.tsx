@@ -1,6 +1,12 @@
+import styled from 'styled-components'
 
+import { Button } from '@workduck-io/mex-components'
 
+import { BodyFont } from './Search'
 
+export const StyledButton = styled(Button)`
+  ${BodyFont}
+`
 
 // export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
 //   primary?: boolean
@@ -204,7 +210,6 @@
 //         `
 //       : ''}
 
-
 //   ${({ theme, primary }) => css`
 //     &:hover {
 //       box-shadow: 0px 6px 12px ${transparentize(0.5, primary ? theme.colors.primary : theme.colors.palette.black)};
@@ -266,7 +271,6 @@
 //             ${({ theme }) => transparentize(0.33, primary ? theme.colors.primary : theme.colors.palette.black)};
 //         `
 //       : ''}
-
 
 //   ${({ theme, primary }) => css`
 //     &:hover {

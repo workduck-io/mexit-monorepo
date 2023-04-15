@@ -13,6 +13,7 @@ import {
   useListNavigation,
   useRole
 } from '@floating-ui/react'
+import { useTheme } from 'styled-components'
 
 import { fuzzySearch, MenuListItemType } from '@mexit/core'
 
@@ -31,13 +32,18 @@ import {
 import { MenuItem } from './Dropdown'
 import { MenuClassName, MenuItemClassName } from './Dropdown.classes'
 
-export const AutoComplete: React.FC<{
+interface AutoCompleteProps {
   onEnter: any
   clearOnEnter?: boolean
+  onCommandEnter?: () => void
   disableMenu?: boolean
   defaultItems: Array<MenuListItemType>
   defaultValue?: string
-}> = ({ defaultItems = [], disableMenu, defaultValue, onEnter, clearOnEnter }) => {
+}
+
+export const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
+  const { defaultItems = [], disableMenu, defaultValue, onEnter, onCommandEnter, clearOnEnter } = props
+
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [inputValue, setInputValue] = useState(defaultValue ?? '')
@@ -65,6 +71,7 @@ export const AutoComplete: React.FC<{
     ]
   })
 
+  const theme = useTheme()
   const role = useRole(context, { role: 'listbox' })
   const dismiss = useDismiss(context)
   const listNav = useListNavigation(context, {
@@ -112,7 +119,7 @@ export const AutoComplete: React.FC<{
   return (
     <>
       <AutoCompleteSelector>
-        <IconDisplay icon={DefaultMIcons.AI} />
+        <IconDisplay color={theme.tokens.colors.primary.hover} size={20} icon={DefaultMIcons.AI} />
         <AutoCompleteInput
           value={inputValue}
           {...getReferenceProps({
@@ -122,6 +129,10 @@ export const AutoComplete: React.FC<{
             'aria-autocomplete': 'list',
             onKeyDown(event) {
               if (event.key === 'Enter') {
+                if (event.metaKey && onCommandEnter) {
+                  onCommandEnter()
+                }
+
                 if (activeIndex !== null && items[activeIndex] && !disableMenu) {
                   handleOnSelect(items[activeIndex])
                 } else {

@@ -88,7 +88,7 @@ const useNavlinks = () => {
       //   // isComingSoon: true
       // },
       {
-        title: 'Links',
+        title: 'Captures',
         path: ROUTE_PATHS.links,
         icon: GetIcon(linkM),
         // count: count.reminders

@@ -1,12 +1,19 @@
 import { Indexes, ISearchQuery, IUpdateDoc, SearchResult, SearchX } from '@workduck-io/mex-search'
 
-import { ILink, mog, PersistentData } from '@mexit/core'
+import { Highlight, ILink, Link, mog, PersistentData, Reminder } from '@mexit/core'
 
 import { exposeX } from './worker-utils'
 
 let searchX = new SearchX()
 
 let hasInitialized = false
+
+export interface InitializeSearchEntity {
+  initializeHeirarchy: ILink[]
+  initializeHighlights: Highlight[]
+  initializeLinks: Link[]
+  initializeReminders: Reminder[]
+}
 
 const searchWorker = {
   getInitState: () => {
@@ -29,6 +36,7 @@ const searchWorker = {
           contents: fileData.snippets
         } as any
       })
+
       hasInitialized = true
     } catch (err) {
       console.log('Error initializing search', err)
@@ -85,6 +93,10 @@ const searchWorker = {
         }
       ]
     })
+  },
+
+  initializeEntities: <T extends keyof InitializeSearchEntity>(updateType: T, data: InitializeSearchEntity[T]) => {
+    return searchX[updateType](data as any)
   },
 
   searchIndexWithRanking: (indexKey: Indexes, query: ISearchQuery, tags?: Array<string>) => {

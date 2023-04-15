@@ -65,7 +65,7 @@ type BlockType = {
   children: Array<any>
 }
 
-export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = false, listDepth = 0) {
+export function parseToMarkdown(chunk: any, ignoreParagraphNewline = false, listDepth = 0) {
   const text = chunk.text || ''
   let type = chunk.type || ''
 

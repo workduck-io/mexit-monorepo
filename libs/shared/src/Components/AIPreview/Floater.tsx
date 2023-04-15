@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { RemoveScroll } from 'react-remove-scroll'
 
 import {
   arrow,
@@ -18,12 +19,17 @@ import {
 import { getSelectionBoundingClientRect } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
-import { FloatingElementType, mog, useFloatingStore, useHistoryStore } from '@mexit/core'
+import { FloatingElementType, useFloatingStore, useHistoryStore } from '@mexit/core'
 
 import { FloaterContainer } from './styled'
+import { AIPreviewProps } from './types'
 import AIBlockPopover from '.'
 
-const DefaultFloater = ({ onClose }) => {
+interface DefaultFloaterProps extends AIPreviewProps {
+  onClose?: () => void
+}
+
+const DefaultFloater: React.FC<DefaultFloaterProps> = ({ onClose, root, ...props }) => {
   const isOpen = useFloatingStore((store) => store.floatingElement === FloatingElementType.AI_POPOVER)
   const setIsOpen = useFloatingStore((store) => store.setFloatingElement)
 
@@ -36,7 +42,6 @@ const DefaultFloater = ({ onClose }) => {
       const state = isOpen ? FloatingElementType.AI_POPOVER : null
 
       if (!state && onClose) {
-        mog('called')
         onClose()
       }
       setIsOpen(state)
@@ -72,45 +77,46 @@ const DefaultFloater = ({ onClose }) => {
   }, [isOpen])
 
   return (
-    <FloatingPortal>
+    <FloatingPortal root={root}>
       {isOpen && (
-        <FloatingFocusManager context={context} closeOnFocusOut>
-          <FloaterContainer
-            ref={refs.setFloating}
-            style={{
-              position: strategy,
-              top: y ?? 0,
-              left: x ?? 0,
-              width: 'max-content'
-            }}
-            {...getFloatingProps()}
-          >
-            <FloatingArrow
-              height={8}
-              width={16}
-              radius={4}
-              fill={theme.tokens.surfaces.modal}
-              stroke={theme.tokens.surfaces.s[3]}
-              strokeWidth={0.1}
-              ref={arrowRef}
-              context={context}
-            />
-            <AIBlockPopover />
-          </FloaterContainer>
-        </FloatingFocusManager>
+        <RemoveScroll enabled>
+          <FloatingFocusManager context={context} closeOnFocusOut>
+            <FloaterContainer
+              id="ai-preview"
+              ref={refs.setFloating}
+              style={{
+                position: strategy,
+                top: y ?? 0,
+                left: x ?? 0,
+                width: 'max-content'
+              }}
+              {...getFloatingProps()}
+            >
+              <FloatingArrow
+                height={8}
+                width={16}
+                radius={4}
+                fill={theme.tokens.surfaces.modal}
+                stroke={theme.tokens.surfaces.s[3]}
+                strokeWidth={0.1}
+                ref={arrowRef}
+                context={context}
+              />
+              <AIBlockPopover {...props} root={root} />
+            </FloaterContainer>
+          </FloatingFocusManager>
+        </RemoveScroll>
       )}
     </FloatingPortal>
   )
 }
 
-const Floater = () => {
+export const AIPreview: React.FC<Omit<DefaultFloaterProps, 'onClose'>> = (props) => {
   const clearAIEventsHistory = useHistoryStore((s) => s.clearAIHistory)
 
   return (
     <ErrorBoundary FallbackComponent={() => <></>}>
-      <DefaultFloater onClose={clearAIEventsHistory} />
+      <DefaultFloater {...props} onClose={clearAIEventsHistory} />
     </ErrorBoundary>
   )
 }
-
-export default Floater

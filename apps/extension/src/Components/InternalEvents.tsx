@@ -6,7 +6,14 @@ import * as Sentry from '@sentry/react'
 import mixpanel from 'mixpanel-browser'
 import Highlighter from 'web-highlighter'
 
-import { API_BASE_URLS, mog, useHighlightStore } from '@mexit/core'
+import {
+  API_BASE_URLS,
+  FloatingElementType,
+  mog,
+  useFloatingStore,
+  useHighlightStore,
+  useHistoryStore
+} from '@mexit/core'
 import { getScrollbarWidth, isInputField } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
@@ -50,6 +57,8 @@ function useToggleHandler() {
   const { previewMode, setPreviewMode } = useEditorStore()
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
   const resetSputlitState = useSputlitStore((s) => s.reset)
+  const addAIEvent = useHistoryStore((store) => store.addInitialEvent)
+  const setFloatingElement = useFloatingStore((s) => s.setFloatingElement)
 
   const timeoutRef = useRef<Timeout>()
   const runAnimateTimer = useCallback((vs: VisualState.animatingIn | VisualState.animatingOut) => {
@@ -70,6 +79,22 @@ function useToggleHandler() {
       }
     }, ms)
   }, [])
+
+  const handleOpenAIPreview = (highlighter) => {
+    const { html } = getSelectionHTML()
+    const range = window.getSelection()?.getRangeAt(0)
+    const content = sanitizeHTML(html)
+
+    if (content) {
+      addAIEvent({ role: 'assistant', content, inputFormat: 'html' })
+
+      highlighter.fromRange(range)
+
+      setFloatingElement(FloatingElementType.AI_POPOVER, {
+        range
+      })
+    }
+  }
 
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
@@ -93,6 +118,10 @@ function useToggleHandler() {
           } else {
             setVisualState(VisualState.animatingOut)
           }
+          sendResponse(true)
+          break
+        case 'open-ai-tools':
+          handleOpenAIPreview(highlighter)
           sendResponse(true)
       }
     }

@@ -20,9 +20,10 @@ type TaskEditorType = {
   content: NodeEditorContent
   readOnly?: boolean
   onChange?: (val: any) => void
+  withCombobox?: boolean
 }
 
-const TaskEditor = ({ editorId, readOnly, content, onChange }: TaskEditorType) => {
+const TaskEditor = ({ editorId, readOnly, content, onChange, withCombobox = true }: TaskEditorType) => {
   const config = useEditorPluginConfig(editorId)
   const { uploadImageToS3 } = useAuth()
   const { uploadImageToWDCDN } = useUploadToCDN(uploadImageToS3)
@@ -66,7 +67,7 @@ const TaskEditor = ({ editorId, readOnly, content, onChange }: TaskEditorType) =
       onChange={onChangeContent}
       editableProps={editableProps}
     >
-      <MultiComboboxContainer config={config.onKeyDownConfig} />
+      {withCombobox && <MultiComboboxContainer config={config.onKeyDownConfig} />}
     </Plate>
   )
 }

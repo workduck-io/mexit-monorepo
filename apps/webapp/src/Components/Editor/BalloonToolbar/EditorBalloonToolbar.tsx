@@ -113,7 +113,7 @@ const BallonMarkToolbarButtons = () => {
             <>
               <ToolbarButton
                 tooltip={{ content: 'Ask AI anything...', ...tooltip }}
-                icon={<IconDisplay size={20} icon={DefaultMIcons.AI} />}
+                icon={<IconDisplay color={theme.tokens.colors.primary.hover} size={20} icon={DefaultMIcons.AI} />}
                 onMouseDown={handleOpenAIPreview}
               />
               <ButtonSeparator />

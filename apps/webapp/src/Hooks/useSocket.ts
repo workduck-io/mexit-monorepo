@@ -50,7 +50,7 @@ const useSocket = () => {
     config.baseURLs.MEXIT_WEBSOCKET_URL,
     {
       onOpen: () => mog('CONNECTION OPENED'),
-      retryOnError: true,
+      retryOnError: false,
       onError: (event) => {
         mog('Socket Error Occured', { event })
       },

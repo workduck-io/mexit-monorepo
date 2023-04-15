@@ -7,6 +7,24 @@ import { BlockType, generateTempId, mog, NodeEditorContent, updateIds } from '@m
 const isInlineNode = (editor: Pick<Editor, 'isInline'>) => (node: Descendant) =>
   Text.isText(node) || editor.isInline(node)
 
+export const highlightNodes = (blockToHighlight: BlockType, highlight?: boolean) => {
+  // * if show is true add highlight else remove highlight from nested obj
+  const block = Object.assign({}, blockToHighlight)
+
+  if (highlight) {
+    block['highlight'] = true
+  } else delete block['highlight']
+
+  return block
+}
+
+export const getMexHTMLDeserializer = (HTMLContent: string, editor: any) => {
+  const element = htmlStringToDOMNode(HTMLContent ?? '')
+  const nodes = editor ? htmlBodyToFragment(editor, element) : undefined
+
+  return nodes
+}
+
 export const getDeserializeSelectionToNodes = (
   selection: { text: string; metadata: string },
   editor: any,
@@ -39,24 +57,6 @@ export const getDeserializeSelectionToNodes = (
   }
 
   mog('deserializeHTML', { nodes, selection, highlight })
-
-  return nodes
-}
-
-export const highlightNodes = (blockToHighlight: BlockType, highlight?: boolean) => {
-  // * if show is true add highlight else remove highlight from nested obj
-  const block = Object.assign({}, blockToHighlight)
-
-  if (highlight) {
-    block['highlight'] = true
-  } else delete block['highlight']
-
-  return block
-}
-
-export const getMexHTMLDeserializer = (HTMLContent: string, editor: any) => {
-  const element = htmlStringToDOMNode(HTMLContent ?? '')
-  const nodes = editor ? htmlBodyToFragment(editor, element) : undefined
 
   return nodes
 }

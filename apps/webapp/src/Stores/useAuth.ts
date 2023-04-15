@@ -15,6 +15,8 @@ import {
   useDataStore,
   useEditorStore,
   useHelpStore,
+  useHighlightStore,
+  useLinkStore,
   useMentionStore,
   useMetadataStore,
   usePromptStore,
@@ -47,7 +49,9 @@ export const useAuthentication = () => {
   const clearUsersCache = useUserCacheStore((s) => s.clearCache)
   const clearUserPreferences = useUserPreferenceStore((store) => store.clear)
   const clearSnippets = useSnippetStore((s) => s.clear)
+  const clearHighlightsStore = useHighlightStore((s) => s.reset)
   const resetDataStore = useDataStore((s) => s.resetDataStore)
+  const resetLinksStore = useLinkStore((s) => s.reset)
   const resetPublicNodes = usePublicNodeStore((s) => s.reset)
   const clearRecents = useRecentsStore((s) => s.clear)
   const clearMentions = useMentionStore((m) => m.reset)
@@ -119,7 +123,9 @@ export const useAuthentication = () => {
     clearRoutesInformation()
     resetPublicNodes()
     clearRecents()
+    clearHighlightsStore()
     clearReminders()
+    resetLinksStore()
     clearSnippets()
     resetShortcuts()
     clearAppStore()

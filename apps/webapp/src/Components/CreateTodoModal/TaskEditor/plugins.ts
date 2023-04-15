@@ -47,7 +47,7 @@ import { optionsCreateNodeIdPlugin, optionsSelectOnBackspacePlugin } from '../..
 import { parseTwitterUrl } from '../../../Editor/Plugins/parseTwitterUrl'
 import Todo from '../../Todo'
 
-const generateTodoPlugins = (uploadImage?: UploadImageFn) => {
+const generateTodoPlugins = (uploadImage: UploadImageFn, inline?: boolean) => {
   return [
     // elements
     createParagraphPlugin(), // paragraph element
@@ -106,7 +106,7 @@ const generateTodoPlugins = (uploadImage?: UploadImageFn) => {
     createMentionPlugin(), // Mentions
     createILinkPlugin(), // Internal Links ILinks
     createInlineBlockPlugin(),
-    createSingleLinePlugin()
+    inline && createSingleLinePlugin()
   ]
 }
 
@@ -129,7 +129,7 @@ export const getComponents = () =>
     [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any
   })
 
-export const getTodoPlugins = (uploadImage?: UploadImageFn) => {
-  const plugins = createPlugins(generateTodoPlugins(uploadImage), { components: getComponents() })
+export const getTodoPlugins = (uploadImage: UploadImageFn, isInline = true) => {
+  const plugins = createPlugins(generateTodoPlugins(uploadImage, isInline), { components: getComponents() })
   return plugins
 }

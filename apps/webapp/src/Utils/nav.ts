@@ -1,3 +1,5 @@
+import { ROUTE_PATHS } from '../Hooks/useRouting'
+
 export const showNav = (pathname: string): boolean => {
   if (pathname === '/') return true
   const showNavPaths = [
@@ -10,7 +12,7 @@ export const showNav = (pathname: string): boolean => {
     '/tag',
     '/integrations',
     '/reminders',
-    '/links'
+    ROUTE_PATHS.links
   ]
 
   for (const path of showNavPaths) {

@@ -8,10 +8,10 @@ import {
   defaultContent,
   DRAFT_NODE,
   generateSnippetId,
+  getMenuItem,
   isReservedNamespace,
   MIcon,
   ModalsType,
-  SupportedAIEventTypes,
   useDataStore,
   useLayoutStore,
   useMetadataStore,
@@ -20,7 +20,7 @@ import {
   useShareModalStore,
   useSnippetStore
 } from '@mexit/core'
-import { DefaultMIcons, getMIcon, InteractiveToast } from '@mexit/shared'
+import { DefaultMIcons, getMIcon, InteractiveToast, useAIOptions } from '@mexit/shared'
 
 import { useDeleteStore } from '../Components/Refactor/DeleteModal'
 import { doesLinkRemain } from '../Components/Refactor/doesLinkRemain'
@@ -29,7 +29,6 @@ import { useBlockMenu } from '../Editor/Components/useBlockMenu'
 import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
 import { useViewStore } from '../Stores/useViewStore'
 
-import { useAIOptions } from './useAIOptions'
 import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'
 import { useNavigation } from './useNavigation'
@@ -44,23 +43,9 @@ interface MenuListItemType {
   disabled?: boolean
   icon?: MIcon
   onSelect: any
+  category?: string
   options?: Array<MenuListItemType>
 }
-
-export const getMenuItem = (
-  label: string,
-  onSelect: any,
-  disabled?: boolean,
-  icon?: MIcon,
-  options?: Array<MenuListItemType>
-) => ({
-  id: label,
-  label,
-  onSelect,
-  icon,
-  disabled,
-  options
-})
 
 export const useCreateNewMenu = () => {
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
@@ -75,11 +60,11 @@ export const useCreateNewMenu = () => {
   const deleteNamespace = useDataStore((store) => store.deleteNamespace)
 
   const { goTo } = useRouting()
-  const { getSelectionInMarkdown } = useUpdateBlock()
   const { push } = useNavigation()
+  const { getSelectionInMarkdown } = useUpdateBlock()
   const { deleteView } = useViews()
   const { addSnippet } = useSnippets()
-  const { performAIAction } = useAIOptions()
+  const { handleOpenAIPreview, getAIMenuItems } = useAIOptions()
   const { execRefactorAsync } = useRefactor()
   const { createNewNote } = useCreateNewNote()
   const blockMenuItems = useBlockMenu()
@@ -289,6 +274,15 @@ export const useCreateNewMenu = () => {
 
   const getBlockMenuItems = (): MenuListItemType[] => {
     return [
+      getMenuItem(
+        'Enhance',
+        () => {
+          const content = getSelectionInMarkdown()
+          handleOpenAIPreview(content)
+        },
+        false,
+        DefaultMIcons.AI
+      ),
       getMenuItem('Send', blockMenuItems.onSendToClick, false, DefaultMIcons.SEND),
       getMenuItem('Move', blockMenuItems.onMoveToClick, false, DefaultMIcons.MOVE),
       getMenuItem('Delete', blockMenuItems.onDeleteClick, false, DefaultMIcons.DELETE)
@@ -331,37 +325,6 @@ export const useCreateNewMenu = () => {
       getMenuItem('New Note', () => handleCreateNote(currentSpace || getDefaultNamespaceId())),
       getMenuItem('New Space', handleCreateSpace),
       getMenuItem('New Snippet', handleCreateSnippet)
-    ]
-  }
-
-  // * AI functions
-  const handleAIQuery = async (type: SupportedAIEventTypes, callback: any) => {
-    performAIAction(type).then((res) => {
-      callback(res)
-    })
-  }
-
-  const getAIMenuItems = () => {
-    return [
-      getMenuItem(
-        'Continue',
-        (c) => handleAIQuery(SupportedAIEventTypes.EXPAND, c),
-        false,
-        getMIcon('ICON', 'system-uicons:write')
-      ),
-      getMenuItem(
-        'Explain',
-        (c) => handleAIQuery(SupportedAIEventTypes.EXPLAIN, c),
-        false,
-        getMIcon('ICON', 'ri:question-line')
-      ),
-      getMenuItem('Summarize', (c) => handleAIQuery(SupportedAIEventTypes.SUMMARIZE, c), false, DefaultMIcons.AI),
-      getMenuItem(
-        'Actionable',
-        (c) => handleAIQuery(SupportedAIEventTypes.ACTIONABLE, c),
-        false,
-        getMIcon('ICON', 'ic:round-view-list')
-      )
     ]
   }
 
