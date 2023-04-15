@@ -292,7 +292,9 @@ RenderPlateless.displayName = 'RenderPlateless'
  */
 const Plateless = ({ content, multiline = false }: PlatelessProps) => {
   const typeMap = useTypeMap(multiline)
-
+  if (!content.length) {
+    return <span>Loading...</span>
+  }
   return (
     <PlatelessStyled readOnly multiline={multiline}>
       <RenderPlateless content={content} typeMap={typeMap} multiline={multiline} />

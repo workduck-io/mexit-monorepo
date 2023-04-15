@@ -145,11 +145,11 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
       return `> ${children}\n\n`
     case ELEMENT_CODE_BLOCK:
       return `
-  <div>
-  \`\`\`
-  ${children}\`\`\`
-  </div>
-        `
+<div>
+\`\`\`
+${children}\`\`\`
+</div>
+      `
     case 'link':
     case 'a':
       return `[${children}](${chunk.link || ''})`
