@@ -1,17 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 
-import {
-  deserializeMd,
-  focusEditor,
-  getEdgePoints,
-  getEndPoint,
-  getPlateEditorRef,
-  getPointAfter,
-  getPointBefore,
-  getPointBeforeLocation,
-  getStartPoint,
-  insertNodes
-} from '@udecode/plate'
+import { deserializeMd, focusEditor, getPlateEditorRef, getPointAfter, insertNodes } from '@udecode/plate'
 import Highlighter from 'web-highlighter'
 
 import { IconButton } from '@workduck-io/mex-components'
@@ -62,15 +51,6 @@ const AIPreviewContainer: React.FC<AIPreviewProps> = (props) => {
     const deserializedContent = getContent(content)
 
     if (Array.isArray(deserializedContent) && deserializedContent.length > 0) {
-      console.log('EDGES', {
-        selection: editor.selection,
-        getPointAfter: getPointAfter(editor, editor.selection),
-        getPointBefore: getPointBefore(editor, editor.selection),
-        getEdgePoints: getEdgePoints(editor, editor.selection),
-        getEndPoint: getEndPoint(editor, editor.selection),
-        getStartPoint: getStartPoint(editor, editor.selection),
-        point: getPointBeforeLocation(editor, editor.selection)
-      })
       const at = replace ? editor?.selection : getPointAfter(editor, editor.selection)
 
       insertNodes(editor, deserializedContent, {

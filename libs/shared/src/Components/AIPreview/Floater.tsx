@@ -4,7 +4,6 @@ import { RemoveScroll } from 'react-remove-scroll'
 
 import {
   arrow,
-  autoUpdate,
   flip,
   FloatingArrow,
   FloatingFocusManager,
@@ -56,8 +55,7 @@ const DefaultFloater: React.FC<DefaultFloaterProps> = ({ onClose, root, ...props
         element: arrowRef,
         padding: 10
       })
-    ],
-    whileElementsMounted: autoUpdate
+    ]
   })
 
   const click = useClick(context)

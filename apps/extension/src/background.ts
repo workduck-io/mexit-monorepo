@@ -90,7 +90,7 @@ chrome.contextMenus.create({
 
 chrome.contextMenus.create({
   id: 'open-ai-tools',
-  title: 'Perform AI enrichment',
+  title: 'Enhance with AI',
   contexts: ['page', 'selection']
 })
 
@@ -258,7 +258,6 @@ chrome.notifications.onClosed.addListener((notificationId, byUser) => {
 chrome.omnibox.onInputChanged.addListener((text, suggest) => {
   const workspaceDetails = useAuthStore.getState().workspaceDetails
   const linkCaptures = useLinkStore.getState().links?.filter((item) => item.alias) ?? []
-  console.log('captures', { linkCaptures })
   const suggestions = fuzzySearch(linkCaptures, text, (item) => item.alias).map((item) => {
     return {
       content: `${API_BASE_URLS.url}/${workspaceDetails.id}/${item.alias}`,
