@@ -40,6 +40,7 @@ import {
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   PlateEditor,
+  setElements,
   toggleList,
   unwrapList,
   Value
@@ -62,18 +63,12 @@ const preFormat = (editor: PlateEditor<Value>) => unwrapList(editor)
  * Returns true if the autoformat can be applied:
  * Is outside of code
  */
-const formatQuery = (editor: PlateEditor<Value>, options: AutoformatQueryOptions) => {
+export const formatQuery = (editor: PlateEditor<Value>, options: AutoformatQueryOptions) => {
   const parentEntry = getParentNode(editor, editor.selection.focus)
   if (!parentEntry) return
   const [node] = parentEntry
 
-  // mog('formatQuery', { editor, options, node })
-
   if (isElement(node) && node.type !== ELEMENT_CODE_LINE && node.type !== ELEMENT_CODE_BLOCK) {
-    // mog('formatNodeConversion', {
-    //   node,
-    //   parentEntry
-    // })
     return true
   }
   return false
@@ -177,14 +172,10 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     match: '[]',
     triggerAtBlockStart: true,
     format: (editor: PlateEditor<Value>) => {
-      insertNodes(editor, [
-        {
-          type: ELEMENT_TODO_LI,
-          children: [{ text: '' }],
-          id: generateTempId(),
-          status: TodoStatus.todo
-        }
-      ])
+      setElements(editor, {
+        type: ELEMENT_TODO_LI,
+        status: TodoStatus.todo
+      })
     },
     query: formatQuery
   },

@@ -5,7 +5,7 @@ import { animated } from 'react-spring'
 
 import styled from 'styled-components'
 
-import { AppInitStatus, useAuthStore, useBlockStore, useEditorStore , useLayoutStore } from '@mexit/core'
+import { AppInitStatus, useAuthStore, useBlockStore, useEditorStore, useLayoutStore } from '@mexit/core'
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import RouteNotFound from './Components/404'

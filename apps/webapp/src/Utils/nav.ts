@@ -12,6 +12,7 @@ export const showNav = (pathname: string): boolean => {
     '/tag',
     '/integrations',
     '/reminders',
+    '/personal',
     ROUTE_PATHS.links
   ]
 

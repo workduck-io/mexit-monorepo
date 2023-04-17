@@ -276,7 +276,6 @@ const SearchView = <Item,>({
   useEffect(() => {
     executeSearch(searchTerm)
     return () => {
-      mog('clearing search', { searchTerm })
       clearSearch()
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps

@@ -107,7 +107,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
 
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
 
-  const isDefault = ['tasks', 'reminders'].includes(view?.id)
+  const isDefault = ['tasks', 'personal'].includes(view?.id)
 
   const { goTo } = useRouting()
 

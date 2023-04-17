@@ -9,7 +9,14 @@ import {
   TElement
 } from '@udecode/plate'
 
-import { camelCase, FloatingElementType, isElder, useComboboxStore, useFloatingStore } from '@mexit/core'
+import {
+  camelCase,
+  ELEMENT_TODO_LI,
+  FloatingElementType,
+  isElder,
+  useComboboxStore,
+  useFloatingStore
+} from '@mexit/core'
 
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { IComboboxItem, SlashCommandConfig } from '../../Types/Combobox'
@@ -23,10 +30,14 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
     const targetRange = useComboboxStore.getState().targetRange
     const commandKey = Object.keys(keys).filter((k) => keys[k].command === item.key)[0]
     const commandConfig = keys[commandKey]
-
+    console.log('command config', { commandConfig, item })
     if (targetRange) {
       try {
-        if (isElder(commandKey, 'snip')) {
+        if (commandConfig.slateElementType === ELEMENT_TODO_LI) {
+          const data = commandConfig.getData ? commandConfig.getData(item) : { type: commandConfig.slateElementType }
+          select(editor, targetRange)
+          insertNodes(editor, data)
+        } else if (isElder(commandKey, 'snip')) {
           const content = getSnippetContent(commandConfig.command)
           if (content) {
             select(editor, targetRange)

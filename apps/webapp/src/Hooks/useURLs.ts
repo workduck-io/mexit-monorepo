@@ -15,8 +15,11 @@ import {
   URL_DOMAIN_REG,
   useAuthStore,
   useDataStore,
-  useHighlightStore
-, useLinkStore } from '@mexit/core'
+  useHighlightStore,
+  useLinkStore
+} from '@mexit/core'
+
+import { getEntitiyInitializer } from '../Workers/controller'
 
 import { useLinkFilterFunctions } from './useFilterFunctions'
 import { applyFilters, FilterStore } from './useFilters'
@@ -352,6 +355,7 @@ export const useURLsAPI = () => {
       })
       .then((links: Link[]) => {
         setLinks(links)
+        getEntitiyInitializer('initializeLinks', links)
       })
       .catch(console.error)
 

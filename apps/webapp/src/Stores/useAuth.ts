@@ -46,6 +46,7 @@ export const useAuthentication = () => {
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
 
   const initContents = useContentStore((store) => store.initContents)
+  const resetHighlights = useHighlightStore((store) => store.reset)
   const clearUsersCache = useUserCacheStore((s) => s.clearCache)
   const clearUserPreferences = useUserPreferenceStore((store) => store.clear)
   const clearSnippets = useSnippetStore((s) => s.clear)
@@ -119,6 +120,7 @@ export const useAuthentication = () => {
     clearReactions()
     clearComments()
     resetDataStore()
+    resetHighlights()
     clearMentions()
     clearRoutesInformation()
     resetPublicNodes()
