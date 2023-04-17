@@ -1,5 +1,17 @@
 # mexit-webapp
 
+## 0.23.1
+
+### Patch Changes
+
+- 50390dd0: Search in View hierarchy, move view store to core
+- bd3a5bc8: Sidebar UI changes, layout changes
+- c89e5cd9: AI-powered actions in extension, Editable query selection
+- 3635ac2e: AI-Powered Selection Actions
+- 915be017: Editor renderer instead of markdown for presentation
+- 4c6e2474: 'Init Entities in API calls, inline tasks'
+- 295c9ba7: View hierarchy
+
 ## 0.23.0
 
 ### Minor Changes
