@@ -30,7 +30,6 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
     const targetRange = useComboboxStore.getState().targetRange
     const commandKey = Object.keys(keys).filter((k) => keys[k].command === item.key)[0]
     const commandConfig = keys[commandKey]
-    console.log('command config', { commandConfig, item })
     if (targetRange) {
       try {
         if (commandConfig.slateElementType === ELEMENT_TODO_LI) {
