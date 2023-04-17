@@ -1,5 +1,12 @@
 # mexit
 
+## 0.19.21
+
+### Patch Changes
+
+- c89e5cd9: AI-powered actions in extension, Editable query selection
+- 295c9ba7: View hierarchy
+
 ## 0.19.20
 
 ### Patch Changes
