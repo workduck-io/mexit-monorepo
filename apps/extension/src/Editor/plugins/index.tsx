@@ -98,7 +98,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     // Special Elements
     createImagePlugin({
       options: {
-        uploadImage: options.uploadImage
+        uploadImage: options?.uploadImage
       }
     }),
     createLinkPlugin(), // Link
@@ -192,7 +192,7 @@ export const useMemoizedPlugins = (components: Record<string, any>, options?: Pl
   const plugins = createPlugins(
     generatePlugins({
       ...options,
-      uploadImage: options.uploadImage ?? uploadImageToWDCDN
+      uploadImage: options?.uploadImage ?? uploadImageToWDCDN
     }),
     {
       components: wrappedComponents

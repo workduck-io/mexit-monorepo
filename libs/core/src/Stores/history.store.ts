@@ -13,6 +13,17 @@ export const historyStoreConfig = (set, get) => ({
   addInitialEvent: (event: AIEvent) => {
     set({ ai: [[event, undefined]] })
   },
+  updateAIEvent: (event: AIEvent, index: number) => {
+    const aiEventsHistory = get().ai as AIEventsHistory
+    const checkIndex = index === -1 ? aiEventsHistory.length - 1 : index
+    const updateEventHistory = aiEventsHistory.map((eventHistory, i) => {
+      if (i === checkIndex) {
+        return [event, eventHistory[1]]
+      }
+      return eventHistory
+    })
+    set({ ai: updateEventHistory })
+  },
   addInAIHistory: (userQuery: AIEvent, assistantResponse: AIEvent) => {
     const aiEventsHistory = get().ai as AIEventsHistory
     const activeEventIndex = get().activeEventIndex

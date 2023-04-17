@@ -123,7 +123,7 @@ const LinkView = () => {
   return (
     <SearchContainer>
       <MainHeader>
-        <Title>Links</Title>
+        <Title>Captures</Title>
       </MainHeader>
       <SearchView
         id={`view_link_`}
@@ -133,7 +133,7 @@ const LinkView = () => {
         onSelect={onSelect}
         onEscapeExit={onEscapeExit}
         options={{
-          inputPlaceholder: 'Search links',
+          inputPlaceholder: 'Search captures',
           view: ViewType.List
         }}
         onSearch={onSearch}

@@ -93,8 +93,8 @@ const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter, hideJoi
             {Array.isArray(filter.values) &&
               (filter.values.length > 0 ? (
                 filter.values.map((value) => (
-                  <>
-                    <FilterValueDiv key={value.id}>
+                  <React.Fragment key={value.id}>
+                    <FilterValueDiv>
                       <IconDisplay size={14} icon={getFilterValueIcon(filter.type, value.value)} />
                       <ItemLabel>{value.label}</ItemLabel>
                     </FilterValueDiv>
@@ -102,10 +102,11 @@ const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter, hideJoi
                       height={16}
                       icon={closeLine}
                       onClick={(e) => {
+                        e.stopPropagation()
                         onRemoveFilter(filter)
                       }}
                     />
-                  </>
+                  </React.Fragment>
                 ))
               ) : (
                 <FilterValueDiv>0 selected</FilterValueDiv>

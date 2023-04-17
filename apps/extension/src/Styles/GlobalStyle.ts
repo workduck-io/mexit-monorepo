@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
-import { customStyles, EditorBalloonStyles, normalize, ThinScrollbar,TippyBalloonStyles } from '@mexit/shared'
+import { customStyles, EditorBalloonStyles, normalize, ThinScrollbar, TippyBalloonStyles } from '@mexit/shared'
 
 export const GlobalStyle = createGlobalStyle`
 
@@ -36,7 +36,14 @@ export const GlobalStyle = createGlobalStyle`
     display: none;
   }
 
-  #sputlit-container, #dibba-container, #mexit-tooltip, #ext-side-nav, #notif {
+  .highlight {
+    color: ${({ theme }) => theme.tokens.text.heading};
+    background: ${({ theme }) => `rgba(${theme.rgbTokens.colors.primary.default}, 0.4)`};
+  }
+
+  
+
+  #sputlit-container, #dibba-container, #ai-preview, #mexit-tooltip, #ext-side-nav, #notif, #mexit-ai-performer {
     ${normalize}; // NormalizeCSS normalization
     letter-spacing: normal;
     font-family: "Inter", sans-serif;
@@ -64,6 +71,10 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     ${({ theme }) => theme.custom && customStyles[theme.custom]}
+  }
+
+  #mexit-ai-performer {
+    font-size: 14px;
   }
 
 `

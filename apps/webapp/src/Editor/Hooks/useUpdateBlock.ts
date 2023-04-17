@@ -1,10 +1,10 @@
 import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
 import { ELEMENT_PARAGRAPH, useContentStore } from '@mexit/core'
+import { parseToMarkdown } from '@mexit/shared'
 
 import { useBufferStore } from '../../Hooks/useEditorBuffer'
 import { useUpdater } from '../../Hooks/useUpdater'
-import parseToMarkdown from '../utils'
 
 type BlockDataType = Record<string, any>
 

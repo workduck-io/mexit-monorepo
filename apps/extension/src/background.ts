@@ -11,6 +11,7 @@ import {
   handleCaptureRequest,
   handleHighlightRequest,
   handleNodeContentRequest,
+  handlePerformAIRequest,
   handleSharingRequest,
   handleShortenerRequest,
   handleSnippetRequest
@@ -82,16 +83,22 @@ chrome.action.onClicked.addListener((command) => {
 })
 
 chrome.contextMenus.create({
-  id: 'open-sputlit',
+  id: 'sputlit',
   title: 'Open Sputlit',
   contexts: ['page', 'selection']
 })
 
-chrome.contextMenus.onClicked.addListener((onClickData) => {
+chrome.contextMenus.create({
+  id: 'open-ai-tools',
+  title: 'Enhance with AI',
+  contexts: ['page', 'selection']
+})
+
+chrome.contextMenus.onClicked.addListener((info) => {
   chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
     const tabId = tabs[0].id
 
-    chrome.tabs.sendMessage(tabId, { type: 'sputlit' }, (response) => {
+    chrome.tabs.sendMessage(tabId, { type: info?.menuItemId }, (response) => {
       handleResponseCallback(tabId, response)
     })
   })
@@ -198,6 +205,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true
     }
 
+    case 'PERFORM_AI_ACTION': {
+      handlePerformAIRequest(request).then((res) => {
+        sendResponse(res?.message)
+      })
+      return true
+    }
+
     default: {
       return true
     }
@@ -244,7 +258,6 @@ chrome.notifications.onClosed.addListener((notificationId, byUser) => {
 chrome.omnibox.onInputChanged.addListener((text, suggest) => {
   const workspaceDetails = useAuthStore.getState().workspaceDetails
   const linkCaptures = useLinkStore.getState().links?.filter((item) => item.alias) ?? []
-
   const suggestions = fuzzySearch(linkCaptures, text, (item) => item.alias).map((item) => {
     return {
       content: `${API_BASE_URLS.url}/${workspaceDetails.id}/${item.alias}`,

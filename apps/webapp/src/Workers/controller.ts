@@ -18,7 +18,7 @@ import { WorkerRequestType } from '../Utils/worker'
 
 import { type AnalysisWorkerInterface } from './analysis'
 import { type RequestsWorkerInterface } from './requests'
-import { type SearchWorkerInterface } from './search'
+import { type SearchWorkerInterface, InitializeSearchEntity } from './search'
 
 export type AnalysisModifier = SearchRepExtra
 export interface AnalysisOptions {
@@ -81,6 +81,18 @@ export const updateILink = async (ilink: ILink) => {
     await searchWorker.updateILink(ilink)
   } catch (error) {
     mog('AddDocIndexError', { error })
+  }
+}
+
+export const getEntitiyInitializer = async <T extends keyof InitializeSearchEntity>(
+  updateType: T,
+  data: InitializeSearchEntity[T]
+) => {
+  try {
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
+    return await searchWorker.initializeEntities(updateType, data)
+  } catch (error) {
+    mog('Get SearchX instance', { error })
   }
 }
 

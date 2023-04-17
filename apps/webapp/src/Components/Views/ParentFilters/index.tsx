@@ -4,19 +4,19 @@ import { useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { useTheme } from 'styled-components'
 
-import {
-  DefaultMIcons,
-FilterJoinDiv,  getMIcon,
-  Group,
-  IconDisplay,
-  SearchFilterWrapper
- } from '@mexit/shared'
+import { DefaultMIcons, FilterJoinDiv, getMIcon, Group, IconDisplay, SearchFilterWrapper } from '@mexit/shared'
 
 import { DisplayFilter } from '../../../Components/Filters/Filter'
 import { getFilterJoinIcon } from '../../../Hooks/useFilterValueIcons'
 import { useViews } from '../../../Hooks/useViews'
 
-import { CloseContainer,ParentFilter, ParentFilterContainer,ParentFiltersGrouped, StyledParentFilters  } from './styled'
+import {
+  CloseContainer,
+  ParentFilter,
+  ParentFilterContainer,
+  ParentFiltersGrouped,
+  StyledParentFilters
+} from './styled'
 
 type ParentFilters = {
   filters: Array<any>
@@ -63,9 +63,9 @@ const ParentFilters: React.FC<{ currentViewId?: string; noMargin?: boolean }> = 
       </Group>
       {expanded && (
         <ParentFilterContainer>
-          {parentFilters.map(({ id, label, filters }) => {
+          {parentFilters.map(({ id, label, filters }, i) => {
             return (
-              <SearchFilterWrapper key={id}>
+              <SearchFilterWrapper key={`${id}_${i}`}>
                 <Group>
                   <Group>
                     <IconDisplay color={theme.tokens.colors.primary.default} icon={DefaultMIcons.VIEW} />

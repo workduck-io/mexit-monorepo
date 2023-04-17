@@ -26,6 +26,7 @@ export const useTaskFromSelection = () => {
           path: todayTaskNodePath,
           parent: { path: dailyTaskNode?.nodeid, namespace: dailyTaskNode?.namespace },
           noteContent: nodeContent,
+          noRedirect: true,
           namespace: getDefaultNamespaceId()
         })
       : undefined

@@ -20,7 +20,7 @@ export const ROUTE_PATHS = {
   snippets: '/snippets',
   snippet: '/snippets/node', // * /snippets/node/:snippetid
   prompt: '/snippets/prompt',
-  links: '/links',
+  links: '/captures',
   actions: '/actions',
   oauth: '/oauth',
   oauthdesktop: '/oauth/desktop',

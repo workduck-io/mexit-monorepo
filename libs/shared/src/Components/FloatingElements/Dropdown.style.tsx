@@ -78,7 +78,12 @@ export const ItemLabel = styled.div<{ fontSize?: 'small' | 'regular' }>`
   }}
 `
 
-export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolean; noBackground?: boolean }>`
+export const RootMenuWrapper = styled.button<{
+  $noPadding?: boolean
+  border: boolean
+  noHover?: boolean
+  noBackground?: boolean
+}>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
@@ -86,7 +91,11 @@ export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolea
   border-radius: ${({ theme }) => theme.borderRadius.small};
   border: ${({ border, theme }) => (border ? `1px solid ${theme.tokens.surfaces.separator}` : 'none')};
   transition: background 0.15s ease-in-out;
-  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+  ${({ $noPadding = false }) =>
+    !$noPadding &&
+    css`
+      padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+    `}
 
   :hover {
     cursor: pointer;

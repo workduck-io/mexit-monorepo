@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { createPlateEditor, createPlateUI } from '@udecode/plate'
 
 import { ELEMENT_TAG, getDefaultContent, NodeEditorContent, QuickLinkType, useContentStore } from '@mexit/core'
+import { getDeserializeSelectionToNodes } from '@mexit/shared'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
@@ -10,7 +11,6 @@ import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
-import { getDeserializeSelectionToNodes } from '../../Utils/deserialize'
 import Results from '../Results'
 
 import { StyledContent } from './styled'

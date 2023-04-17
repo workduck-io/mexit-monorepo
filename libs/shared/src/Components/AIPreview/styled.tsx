@@ -1,7 +1,8 @@
 import styled, { keyframes } from 'styled-components'
 
 import { SupportedAIEventTypes } from '@mexit/core'
-import { BodyFont } from '@mexit/shared'
+
+import { BodyFont } from '../../Style/Search'
 
 const getEventColor = (type: SupportedAIEventTypes | undefined, saturation = 100, lightness = 75) => {
   if (!type) return `hsl(-210, 100%, 75%)`
@@ -57,6 +58,7 @@ export const AIContainerHeader = styled.header`
 
 export const AIResponseContainer = styled.div`
   ${BodyFont}
+  padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
   max-height: 16rem;
 `
 
@@ -98,20 +100,22 @@ export const StyledAIHistory = styled.span<{ type: SupportedAIEventTypes }>`
 `
 
 export const FloaterContainer = styled.div`
-  border-radius: ${({ theme }) => theme.borderRadius.large};
-  background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.modal}, 0.5);
+  color: ${({ theme }) => theme.tokens.text.default};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.modal}, 0.8);
   box-shadow: inset ${({ theme }) => theme.tokens.shadow.medium};
   backdrop-filter: blur(2rem);
+  border: 1px solid ${({ theme }) => theme.tokens.surfaces.app};
   transform-origin: top;
-  z-index: 11;
+  z-index: 9999;
   border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
   animation: ${float} 150ms ease-out;
 `
 
 export const StyledAIContainer = styled.div`
-  width: 28rem;
+  width: 40rem;
   height: 24rem;
-  max-width: 28rem;
+  max-width: 40rem;
   max-height: 24rem;
   display: flex;
   flex-direction: column;

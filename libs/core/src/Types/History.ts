@@ -6,9 +6,12 @@ export enum SupportedAIEventTypes {
   PROMPT = 'PROMPT'
 }
 
+export type ContentFormatType = 'markdown' | 'html' | 'audio' | 'video'
+
 export interface AIEvent {
   role: 'user' | 'assistant'
   content?: string
+  inputFormat?: ContentFormatType
   type?: SupportedAIEventTypes
 }
 

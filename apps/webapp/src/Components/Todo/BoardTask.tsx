@@ -40,8 +40,8 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
     const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
     const ref = React.useRef<HTMLDivElement>(null)
 
-    const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid])
-    const pC = useMemo(() => getPureContent(todo), [id, todo, documentUpdated])
+    const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid, documentUpdated])
+    const pC = useMemo(() => getPureContent(todo), [id, todo])
     const { accessWhenShared } = usePermissions()
     const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
     const toggleModal = useModalStore((store) => store.toggleOpen)

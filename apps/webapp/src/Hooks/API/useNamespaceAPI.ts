@@ -10,13 +10,14 @@ import {
   MIcon,
   mog,
   SingleNamespace,
-  useDataStore
-, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+  useDataStore,
+  userPreferenceStore as useUserPreferenceStore
+} from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
 import { deserializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
-import { runBatchWorker } from '../../Workers/controller'
+import { getEntitiyInitializer, runBatchWorker } from '../../Workers/controller'
 import { useUpdater } from '../useUpdater'
 
 export const useNamespaceApi = () => {
@@ -66,17 +67,17 @@ export const useNamespaceApi = () => {
         { newILinks: [], archivedILinks: [] }
       )
 
+      getEntitiyInitializer('initializeHeirarchy', newILinks)
+
       const localILinks = useDataStore.getState().ilinks
 
       const allSpaces = namespaces.map((n) => n.ns)
       const spacePreferences = useUserPreferenceStore.getState().space
       const ns = allSpaces.filter((s) => !spacePreferences[s?.id]?.hidden)
-      // console.log('HERE ARE THEY', { ns, spacePreferences })
 
       setAllSpaces(allSpaces)
 
       setNamespaces(ns)
-      // TODO: Also set archive links
 
       addInArchive(archivedILinks)
 

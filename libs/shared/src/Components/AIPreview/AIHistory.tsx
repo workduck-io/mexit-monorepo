@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { SupportedAIEventTypes, useHistoryStore } from '@mexit/core'
 
 import { StyledAIHistory, StyledAIHistoryContainer } from './styled'

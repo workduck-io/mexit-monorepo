@@ -63,6 +63,10 @@ export const highlightStoreConfig = (set, get) => ({
     set({ highlightBlockMap })
   },
 
+  reset: () => {
+    set({ highlights: [], highlightBlockMap: {} })
+  },
+
   setHighlights: (highlights: Highlights) => {
     set({ highlights })
   },

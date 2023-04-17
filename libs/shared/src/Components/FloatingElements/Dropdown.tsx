@@ -35,6 +35,7 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
 import cx from 'classnames'
 import { debounce } from 'lodash'
+import { useTheme } from 'styled-components'
 
 import { fuzzySearch, MIcon } from '@mexit/core'
 
@@ -127,6 +128,7 @@ interface Props {
    * Show Button with Border
    */
   border?: boolean
+  noPadding?: boolean
 
   handleKeyDown?: (e: KeyboardEvent) => void
 
@@ -153,6 +155,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       allowSearch,
       onCreate,
       onMouseEnter,
+      noPadding,
       onMouseLeave,
       handleKeyDown,
       searchPlaceholder,
@@ -169,7 +172,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
     const [filteredChildren, setFilteredChildren] = useState<React.ReactNode>(children)
 
     const inputRef = React.useRef<HTMLInputElement>(null)
-
+    const theme = useTheme()
     const listItemsRef = useRef<Array<HTMLButtonElement | null>>([])
 
     const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -329,6 +332,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
         <RootMenuWrapper
           noHover={noHover}
           border={border}
+          $noPadding={noPadding}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           {...getReferenceProps({
@@ -336,6 +340,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
             ref: mergedReferenceRef,
             onClick(event) {
               event.stopPropagation()
+              event.preventDefault()
               ;(event.currentTarget as HTMLButtonElement).focus()
             },
             ...(nested
@@ -389,7 +394,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
               >
                 {allowSearch && children && (
                   <SidebarListFilter noMargin>
-                    <Icon icon={searchLine} />
+                    <Icon icon={searchLine} color={theme.tokens.text.default} />
                     <Input
                       placeholder={searchPlaceholder ?? 'Filter items'}
                       className={MenuFilterInputClassName}

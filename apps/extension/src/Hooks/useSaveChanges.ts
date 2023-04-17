@@ -37,7 +37,7 @@ export interface AppendAndSaveProps {
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { setPreviewMode, setNodeContent } = useEditorStore()
+  const { setPreviewMode } = useEditorStore()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
   const { updateDocument, updateBlocks } = useSearch()

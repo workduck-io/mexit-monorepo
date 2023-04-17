@@ -1,55 +1,26 @@
 import React, { useEffect, useMemo } from 'react'
 
-import {
-  deserializeMd,
-  focusEditor,
-  getEndPoint,
-  getPlateEditorRef,
-  insertNodes,
-  usePlateEditorRef
-} from '@udecode/plate'
+import { deserializeMd, focusEditor, getPlateEditorRef, getPointAfter, insertNodes } from '@udecode/plate'
 import Highlighter from 'web-highlighter'
 
 import { IconButton } from '@workduck-io/mex-components'
 
 import { camelCase, generateTempId, SupportedAIEventTypes, useFloatingStore, useHistoryStore } from '@mexit/core'
-import { AutoComplete, DefaultMIcons, Group } from '@mexit/shared'
 
 import { useAIOptions } from '../../Hooks/useAIOptions'
-import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
-import Plateless from '../Editor/Plateless'
+import { StyledButton } from '../../Style/Buttons'
+import { Group } from '../../Style/Layouts'
+import { AutoComplete } from '../FloatingElements'
+import { IconDisplay } from '../IconDisplay'
+import { DefaultMIcons } from '../Icons'
+import InsertMenu from '../InsertMenu'
 
 import AIHistory from './AIHistory'
-import {
-  AIContainerFooter,
-  AIContainerHeader,
-  AIContainerSection,
-  AIResponseContainer,
-  StyledAIContainer
-} from './styled'
+import AIResponse from './AIResponse'
+import { AIContainerFooter, AIContainerHeader, AIContainerSection, StyledAIContainer } from './styled'
+import { AIPreviewProps } from './types'
 
-const AIResponse = ({ aiResponse, index }) => {
-  const editor = usePlateEditorRef()
-  const selected = aiResponse?.at(index)?.at(0)
-
-  if (selected) {
-    const deserialize = deserializeMd(editor, selected?.content)
-
-    return (
-      <AIResponseContainer>
-        <Plateless key={`wd-mexit-ai-response-${index}`} content={deserialize} multiline />
-      </AIResponseContainer>
-    )
-  }
-
-  return <></>
-}
-
-interface AIPreviewProps {
-  onInsert?: (content: string) => void
-}
-
-const AIBlockPopover: React.FC<AIPreviewProps> = (props) => {
+const AIPreviewContainer: React.FC<AIPreviewProps> = (props) => {
   const aiEventsHistory = useHistoryStore((s) => s.ai)
   const activeEventIndex = useHistoryStore((s) => s.activeEventIndex)
   const setActiveEventIndex = useHistoryStore((s) => s.setActiveEventIndex)
@@ -57,27 +28,33 @@ const AIBlockPopover: React.FC<AIPreviewProps> = (props) => {
   const setFloatingElement = useFloatingStore((s) => s.setFloatingElement)
 
   const { performAIAction } = useAIOptions()
-  const { getAIMenuItems } = useCreateNewMenu()
 
   const defaultItems = useMemo(() => {
-    return getAIMenuItems()
+    if (props.getDefaultItems) return props.getDefaultItems()
+    return []
   }, [])
 
-  const insertContent = (content: string, replace = true) => {
+  const getContent = (content: string) => {
     if (!content) return
 
     const editor = getPlateEditorRef()
-    const deserialize = deserializeMd(editor, content)?.map((node) => ({
+    const deserializedContent = deserializeMd(editor, content)?.map((node) => ({
       ...node,
       id: generateTempId()
     }))
 
-    if (Array.isArray(deserialize) && deserialize.length > 0) {
-      const at = replace ? editor.selection : getEndPoint(editor, editor.selection)
+    return deserializedContent
+  }
 
-      insertNodes(editor, deserialize, {
-        at,
-        select: true
+  const insertContent = (content: string, replace = true) => {
+    const editor = getPlateEditorRef(props.id)
+    const deserializedContent = getContent(content)
+
+    if (Array.isArray(deserializedContent) && deserializedContent.length > 0) {
+      const at = replace ? editor?.selection : getPointAfter(editor, editor.selection)
+
+      insertNodes(editor, deserializedContent, {
+        at
       })
 
       try {
@@ -108,6 +85,16 @@ const AIBlockPopover: React.FC<AIPreviewProps> = (props) => {
     }
   }
 
+  const handleOnInsert = (id?: string) => {
+    const content = aiEventsHistory?.at(activeEventIndex)?.at(0)?.content
+    if (!props.insertInNote) {
+      insertContent(content, false)
+    } else {
+      const deserializedContent = getContent(content)
+      props.onInsert?.(deserializedContent, id)
+    }
+  }
+
   const userQuery = aiEventsHistory?.at(activeEventIndex)?.at(-1)
   const defaultValue =
     !userQuery?.type || userQuery?.type === SupportedAIEventTypes.PROMPT
@@ -117,10 +104,11 @@ const AIBlockPopover: React.FC<AIPreviewProps> = (props) => {
   const disableMenu = useFloatingStore.getState().state?.AI_POPOVER?.disableMenu
 
   return (
-    <StyledAIContainer>
+    <StyledAIContainer id="mexit-ai-performer">
       <AIContainerHeader>
         <AutoComplete
           onEnter={handleOnEnter}
+          onCommandEnter={handleOnInsert}
           disableMenu={disableMenu}
           clearOnEnter
           defaultValue={defaultValue}
@@ -128,34 +116,28 @@ const AIBlockPopover: React.FC<AIPreviewProps> = (props) => {
         />
       </AIContainerHeader>
       <AIContainerSection>
-        <AIResponse index={activeEventIndex} aiResponse={aiEventsHistory} />
+        <AIResponse plugins={props.plugins} index={activeEventIndex} aiResponse={aiEventsHistory} />
       </AIContainerSection>
       <AIContainerFooter>
         <IconButton title="Clear History" size={12} icon="ri:time-line" onClick={clearAIResponses} />
         <AIHistory onClick={(index: number) => setActiveEventIndex(index)} />
         <Group>
-          <IconButton
-            title="Replace"
-            onClick={() => {
-              const content = aiEventsHistory?.at(activeEventIndex)?.at(0)?.content
-              insertContent(content)
-            }}
-            size={12}
-            icon={DefaultMIcons.INSERT.value}
-          />
-          <IconButton
-            title="Insert"
-            size={12}
-            icon={DefaultMIcons.EMBED.value}
-            onClick={() => {
-              const content = aiEventsHistory?.at(activeEventIndex)?.at(0)?.content
-              insertContent(content, false)
-            }}
-          />
+          {props.allowReplace && (
+            <StyledButton
+              onClick={() => {
+                const content = aiEventsHistory?.at(activeEventIndex)?.at(0)?.content
+                insertContent(content)
+              }}
+            >
+              <IconDisplay icon={DefaultMIcons.INSERT} size={12} />
+              Replace
+            </StyledButton>
+          )}
+          <InsertMenu root={props.root} isMenu={props.insertInNote} onClick={handleOnInsert} />
         </Group>
       </AIContainerFooter>
     </StyledAIContainer>
   )
 }
 
-export default AIBlockPopover
+export default AIPreviewContainer
