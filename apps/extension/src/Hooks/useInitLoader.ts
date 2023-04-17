@@ -155,7 +155,7 @@ export const useInitLoader = () => {
   const getAllSmartCaptures = async () => {
     const d = await wInitSmartCaptures()
     const d1 = data as any
-    setConfig(d)
+    setConfig(d1)
   }
 
   const fetchAll = async () => {
