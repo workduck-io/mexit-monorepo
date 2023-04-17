@@ -143,9 +143,9 @@ export const apiURLs = {
   },
 
   invite: {
-    getById: (inviteId: string) => `${BASE_URLS.invite}/${inviteId}`,
-    getAll: `${BASE_URLS.invite}`,
-    create: `${BASE_URLS.invite}`
+    getById: (inviteId: string) => `${API_BASE_URLS.invite}/${inviteId}`,
+    getAll: `${API_BASE_URLS.invite}`,
+    create: `${API_BASE_URLS.invite}`
   },
 
   reminders: {
