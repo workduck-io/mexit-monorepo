@@ -2,6 +2,8 @@ import { useCallback } from 'react'
 
 import { mog, useHighlightStore } from '@mexit/core'
 
+import { getEntitiyInitializer } from '../Workers/controller'
+
 import { useHighlightAPI } from './API/useHighlightAPI'
 
 export const useHighlights = () => {
@@ -38,6 +40,7 @@ export const useHighlightSync = () => {
       .then((highlights) => {
         if (highlights) {
           setHighlights(highlights)
+          getEntitiyInitializer('initializeHighlights', highlights)
         }
       })
       .catch((e) => {

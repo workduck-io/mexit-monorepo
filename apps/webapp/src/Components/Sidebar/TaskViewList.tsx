@@ -72,9 +72,9 @@ const ViewList = () => {
               data: {}
             },
             {
-              label: 'Reminders',
+              label: 'Personal',
               id: ReminderViewData.id,
-              icon: getMIcon('ICON', 'ri:timer-flash-line'),
+              icon: getMIcon('ICON', 'ri:user-line'),
               data: {}
             }
           ]}

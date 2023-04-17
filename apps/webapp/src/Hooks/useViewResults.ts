@@ -46,11 +46,13 @@ const useViewResults = (path: string) => {
     const filterSetQuery = currentFilters?.length > 0 ? [...parentFilters, currentFilters] : parentFilters
     const query = generateFilterSetQuery(filterSetQuery, entities)
 
-    queryIndex(Indexes.MAIN, query).then((queryResult) => {
-      if (queryResult) {
-        setResults(queryResult)
-      }
-    })
+    if (query.length) {
+      queryIndex(Indexes.MAIN, query).then((queryResult) => {
+        if (queryResult) {
+          setResults(queryResult)
+        }
+      })
+    } else setResults([])
   }, [currentFilters, entities, docUpdated])
 
   return groupedResults

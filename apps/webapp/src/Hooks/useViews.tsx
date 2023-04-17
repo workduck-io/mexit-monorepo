@@ -1,6 +1,6 @@
 import { Entities } from '@workduck-io/mex-search'
 
-import { Filter, getAllEntities, useDataStore, View, ViewType } from '@mexit/core'
+import { Filter, getAllEntities, RESERVED_NAMESPACES, useDataStore, View, ViewType } from '@mexit/core'
 
 import { useViewStore } from '../Stores/useViewStore'
 
@@ -30,6 +30,25 @@ export const useViews = () => {
         ]
       }
     }
+  }
+
+  const getPersonalSpace = (): Filter => {
+    const space = useDataStore.getState().spaces.find((space) => space.name === RESERVED_NAMESPACES.default)
+
+    if (space)
+      return {
+        multiple: false,
+        id: 'FILTER_SPACE',
+        join: 'all',
+        type: 'space',
+        values: [
+          {
+            value: space.id,
+            id: space.id,
+            label: space.name
+          }
+        ]
+      }
   }
 
   const getParentViewFilters = (path: string) => {
@@ -64,14 +83,16 @@ export const useViews = () => {
           globalJoin: 'all',
           sortOrder: 'ascending'
         }
-      case 'reminders':
+      case 'personal':
+        // eslint-disable-next-line no-case-declarations
+        const personalFilters = getPersonalSpace()
         return {
-          id: 'reminders',
-          filters: [],
-          title: 'Reminders',
-          description: 'The Reminders View is helpful tool for keeping track of tasks, events, and deadlines.',
+          id: 'personal',
+          filters: personalFilters ? [personalFilters] : [],
+          title: 'Personal',
+          description: 'The Personal View is helpful tool for keeping track of tasks, events, and deadlines.',
           viewType: ViewType.List,
-          entities: [Entities.REMINDER],
+          entities: [],
           globalJoin: 'all',
           sortOrder: 'ascending'
         }

@@ -16,6 +16,7 @@ import {
   mog,
   PromptRenderType,
   SEPARATOR,
+  TodoStatus,
   useAuthStore,
   useDataStore,
   useEditorStore,
@@ -259,7 +260,12 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       },
       task: {
         slateElementType: ELEMENT_TODO_LI,
-        command: 'task'
+        command: 'task',
+        getData: () => ({
+          type: ELEMENT_TODO_LI,
+          children: [{ text: '' }],
+          status: TodoStatus.todo
+        })
       },
       table: {
         slateElementType: ELEMENT_TABLE,

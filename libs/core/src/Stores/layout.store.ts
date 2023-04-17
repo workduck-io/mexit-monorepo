@@ -44,7 +44,7 @@ interface LayoutState {
 
 const SIDEBAR_WIDTH = 276
 
-export const layoutStoreConfig = (set, get) => ({
+const initializeLayoutStore = () => ({
   // Focus mode
   toggleTop: 44,
   showLoader: false,
@@ -65,7 +65,11 @@ export const layoutStoreConfig = (set, get) => ({
   rhSidebar: {
     expanded: false,
     show: true
-  },
+  }
+})
+
+export const layoutStoreConfig = (set, get) => ({
+  ...initializeLayoutStore(),
   setToggleTop: (height: number) => set({ toggleTop: height }),
   toggleFocusMode: () => set((state) => ({ focusMode: { ...state.focusMode, on: !state.focusMode.on } })),
   setFocusMode: (focusMode) => set({ focusMode }),
@@ -115,6 +119,10 @@ export const layoutStoreConfig = (set, get) => ({
     const infobar = get().infobar
     if (infobar.mode === mode) return
     set({ infobar: { ...infobar, mode } })
+  },
+  reset: () => {
+    const initLayoutState = initializeLayoutStore()
+    set(initLayoutState)
   }
 })
 

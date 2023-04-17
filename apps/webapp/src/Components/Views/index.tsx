@@ -63,7 +63,7 @@ export const ViewContainer: React.FC<ViewProps> = ({ viewId, withFilters = true 
 
   return (
     <View>
-      <ViewRenderer key={activeView?.id} view={activeView} />
+      <ViewRenderer view={activeView} />
     </View>
   )
 }

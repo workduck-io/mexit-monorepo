@@ -41,6 +41,7 @@ export const useInitLoader = () => {
 
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
+  const highlightStoreHydrated = useHighlightStore((store) => store._hasHydrated)
   const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
   const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
@@ -124,7 +125,8 @@ export const useInitLoader = () => {
       userPrefHydrated &&
       snippetHydrated &&
       dataStoreHydrated &&
-      contentStoreHydrated
+      contentStoreHydrated &&
+      highlightStoreHydrated
     ) {
       startWorkers()
         .then(async () => {
