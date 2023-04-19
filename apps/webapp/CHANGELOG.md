@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.23.2
+
+### Patch Changes
+
+- 477c1746: Inherit Extra Fields From Parent View
+
 ## 0.23.1
 
 ### Patch Changes
