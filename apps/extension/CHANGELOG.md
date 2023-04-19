@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.22
+
+### Patch Changes
+
+- c89e5cd9: Inherit Extra Fields From Parent View
+
 ## 0.19.21
 
 ### Patch Changes
