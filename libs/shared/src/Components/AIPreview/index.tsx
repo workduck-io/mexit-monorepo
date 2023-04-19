@@ -53,12 +53,12 @@ const AIPreviewContainer: React.FC<AIPreviewProps> = (props) => {
     if (Array.isArray(deserializedContent) && deserializedContent.length > 0) {
       const at = replace ? editor?.selection : getPointAfter(editor, editor.selection)
 
-      insertNodes(editor, deserializedContent, {
-        at
-      })
-
       try {
-        focusEditor(editor)
+        insertNodes(editor, deserializedContent, {
+          at,
+          select: true
+        })
+        focusEditor(editor, at)
       } catch (err) {
         console.error('Unable to focus editor', err)
       }
@@ -92,6 +92,7 @@ const AIPreviewContainer: React.FC<AIPreviewProps> = (props) => {
     } else {
       const deserializedContent = getContent(content)
       props.onInsert?.(deserializedContent, id)
+      setFloatingElement(undefined)
     }
   }
 

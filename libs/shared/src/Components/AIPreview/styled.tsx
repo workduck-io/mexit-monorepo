@@ -107,7 +107,7 @@ export const FloaterContainer = styled.div`
   backdrop-filter: blur(2rem);
   border: 1px solid ${({ theme }) => theme.tokens.surfaces.app};
   transform-origin: top;
-  z-index: 10;
+  z-index: 11;
   border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
   animation: ${float} 150ms ease-out;
 `
