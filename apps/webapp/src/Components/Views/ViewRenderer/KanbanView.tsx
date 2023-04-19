@@ -21,12 +21,14 @@ import {
 } from '@mexit/core'
 import {
   Count,
+  Description,
   Group,
   GroupHeader,
   IconDisplay,
   OverlaySidebarWindowWidth,
   StyledTasksKanban,
-  TaskColumnHeader
+  TaskColumnHeader,
+  TaskListWrapper
 } from '@mexit/shared'
 
 import { useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
@@ -314,6 +316,15 @@ const KanbanView: React.FC<any> = (props) => {
       </TaskColumnHeader>
     )
   }
+
+  if (!board?.columns?.length)
+    return (
+      <TaskListWrapper>
+        <Description>
+          Could not find any results for your search, please try again with different search terms.
+        </Description>
+      </TaskListWrapper>
+    )
 
   return (
     <StyledTasksKanban sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}>

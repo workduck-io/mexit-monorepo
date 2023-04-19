@@ -58,7 +58,7 @@ const useSocket = () => {
       queryParams: { userId, Authorizer: idToken },
       share: true
     },
-    !!(idToken && userId)
+    false // !!(idToken && userId)
   )
 
   return utilFunctions

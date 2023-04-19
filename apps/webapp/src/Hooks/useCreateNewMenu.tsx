@@ -213,7 +213,9 @@ export const useCreateNewMenu = () => {
           viewType: view.viewType,
           sortOrder: view.sortOrder,
           sortType: view.sortType,
-          globalJoin: view.globalJoin
+          globalJoin: view.globalJoin,
+          entities: view.entities,
+          groupBy: view.groupBy
         }
       })
     }

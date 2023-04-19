@@ -76,7 +76,6 @@ export const useViewFilters = () => {
   }
 
   const addCurrentFilter = (filter: Filter) => {
-    mog('Change Current Filter: ', { s: currentFilters, f: filter })
     setCurrentFilters([...currentFilters, filter])
   }
 
