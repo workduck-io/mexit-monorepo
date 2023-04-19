@@ -13,6 +13,7 @@ import {
   useAuthStore,
   useContentStore,
   useDataStore,
+  useFloatingStore,
   useHighlightStore,
   useRecentsStore
 } from '@mexit/core'
@@ -48,6 +49,7 @@ export function useSaveChanges() {
   const setActiveItem = useSputlitStore((s) => s.setActiveItem)
   const ilinks = useDataStore((s) => s.ilinks)
   const sharedNodes = useDataStore((s) => s.sharedNodes)
+  const setFloatingElement = useFloatingStore((store) => store.setFloatingElement)
 
   const setContent = useContentStore((s) => s.setContent)
   const appendContent = useContentStore((s) => s.appendContent)
@@ -262,35 +264,36 @@ export function useSaveChanges() {
     setActiveItem()
     // mog('Request and things', { request, node, nodeContent, content })
     // TODO: Merge this with the savit request call. DRY
-    chrome.runtime.sendMessage(request, (response) => {
-      const { message, error } = response
+    const response = await chrome.runtime.sendMessage(request)
 
-      if (error && notification) {
-        toast.error('An Error Occured. Please try again.')
-      } else {
-        // mog('Response and things', { response })
-        const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
-        const nodeid = !bulkCreateRequest ? message.id : message.node.id
-        const content = message.content ?? request.body.content
-        appendContent(node.nodeid, content)
-        const title = !bulkCreateRequest ? message.title : message.node.title
-        updateBlocks({
-          id: node.nodeid,
-          contents: content,
-          title
-        })
+    const { message, error } = response
 
-        if (notification) {
-          toast.success('Saved to Cloud')
-        }
+    if (error && notification) {
+      toast.error('An Error Occured. Please try again.')
+    } else {
+      // mog('Response and things', { response })
+      const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
+      const nodeid = !bulkCreateRequest ? message.id : message.node.id
+      const content = message.content ?? request.body.content
+      appendContent(node.nodeid, content)
+      const title = !bulkCreateRequest ? message.title : message.node.title
+      updateBlocks({
+        id: node.nodeid,
+        contents: content,
+        title
+      })
 
-        if (saveAndExit) {
-          setVisualState(VisualState.animatingOut)
-          // So that sputlit opens with preview true when it opens the next time
-          setPreviewMode(true)
-        }
+      if (notification) {
+        toast.success('Saved to Cloud')
       }
-    })
+
+      if (saveAndExit) {
+        setVisualState(VisualState.animatingOut)
+        // So that sputlit opens with preview true when it opens the next time
+        setPreviewMode(true)
+        setFloatingElement(undefined)
+      }
+    }
   }
 
   return {

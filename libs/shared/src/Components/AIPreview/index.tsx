@@ -92,7 +92,6 @@ const AIPreviewContainer: React.FC<AIPreviewProps> = (props) => {
     } else {
       const deserializedContent = getContent(content)
       props.onInsert?.(deserializedContent, id)
-      setFloatingElement(undefined)
     }
   }
 
