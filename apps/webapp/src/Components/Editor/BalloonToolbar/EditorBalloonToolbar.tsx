@@ -34,21 +34,28 @@ import {
   MarkToolbarButton,
   ToolbarButton,
   ToolbarButtonProps,
+  useEditorState,
   usePlateEditorRef
 } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 import Highlighter from 'web-highlighter'
 
 import { FloatingElementType, useFloatingStore, useHistoryStore } from '@mexit/core'
-import { ButtonSeparator, DefaultMIcons, getMIcon, IconDisplay, useBalloonToolbarStore } from '@mexit/shared'
+import {
+  BallonOptionsUnwrapper,
+  BalloonToolbar,
+  ButtonSeparator,
+  DefaultMIcons,
+  getMIcon,
+  IconDisplay,
+  useBalloonToolbarStore
+} from '@mexit/shared'
 
 import useUpdateBlock from '../../../Editor/Hooks/useUpdateBlock'
 
 import { SelectionToNode, SelectionToNodeInput } from './components/SelectionToNode'
 import { SelectionToSnippet, SelectionToSnippetInput } from './components/SelectionToSnippet'
 import { SelectionToTask } from './components/SelectionToTask'
-import BallonOptionsUnwrapper from './BallonOptionsUnwrapper'
-import { BalloonToolbar } from './BalloonToolbar'
 
 const BallonMarkToolbarButtons = () => {
   const [isOptionOpen, setIsOptionOpen] = React.useState<string | null>(null)
@@ -91,6 +98,8 @@ const BallonMarkToolbarButtons = () => {
   const arrow = false
   const top = 'top' as const
 
+  const floatingEditor = useEditorState()
+
   const floatingOptions = {
     placement: top
   }
@@ -106,7 +115,7 @@ const BallonMarkToolbarButtons = () => {
   } as any
 
   return (
-    <BalloonToolbar floatingOptions={floatingOptions} arrow={arrow}>
+    <BalloonToolbar floatingOptions={floatingOptions} arrow={arrow} editor={floatingEditor}>
       {
         {
           normal: (

@@ -1,7 +1,10 @@
 import toast from 'react-hot-toast'
 
+import { createPlateEditor, createPlateUI } from '@udecode/plate'
+
 import {
   DefaultMIcons,
+  ELEMENT_TAG,
   extractMetadata,
   generateHighlightId,
   getHighlightBlockMap,
@@ -18,7 +21,10 @@ import {
   useMetadataStore,
   useRecentsStore
 } from '@mexit/core'
+import { getDeserializeSelectionToNodes } from '@mexit/shared'
 
+import { CopyTag } from '../Editor/components/Tags/CopyTag'
+import { generateEditorPluginsWithComponents } from '../Editor/plugins'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 
 import { useEditorStore } from './useEditorStore'
@@ -57,6 +63,7 @@ export function useSaveChanges() {
   const updateMetadata = useMetadataStore((s) => s.updateMetadata)
   const addRecent = useRecentsStore((store) => store.addRecent)
   const addHighlight = useHighlightStore((s) => s.addHighlight)
+  const addHighlightInStore = useHighlightStore((s) => s.addHighlightEntity)
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const { saveHighlight } = useHighlights()
@@ -140,6 +147,46 @@ export function useSaveChanges() {
   }
 
   /**
+   * Add Highlight Entity
+   */
+
+  const saveHighlightEntity = async (selection: any) => {
+    if (!selection) return
+
+    const editor = createPlateEditor({
+      plugins: generateEditorPluginsWithComponents(
+        createPlateUI({
+          [ELEMENT_TAG]: CopyTag
+        }),
+        {
+          exclude: { dnd: true }
+        }
+      )
+    })
+
+    const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, false)
+
+    const isCapturedHighlight = selection?.range && window.location.href
+
+    const highlight = isCapturedHighlight && {
+      entityId: generateHighlightId(),
+      properties: {
+        sourceUrl: selection?.range && window.location.href,
+        saveableRange: selection?.range
+      },
+      content
+    }
+
+    try {
+      await saveHighlight(highlight, document.title)
+      addHighlightInStore(highlight)
+    } catch (err) {
+      console.error(err)
+      toast('An error occured while saving the highlight. Please try again.')
+    }
+  }
+
+  /**
    * Creates highlight entity from selection
    * Does not add the highlight to the store as that requires content to generate blockmap
    *
@@ -153,7 +200,8 @@ export function useSaveChanges() {
       properties: {
         sourceUrl: selection?.range && window.location.href,
         saveableRange: selection?.range
-      }
+      },
+      content
     }
     if (highlight) {
       // Save highlight

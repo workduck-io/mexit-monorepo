@@ -4,11 +4,17 @@ import styled, { css } from 'styled-components'
 
 import { BodyFont } from './Search'
 
-export const TabPanel = styled(animated.div)`
+export const TabPanel = styled(animated.div)<{ fade?: boolean }>`
   width: 100%;
   height: 100%;
   overflow: hidden;
   border-radius: ${({ theme }) => theme.borderRadius.small};
+
+  ${({ fade }) =>
+    fade &&
+    css`
+      opacity: 0.7;
+    `};
 `
 
 export const TabHeading = styled.span`

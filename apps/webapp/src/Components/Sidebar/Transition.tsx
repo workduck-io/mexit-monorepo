@@ -38,7 +38,7 @@ export const useSidebarTransition = () => {
 
   const rhSidebarStyle = useMemo(() => {
     const showRHSidebar = rhSidebar.show && rhSidebar.expanded
-    const visibleEndColumnWidth = `${isDesktop ? '600px' : '400px'}`
+    const visibleEndColumnWidth = '400px'
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
     if (!overlaySidebar) {
       const style = {

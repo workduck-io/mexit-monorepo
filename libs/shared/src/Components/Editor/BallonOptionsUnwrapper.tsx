@@ -4,7 +4,8 @@ import { getPreventDefaultHandler } from '@udecode/plate'
 import styled, { css } from 'styled-components'
 
 import { MIcon } from '@mexit/core'
-import { fadeIn, Tooltip } from '@mexit/shared'
+
+import { Tooltip } from '../FloatingElements'
 
 type BallonOptionsUnwrapperProps = {
   id: string
@@ -62,12 +63,10 @@ const StyledOption = styled.span<{ index?: number; active?: boolean; isMiddleAct
         `
       : css`
           display: none;
-        `} /* animation: ${fadeIn} 0.5s ease-in; */
-  /* animation-fill-mode: backwards; */
-  /* animation-delay: ${(props) => props.index * 0.05}s; */
+        `}
 `
 
-const BallonOptionsUnwrapper: React.FC<BallonOptionsUnwrapperProps> = ({
+export const BallonOptionsUnwrapper: React.FC<BallonOptionsUnwrapperProps> = ({
   id,
   icon,
   children,
@@ -113,5 +112,3 @@ const BallonOptionsUnwrapper: React.FC<BallonOptionsUnwrapperProps> = ({
     </Tooltip>
   )
 }
-
-export default BallonOptionsUnwrapper

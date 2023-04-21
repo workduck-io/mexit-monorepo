@@ -5,6 +5,7 @@ import Highlighter from 'web-highlighter'
 import {
   AIEvent,
   API,
+  ContentFormatType,
   FloatingElementType,
   getMenuItem,
   getMIcon,
@@ -22,11 +23,17 @@ export const useAIOptions = () => {
   const addInAIEventsHistory = useHistoryStore((store) => store.addInAIHistory)
   const setFloatingElement = useFloatingStore((store) => store.setFloatingElement)
 
-  const handleOpenAIPreview = (content: string) => {
+  const handleOpenAIPreview = (content: string, inputFormat?: ContentFormatType) => {
     const selection = window.getSelection()
 
     if (content) {
-      addAIEvent({ role: 'assistant', content })
+      const aiEvent = { role: 'assistant', content } as AIEvent
+
+      if (inputFormat) {
+        aiEvent.inputFormat = inputFormat
+      }
+
+      addAIEvent(aiEvent)
     }
 
     const highlight = new Highlighter({

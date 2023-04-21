@@ -42,6 +42,10 @@ export const highlightStoreConfig = (set, get) => ({
   highlights: [],
   highlightBlockMap: {},
   setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => set({ highlightBlockMap }),
+  addHighlightEntity: (highlight: Highlight) => {
+    const existingHighlights = get().highlights
+    set({ highlights: [...existingHighlights, highlight] })
+  },
 
   initHighlightBlockMap: (ilinks, contents) => {
     const highlightBlockMap = {}

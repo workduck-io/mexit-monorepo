@@ -10,6 +10,7 @@ export enum ActionType {
   TOGGLE = 'Toggle Action',
   BROWSER_EVENT = 'Browser Action',
   SCREENSHOT = 'Screenshot Action',
+  HIGHLIGHT = 'Highlight',
   MAGICAL = 'Smart Capture',
   RIGHT_SIDEBAR = 'Right Sidebar Action',
   LOREM_IPSUM = 'lorem ipsum generator',

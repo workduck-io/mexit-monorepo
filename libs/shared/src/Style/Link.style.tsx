@@ -133,6 +133,40 @@ export const HighlightCollapsedToggle = styled(Button)`
   box-shadow: none;
 `
 
+export const FooterFlexButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  ${BodyFont}
+
+  gap: ${({ theme }) => theme.spacing.tiny};
+  padding: ${({ theme }) => theme.spacing.small};
+
+  :hover {
+    cursor: pointer;
+    color: ${({ theme }) => theme.tokens.text.default};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+  }
+`
+
+export const HighlightText = styled.div``
+
+export const VerticalSeperator = styled.span`
+  height: 1em;
+  width: 1px;
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+`
+
+export const CardFooter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: ${({ theme }) => `rgba(${theme.rgbTokens.surfaces.s[4]}, 0.8)`};
+  backdrop-filter: blur(10px);
+`
+
 export const HighlightNoteLink = styled.div`
   display: flex;
   flex-direction: row;
@@ -168,7 +202,9 @@ export const HighlightGroupsWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.medium};
 `
 
-export const HighlightText = styled.div``
+export const Container = styled.div`
+  padding: ${({ theme }) => theme.spacing.small};
+`
 
 export const HighlightGroupWrapper = styled.div`
   display: flex;
@@ -180,10 +216,10 @@ export const SingleHighlightWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.small};
-  padding: ${({ theme }) => theme.spacing.small};
   background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   user-select: none;
+  overflow: hidden;
 `
 
 export const HighlightNotes = styled.div`

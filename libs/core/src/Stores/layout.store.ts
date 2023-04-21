@@ -1,5 +1,6 @@
 import { ExtInfobarMode, InfobarMode } from '@mexit/shared'
 
+import { DrawerType } from '../Types/Layout'
 import { StoreIdentifier } from '../Types/Store'
 import { getLocalStorage } from '../Utils/storage'
 import { createStore } from '../Utils/storeCreator'
@@ -32,6 +33,8 @@ interface LayoutState {
     show: boolean
   }
   toggleTop: number
+  drawer: DrawerType
+  setDrawer: (drawer?: DrawerType) => void
   infobar: { mode: ExtInfobarMode }
   showRHSidebar: () => void
   hideRHSidebar: () => void
@@ -50,6 +53,10 @@ const initializeLayoutStore = () => ({
   showLoader: false,
   contextMenu: undefined as ContextMenu | undefined,
   focusMode: { on: false, hover: false },
+
+  // Quick Action Drawer
+  drawer: undefined as DrawerType | undefined,
+
   // Infobar
   infobar: {
     visible: true,
@@ -85,6 +92,8 @@ export const layoutStoreConfig = (set, get) => ({
         width: state.sidebar.expanded ? 0 : SIDEBAR_WIDTH
       }
     })),
+  setDrawer: (drawer?: DrawerType) => set({ drawer }),
+
   showSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, show: true } })),
   hideSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, show: false } })),
   toggleExtensionSidebar: () => set({ rhSidebar: { expanded: false, show: !get().rhSidebar.show } }),

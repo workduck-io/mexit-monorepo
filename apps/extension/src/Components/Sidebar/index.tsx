@@ -3,13 +3,14 @@ import React, { useEffect, useMemo } from 'react'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { useAuthStore, useLayoutStore } from '@mexit/core'
-import { ExtInfobarMode, Group, InfoBarWrapper, LoginInfoBar, Tabs, WDLogo } from '@mexit/shared'
+import { Drawer, ExtInfobarMode, Group, InfoBarWrapper, LoginInfoBar, Tabs, WDLogo } from '@mexit/shared'
 
 import { useRightSidebarShortcuts } from '../../Hooks/useRightSidebarShortcuts'
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useRightSidebarItems } from '../../Stores/useRightSidebarItems'
 import { getElementById } from '../../Utils/cs-utils'
 import { RHSLogin } from '../Login'
+import QuickActionsDrawer from '../QuickActionsDrawer'
 
 import { DraggableToggle } from './DraggableToggle'
 import { ExtensionHeaderStyled, ExtSideNav, SidebarContainer, SubHeading } from './styled'
@@ -48,6 +49,7 @@ const ExtensionHeader = () => {
 }
 
 export const ExtInfoBar = () => {
+  const drawer = useLayoutStore((store) => store.drawer)
   const rhSidebar = useLayoutStore((store) => store.rhSidebar)
   const toggleExtensionSidebar = useLayoutStore((store) => store.toggleExtensionSidebar)
   const { rhSidebarSpringProps } = useSidebarTransition()
@@ -83,6 +85,9 @@ export const ExtInfoBar = () => {
           <InfoBarWrapper mode={infobar.mode}>
             <ExtensionHeader />
             <ExtInfoBarItems />
+            <Drawer show={!!drawer}>
+              <QuickActionsDrawer />
+            </Drawer>
           </InfoBarWrapper>
         ) : (
           <LoginInfoBar mode={infobar.mode}>

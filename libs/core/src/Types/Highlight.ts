@@ -1,3 +1,5 @@
+import { NodeEditorContent } from './Editor'
+
 export interface HighlightMetaBlock {
   parentTagName: string
   parentIndex: number
@@ -41,6 +43,7 @@ export interface Highlight {
     sourceUrl: string
   }
 
+  content: NodeEditorContent
   /**
    * ID of the note where the content was added
    */

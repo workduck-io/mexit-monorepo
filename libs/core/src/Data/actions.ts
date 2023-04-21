@@ -23,6 +23,22 @@ export const CREATE_NEW_ITEM: ListItemType = {
   }
 }
 
+export const HIGHLIGHT_ACTION: ListItemType = {
+  title: 'Highlight',
+  id: 'highlight-action',
+  icon: DefaultMIcons.HIGHLIGHT,
+  description: 'Highlight current selection',
+  category: QuickLinkType.action,
+  type: ActionType.HIGHLIGHT,
+  shortcut: {
+    highlight: {
+      category: 'action',
+      keystrokes: 'Enter',
+      title: 'to highlight'
+    }
+  }
+}
+
 export const CREATE_NEW_SNIPPET: ListItemType = {
   title: 'Create new ',
   id: 'create-new-snippet',

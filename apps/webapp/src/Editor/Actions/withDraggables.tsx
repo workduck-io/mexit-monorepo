@@ -28,7 +28,7 @@ import {
 } from '@udecode/plate'
 import styled, { css } from 'styled-components'
 
-import { IS_DEV, useBlockStore, useEditorStore } from '@mexit/core'
+import { ELEMENT_CAPTURE, IS_DEV, useBlockStore, useEditorStore } from '@mexit/core'
 import { RelativeTime } from '@mexit/shared'
 
 import { ProfileImage } from '../../Components/User/ProfileImage'
@@ -142,11 +142,6 @@ const GrabberTooltipContent = (props: any) => {
 
   return (
     <StyledTip>
-      {/* <Tippy content={`BLOCK: ${props.element.id}`}>
-        <ActionDraggableIcon onClick={(ev) => show(ev, { props: { blockId: props.element.id } })}>
-          <Icon icon={addLine} />
-        </ActionDraggableIcon>
-      </Tippy> */}
       {props.element && props.element.metadata ? (
         <TippyHeadless {...MetadataTooltipProps} render={(attrs) => <MetadataViewSmall m={props.element.metadata} />}>
           <ActionDraggableIcon>
@@ -164,7 +159,6 @@ export const grabberTooltipProps: TippyProps = {
   arrow: false,
   delay: [100, 0],
   followCursor: true,
-  // duration: [0, 10000000],
   appendTo: () => document.body,
   hideOnClick: false,
   interactive: true,
@@ -209,11 +203,12 @@ export const withStyledDraggables = (components: any) => {
 
   return withDraggables(components, [
     {
-      keys: [ELEMENT_PARAGRAPH, ELEMENT_UL, ELEMENT_OL],
+      keys: [ELEMENT_PARAGRAPH, ELEMENT_UL, ELEMENT_OL, ELEMENT_CAPTURE],
       level: 0
     },
     {
       keys: [
+        ELEMENT_CAPTURE,
         ELEMENT_PARAGRAPH,
         ELEMENT_BLOCKQUOTE,
         ELEMENT_TODO_LI,
@@ -231,7 +226,7 @@ export const withStyledDraggables = (components: any) => {
         // ELEMENT_ILINK,
         ELEMENT_TABLE,
         ELEMENT_MEDIA_EMBED,
-        ELEMENT_CODE_BLOCK
+        ELEMENT_CODE_BLOCK,
         // ELEMENT_ACTION_BLOCK
       ],
       onRenderDragHandle: ({ className, styles, element }) => {

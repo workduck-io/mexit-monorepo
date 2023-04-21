@@ -1,32 +1,86 @@
 import React, { useMemo } from 'react'
 
-import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
-import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
+import { useTheme } from 'styled-components'
 
-import { API_BASE_URLS, Highlight, Highlights } from '@mexit/core'
+import { camelCase, DrawerType, Highlight, Highlights, useLayoutStore } from '@mexit/core'
 import {
-  HighlightCollapsedToggle,
+  CardFooter,
+  Container,
+  DefaultMIcons,
+  FooterFlexButton,
+  GenericFlex,
+  getMIcon,
   HighlightGroupsWrapper,
-  HighlightNote,
-  HighlightNotes,
-  HighlightText,
-  SingleHighlightWrapper
+  IconDisplay,
+  MexIcon,
+  PrimaryText,
+  SingleHighlightWrapper,
+  SnippetContentPreview,
+  VerticalSeperator
 } from '@mexit/shared'
 
 import { useHighlights } from '../../Hooks/useHighlights'
-import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
+import { useLinks } from '../../Hooks/useLinks'
+
+import { NodeCardHeader } from './NodeCard'
 
 const HIGHLIGHT_TEXT_MAX_LENGTH = 300
 
+const LinkedNotes = ({ isEditable, editNodes }) => {
+  const theme = useTheme()
+  const openDrawer = useLayoutStore((store) => store.setDrawer)
+
+  const handleOnClick = (e) => {
+    e.stopPropagation()
+    // * Open Quick Action Drawer
+    openDrawer(DrawerType.LINKED_NOTES)
+    // window.open(`${API_BASE_URLS.frontend}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
+  }
+
+  return (
+    <FooterFlexButton onClick={handleOnClick}>
+      <IconDisplay icon={getMIcon('ICON', 'ri:eye-line')} /> Linked Notes ({editNodes.length})
+    </FooterFlexButton>
+    // <HighlightNotes>
+    //   {isEditable
+    //     ? editNodes.map((node: any) => (
+    //         <HighlightNote onClick={() => handleOpenNote(node.nodeid)}>
+    //           <Icon icon={fileList2Line} />
+    //           {getTitleFromPath(node.path)}
+    //         </HighlightNote>
+    //       ))
+    //     : null}
+    // </HighlightNotes>
+  )
+}
+
+const AddToNote = () => {
+  const theme = useTheme()
+  const openDrawer = useLayoutStore((store) => store.setDrawer)
+
+  const handleOnClick = (e) => {
+    e.stopPropagation()
+
+    // Open Quick Action Drawer
+    openDrawer(DrawerType.ADD_TO_NOTE)
+  }
+
+  return (
+    <FooterFlexButton onClick={handleOnClick}>
+      <IconDisplay color={theme.tokens.colors.primary.default} icon={DefaultMIcons.ADD} />{' '}
+      <PrimaryText>Add To Note</PrimaryText>
+    </FooterFlexButton>
+  )
+}
+
 export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight }) => {
   const [open, setOpen] = React.useState(false)
-  // const showOpen =
   const highlightText = highlight.properties.saveableRange.text
+
   const { getEditableMap } = useHighlights()
   const { getILinkFromNodeid } = useLinks()
 
+  const theme = useTheme()
   const editableMap = getEditableMap(highlight.entityId)
 
   const editNodes = useMemo(() => {
@@ -37,7 +91,6 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
   }, [editableMap])
 
   const isEditable = useMemo(() => Object.keys(editableMap ?? {}).length > 0, [editableMap])
-  // mog('IS EDITABLE', { isEditable, editNodes, i: useDataStore.getState().ilinks })
   const nodeId = editNodes[0]?.nodeid
 
   const willCollapse = highlightText.length > HIGHLIGHT_TEXT_MAX_LENGTH
@@ -52,30 +105,29 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
     element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
-  const openNodeInMexit = (nodeid: string) => {
-    window.open(`${API_BASE_URLS.frontend}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
-  }
+  const title = camelCase(toShowText.slice(0, 35))
 
   return (
     <SingleHighlightWrapper onClick={() => openHighlight()}>
-      <HighlightText>{toShowText}</HighlightText>
-      {willCollapse ? (
-        <HighlightCollapsedToggle onClick={() => setOpen(!open)}>
-          <Icon icon={open ? arrowUpSLine : arrowRightSLine} />
-          {open ? 'Less' : 'More'}
-        </HighlightCollapsedToggle>
-      ) : null}
-
-      <HighlightNotes>
-        {isEditable
-          ? editNodes.map((node) => (
-              <HighlightNote onClick={() => openNodeInMexit(node.nodeid)}>
-                <Icon icon={fileList2Line} />
-                {getTitleFromPath(node.path)}
-              </HighlightNote>
-            ))
-          : null}
-      </HighlightNotes>
+      <Container>
+        <NodeCardHeader>
+          <GenericFlex
+            onClick={() => {
+              //
+            }}
+          >
+            <MexIcon color={theme.tokens.colors.primary.default} icon={DefaultMIcons.HIGHLIGHT.value} />
+            <PrimaryText>{title}</PrimaryText>
+          </GenericFlex>
+          {/* <MexIcon onClick={onClick} icon={fileCopyLine} height={16} width={16} /> */}
+        </NodeCardHeader>
+        <SnippetContentPreview>{toShowText}</SnippetContentPreview>
+      </Container>
+      <CardFooter>
+        <LinkedNotes isEditable={isEditable} editNodes={editNodes} />
+        <VerticalSeperator />
+        <AddToNote />
+      </CardFooter>
     </SingleHighlightWrapper>
   )
 }
