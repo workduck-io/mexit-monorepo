@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.23.3
+
+### Patch Changes
+
+- fd8088ce: KY Client timeout to 20s
+
 ## 0.23.2
 
 ### Patch Changes

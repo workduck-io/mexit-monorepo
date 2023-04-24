@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.23
+
+### Patch Changes
+
+- fd8088ce: KY Client timeout to 20s
+
 ## 0.19.22
 
 ### Patch Changes
