@@ -44,7 +44,7 @@ const MoveToSpace: React.FC<MoveToSpaceProps> = ({ selected, onChange, currentSp
   }
 
   return (
-    <MoveSpaceSection>
+    <MoveSpaceSection id="space-selector">
       <Group>
         <input type="checkbox" checked={isSelectorVisible} onChange={onMoveToSpaceSelect} />
         Move Notes to Another Space
@@ -53,6 +53,8 @@ const MoveToSpace: React.FC<MoveToSpaceProps> = ({ selected, onChange, currentSp
         <Menu
           key="wd-mexit-space-selector"
           border
+          noHover
+          root={document.getElementById('space-selector')}
           handleKeyDown={handleKeyDown}
           values={
             <GenericFlex>
