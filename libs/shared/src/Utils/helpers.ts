@@ -1,6 +1,8 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 
+import { NodeEditorContent } from '@mexit/core'
+
 export async function copyTextToClipboard(text: any, toastMessage?: string) {
   await navigator.clipboard
     .writeText(String(text))
@@ -29,3 +31,13 @@ export const resize = (ref: React.RefObject<HTMLElement>) => {
   window.parent.postMessage({ type: 'height-init', height: ref.current.clientHeight }, '*')
 }
 export const randomNumberBetween = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
+
+export const addOriginToBlocks = (blocks: NodeEditorContent, source: string) => {
+  return blocks.map((block) => ({
+    ...block,
+    blockMeta: {
+      ...(block.blockMeta ?? {}),
+      origin: source
+    }
+  }))
+}

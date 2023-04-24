@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 
 import message2Line from '@iconify/icons-ri/message-2-line'
 import { Icon } from '@iconify/react'
-import { findNodePath, isSelectionExpanded } from '@udecode/plate'
+import { findNodePath, isSelectionExpanded, isUrl } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import { useFocused, useSelected } from 'slate-react'
 
@@ -40,7 +40,7 @@ export const BlockInfo = (props: any) => {
   // Whether the element is inline
   // TODO: Find a way to only show this for first level blocks only
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
-  const anal = useAnalysisStore((state) => state.analysis)
+  const analysis = useAnalysisStore((state) => state.analysis)
   // const isTable = useMemo(() => attributes['data-slate-table'], [attributes])
   const { getCommentsOfBlock, addComment, deleteComment } = useComments()
   const { getReactionsOfBlock, getReactionDetails, addReaction, deleteReaction } = useReactions()
@@ -66,13 +66,14 @@ export const BlockInfo = (props: any) => {
 
   // Whether to show source info
   const showSource = useMemo(() => {
-    if (anal?.displayBlocksWithHighlight) {
-      if (anal?.displayBlocksWithHighlight?.includes(element?.id)) {
+    if (analysis?.displayBlocksWithHighlight) {
+      if (analysis?.displayBlocksWithHighlight?.includes(element?.id)) {
         return true
       }
     }
-    return false
-  }, [anal?.displayBlocksWithHighlight, element?.id])
+
+    return isUrl(element?.blockMeta?.origin)
+  }, [analysis?.displayBlocksWithHighlight, element?.id])
 
   // Does the element have sourceUrl
   const hasAssociatedHighlight = useMemo(
@@ -82,13 +83,13 @@ export const BlockInfo = (props: any) => {
 
   // Source url
   const sourceURL = useMemo(() => {
-    if (!hasAssociatedHighlight) {
-      return undefined
-    } else {
+    if (hasAssociatedHighlight) {
       // Extract the source from the highlight entity
       const highlightId = element?.metadata?.elementMetadata?.id
       const highlight = getHighlight(highlightId)
       return highlight?.properties?.sourceUrl
+    } else if (isUrl(element?.blockMeta?.origin)) {
+      return element?.blockMeta?.origin
     }
   }, [element, hasAssociatedHighlight])
 
