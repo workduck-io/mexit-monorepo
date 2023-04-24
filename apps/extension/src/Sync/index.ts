@@ -1,4 +1,16 @@
-import { BroadcastSyncedChannel, mog, useContentStore, useDataStore, useHighlightStore, useLayoutStore , useLinkStore,useRecentsStore, useReminderStore, useSnippetStore  } from '@mexit/core'
+import {
+  BroadcastSyncedChannel,
+  mog,
+  useContentStore,
+  useDataStore,
+  useHighlightStore,
+  useLayoutStore,
+  useLinkStore,
+  useMetadataStore,
+  useRecentsStore,
+  useReminderStore,
+  useSnippetStore
+} from '@mexit/core'
 
 import { childIframe } from './iframeConnector'
 import { MessageType, UnhandledRequestsByExtension } from './messageHandler'
@@ -32,6 +44,15 @@ const messagePassing = () => {
     {
       name: BroadcastSyncedChannel.LAYOUT,
       sync: [{ field: 'toggleTop' }]
+    },
+    onStateChange
+  )
+
+  storeChangeHandler(
+    useMetadataStore,
+    {
+      name: BroadcastSyncedChannel.METADATA,
+      sync: [{ field: 'metadata' }]
     },
     onStateChange
   )
