@@ -75,6 +75,7 @@ const client = ky.create({
     beforeRequest: [attachTokenToRequest],
     afterResponse: [refreshTokenHook]
   },
+  timeout: 20000,
   retry: 0
 })
 
