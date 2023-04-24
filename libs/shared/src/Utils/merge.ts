@@ -19,7 +19,8 @@ export const keysToExcludeInGrouping = [
   'updatedAt',
   'lastEditedBy',
   'tags',
-  'text'
+  'text',
+  'type'
 ]
 export const keysToExcludeInSorting = [
   'id',
@@ -29,7 +30,8 @@ export const keysToExcludeInSorting = [
   'updatedBy',
   'lastEditedBy',
   'tags',
-  'parent'
+  'parent',
+  'type'
 ]
 
 export const findGroupingKey = (keyFrequencyMap: Record<string, number>, keysToExclude?: Array<string>) => {

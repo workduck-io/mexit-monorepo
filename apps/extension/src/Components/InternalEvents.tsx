@@ -6,14 +6,7 @@ import * as Sentry from '@sentry/react'
 import mixpanel from 'mixpanel-browser'
 import Highlighter from 'web-highlighter'
 
-import {
-  API_BASE_URLS,
-  FloatingElementType,
-  mog,
-  useFloatingStore,
-  useHighlightStore,
-  useHistoryStore
-} from '@mexit/core'
+import { API_BASE_URLS, FloatingElementType, useFloatingStore, useHighlightStore, useHistoryStore } from '@mexit/core'
 import { getScrollbarWidth, isInputField } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
@@ -239,7 +232,7 @@ function handleHighlighter() {
 
       highlightsOfUrl.forEach((highlight) => {
         const { startMeta, endMeta, text, id } = highlight.properties.saveableRange
-        mog('check', { id, highlighedIds })
+        // mog('check', { id, highlighedIds })
 
         if (!highlighedIds.includes(id)) {
           highlighter.fromStore(startMeta, endMeta, text, highlight.entityId)

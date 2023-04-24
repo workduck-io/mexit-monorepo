@@ -155,12 +155,15 @@ const Tag = () => {
   }
 
   useEffect(() => {
+    const cache = Object.keys(cleanCache)
+
     if (search && search !== '') {
-      const filtered = fuzzySearch(Object.keys(cleanCache), search)
+      const filtered = fuzzySearch(cache, search, (item) => item)
       setTags(filtered)
     }
+
     if (search === '') {
-      setTags(Object.keys(cleanCache))
+      setTags(cache)
     }
   }, [search])
 

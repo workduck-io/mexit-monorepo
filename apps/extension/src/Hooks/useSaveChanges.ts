@@ -15,6 +15,7 @@ import {
   useDataStore,
   useFloatingStore,
   useHighlightStore,
+  useMetadataStore,
   useRecentsStore
 } from '@mexit/core'
 
@@ -53,7 +54,7 @@ export function useSaveChanges() {
 
   const setContent = useContentStore((s) => s.setContent)
   const appendContent = useContentStore((s) => s.appendContent)
-
+  const updateMetadata = useMetadataStore((s) => s.updateMetadata)
   const addRecent = useRecentsStore((store) => store.addRecent)
   const addHighlight = useHighlightStore((s) => s.addHighlight)
   const { isSharedNode } = useNodes()
@@ -262,8 +263,7 @@ export function useSaveChanges() {
     setSelection(undefined)
     addRecent(node.nodeid)
     setActiveItem()
-    // mog('Request and things', { request, node, nodeContent, content })
-    // TODO: Merge this with the savit request call. DRY
+
     const response = await chrome.runtime.sendMessage(request)
 
     const { message, error } = response
@@ -271,12 +271,13 @@ export function useSaveChanges() {
     if (error && notification) {
       toast.error('An Error Occured. Please try again.')
     } else {
-      // mog('Response and things', { response })
-      const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
-      const nodeid = !bulkCreateRequest ? message.id : message.node.id
-      const content = message.content ?? request.body.content
+      const title = message?.title ?? message?.node?.title
+      const content = message?.content ?? request?.body?.content
+
       appendContent(node.nodeid, content)
-      const title = !bulkCreateRequest ? message.title : message.node.title
+
+      // * TODO: Pick updatedAt from response
+      updateMetadata('notes', node.nodeid, { updatedAt: Date.now() })
       updateBlocks({
         id: node.nodeid,
         contents: content,

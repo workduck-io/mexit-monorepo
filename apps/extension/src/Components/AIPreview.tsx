@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { NodeEditorContent } from '@mexit/core'
-import { AIPreview, useAIOptions } from '@mexit/shared'
+import { addOriginToBlocks, AIPreview, useAIOptions } from '@mexit/shared'
 
 import { generateEditorPluginsWithComponents } from '../Editor/plugins'
 import { useSaveChanges } from '../Hooks/useSaveChanges'
@@ -14,7 +14,8 @@ const AIPreviewContainer = () => {
   const { getAIMenuItems } = useAIOptions()
 
   const handleOnInsert = (content: NodeEditorContent, nodeId: string) => {
-    appendAndSave({ nodeid: nodeId, content })
+    const contentWithSource = addOriginToBlocks(content, window.location.href)
+    appendAndSave({ nodeid: nodeId, content: contentWithSource })
   }
 
   const plugins = useMemo(
