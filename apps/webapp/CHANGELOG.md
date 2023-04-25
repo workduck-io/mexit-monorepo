@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.23.4
+
+### Patch Changes
+
+- 8c3837b6: Theme Preferences Changes
+
 ## 0.23.3
 
 ### Patch Changes
