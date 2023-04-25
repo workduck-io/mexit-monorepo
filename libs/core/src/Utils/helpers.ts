@@ -14,7 +14,7 @@ export function wrapErr<T>(f: (result: T) => void) {
 
 export const defaultContent: NodeContent = {
   type: 'init',
-  content: [{ type: ELEMENT_PARAGRAPH, children: [{ text: 'hello world' }] }],
+  content: [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],
   version: -1
 }
 

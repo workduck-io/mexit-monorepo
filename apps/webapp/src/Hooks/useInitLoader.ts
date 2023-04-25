@@ -46,6 +46,7 @@ export const useInitLoader = () => {
   const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
   const userPrefHydrated = useUserPreferenceStore((s) => s._hasHydrated)
+  const linksStoreHydrated = useLinkStore((s) => s._hasHydrated)
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
@@ -108,9 +109,9 @@ export const useInitLoader = () => {
           archive: useDataStore.getState().archive,
           sharedNodes: useDataStore.getState().sharedNodes,
           snippets: useSnippetStore.getState().snippets,
-          links: useLinkStore.getState().links,
+          links: useLinkStore.getState().links ?? [],
           contents: useContentStore.getState().contents,
-          highlights: useHighlightStore.getState().highlights,
+          highlights: useHighlightStore.getState().highlights ?? [],
           prompts: usePromptStore.getState().getAllPrompts()
         }
 
@@ -126,7 +127,8 @@ export const useInitLoader = () => {
       snippetHydrated &&
       dataStoreHydrated &&
       contentStoreHydrated &&
-      highlightStoreHydrated
+      highlightStoreHydrated &&
+      linksStoreHydrated
     ) {
       startWorkers()
         .then(async () => {
@@ -145,5 +147,13 @@ export const useInitLoader = () => {
           console.error('InitSearchIndexError', { error })
         })
     }
-  }, [initalizeApp, snippetHydrated, dataStoreHydrated, contentStoreHydrated])
+  }, [
+    initalizeApp,
+    linksStoreHydrated,
+    highlightStoreHydrated,
+    snippetHydrated,
+    userPrefHydrated,
+    dataStoreHydrated,
+    contentStoreHydrated
+  ])
 }
