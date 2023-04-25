@@ -14,7 +14,7 @@ const Init = () => {
   const { initCognito } = useAuth()
   useEffect(() => {
     API.init()
-    console.log('API_BASE_URLS', { config })
+    // console.log('API_BASE_URLS', { config })
     const initUserAndApp = () => {
       initCognito(
         {

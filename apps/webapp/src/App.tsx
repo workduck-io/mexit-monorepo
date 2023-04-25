@@ -21,15 +21,16 @@ const FORCE_LOGOUT_VERSION = '0.21.0'
 
 const AutoThemeSwitch = () => {
   const theme = useUserPreferenceStore((state) => state.theme)
+  const hasHydrated = useUserPreferenceStore((s) => s._hasHydrated)
   const { preferences, changeTheme } = useThemeContext()
 
   useEffect(() => {
-    if (theme) {
+    if (theme && hasHydrated) {
       if (theme !== preferences) {
         changeTheme(theme.themeId, theme.mode)
       }
     }
-  }, [theme])
+  }, [theme, hasHydrated])
 
   return null
 }

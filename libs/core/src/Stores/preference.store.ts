@@ -27,7 +27,7 @@ export interface UserPreferenceStore extends UserPreferences {
 
 export const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
   version: 'unset',
-  theme: { themeId: 'xeM', mode: 'dark' },
+  theme: { themeId: 'xem', mode: 'dark' },
   lastOpenedNotes: {},
   lastUsedSnippets: {},
   space: {},
@@ -50,7 +50,6 @@ export const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
       version: 'unset',
       activeNamespace: undefined,
       space: {},
-      theme: { themeId: 'xeM', mode: 'dark' },
       lastOpenedNotes: {},
       lastUsedSnippets: {},
       smartCaptureExcludedFields: {}
@@ -138,6 +137,7 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
   })
 
   const mergedSpacePreferences = merge(local.space, remote.space ?? {})
+  const theme = remote.theme ?? local.theme
 
   // mog('mergedLastOpenedNotes', { localLastOpenedNotes, mergedLastOpenedNotes, local, remote })
   return {
@@ -148,7 +148,10 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     lastOpenedNotes: getLimitedEntries({ ...local.lastOpenedNotes, ...mergedLastOpenedNotes }),
     lastUsedSnippets: { ...local.lastUsedSnippets, ...mergedLastUsedSnippets },
     space: mergedSpacePreferences,
-    theme: remote.theme ?? local.theme,
+    theme: {
+      ...theme,
+      themeId: theme.themeId.toLowerCase()
+    },
     smartCaptureExcludedFields: local.smartCaptureExcludedFields
   }
 }
