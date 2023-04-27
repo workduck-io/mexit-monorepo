@@ -83,7 +83,7 @@ const BallonMarkToolbarButtons = () => {
 
     const highlight = new Highlighter({
       style: {
-        className: 'highlight'
+        className: 'mexit-highlight'
       }
     })
 

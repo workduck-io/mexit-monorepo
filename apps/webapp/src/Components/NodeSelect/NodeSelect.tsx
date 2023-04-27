@@ -23,10 +23,12 @@ import {
   SingleNamespace,
   useContentStore,
   useDataStore,
-useMetadataStore ,   useRecentsStore,
-userPreferenceStore as useUserPreferenceStore,  useSnippetStore,
+  useMetadataStore,
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useSnippetStore,
   withoutContinuousDelimiter
- } from '@mexit/core'
+} from '@mexit/core'
 import {
   DefaultMIcons,
   IconDisplay,
@@ -210,10 +212,6 @@ function NodeSelect({
     const ilinks = useDataStore.getState().ilinks
     const snippets = useSnippetStore.getState().snippets ?? {}
     const sharedNodes = useDataStore.getState().sharedNodes
-
-    // if (!disallowReserved) {
-    //   return ilinks.map((l) => makeQuickLink(l.path, { nodeid: l.nodeid, icon: l.icon }))
-    // }
 
     const fLinks = disallowReserved ? ilinks.filter((l) => !isReserved(l.path)) : ilinks
 

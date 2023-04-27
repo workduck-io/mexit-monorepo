@@ -55,6 +55,7 @@ const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert', isMe
     <Menu
       allowSearch
       noBackground
+      enableAutoUpdate={false}
       noPadding
       searchPlaceholder="Search for a Note..."
       root={root}

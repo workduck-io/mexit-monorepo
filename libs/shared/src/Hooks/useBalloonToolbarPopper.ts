@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { getSelectionText, isSelectionExpanded, mergeProps, useEventEditorSelectors } from '@udecode/plate-core'
 import {
@@ -40,9 +40,6 @@ export const useFloatingToolbar = ({
 } = {}): UseVirtualFloatingReturn & {
   open: boolean
 } => {
-  const [selected, setSelected] = useState(null)
-  const selection = useDeferredValue(selected)
-
   const focusedEditorId = useEventEditorSelectors.focus()
   const focused = useFocused()
   const toolbarState = useBalloonToolbarStore((s) => s.toolbarState)
@@ -82,11 +79,11 @@ export const useFloatingToolbar = ({
     if (floatingOptions?.windowSelection) {
       window.addEventListener('mouseup', handleMouseUp)
       window.addEventListener('mousedown', handleMouseDown)
+    }
 
-      return () => {
-        window.removeEventListener('mouseup', handleMouseUp)
-        window.removeEventListener('mousedown', handleMouseDown)
-      }
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('mousedown', handleMouseDown)
     }
   }, [])
 

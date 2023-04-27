@@ -1,7 +1,16 @@
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 
-import { Highlight, mog, NodeEditorContent, SEPARATOR, useAuthStore, useContentStore, useHighlightStore, WORKSPACE_HEADER } from '@mexit/core'
+import {
+  Highlight,
+  mog,
+  NodeEditorContent,
+  SEPARATOR,
+  useAuthStore,
+  useContentStore,
+  useHighlightStore,
+  WORKSPACE_HEADER
+} from '@mexit/core'
 
 import { useLinkURLs } from '../Hooks/useURLs'
 
@@ -126,7 +135,7 @@ export const useHighlights = () => {
     // if (!link) {
     //   await saveLink({ url: highlight.properties.sourceUrl, title: sourceTitle })
     // }
-    await saveHighlightAPI(highlight)
+    return await saveHighlightAPI(highlight)
   }
 
   return {
@@ -139,10 +148,12 @@ export const useHighlights = () => {
 
 export const useHighlightAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+  const userId = useAuthStore((store) => store.userDetails.id)
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
-    Accept: 'application/json, text/plain, */*'
+    Accept: 'application/json, text/plain, */*',
+    'mex-user-id': userId
   })
 
   const saveHighlight = async (highlight: Highlight) => {
@@ -150,24 +161,19 @@ export const useHighlightAPI = () => {
       type: 'HIGHLIGHT',
       subType: 'ADD_HIGHLIGHT',
       headers: workspaceHeaders(),
-      body: {
-        properties: highlight.properties,
-        entityId: highlight.entityId
-      }
+      body: highlight
     }
 
-    const data = chrome.runtime.sendMessage(request, (response) => {
-      const { message, error } = response
+    const response = await chrome.runtime.sendMessage(request)
 
-      if (error) {
-        mog('ErrorSavingLink', error)
-        toast.error('An error occured. Please try again.')
-      } else {
-        return message
-      }
-    })
+    const { message, error } = response
 
-    return data
+    if (error) {
+      mog('ErrorSavingLink', error)
+      toast.error('An error occured. Please try again.')
+    } else {
+      return message
+    }
   }
 
   const deleteHighlight = async (highlightId: string) => {

@@ -13,7 +13,7 @@ export const TabPanel = styled(animated.div)<{ fade?: boolean }>`
   ${({ fade }) =>
     fade &&
     css`
-      opacity: 0.7;
+      opacity: 0.3;
     `};
 `
 

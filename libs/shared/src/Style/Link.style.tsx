@@ -202,6 +202,12 @@ export const HighlightGroupsWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.medium};
 `
 
+export const LinkedNotesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.small};
+`
+
 export const Container = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
 `

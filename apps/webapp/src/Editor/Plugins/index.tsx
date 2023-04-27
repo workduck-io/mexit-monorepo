@@ -50,7 +50,7 @@ import {
 import { useAuth } from '@workduck-io/dwindle'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { createCapturePlugin, MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@mexit/shared'
+import { MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@mexit/shared'
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
@@ -130,7 +130,6 @@ export const generatePlugins = (options: PluginOptionType) => {
     createListPlugin(), // List
     createTodoPlugin(),
     createTablePlugin({ component: TableWrapper }), // Table
-    createCapturePlugin(),
 
     // Editing Plugins
     createSoftBreakPlugin(optionsSoftBreakPlugin),

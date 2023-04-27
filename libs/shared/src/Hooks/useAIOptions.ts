@@ -38,7 +38,7 @@ export const useAIOptions = () => {
 
     const highlight = new Highlighter({
       style: {
-        className: 'highlight'
+        className: 'mexit-highlight'
       }
     })
 

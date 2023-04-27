@@ -11,6 +11,7 @@ import {
   Highlight,
   mog,
   NodeProperties,
+  SaveableRange,
   SEPARATOR,
   SingleNamespace,
   useAuthStore,
@@ -150,7 +151,12 @@ export function useSaveChanges() {
    * Add Highlight Entity
    */
 
-  const saveHighlightEntity = async (selection: any) => {
+  type SelectionHighlight = {
+    html: string
+    range: SaveableRange
+  }
+
+  const saveHighlightEntity = async (selection: SelectionHighlight) => {
     if (!selection) return
 
     const editor = createPlateEditor({
@@ -180,6 +186,7 @@ export function useSaveChanges() {
     try {
       await saveHighlight(highlight, document.title)
       addHighlightInStore(highlight)
+      toast('Highlight saved!')
     } catch (err) {
       console.error(err)
       toast('An error occured while saving the highlight. Please try again.')
@@ -203,6 +210,7 @@ export function useSaveChanges() {
       },
       content
     }
+
     if (highlight) {
       // Save highlight
       const sourceTitle = document.title
@@ -347,6 +355,7 @@ export function useSaveChanges() {
 
   return {
     saveIt,
+    saveHighlightEntity,
     appendAndSave
   }
 }

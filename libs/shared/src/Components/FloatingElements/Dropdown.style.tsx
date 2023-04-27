@@ -130,6 +130,10 @@ export const RootMenuWrapper = styled.button<{
         background: ${theme.tokens.surfaces.s[2]};
       }
     `}
+
+  &:focus {
+    outline: none;
+  }
 `
 
 export const MenuWrapper = styled.div`

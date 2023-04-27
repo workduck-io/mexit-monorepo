@@ -128,7 +128,8 @@ export const DefaultMIcons = {
   IMAGE: getMIcon('ICON', 'bx:image'),
   AI: getMIcon('ICON', 'carbon:magic-wand-filled'),
   EMBED: getMIcon('ICON', 'lucide:file-input'),
-  INSERT: getMIcon('ICON', 'ri:arrow-go-back-line')
+  INSERT: getMIcon('ICON', 'ri:arrow-go-back-line'),
+  SEARCH: getMIcon('ICON', 'ri:search-line')
 }
 
 export const ForwardlinkIcon = {

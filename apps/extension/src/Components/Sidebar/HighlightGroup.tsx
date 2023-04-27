@@ -26,31 +26,46 @@ import { NodeCardHeader } from './NodeCard'
 
 const HIGHLIGHT_TEXT_MAX_LENGTH = 300
 
-const LinkedNotes = ({ isEditable, editNodes }) => {
-  const theme = useTheme()
+const LinkedNotes = ({ entityId }) => {
   const openDrawer = useLayoutStore((store) => store.setDrawer)
+
+  const { getEditableMap } = useHighlights()
+  const { getILinkFromNodeid } = useLinks()
+
+  const editableMap = getEditableMap(entityId)
+
+  const editNodes = useMemo(() => {
+    return Object.keys(editableMap).map((nodeId) => {
+      const node = getILinkFromNodeid(nodeId, true)
+      return node
+    })
+  }, [editableMap])
 
   const handleOnClick = (e) => {
     e.stopPropagation()
     // * Open Quick Action Drawer
     openDrawer(DrawerType.LINKED_NOTES)
-    // window.open(`${API_BASE_URLS.frontend}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
   }
 
+  if (!editNodes?.length) return null
+
   return (
-    <FooterFlexButton onClick={handleOnClick}>
-      <IconDisplay icon={getMIcon('ICON', 'ri:eye-line')} /> Linked Notes ({editNodes.length})
-    </FooterFlexButton>
-    // <HighlightNotes>
-    //   {isEditable
-    //     ? editNodes.map((node: any) => (
-    //         <HighlightNote onClick={() => handleOpenNote(node.nodeid)}>
-    //           <Icon icon={fileList2Line} />
-    //           {getTitleFromPath(node.path)}
-    //         </HighlightNote>
-    //       ))
-    //     : null}
-    // </HighlightNotes>
+    <>
+      <FooterFlexButton onClick={handleOnClick}>
+        <IconDisplay icon={getMIcon('ICON', 'ri:eye-line')} /> Linked Notes ({editNodes?.length})
+      </FooterFlexButton>
+      {/* <HighlightNotes>
+          {isEditable
+            ? editNodes.map((node: any) => (
+                <HighlightNote onClick={() => handleOpenNote(node.nodeid)}>
+                  <Icon icon={fileList2Line} />
+                  {getTitleFromPath(node.path)}
+                </HighlightNote>
+              ))
+            : null}
+        </HighlightNotes> */}
+      <VerticalSeperator />
+    </>
   )
 }
 
@@ -77,25 +92,11 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
   const [open, setOpen] = React.useState(false)
   const highlightText = highlight.properties.saveableRange.text
 
-  const { getEditableMap } = useHighlights()
-  const { getILinkFromNodeid } = useLinks()
-
   const theme = useTheme()
-  const editableMap = getEditableMap(highlight.entityId)
 
-  const editNodes = useMemo(() => {
-    return Object.keys(editableMap).map((nodeId) => {
-      const node = getILinkFromNodeid(nodeId, true)
-      return node
-    })
-  }, [editableMap])
+  const willCollapse = highlightText?.length > HIGHLIGHT_TEXT_MAX_LENGTH
 
-  const isEditable = useMemo(() => Object.keys(editableMap ?? {}).length > 0, [editableMap])
-  const nodeId = editNodes[0]?.nodeid
-
-  const willCollapse = highlightText.length > HIGHLIGHT_TEXT_MAX_LENGTH
-
-  const strippedText = highlightText.substring(0, HIGHLIGHT_TEXT_MAX_LENGTH) + (willCollapse ? '...' : '')
+  const strippedText = highlightText?.substring(0, HIGHLIGHT_TEXT_MAX_LENGTH) + (willCollapse ? '...' : '')
 
   const toShowText = willCollapse ? (open ? highlightText : strippedText) : highlightText
 
@@ -124,8 +125,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
         <SnippetContentPreview>{toShowText}</SnippetContentPreview>
       </Container>
       <CardFooter>
-        <LinkedNotes isEditable={isEditable} editNodes={editNodes} />
-        <VerticalSeperator />
+        <LinkedNotes entityId={highlight.entityId} />
         <AddToNote />
       </CardFooter>
     </SingleHighlightWrapper>
@@ -136,6 +136,10 @@ export const HighlightGroups = ({ highlights }: { highlights: Highlights }) => {
   return open && highlights ? (
     <HighlightGroupsWrapper>
       {highlights.map((highlight) => {
+        console.log('HIGHLIGHT IS ', { highlight })
+
+        if (!highlight) return null
+
         return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} />
       })}
     </HighlightGroupsWrapper>
