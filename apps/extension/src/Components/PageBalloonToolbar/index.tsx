@@ -1,10 +1,17 @@
 import { useState } from 'react'
 
-import { ToolbarButton } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 import Highlighter from 'web-highlighter'
 
-import { BalloonToolbar, DefaultMIcons, IconDisplay, useAIOptions, useBalloonToolbarStore } from '@mexit/shared'
+import {
+  BalloonToolbar,
+  ButtonSeparator,
+  DefaultMIcons,
+  IconButtonWrapper,
+  IconDisplay,
+  useAIOptions,
+  useBalloonToolbarStore
+} from '@mexit/shared'
 
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { getElementById } from '../../Utils/cs-utils'
@@ -19,6 +26,7 @@ const PageBallonToolbar = () => {
   const { saveHighlightEntity } = useSaveChanges()
 
   const onAIPreviewClick = (event) => {
+    setIsOptionOpen(null)
     event.preventDefault()
 
     const content = getSelectionHTML()
@@ -27,6 +35,8 @@ const PageBallonToolbar = () => {
   }
 
   const handleHighlight = () => {
+    setIsOptionOpen(null)
+
     const { html } = getSelectionHTML()
     const selectionRange = window.getSelection().getRangeAt(0)
     const content = sanitizeHTML(html)
@@ -51,17 +61,36 @@ const PageBallonToolbar = () => {
     setIsOptionOpen(id)
   }
 
+  const handleThese = () => {
+    // * TODO: Add these to the page
+  }
+
   return (
     <BalloonToolbar
       portalElement={getElementById('mexit-container')}
       floatingOptions={{ placement: 'top', windowSelection: true }}
     >
-      <ToolbarButton
+      <IconButtonWrapper onMouseDown={onAIPreviewClick}>
+        <IconDisplay size={20} icon={DefaultMIcons.AI} />
+        <span>Enhance</span>
+      </IconButtonWrapper>
+      <ButtonSeparator />
+
+      <IconButtonWrapper onMouseDown={handleHighlight}>
+        <IconDisplay size={20} icon={DefaultMIcons.HIGHLIGHT} />
+        <span>Highlight</span>
+      </IconButtonWrapper>
+      {/* <ToolbarButton
         icon={<IconDisplay color={theme.tokens.colors.primary.hover} size={20} icon={DefaultMIcons.AI} />}
         onMouseDown={onAIPreviewClick}
       />
+      <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.HIGHLIGHT} />} onMouseDown={handleHighlight} /> */}
 
-      <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.HIGHLIGHT} />} onMouseDown={handleHighlight} />
+      {/* <BallonOptionsUnwrapper active={isOptionOpen} onClick={handleOpenOption} id="Add To">
+        <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.SNIPPET} />} onMouseDown={handleThese} />
+        <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.NOTE} />} onMouseDown={handleThese} />
+        <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.TASK} />} onMouseDown={handleThese} />
+      </BallonOptionsUnwrapper> */}
     </BalloonToolbar>
   )
 }

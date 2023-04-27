@@ -1,8 +1,7 @@
 import { ExtInfobarMode, InfobarMode } from '@mexit/shared'
 
-import { DrawerType } from '../Types/Layout'
+import { Drawer, DrawerType } from '../Types/Layout'
 import { StoreIdentifier } from '../Types/Store'
-import { getLocalStorage } from '../Utils/storage'
 import { createStore } from '../Utils/storeCreator'
 
 export interface FocusMode {
@@ -55,7 +54,7 @@ const initializeLayoutStore = () => ({
   focusMode: { on: false, hover: false },
 
   // Quick Action Drawer
-  drawer: undefined as DrawerType | undefined,
+  drawer: undefined as Drawer | undefined,
 
   // Infobar
   infobar: {
@@ -92,7 +91,7 @@ export const layoutStoreConfig = (set, get) => ({
         width: state.sidebar.expanded ? 0 : SIDEBAR_WIDTH
       }
     })),
-  setDrawer: (drawer?: DrawerType) => set({ drawer }),
+  setDrawer: (drawer?: Drawer) => set({ drawer }),
 
   showSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, show: true } })),
   hideSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, show: false } })),
@@ -135,8 +134,4 @@ export const layoutStoreConfig = (set, get) => ({
   }
 })
 
-export const useLayoutStore = createStore(layoutStoreConfig, StoreIdentifier.LAYOUT, true, {
-  storage: {
-    web: getLocalStorage()
-  }
-})
+export const useLayoutStore = createStore(layoutStoreConfig, StoreIdentifier.LAYOUT, false)

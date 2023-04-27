@@ -4,12 +4,18 @@ import styled, { css } from 'styled-components'
 
 import { BodyFont } from '../../Style/Search'
 
+export enum DRAWER_HEIGHT_STATES {
+  NORMAL = '28em',
+  LOADING = '5em'
+}
+
 export const DrawerContainer = styled(animated.div)`
-  position: absolute;
-  background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  position: fixed;
+  z-index: 100000;
   right: 10px;
-  height: 400px;
-  width: 400px;
+  width: 380px;
+
   border-radius: ${({ theme }) => `${theme.borderRadius.large} ${theme.borderRadius.large} 0 0`};
   ${({ theme }) => css`
     box-shadow: 0px -10px 40px ${theme.tokens.colors.black};
@@ -32,6 +38,7 @@ export const DrawerHeaderDesc = styled.div`
 export const DrawerHeaderContainer = styled.div`
   align-items: flex-start;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing.medium};
 `

@@ -90,7 +90,7 @@ chrome.contextMenus.create({
 
 chrome.contextMenus.create({
   id: 'open-ai-tools',
-  title: 'Enhance with AI',
+  title: 'Enhance',
   contexts: ['page', 'selection']
 })
 

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { API_BASE_URLS, useMetadataStore } from '@mexit/core'
+import { API_BASE_URLS, useLayoutStore, useMetadataStore } from '@mexit/core'
 import { DrawerHeader, HighlightNote, HighlightNotes, IconDisplay } from '@mexit/shared'
 
 import { useHighlights } from '../../Hooks/useHighlights'
@@ -12,22 +12,22 @@ type LinkedNotesProps = {
   entityId?: string
 }
 
-const LinkedNotes: React.FC<LinkedNotesProps> = ({ entityId }) => {
+const LinkedNotes: React.FC<LinkedNotesProps> = () => {
+  const entityId = useLayoutStore((store) => store.drawer.data?.entityId)
+
   const { getEditableMap } = useHighlights()
   const { getILinkFromNodeid } = useLinks()
 
   const metadata = useMetadataStore.getState().metadata.notes
 
-  const editableMap = getEditableMap(entityId)
-
-  const isEditable = useMemo(() => Object.keys(editableMap ?? {}).length > 0, [editableMap])
-
   const linkedNotes = useMemo(() => {
+    const editableMap = getEditableMap(entityId)
+
     return Object.keys(editableMap).map((nodeId) => {
       const node = getILinkFromNodeid(nodeId, true)
       return node
     })
-  }, [editableMap])
+  }, [entityId])
 
   const description = `This highlight is linked with ${linkedNotes?.length} note(s).`
 
@@ -36,22 +36,22 @@ const LinkedNotes: React.FC<LinkedNotesProps> = ({ entityId }) => {
     window.open(`${API_BASE_URLS.frontend}/editor/${noteId}`, '_blank', 'noopener, noreferrer')
   }
 
+  console.log('linkedNotes', { linkedNotes })
+
   return (
     <QuickActionsDrawerContainer>
       <DrawerHeader title="Linked Notes" description={description} />
       <HighlightNotes>
-        {isEditable
-          ? linkedNotes.map((node: any) => {
-              const icon = metadata[node.nodeid]?.icon
+        {linkedNotes.map((node: any) => {
+          const icon = metadata[node.nodeid]?.icon
 
-              return (
-                <HighlightNote onClick={() => handleOpenNote(node.nodeid)}>
-                  <IconDisplay icon={icon} />
-                  {getTitleFromPath(node.path)}
-                </HighlightNote>
-              )
-            })
-          : null}
+          return (
+            <HighlightNote onClick={() => handleOpenNote(node.nodeid)}>
+              <IconDisplay icon={icon} />
+              {getTitleFromPath(node.path)}
+            </HighlightNote>
+          )
+        })}
       </HighlightNotes>
     </QuickActionsDrawerContainer>
   )

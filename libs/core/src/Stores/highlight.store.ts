@@ -75,6 +75,20 @@ export const highlightStoreConfig = (set, get) => ({
     set({ highlights })
   },
 
+  updateHighlightBlockMap: (entityId: string, { nodeId, blockIds }) => {
+    const highlightBlockMap = get().highlightBlockMap
+
+    blockIds.forEach((blockId: string) => {
+      addToHighlightBlockMap(highlightBlockMap, {
+        highlightId: entityId,
+        nodeId,
+        blockId
+      })
+    })
+
+    set({ highlightBlockMap })
+  },
+
   addHighlight: (highlight, { nodeId, blockIds }) => {
     const { highlights, highlightBlockMap } = get()
     const newHighlighted: Highlights = [...highlights, highlight]

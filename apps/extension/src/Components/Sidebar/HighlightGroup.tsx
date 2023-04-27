@@ -26,58 +26,50 @@ import { NodeCardHeader } from './NodeCard'
 
 const HIGHLIGHT_TEXT_MAX_LENGTH = 300
 
-const LinkedNotes = ({ entityId }) => {
+const LinkedNotes: React.FC<{ highlight: Highlight }> = ({ highlight }) => {
   const openDrawer = useLayoutStore((store) => store.setDrawer)
 
   const { getEditableMap } = useHighlights()
   const { getILinkFromNodeid } = useLinks()
 
-  const editableMap = getEditableMap(entityId)
+  const linkedNotes = useMemo(() => {
+    const editableMap = getEditableMap(highlight.entityId)
 
-  const editNodes = useMemo(() => {
     return Object.keys(editableMap).map((nodeId) => {
       const node = getILinkFromNodeid(nodeId, true)
       return node
     })
-  }, [editableMap])
+  }, [highlight.entityId])
 
   const handleOnClick = (e) => {
     e.stopPropagation()
     // * Open Quick Action Drawer
-    openDrawer(DrawerType.LINKED_NOTES)
+    openDrawer({ type: DrawerType.LINKED_NOTES, data: highlight })
   }
 
-  if (!editNodes?.length) return null
+  if (!linkedNotes?.length) return null
 
   return (
     <>
       <FooterFlexButton onClick={handleOnClick}>
-        <IconDisplay icon={getMIcon('ICON', 'ri:eye-line')} /> Linked Notes ({editNodes?.length})
+        <IconDisplay icon={getMIcon('ICON', 'ri:eye-line')} /> Linked Notes ({linkedNotes?.length})
       </FooterFlexButton>
-      {/* <HighlightNotes>
-          {isEditable
-            ? editNodes.map((node: any) => (
-                <HighlightNote onClick={() => handleOpenNote(node.nodeid)}>
-                  <Icon icon={fileList2Line} />
-                  {getTitleFromPath(node.path)}
-                </HighlightNote>
-              ))
-            : null}
-        </HighlightNotes> */}
       <VerticalSeperator />
     </>
   )
 }
 
-const AddToNote = () => {
+const AddToNote: React.FC<{ highlight: Highlight }> = ({ highlight }) => {
   const theme = useTheme()
   const openDrawer = useLayoutStore((store) => store.setDrawer)
 
   const handleOnClick = (e) => {
     e.stopPropagation()
-
     // Open Quick Action Drawer
-    openDrawer(DrawerType.ADD_TO_NOTE)
+    openDrawer({
+      type: DrawerType.ADD_TO_NOTE,
+      data: highlight
+    })
   }
 
   return (
@@ -125,8 +117,8 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
         <SnippetContentPreview>{toShowText}</SnippetContentPreview>
       </Container>
       <CardFooter>
-        <LinkedNotes entityId={highlight.entityId} />
-        <AddToNote />
+        <LinkedNotes highlight={highlight} />
+        <AddToNote highlight={highlight} />
       </CardFooter>
     </SingleHighlightWrapper>
   )

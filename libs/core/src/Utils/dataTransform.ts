@@ -1,3 +1,5 @@
+import { BlockType } from '../Stores'
+
 import { generateTempId } from './idGenerator'
 
 export type getValuefn = (obj?: any) => string
@@ -126,19 +128,22 @@ export const applyArrayTransformation = (a: any[], t: ArrayTransform): any[] => 
   return newa
 }
 
-export const updateIds = (blockToUpdate: any, withType?: boolean, idGenerator: () => string = generateTempId) => {
-  const block = Object.assign({}, blockToUpdate)
-  const addIdIfType = withType && block?.type
-
-  if (block.id || addIdIfType) {
-    const newId = idGenerator()
-    block.id = newId
+export const idUpdateFunction = (block) => {
+  return {
+    ...block,
+    id: generateTempId()
   }
+}
+
+export const updateIds = (blockToUpdate: any, updateFunc: (block: BlockType) => BlockType = idUpdateFunction) => {
+  const block = updateFunc(Object.assign({}, blockToUpdate))
+
   if (block.children) {
     block.children = block.children.map((bl) => {
-      return updateIds(bl, addIdIfType, idGenerator)
+      return updateIds(bl, updateFunc)
     })
   }
+
   return block
 }
 

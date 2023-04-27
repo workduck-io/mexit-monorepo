@@ -148,12 +148,10 @@ export const useHighlights = () => {
 
 export const useHighlightAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const userId = useAuthStore((store) => store.userDetails.id)
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
-    Accept: 'application/json, text/plain, */*',
-    'mex-user-id': userId
+    Accept: 'application/json, text/plain, */*'
   })
 
   const saveHighlight = async (highlight: Highlight) => {

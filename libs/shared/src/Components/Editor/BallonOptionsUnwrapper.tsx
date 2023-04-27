@@ -9,7 +9,7 @@ import { Tooltip } from '../FloatingElements'
 
 type BallonOptionsUnwrapperProps = {
   id: string
-  icon: MIcon
+  icon?: MIcon
   active: string
   color?: string
   onClick: (id: string) => void
@@ -85,7 +85,7 @@ export const BallonOptionsUnwrapper: React.FC<BallonOptionsUnwrapperProps> = ({
   }
 
   return (
-    <Tooltip content={isActive ? null : id}>
+    <Tooltip content={isActive ? null : id} root={document.getElementById(id)}>
       <BallonOptionContainer
         ref={ref}
         onClick={getPreventDefaultHandler()}

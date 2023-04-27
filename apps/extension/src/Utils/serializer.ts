@@ -9,11 +9,10 @@ import {
   useAuthStore
 } from '@mexit/core'
 
-
 // From content to api
 export const serializeContent = (
   content: any[],
-  nodeid: string,
+  nodeid: string, // nodeid isn't present anywhere inside the function ?
   // If present, and if element.highlight is true, adds the metadata to the element
   elementMetadata?: ElementHighlightMetadata
 ) => {

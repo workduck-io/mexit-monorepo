@@ -17,7 +17,7 @@ export const LoadingWrapper = styled.div<LoadingProps>`
     !transparent &&
     css`
       padding: 10px;
-      background: ${theme.colors.gray[9]};
+      background: ${theme.tokens.surfaces.s[4]};
     `}
 
   border-radius: 5px;
@@ -36,8 +36,8 @@ const LoadingDot = styled.div<{ totalDots: number; color?: string }>`
           box-shadow: 0 2px 8px ${color};
         `
       : css`
-          background: ${theme.colors.primary};
-          box-shadow: 0 2px 8px ${theme.colors.primary};
+          background: ${theme.tokens.colors.primary.default};
+          box-shadow: 0 2px 8px ${theme.tokens.colors.primary.default};
         `}
 
   border-radius: 50%;

@@ -11,7 +11,7 @@ export const useSidebarTransition = () => {
 
   const rhSidebarStyle = useMemo(() => {
     const showRHSidebar = rhSidebar.show && rhSidebar.expanded
-    const visibleEndColumnWidth = '415px'
+    const visibleEndColumnWidth = '400px'
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
     const style = {
       width: endColumnWidth
@@ -24,7 +24,7 @@ export const useSidebarTransition = () => {
 
   const { style: gridStyle, endColumnWidth } = useMemo(() => {
     const showRHSidebar = rhSidebar.show && rhSidebar.expanded
-    const visibleEndColumnWidth = '415px'
+    const visibleEndColumnWidth = '400px'
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
     // mog('Overlay', { overlaySidebar, showSidebar, showRHSidebar })
     const style = {

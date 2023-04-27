@@ -3,6 +3,7 @@ import React from 'react'
 import { useLayoutStore } from '@mexit/core'
 
 import { Group, MexIcon } from '../../Style/Layouts'
+import { Loading } from '../../Style/Loading'
 import { DefaultMIcons } from '../Icons'
 
 import { DrawerHeaderContainer, DrawerHeaderDesc } from './styled'
@@ -11,9 +12,10 @@ type DrawerHeaderProps = {
   title: string
   showBackButton?: boolean
   description?: string
+  isLoading?: boolean
 }
 
-export const DrawerHeader: React.FC<DrawerHeaderProps> = ({ title, showBackButton, description }) => {
+export const DrawerHeader: React.FC<DrawerHeaderProps> = ({ title, showBackButton, description, isLoading }) => {
   const closeDrawer = useLayoutStore((store) => store.setDrawer)
 
   const handleCloseDrawer = () => {
@@ -29,14 +31,18 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({ title, showBackButto
           <DrawerHeaderDesc>{description}</DrawerHeaderDesc>
         </div>
       </Group>
-      <MexIcon
-        cursor="pointer"
-        icon={DefaultMIcons.CLEAR.value}
-        fontSize={20}
-        height={20}
-        width={20}
-        onClick={handleCloseDrawer}
-      />
+      {isLoading ? (
+        <Loading dots={3} transparent />
+      ) : (
+        <MexIcon
+          cursor="pointer"
+          icon={DefaultMIcons.CLEAR.value}
+          fontSize={20}
+          height={20}
+          width={20}
+          onClick={handleCloseDrawer}
+        />
+      )}
     </DrawerHeaderContainer>
   )
 }

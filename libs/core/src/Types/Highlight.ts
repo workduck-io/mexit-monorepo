@@ -41,9 +41,13 @@ export interface Highlight {
      * Source URL of the webpage on which the highlight was made
      */
     sourceUrl: string
+
+    /**
+     * Block Content
+     */
+    content: NodeEditorContent
   }
 
-  content: NodeEditorContent
   /**
    * ID of the note where the content was added
    */

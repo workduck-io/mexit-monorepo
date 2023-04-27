@@ -27,6 +27,7 @@ import { getDeserializeSelectionToNodes } from '@mexit/shared'
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../Editor/plugins'
 import { useSputlitStore } from '../Stores/useSputlitStore'
+import { serializeContent } from '../Utils/serializer'
 
 import { useEditorStore } from './useEditorStore'
 import { useHighlights } from './useHighlights'
@@ -170,7 +171,7 @@ export function useSaveChanges() {
       )
     })
 
-    const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, false)
+    const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, false, true)
 
     const isCapturedHighlight = selection?.range && window.location.href
 
@@ -178,13 +179,22 @@ export function useSaveChanges() {
       entityId: generateHighlightId(),
       properties: {
         sourceUrl: selection?.range && window.location.href,
-        saveableRange: selection?.range
-      },
-      content
+        saveableRange: selection?.range,
+        content
+      }
     }
 
     try {
-      await saveHighlight(highlight, document.title)
+      await saveHighlight(
+        {
+          ...highlight,
+          properties: {
+            ...highlight?.properties,
+            content: serializeContent(content, '')
+          }
+        },
+        document.title
+      )
       addHighlightInStore(highlight)
       toast('Highlight saved!')
     } catch (err) {
@@ -206,9 +216,9 @@ export function useSaveChanges() {
       entityId: generateHighlightId(),
       properties: {
         sourceUrl: selection?.range && window.location.href,
-        saveableRange: selection?.range
-      },
-      content
+        saveableRange: selection?.range,
+        content: serializeContent(content, '')
+      }
     }
 
     if (highlight) {
