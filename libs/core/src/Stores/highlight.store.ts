@@ -1,3 +1,5 @@
+import { produce } from 'immer'
+
 import { ElementHighlightMetadata, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
 import { StoreIdentifier } from '../Types/Store'
 import { mog } from '../Utils/mog'
@@ -44,7 +46,7 @@ export const highlightStoreConfig = (set, get) => ({
   setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => set({ highlightBlockMap }),
   addHighlightEntity: (highlight: Highlight) => {
     const existingHighlights = get().highlights
-    set({ highlights: [...existingHighlights, highlight] })
+    set({ highlights: [highlight, ...existingHighlights] })
   },
 
   initHighlightBlockMap: (ilinks, contents) => {
@@ -76,34 +78,33 @@ export const highlightStoreConfig = (set, get) => ({
   },
 
   updateHighlightBlockMap: (entityId: string, { nodeId, blockIds }) => {
-    const highlightBlockMap = get().highlightBlockMap
-
-    blockIds.forEach((blockId: string) => {
-      addToHighlightBlockMap(highlightBlockMap, {
-        highlightId: entityId,
-        nodeId,
-        blockId
+    set(
+      produce((draft: any) => {
+        blockIds.forEach((blockId: string) => {
+          addToHighlightBlockMap(draft.highlightBlockMap, {
+            highlightId: entityId,
+            nodeId,
+            blockId
+          })
+        })
       })
-    })
-
-    set({ highlightBlockMap })
+    )
   },
 
   addHighlight: (highlight, { nodeId, blockIds }) => {
-    const { highlights, highlightBlockMap } = get()
-    const newHighlighted: Highlights = [...highlights, highlight]
-    const newHighlightBlockMap = { ...highlightBlockMap }
+    set(
+      produce((draft: any) => {
+        draft.highlights.unshift(highlight)
 
-    blockIds.forEach((blockId: string) => {
-      addToHighlightBlockMap(newHighlightBlockMap, {
-        highlightId: highlight.entityId,
-        nodeId,
-        blockId
+        blockIds.forEach((blockId: string) => {
+          addToHighlightBlockMap(draft.highlightBlockMap, {
+            highlightId: highlight.entityId,
+            nodeId,
+            blockId
+          })
+        })
       })
-    })
-
-    mog('addHighlighted', { highlight, nodeId, blockIds, newHighlighted, newHighlightBlockMap })
-    set({ highlights: newHighlighted, highlightBlockMap: newHighlightBlockMap })
+    )
   },
 
   removeHighlight: (highlightId: string) => {
@@ -121,8 +122,6 @@ export const highlightStoreConfig = (set, get) => ({
   },
 
   clearAllHighlightedBlocks: () => {
-    const { highlights: oldHighlighted, highlightBlockMap: oldHighlightBlockMap } = get()
-    mog('clearAllHighlighted', { oldHighlighted, oldHighlightBlockMap })
     set({ highlights: [], highlightBlockMap: {} })
   }
 })

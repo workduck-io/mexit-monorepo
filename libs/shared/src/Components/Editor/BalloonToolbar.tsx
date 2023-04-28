@@ -7,7 +7,7 @@ import { useFloatingToolbar } from '../../Hooks/useBalloonToolbarPopper'
 import { BalloonToolbarBase } from '../../Style/BalloonToolbar.styles'
 import { BalloonToolbarProps } from '../../Types/BalloonToolbar.types'
 
-export const BalloonToolbar = withPlateEventProvider((props: BalloonToolbarProps) => {
+export const BallonToolbaWithoutEvent = (props: BalloonToolbarProps) => {
   const { children, editor, portalElement, floatingOptions } = props
 
   const { floating, style, open } = useFloatingToolbar({
@@ -24,4 +24,6 @@ export const BalloonToolbar = withPlateEventProvider((props: BalloonToolbarProps
       </BalloonToolbarBase>
     </PortalBody>
   )
-})
+}
+
+export const BalloonToolbar = withPlateEventProvider(BallonToolbaWithoutEvent)

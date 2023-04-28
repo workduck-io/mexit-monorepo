@@ -2,7 +2,7 @@ import { ELEMENT_DEFAULT } from '@udecode/plate'
 import { deserializeHtml, htmlBodyToFragment, htmlStringToDOMNode } from '@udecode/plate-core'
 import { Descendant, Editor, Text } from 'slate'
 
-import { BlockType, generateTempId, idUpdateFunction, mog, NodeEditorContent, updateIds } from '@mexit/core'
+import { BlockType, generateTempId, mog, NodeEditorContent, updateIds } from '@mexit/core'
 
 const isInlineNode = (editor: Pick<Editor, 'isInline'>) => (node: Descendant) =>
   Text.isText(node) || editor.isInline(node)
@@ -29,8 +29,7 @@ export const getDeserializeSelectionToNodes = (
   selection: { text: string; metadata: string },
   editor: any,
   // If true, adds the highlight: true to blocks
-  highlight?: boolean,
-  withoutIds = false
+  highlight?: boolean
 ): NodeEditorContent => {
   let nodes
   const element = htmlStringToDOMNode(selection?.text ?? '<p></p>')
@@ -51,14 +50,7 @@ export const getDeserializeSelectionToNodes = (
 
       if (isText) nodes = [{ id: generateTempId(), type: ELEMENT_DEFAULT, children: nodes }]
     }
-    if (nodes)
-      nodes = nodes.map((block) =>
-        updateIds(block, ({ id, ...restBlock }) => {
-          if (withoutIds) return restBlock
-          else if (id || restBlock.type) return idUpdateFunction(block)
-          return block
-        })
-      )
+    if (nodes) nodes = nodes.map((block) => updateIds(block, true))
     if (nodes) nodes = nodes.map((node) => highlightNodes(node, highlight))
   } catch (err) {
     console.log(err)

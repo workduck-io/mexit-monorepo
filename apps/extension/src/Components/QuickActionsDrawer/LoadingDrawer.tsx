@@ -8,7 +8,7 @@ const LoadingDrawer = () => {
 
   return (
     <QuickActionsDrawerContainer>
-      <DrawerHeader isLoading={drawerState.data?.isLoading} title={drawerState.data?.title} />
+      <DrawerHeader align="center" isLoading={drawerState.data?.isLoading} title={drawerState.data?.title} />
     </QuickActionsDrawerContainer>
   )
 }

@@ -13,7 +13,7 @@ import { Group } from '../../Style/Layouts'
 import { AutoComplete } from '../FloatingElements'
 import { IconDisplay } from '../IconDisplay'
 import { DefaultMIcons } from '../Icons'
-import InsertMenu from '../InsertMenu'
+import { InsertMenu } from '../InsertMenu'
 
 import AIHistory from './AIHistory'
 import AIResponse from './AIResponse'
@@ -70,9 +70,9 @@ const AIPreviewContainer: React.FC<AIPreviewProps> = (props) => {
   useEffect(() => {
     return () => {
       const state = useFloatingStore.getState().state?.AI_POPOVER
-      if (state?.range) {
+      if (state?.id) {
         const highlight = new Highlighter()
-        highlight.removeAll()
+        highlight.remove(state.id)
       }
     }
   }, [])

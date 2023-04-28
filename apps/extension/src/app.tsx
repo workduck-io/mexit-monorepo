@@ -42,9 +42,7 @@ const Extension = () => {
               <TooltipPortal>
                 <Tooltip />
               </TooltipPortal>
-              <PortalMaker>
-                <AIPreviewContainer />
-              </PortalMaker>
+              <AIPreviewContainer />
               <PageBallonToolbar />
             </>
           )}

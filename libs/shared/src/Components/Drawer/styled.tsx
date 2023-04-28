@@ -35,10 +35,16 @@ export const DrawerHeaderDesc = styled.div`
   opacity: 0.9;
 `
 
-export const DrawerHeaderContainer = styled.div`
-  align-items: flex-start;
+export const DrawerHeaderContainer = styled.div<{ align?: 'start' | 'center' }>`
+  ${({ align }) =>
+    align === 'center'
+      ? css`
+          align-items: center;
+        `
+      : css`
+          align-items: flex-start;
+        `}
   display: flex;
-  align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing.medium};
 `

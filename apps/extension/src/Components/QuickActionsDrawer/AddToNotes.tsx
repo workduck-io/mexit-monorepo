@@ -36,9 +36,7 @@ const AddToNotes = () => {
       return {
         ...updateIds(block),
         metadata: {
-          ...(block.metadata || {}),
           elementMetadata: {
-            ...(block.metadata?.elementMetadata || {}),
             id: highlight.entityId,
             type: 'highlightV1'
           }

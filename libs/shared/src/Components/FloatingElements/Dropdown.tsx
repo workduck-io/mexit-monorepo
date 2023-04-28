@@ -123,8 +123,6 @@ interface Props {
   onMouseEnter?: (e: any) => void
   onMouseLeave?: (e: any) => void
 
-  enableAutoUpdate?: boolean
-
   /**
    * Show Button with Border
    */
@@ -155,7 +153,6 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       multiSelect,
       allowSearch,
       onCreate,
-      enableAutoUpdate = true,
       onMouseEnter,
       noPadding,
       onMouseLeave,
@@ -190,12 +187,10 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       open,
       onOpenChange: setOpen,
       middleware: [offset({ mainAxis: 4, alignmentAxis: nested ? -5 : 0 }), flip(), shift()],
-      placement: (nested && enableAutoUpdate) || !enableAutoUpdate ? 'right-start' : 'bottom-start',
+      placement: nested ? 'right-start' : 'bottom-start',
       nodeId
       // whileElementsMounted: autoUpdate
     })
-
-    console.log('NESTED IS', { nested, enableAutoUpdate })
 
     const resetSearch = useCallback(() => {
       // mog('resetSearch')

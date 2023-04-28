@@ -28,15 +28,18 @@ export const NoteItem = styled.div<{ selected?: boolean }>`
   line-height: 1.5;
   margin: 0;
   outline: 0;
-  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+  padding: ${({ theme }) => theme.spacing.small};
   gap: ${({ theme }) => theme.spacing.small};
   background: none;
   ${BodyFont}
+  opacity: 1;
 
   color: ${({ theme }) => theme.tokens.text.fade};
 
   :hover {
     cursor: pointer;
+    background: ${({ theme }) => theme.sidebar.tree.item.wrapper.active.surface};
+    opacity: 0.8;
   }
 
   &.open {

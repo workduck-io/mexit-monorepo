@@ -168,7 +168,7 @@ export const SnippetsInfoBar = () => {
           <p>{!search ? 'All your Snippets will shown here!' : 'No Results Found!'}</p>
         </CenteredColumn>
       ) : (
-        <SidebarSection label="Popular" icon={DefaultMIcons.SNIPPET}>
+        <SidebarSection scrollable label="Popular" icon={DefaultMIcons.SNIPPET}>
           <List $noMargin scrollable>
             {searchedSnippets?.map((snippet) => (
               <SnippetCard

@@ -80,15 +80,17 @@ export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
   }
 `
 
-export const List = styled.section<{ scrollable?: boolean; $noMargin?: boolean }>`
+export const List = styled.section<{ scrollable?: boolean; $noMargin?: boolean; padding?: boolean }>`
   ${({ $noMargin }) =>
     !$noMargin &&
     css`
       margin-top: ${({ theme }) => theme.spacing.medium};
     `}
 
+  display:flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.small};
   overflow: hidden auto;
-  max-height: 90vh;
   overscroll-behavior: contain;
 `
 

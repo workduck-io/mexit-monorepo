@@ -112,7 +112,7 @@ export const NotesInfoBar = () => {
           <p>{!search ? 'All your recents will shown here!' : 'No Results Found!'}</p>
         </CenteredColumn>
       ) : (
-        <SidebarSection label="Recents" icon={DefaultMIcons.NOTE}>
+        <SidebarSection scrollable label="Recents" icon={DefaultMIcons.NOTE}>
           <List $noMargin scrollable>
             {searchedNodes?.map((nodeId) => (
               <NodeCard key={nodeId} nodeId={nodeId} />

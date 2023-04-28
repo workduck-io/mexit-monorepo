@@ -85,10 +85,11 @@ function useToggleHandler() {
     if (content) {
       addAIEvent({ role: 'assistant', content, inputFormat: 'html' })
 
-      highlighter.fromRange(range)
+      const id = highlighter.fromRange(range)?.id
 
       setFloatingElement(FloatingElementType.AI_POPOVER, {
-        range
+        range,
+        id
       })
     }
   }
@@ -231,20 +232,16 @@ function handleHighlighter() {
 
   useEffect(() => {
     const highlighter = new Highlighter({ style: { className: 'mexit-highlight' } })
+
     const highlightOldRange = () => {
       const highlightsOfUrl = getHighlightsOfUrl(window.location.href)
 
       highlightsOfUrl.forEach((highlight) => {
         const { startMeta, endMeta, text, id } = highlight.properties.saveableRange
-        // mog('check', { id, highlighedIds })
 
         if (!highlighedIds.includes(id)) {
           highlighter.fromStore(startMeta, endMeta, text, highlight.entityId)
           highlighedIds.push(highlight.entityId)
-
-          // if (highlight?.shared) {
-          //   highlighter.addClass('shared', key)
-          // }
         }
       })
     }

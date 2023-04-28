@@ -28,3 +28,8 @@ export const FadeContainer = styled.section<{ fade: boolean }>`
         `
       : ''};
 `
+
+export const FadeSpan = styled.span`
+  color: ${({ theme }) => theme.tokens.text.fade} !important;
+  animation: ${fadeIn} 0.25s ease-in-out;
+`

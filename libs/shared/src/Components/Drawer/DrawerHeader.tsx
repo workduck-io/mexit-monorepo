@@ -13,9 +13,16 @@ type DrawerHeaderProps = {
   showBackButton?: boolean
   description?: string
   isLoading?: boolean
+  align?: 'start' | 'center'
 }
 
-export const DrawerHeader: React.FC<DrawerHeaderProps> = ({ title, showBackButton, description, isLoading }) => {
+export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
+  title,
+  showBackButton,
+  description,
+  isLoading,
+  align = 'start'
+}) => {
   const closeDrawer = useLayoutStore((store) => store.setDrawer)
 
   const handleCloseDrawer = () => {
@@ -23,7 +30,7 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({ title, showBackButto
   }
 
   return (
-    <DrawerHeaderContainer>
+    <DrawerHeaderContainer align={align}>
       <Group>
         {showBackButton && <MexIcon cursor="pointer" fontSize={20} height={20} width={20} icon="ri:arrow-left-line" />}
         <div>

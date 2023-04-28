@@ -151,6 +151,7 @@ export const MenuWrapper = styled.div`
 
 export const MenuItemWrapper = styled.button<{ isActive?: boolean }>`
   ${MenuItemStyles}
+  cursor: pointer;
 
   ${({ isActive, theme }) =>
     isActive &&

@@ -59,6 +59,7 @@ export const Drawer: React.FC<DrawerProps> = ({ show, children }) => {
   // }, [ref, show])
 
   return (
+    // @ts-ignore
     <DrawerContainer ref={ref} style={props}>
       {children}
     </DrawerContainer>

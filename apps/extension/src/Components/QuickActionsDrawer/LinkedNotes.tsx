@@ -1,7 +1,7 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import { API_BASE_URLS, useLayoutStore, useMetadataStore } from '@mexit/core'
-import { DrawerHeader, HighlightNote, HighlightNotes, IconDisplay } from '@mexit/shared'
+import { DrawerHeader, FadeSpan, Group, HighlightNote, HighlightNotes, IconDisplay } from '@mexit/shared'
 
 import { useHighlights } from '../../Hooks/useHighlights'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
@@ -13,6 +13,7 @@ type LinkedNotesProps = {
 }
 
 const LinkedNotes: React.FC<LinkedNotesProps> = () => {
+  const [showOpen, setShowOpen] = useState<boolean>(null)
   const entityId = useLayoutStore((store) => store.drawer.data?.entityId)
 
   const { getEditableMap } = useHighlights()
@@ -29,14 +30,12 @@ const LinkedNotes: React.FC<LinkedNotesProps> = () => {
     })
   }, [entityId])
 
-  const description = `This highlight is linked with ${linkedNotes?.length} note(s).`
+  const description = `This Capture is linked with ${linkedNotes?.length} note(s).`
 
   const handleOpenNote = (noteId: string) => {
     // Open Note in new tab
     window.open(`${API_BASE_URLS.frontend}/editor/${noteId}`, '_blank', 'noopener, noreferrer')
   }
-
-  console.log('linkedNotes', { linkedNotes })
 
   return (
     <QuickActionsDrawerContainer>
@@ -46,9 +45,12 @@ const LinkedNotes: React.FC<LinkedNotesProps> = () => {
           const icon = metadata[node.nodeid]?.icon
 
           return (
-            <HighlightNote onClick={() => handleOpenNote(node.nodeid)}>
-              <IconDisplay icon={icon} />
-              {getTitleFromPath(node.path)}
+            <HighlightNote onMouseEnter={() => setShowOpen(node.nodeid)} onClick={() => handleOpenNote(node.nodeid)}>
+              <Group>
+                <IconDisplay icon={icon} />
+                {getTitleFromPath(node.path)}
+              </Group>
+              {showOpen === node?.nodeid && <FadeSpan>Open</FadeSpan>}
             </HighlightNote>
           )
         })}

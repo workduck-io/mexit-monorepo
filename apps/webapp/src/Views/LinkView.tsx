@@ -17,7 +17,6 @@ export type SnippetsProps = {
 const LinkView = () => {
   const links = useLinkStore((store) => store.links)
   const { getAllLinks } = useURLsAPI()
-  //   const { getNode } = useNodes()
   const { goTo } = useRouting()
 
   /**
@@ -57,7 +56,7 @@ const LinkView = () => {
   const filterResults = (results: Link[]): Link[] => {
     const linksFromRes = results
       .map((r) => {
-        const link = links.find((l) => l.url === r.url)
+        const link = links?.find((l) => l.url === r.url)
         return link
       })
       .filter((l) => l)
@@ -89,7 +88,7 @@ const LinkView = () => {
 
   // Forwarding ref to focus on the selected result
   const BaseItem = ({ item, splitOptions, ...props }: RenderItemProps<any>, ref: React.Ref<HTMLDivElement>) => {
-    const link = links.find((s) => s.url === item.url)
+    const link = links?.find((s) => s.url === item.url)
     if (!item || !link) {
       return null
     }
@@ -126,8 +125,8 @@ const LinkView = () => {
         <Title>Captures</Title>
       </MainHeader>
       <SearchView
-        id={`view_link_`}
-        key={`view_link_`}
+        id="mexit-captures"
+        key="mexit-captures"
         initialItems={initialLinks}
         getItemKey={(i) => i.url}
         onSelect={onSelect}
@@ -137,7 +136,6 @@ const LinkView = () => {
           view: ViewType.List
         }}
         onSearch={onSearch}
-        // place="Search links"
         RenderItem={RenderItem}
         filterActions={{
           filters,
@@ -145,9 +143,7 @@ const LinkView = () => {
           resetCurrentFilters,
           globalJoin
         }}
-        // RenderPreview={RenderPreview}
         RenderFilters={RenderFilters}
-        // RenderStartCard={RenderStartCard}
       />
     </SearchContainer>
   )

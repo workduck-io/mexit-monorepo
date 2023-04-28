@@ -25,7 +25,7 @@ export const linkStoreConstructor = (set, get) => ({
   addLink: (link: Link) => {
     const oldLinks = get().links
 
-    set({ links: [...oldLinks, link] })
+    set({ links: [link, ...oldLinks] })
   },
   reset: () => {
     set({ links: [] })

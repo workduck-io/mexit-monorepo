@@ -88,10 +88,11 @@ const BallonMarkToolbarButtons = () => {
     })
 
     const range = selection.getRangeAt(0)
-    highlight.fromRange(range)
+    const id = highlight.fromRange(range)?.id
 
     setFloatingElement(FloatingElementType.AI_POPOVER, {
-      range
+      range,
+      id
     })
   }
 

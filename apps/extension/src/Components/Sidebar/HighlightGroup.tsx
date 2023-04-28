@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 
 import { useTheme } from 'styled-components'
 
-import { camelCase, DrawerType, Highlight, Highlights, useLayoutStore } from '@mexit/core'
+import { camelCase, DrawerType, Highlight, Highlights, useHighlightStore, useLayoutStore } from '@mexit/core'
 import {
   CardFooter,
   Container,
@@ -10,7 +10,6 @@ import {
   FooterFlexButton,
   GenericFlex,
   getMIcon,
-  HighlightGroupsWrapper,
   IconDisplay,
   MexIcon,
   PrimaryText,
@@ -28,6 +27,7 @@ const HIGHLIGHT_TEXT_MAX_LENGTH = 300
 
 const LinkedNotes: React.FC<{ highlight: Highlight }> = ({ highlight }) => {
   const openDrawer = useLayoutStore((store) => store.setDrawer)
+  const highlightBlockMap = useHighlightStore((store) => store.highlightBlockMap)
 
   const { getEditableMap } = useHighlights()
   const { getILinkFromNodeid } = useLinks()
@@ -39,7 +39,7 @@ const LinkedNotes: React.FC<{ highlight: Highlight }> = ({ highlight }) => {
       const node = getILinkFromNodeid(nodeId, true)
       return node
     })
-  }, [highlight.entityId])
+  }, [highlight?.entityId, highlightBlockMap])
 
   const handleOnClick = (e) => {
     e.stopPropagation()
@@ -112,7 +112,6 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
             <MexIcon color={theme.tokens.colors.primary.default} icon={DefaultMIcons.HIGHLIGHT.value} />
             <PrimaryText>{title}</PrimaryText>
           </GenericFlex>
-          {/* <MexIcon onClick={onClick} icon={fileCopyLine} height={16} width={16} /> */}
         </NodeCardHeader>
         <SnippetContentPreview>{toShowText}</SnippetContentPreview>
       </Container>
@@ -126,14 +125,12 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
 
 export const HighlightGroups = ({ highlights }: { highlights: Highlights }) => {
   return open && highlights ? (
-    <HighlightGroupsWrapper>
+    <>
       {highlights.map((highlight) => {
-        console.log('HIGHLIGHT IS ', { highlight })
-
         if (!highlight) return null
 
         return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} />
       })}
-    </HighlightGroupsWrapper>
+    </>
   ) : null
 }

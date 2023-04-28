@@ -8,6 +8,7 @@ import { useHighlightAPI } from './API/useHighlightAPI'
 
 export const useHighlights = () => {
   const highlights = useHighlightStore((s) => s.highlights)
+  const hasHydrated = useHighlightStore((store) => store._hasHydrated)
   const highlightBlockMap = useHighlightStore((store) => store.highlightBlockMap)
   const getHighlightMap = useCallback(
     (highlighId: string) => {
@@ -22,7 +23,7 @@ export const useHighlights = () => {
       const highlight = highlights.find((h) => h.entityId === highlightId)
       return highlight
     },
-    [highlights]
+    [highlights, hasHydrated]
   )
 
   return {

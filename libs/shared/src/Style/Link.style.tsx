@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
@@ -32,6 +32,11 @@ export const LinkHeader = styled.div`
   align-items: center;
 
   width: 100%;
+
+  :hover {
+    cursor: pointer;
+    color: ${({ theme }) => theme.tokens.colors.primary.hover};
+  }
 
   gap: ${({ theme }) => theme.spacing.small};
 
@@ -129,8 +134,8 @@ export const HighlightCollapsedToggle = styled(Button)`
   align-items: center;
   width: max-content;
   color: ${({ theme }) => theme.tokens.text.fade};
-  font-size: 1rem;
   box-shadow: none;
+  ${BodyFont}
 `
 
 export const FooterFlexButton = styled.div`
@@ -150,7 +155,10 @@ export const FooterFlexButton = styled.div`
   }
 `
 
-export const HighlightText = styled.div``
+export const HighlightText = styled.div`
+  ${BodyFont}
+  color: ${({ theme }) => theme.tokens.text.default};
+`
 
 export const VerticalSeperator = styled.span`
   height: 1em;
@@ -218,13 +226,19 @@ export const HighlightGroupWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
 `
 
-export const SingleHighlightWrapper = styled.div`
+export const SingleHighlightWrapper = styled.div<{ padding?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.small};
   background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   user-select: none;
+  flex-shrink: 0;
+  ${({ padding, theme }) =>
+    padding &&
+    css`
+      padding: ${theme.spacing.small};
+    `}
   overflow: hidden;
 `
 
@@ -232,19 +246,28 @@ export const HighlightNotes = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: ${({ theme }) => theme.spacing.tiny};
+  overflow: hidden auto;
+  margin-top: ${({ theme }) => theme.spacing.medium};
 `
 
 export const HighlightNote = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.tiny};
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.small};
+  padding: ${({ theme }) => theme.spacing.small};
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+
+  box-sizing: border-box;
+  width: 100%;
+  ${BodyFont}
   cursor: pointer;
 
   color: ${({ theme }) => theme.tokens.text.fade};
 
   &:hover {
-    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    background: ${({ theme }) => theme.sidebar.tree.item.wrapper.active.surface};
+    color: ${({ theme }) => theme.tokens.text.default};
   }
 `

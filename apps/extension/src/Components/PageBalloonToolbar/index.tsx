@@ -3,8 +3,9 @@ import { useState } from 'react'
 import { useTheme } from 'styled-components'
 import Highlighter from 'web-highlighter'
 
+import { useLinkStore } from '@mexit/core'
 import {
-  BalloonToolbar,
+  BallonToolbaWithoutEvent,
   ButtonSeparator,
   DefaultMIcons,
   IconButtonWrapper,
@@ -14,14 +15,17 @@ import {
 } from '@mexit/shared'
 
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useLinkURLs } from '../../Hooks/useURLs'
 import { getElementById } from '../../Utils/cs-utils'
 import { getSelectionHTML } from '../../Utils/getSelectionHTML'
 import { sanitizeHTML } from '../../Utils/sanitizeHTML'
 
 const PageBallonToolbar = () => {
-  const theme = useTheme()
   const [isOptionOpen, setIsOptionOpen] = useState<string | null>(null)
   const closePageToolbar = useBalloonToolbarStore((store) => store.setOpen)
+
+  const theme = useTheme()
+  const { saveLink } = useLinkURLs()
   const { handleOpenAIPreview } = useAIOptions()
   const { saveHighlightEntity } = useSaveChanges()
 
@@ -53,6 +57,12 @@ const PageBallonToolbar = () => {
       html: content,
       range: saveableRange
     }).then((res) => {
+      const links = useLinkStore.getState().links
+      if (!links?.find((l) => l.url === window.location.href)) {
+        const link = { url: window.location.href, title: document.title }
+        saveLink(link)
+      }
+
       closePageToolbar(false)
     })
   }
@@ -61,25 +71,21 @@ const PageBallonToolbar = () => {
     setIsOptionOpen(id)
   }
 
-  const handleThese = () => {
-    // * TODO: Add these to the page
-  }
-
   return (
-    <BalloonToolbar
+    <BallonToolbaWithoutEvent
       portalElement={getElementById('mexit-container')}
       floatingOptions={{ placement: 'top', windowSelection: true }}
     >
+      <IconButtonWrapper onMouseDown={handleHighlight}>
+        <IconDisplay size={20} icon={DefaultMIcons.HIGHLIGHT} />
+        <span>Capture</span>
+      </IconButtonWrapper>
+      <ButtonSeparator />
       <IconButtonWrapper onMouseDown={onAIPreviewClick}>
         <IconDisplay size={20} icon={DefaultMIcons.AI} />
         <span>Enhance</span>
       </IconButtonWrapper>
-      <ButtonSeparator />
 
-      <IconButtonWrapper onMouseDown={handleHighlight}>
-        <IconDisplay size={20} icon={DefaultMIcons.HIGHLIGHT} />
-        <span>Highlight</span>
-      </IconButtonWrapper>
       {/* <ToolbarButton
         icon={<IconDisplay color={theme.tokens.colors.primary.hover} size={20} icon={DefaultMIcons.AI} />}
         onMouseDown={onAIPreviewClick}
@@ -91,7 +97,7 @@ const PageBallonToolbar = () => {
         <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.NOTE} />} onMouseDown={handleThese} />
         <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.TASK} />} onMouseDown={handleThese} />
       </BallonOptionsUnwrapper> */}
-    </BalloonToolbar>
+    </BallonToolbaWithoutEvent>
   )
 }
 

@@ -19,7 +19,7 @@ export const StyledResults = styled.div<{ isScreenshot?: boolean }>`
 export const List = styled.div`
   width: 100%;
   overflow: auto;
-  /* position: relative; */
+  position: relative;
   scroll-behavior: smooth;
 
   max-height: 300px;

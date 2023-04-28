@@ -171,7 +171,7 @@ export function useSaveChanges() {
       )
     })
 
-    const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, false, true)
+    const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, false)
 
     const isCapturedHighlight = selection?.range && window.location.href
 
@@ -223,11 +223,24 @@ export function useSaveChanges() {
 
     if (highlight) {
       // Save highlight
+      const updateContent = content?.map((block) => {
+        return {
+          ...block,
+          metadata: {
+            elementMetadata: {
+              id: highlight.entityId,
+              type: 'highlightV1'
+            }
+          }
+        }
+      })
+
       const sourceTitle = document.title
       await saveHighlight(highlight, sourceTitle)
       // Extract the blockids for which we have captured highlights
-      const blockHighlightMap = getHighlightBlockMap(nodeid, content)
+      const blockHighlightMap = getHighlightBlockMap(nodeid, updateContent)
       mog('BLOCKHIGHLIGHT MAP', { blockHighlightMap })
+
       // Add highlight in local store and nodeblockmap
       addHighlight(highlight, blockHighlightMap)
       return { highlight, blockHighlightMap }

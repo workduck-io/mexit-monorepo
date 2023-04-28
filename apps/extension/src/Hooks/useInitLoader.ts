@@ -18,7 +18,8 @@ import {
   useInitStore,
   useLinkStore,
   useSmartCaptureStore,
-  useSnippetStore} from '@mexit/core'
+  useSnippetStore
+} from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import {
@@ -44,6 +45,8 @@ export const useInitLoader = () => {
   const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
   const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
   const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
+  const linksStoreHydrated = useLinkStore((s) => s._hasHydrated)
+  const highlightStoreHydrated = useHighlightStore((store) => store._hasHydrated)
 
   const { setNamespaces, setIlinks, addInArchive } = useDataStore()
 
@@ -52,7 +55,7 @@ export const useInitLoader = () => {
   const setSlashCommands = useDataStore((store) => store.setSlashCommands)
 
   const updateSnippetsInStore = useSnippetStore((state) => state.initSnippets)
-  const { removeDocument, updateDocument } = useSearch()
+  const { updateDocument } = useSearch()
 
   const setLinks = useLinkStore((store) => store.setLinks)
   const setHighlights = useHighlightStore((store) => store.setHighlights)
@@ -182,7 +185,7 @@ export const useInitLoader = () => {
       const initData = {
         ilinks: useDataStore.getState().ilinks,
         archive: useDataStore.getState().archive,
-        links: useLinkStore.getState().links,
+        links: useLinkStore.getState().links ?? [],
         highlights: useHighlightStore.getState().highlights,
         sharedNodes: useDataStore.getState().sharedNodes,
         snippets: useSnippetStore.getState().snippets,
@@ -197,7 +200,15 @@ export const useInitLoader = () => {
   }
 
   useEffect(() => {
-    if (isAuthenticated && snippetHydrated && dataStoreHydrated && contentStoreHydrated && iframeAdded) {
+    if (
+      isAuthenticated &&
+      snippetHydrated &&
+      dataStoreHydrated &&
+      contentStoreHydrated &&
+      linksStoreHydrated &&
+      highlightStoreHydrated &&
+      iframeAdded
+    ) {
       startWorkers()
         .then(() => {
           mog('All workers initialized from extension. Fetching data now')
@@ -207,5 +218,12 @@ export const useInitLoader = () => {
           mog('Error while initializing: ', { error })
         })
     }
-  }, [snippetHydrated, dataStoreHydrated, contentStoreHydrated, iframeAdded])
+  }, [
+    snippetHydrated,
+    dataStoreHydrated,
+    highlightStoreHydrated,
+    linksStoreHydrated,
+    contentStoreHydrated,
+    iframeAdded
+  ])
 }
