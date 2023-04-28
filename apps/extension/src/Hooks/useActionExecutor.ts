@@ -21,7 +21,8 @@ import {
   useDataStore,
   useLayoutStore,
   useLinkStore,
-  useSmartCaptureStore} from '@mexit/core'
+  useSmartCaptureStore
+} from '@mexit/core'
 import { copyTextToClipboard } from '@mexit/shared'
 
 import { useSputlitStore } from '../Stores/useSputlitStore'
@@ -262,30 +263,17 @@ export function useActionExecutor() {
                     toast.error('Could not capture screenshot')
                   } else {
                     setVisualState(VisualState.animatingIn)
-                    // mog('Success! We got an image (w e t h i n k s)', { item })
-
-                    // Use renderer to render screenshot??
-                    // How to pass it to screenshot?
                     const base64Image = message
                     setScreenshot(base64Image)
-
-                    // Adding a paragraph in the start due to errors caused by editor
-                    // trying to focus in the start of the note
                     setActiveItem(item)
-                    // TODO: Move smallContent from mex-electron to mex-space
-                    // TODO: Use smallContent from mex-space.
-                    // setPersistedContent([
-                    //   { type: 'p', children: [{ text: 'Screenshot' }] },
-                    //   { children: [{ text: '' }], type: 'img' /* url: message */ },
-                    //   { text: '\n' },
-                    //   { text: '[' },
-                    //   { type: 'a', url: message, children: [{ text: 'Ref' }] },
-                    //   { text: ' ]' }
-                    // ])
                   }
                 }
               )
             }, 1000)
+            break
+          }
+          case ActionType.HIGHLIGHT: {
+            // Execute
           }
         }
       }

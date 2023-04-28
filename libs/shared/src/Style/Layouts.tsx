@@ -26,6 +26,17 @@ export const Group = styled.span`
   gap: ${({ theme }) => theme.spacing.small};
 `
 
+export const IconButtonWrapper = styled(Group)`
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  border-radius: 0.25em;
+  padding: 0.25em 0.5em;
+
+  :hover {
+    background: ${({ theme }) => theme.tokens.surfaces.highlight};
+  }
+`
+
 export const MexIcon = styled(Icon)<{ margin?: string; $noHover?: boolean; $cursor?: boolean }>`
   padding: 1px;
   margin: ${({ margin }) => margin};

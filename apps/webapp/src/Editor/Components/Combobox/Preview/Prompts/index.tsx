@@ -114,7 +114,8 @@ const PromptPreview: React.FC<PromptPreviewProps> = ({ promptId }) => {
             .generateResult(promptId, {})
             .then((res) => {
               if (res) {
-                usePromptStore.getState().addPromptResult(promptId, res)
+                const result = [res.content]
+                usePromptStore.getState().addPromptResult(promptId, result)
                 useComboboxStore.getState().setItemLoading()
               }
             })

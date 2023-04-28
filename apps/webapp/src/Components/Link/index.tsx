@@ -44,7 +44,6 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const highlights = getGroupedHighlights(link)
 
   const onAddNewTag = (tag: Tag) => {
-    // mog('onAddNewTag', { tag })
     addTag(link.url, tag.value)
   }
 
@@ -66,8 +65,6 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const onDeleteLink = (url: string) => {
     deleteLink(url)
   }
-
-  // mog('LinkComponent', { link, highlights })
 
   return (
     <LinkWrapper>

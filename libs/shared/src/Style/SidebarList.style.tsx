@@ -4,6 +4,7 @@ import { Input } from './Form'
 
 interface SidebarListWrapperProps {
   noMargin?: boolean
+  border?: boolean
 }
 
 export const SidebarListWrapper = styled.div<SidebarListWrapperProps>`
@@ -45,7 +46,6 @@ export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
   margin-top: ${({ noMargin, theme }) => (noMargin ? '0' : theme.spacing.medium)};
   background: ${({ theme }) => theme.generic.form.input.surface};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  border: 1px solid transparent;
 
   ${Input} {
     flex-grow: 1;
@@ -58,24 +58,39 @@ export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
     background: ${({ theme }) => theme.generic.form.input.hover.surface};
   }
 
-  &:focus-within {
-    border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
-  }
+  ${({ theme, border }) =>
+    border
+      ? css`
+          border: 2px solid ${theme.tokens.surfaces.highlight};
+          padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
 
+          &:focus-within {
+            border: 2px solid ${({ theme }) => theme.tokens.colors.primary.default};
+          }
+        `
+      : css`
+          border: 1px solid transparent;
+
+          &:focus-within {
+            border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+          }
+        `}
   svg {
     flex-shrink: 0;
   }
 `
 
-export const List = styled.section<{ scrollable?: boolean; $noMargin?: boolean }>`
+export const List = styled.section<{ scrollable?: boolean; $noMargin?: boolean; padding?: boolean }>`
   ${({ $noMargin }) =>
     !$noMargin &&
     css`
       margin-top: ${({ theme }) => theme.spacing.medium};
     `}
 
+  display:flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.small};
   overflow: hidden auto;
-  max-height: 90vh;
   overscroll-behavior: contain;
 `
 

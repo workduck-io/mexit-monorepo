@@ -12,6 +12,7 @@ import {
   Link,
   mog,
   Settify,
+  sortByCreated,
   URL_DOMAIN_REG,
   useAuthStore,
   useDataStore,
@@ -354,7 +355,7 @@ export const useURLsAPI = () => {
         return links
       })
       .then((links: Link[]) => {
-        setLinks(links)
+        setLinks(links.sort(sortByCreated))
         getEntitiyInitializer('initializeLinks', links)
       })
       .catch(console.error)

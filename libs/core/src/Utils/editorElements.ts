@@ -43,3 +43,5 @@ export const ELEMENT_H6 = 'h6'
 
 export const ELEMENT_HR = 'hr'
 export const ELEMENT_SECTION_SEPARATOR = 'section_separator'
+
+export const ELEMENT_CAPTURE = 'capture'

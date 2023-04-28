@@ -67,8 +67,9 @@ const ContentEditor = () => {
   const nodeContent = useMemo(() => {
     const internalUpdate = useContentStore.getState().internalUpdate
 
-    if (!internalUpdate) return returnLastUpdatedContentOnError(nodeid, fsContent?.content)
-    else {
+    if (!internalUpdate) {
+      return returnLastUpdatedContentOnError(nodeid, fsContent?.content)
+    } else {
       setInternalUpdate(false)
       const fromContent = useContentStore.getState().contents[nodeid].content
       return returnLastUpdatedContentOnError(nodeid, fromContent)

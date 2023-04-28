@@ -47,7 +47,7 @@ export function ContextInfoBar() {
         <AddTags />
       </SidebarSection>
       {pageHighlights?.length > 0 ? (
-        <SidebarSection label="Highlights" icon={DefaultMIcons.HIGHLIGHT}>
+        <SidebarSection scrollable label="Captures" icon={DefaultMIcons.HIGHLIGHT}>
           <List $noMargin scrollable>
             <HighlightGroups highlights={pageHighlights} />
           </List>

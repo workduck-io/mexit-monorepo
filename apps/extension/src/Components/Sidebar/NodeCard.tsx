@@ -10,9 +10,10 @@ import {
   mog,
   useAuthStore,
   useContentStore,
-useMetadataStore,  useRecentsStore,
+  useMetadataStore,
+  useRecentsStore,
   WORKSPACE_HEADER
- } from '@mexit/core'
+} from '@mexit/core'
 import {
   CopyButton,
   GenericFlex,
@@ -32,7 +33,7 @@ export const NodeCardHeader = styled.div<{ $noHover?: boolean }>`
   justify-content: space-between;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  font-size: 1.1em;
+  font-size: 1em;
   padding: ${({ theme }) => theme.spacing.tiny};
   cursor: pointer;
   border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};

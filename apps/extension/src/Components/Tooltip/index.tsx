@@ -1,19 +1,16 @@
 import React, { useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
 
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon as Iconify } from '@iconify/react'
-
 import { API_BASE_URLS, mog, useHighlightStore } from '@mexit/core'
-import { copyTextToClipboard, HighlightNote, Popover } from '@mexit/shared'
+import { copyTextToClipboard } from '@mexit/shared'
 
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useHighlights } from '../../Hooks/useHighlights'
-import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
+import { useLinks } from '../../Hooks/useLinks'
 import { VisualState } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 
-import { Icon, NoteListWrapper, StyledTooltip } from './styled'
+import { Icon, StyledTooltip } from './styled'
 
 function Tooltip() {
   //
@@ -73,7 +70,7 @@ function Tooltip() {
       left={window.scrollX + tooltipState.coordinates.left}
       showTooltip={tooltipState.visualState === VisualState.hidden ? false : true}
     >
-      {isEditable &&
+      {/* {isEditable &&
         (editNodes.length > 1 ? (
           <>
             <Popover
@@ -124,7 +121,25 @@ function Tooltip() {
               <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
             </svg>
           </Icon>
-        ))}
+        ))} */}
+
+      <Icon onClick={() => handleCopyClipboard(highlight.properties.saveableRange.text)}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+        </svg>
+      </Icon>
+
       {isEditable && (
         <Icon onClick={handleDelete}>
           <svg
@@ -145,23 +160,6 @@ function Tooltip() {
           </svg>
         </Icon>
       )}
-
-      <Icon onClick={() => handleCopyClipboard(highlight.properties.saveableRange.text)}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-        </svg>
-      </Icon>
 
       {/* {access !== 'READ' && (
         <Icon onClick={handleEdit}>

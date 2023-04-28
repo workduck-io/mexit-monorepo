@@ -412,11 +412,15 @@ export const ResultMetaData = styled.div`
   }
 `
 
-export const Result = styled(animated.div)<{ selected?: boolean; view?: ViewType }>`
+export const Result = styled(animated.div)<{ selected?: boolean; view?: ViewType; noPointer?: boolean }>`
   background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
-  :hover {
-    cursor: pointer;
-  }
+
+  ${({ noPointer }) =>
+    !noPointer &&
+    css`
+      cursor: pointer;
+    `};
+
   ${({ theme, selected, view }) => {
     if (view === ViewType.Card) {
       return css`

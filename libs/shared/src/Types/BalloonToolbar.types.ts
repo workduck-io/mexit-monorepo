@@ -21,7 +21,9 @@ export interface BalloonToolbarProps extends StyledProps<ToolbarProps> {
    */
   arrow?: boolean
 
+  editor?: any
+
   portalElement?: Element
 
-  floatingOptions?: UseVirtualFloatingOptions
+  floatingOptions?: UseVirtualFloatingOptions & { windowSelection?: boolean }
 }

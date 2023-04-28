@@ -7,6 +7,7 @@ import AIPreviewContainer from './Components/AIPreview'
 import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'
 import { InternalEvents } from './Components/InternalEvents'
+import PageBallonToolbar from './Components/PageBalloonToolbar'
 import ReminderArmer from './Components/ReminderArmer'
 import { ExtInfoBar } from './Components/Sidebar'
 import Sputlit from './Components/Sputlit'
@@ -21,7 +22,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export function AIPreviewPortal(props: Props) {
+export function PortalMaker(props: Props) {
   return createPortal(props.children, styleSlot)
 }
 
@@ -41,15 +42,11 @@ const Extension = () => {
               <TooltipPortal>
                 <Tooltip />
               </TooltipPortal>
-              <AIPreviewPortal>
-                <AIPreviewContainer />
-              </AIPreviewPortal>
+              <AIPreviewContainer />
+              <PageBallonToolbar />
             </>
           )}
-
-          {/* TODO: think of a better name, and use it everywhere for consistency */}
           <ExtInfoBar />
-
           <SputlitPortal>
             <Sputlit />
           </SputlitPortal>

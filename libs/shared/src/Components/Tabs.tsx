@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useSpring } from 'react-spring'
 
+import { useLayoutStore } from '@mexit/core'
+
 import { StyledTab, TabBody, TabHeaderContainer, TabPanel, TabsContainer, TabsWrapper } from '../Style/Tab.Styles'
 
 export type ExtInfobarMode = 'context' | 'snippets' | 'notes' | 'reminders'
@@ -26,6 +28,7 @@ type TabsProps = {
 
 export const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible, root }) => {
   const [previousTab, setPreviousTab] = useState(openedTab)
+  const drawer = useLayoutStore((store) => store.drawer)
 
   const animationProps = useSpring({
     from: { opacity: visible ? 0 : 1 },
@@ -53,7 +56,7 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible, 
           ))}
         </TabsWrapper>
       </TabHeaderContainer>
-      <TabPanel style={bodyAnimation}>
+      <TabPanel fade={!!drawer} style={bodyAnimation}>
         <TabBody onClick={() => onChange(openedTab)}>{tabs[index]?.component}</TabBody>
       </TabPanel>
     </TabsContainer>

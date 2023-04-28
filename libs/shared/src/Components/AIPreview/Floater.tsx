@@ -39,10 +39,10 @@ const DefaultFloater: React.FC<DefaultFloaterProps> = ({ onClose, root, ...props
     open: isOpen,
     onOpenChange: (isOpen) => {
       const state = isOpen ? FloatingElementType.AI_POPOVER : null
-
       if (!state && onClose) {
         onClose()
       }
+
       setIsOpen(state)
     },
     middleware: [
@@ -75,8 +75,8 @@ const DefaultFloater: React.FC<DefaultFloaterProps> = ({ onClose, root, ...props
   }, [isOpen])
 
   return (
-    <FloatingPortal root={root}>
-      {isOpen && (
+    isOpen && (
+      <FloatingPortal root={root}>
         <RemoveScroll enabled>
           <FloatingFocusManager context={context} closeOnFocusOut>
             <FloaterContainer
@@ -104,8 +104,8 @@ const DefaultFloater: React.FC<DefaultFloaterProps> = ({ onClose, root, ...props
             </FloaterContainer>
           </FloatingFocusManager>
         </RemoveScroll>
-      )}
-    </FloatingPortal>
+      </FloatingPortal>
+    )
   )
 }
 

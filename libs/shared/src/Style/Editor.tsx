@@ -420,7 +420,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
 
   /* Slate Code Block */
 
-  .highlight {
+  .mexit-highlight {
     color: ${({ theme }) => theme.tokens.text.heading};
     background: ${({ theme }) => `rgba(${theme.rgbTokens.colors.primary.default}, 0.4)`};
   }

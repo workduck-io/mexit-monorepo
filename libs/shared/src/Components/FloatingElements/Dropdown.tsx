@@ -12,7 +12,6 @@ import React, {
 import { mergeRefs } from 'react-merge-refs'
 
 import {
-  autoUpdate,
   flip,
   FloatingFocusManager,
   FloatingNode,
@@ -189,8 +188,8 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       onOpenChange: setOpen,
       middleware: [offset({ mainAxis: 4, alignmentAxis: nested ? -5 : 0 }), flip(), shift()],
       placement: nested ? 'right-start' : 'bottom-start',
-      nodeId,
-      whileElementsMounted: autoUpdate
+      nodeId
+      // whileElementsMounted: autoUpdate
     })
 
     const resetSearch = useCallback(() => {

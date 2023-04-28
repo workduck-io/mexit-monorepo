@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BodyFont, GenericFlex, RHSideNav } from '@mexit/shared'
 
@@ -23,9 +23,16 @@ export const SubHeading = styled.span`
   color: ${({ theme }) => theme.tokens.text.heading};
 `
 
-export const StyledSidebarSection = styled.section`
+export const StyledSidebarSection = styled.section<{ scrollable?: boolean }>`
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+
+  ${({ scrollable }) =>
+    scrollable &&
+    css`
+      overflow: auto;
+    `}
 `
 
 export const SectionHeading = styled.div`

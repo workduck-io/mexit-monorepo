@@ -1,5 +1,7 @@
 import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, Highlight, mog } from '@mexit/core'
 
+import { deserializeContent } from '../../Utils/serializer'
+
 export const useHighlightAPI = () => {
   const saveHighlight = async (h: Highlight) => {
     const reqData = {
@@ -22,6 +24,11 @@ export const useHighlightAPI = () => {
     })
     try {
       const highlights = res?.Items?.map((item: any) => {
+        if (item.properties?.content) {
+          const content = deserializeContent(item.properties.content)
+          item.properties.content = content
+        }
+
         return {
           properties: item?.properties,
           entityId: item?.entityId

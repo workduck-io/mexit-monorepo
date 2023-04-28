@@ -7,7 +7,7 @@ import mixpanel from 'mixpanel-browser'
 import Highlighter from 'web-highlighter'
 
 import { API_BASE_URLS, FloatingElementType, useFloatingStore, useHighlightStore, useHistoryStore } from '@mexit/core'
-import { getScrollbarWidth, isInputField } from '@mexit/shared'
+import { addIconsToIconify, getScrollbarWidth, isInputField } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
 import { useInitLoader } from '../Hooks/useInitLoader'
@@ -34,6 +34,10 @@ export function InternalEvents() {
   badgeRenderer()
   useReminderActionHandler()
   useInitLoader()
+
+  // * Initialize custom icons in Iconify
+  addIconsToIconify()
+
   // useDocumentLock()
   // useFocusHandler()
   return null
@@ -81,10 +85,11 @@ function useToggleHandler() {
     if (content) {
       addAIEvent({ role: 'assistant', content, inputFormat: 'html' })
 
-      highlighter.fromRange(range)
+      const id = highlighter.fromRange(range)?.id
 
       setFloatingElement(FloatingElementType.AI_POPOVER, {
-        range
+        range,
+        id
       })
     }
   }
@@ -227,20 +232,16 @@ function handleHighlighter() {
 
   useEffect(() => {
     const highlighter = new Highlighter({ style: { className: 'mexit-highlight' } })
+
     const highlightOldRange = () => {
       const highlightsOfUrl = getHighlightsOfUrl(window.location.href)
 
       highlightsOfUrl.forEach((highlight) => {
         const { startMeta, endMeta, text, id } = highlight.properties.saveableRange
-        // mog('check', { id, highlighedIds })
 
         if (!highlighedIds.includes(id)) {
           highlighter.fromStore(startMeta, endMeta, text, highlight.entityId)
           highlighedIds.push(highlight.entityId)
-
-          // if (highlight?.shared) {
-          //   highlighter.addClass('shared', key)
-          // }
         }
       })
     }

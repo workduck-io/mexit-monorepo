@@ -7,6 +7,7 @@ import {
   batchArray,
   batchArrayWithNamespaces,
   DefaultMIcons,
+  Highlight,
   ILink,
   iLinksToUpdate,
   mog,
@@ -14,6 +15,7 @@ import {
   Snippets
 } from '@mexit/core'
 
+import { deserializeContent } from '../Utils/serializer'
 import { WorkerRequestType } from '../Utils/worker'
 
 import { exposeX } from './worker-utils'
@@ -231,7 +233,22 @@ const initializeHighlightsExtension = async () => {
   return await client
     .get(apiURLs.highlights.all)
     .then((d) => d.json())
-    .then((d: any) => d.Items)
+    .then((d: any) => {
+      const highlights =
+        d?.Items?.map((item) => {
+          if (item?.properties?.content) {
+            const content = deserializeContent(item.properties.content)
+            item.properties.content = content
+          }
+
+          return {
+            properties: item?.properties,
+            entityId: item?.entityId
+          } as Highlight
+        }) ?? []
+
+      return highlights
+    })
     .catch((error) => {
       mog('InitHighlightsError', { error })
       return undefined

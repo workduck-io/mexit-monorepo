@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getNameFromPath, MenuListItemType, SHARED_NAMESPACE, useDataStore, useMetadataStore } from '@mexit/core'
+import { getNameFromPath, MenuListItemType, MIcon, SHARED_NAMESPACE, useDataStore, useMetadataStore } from '@mexit/core'
 
 import { StyledButton } from '../Style/Buttons'
 
@@ -10,17 +10,18 @@ import { DefaultMIcons } from './Icons'
 
 interface InsertMenuProps {
   onClick?: any
-  items?: Array<MenuListItemType>
+  items?: Array<Partial<MenuListItemType>>
   title?: string
+  icon?: MIcon
   root?: any
   isMenu?: boolean
 }
 
-const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert', isMenu, root }) => {
+export const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert', items, isMenu, root, icon }) => {
   if (!isMenu) {
     return (
       <StyledButton onClick={onClick}>
-        <IconDisplay icon={DefaultMIcons.EMBED} size={12} />
+        <IconDisplay icon={icon ?? DefaultMIcons.EMBED} size={12} />
         {title}
       </StyledButton>
     )
@@ -34,14 +35,14 @@ const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert', isMe
 
     const mLinks = ilinks.map((l) => ({
       label: getNameFromPath(l.path),
-      icon: metadata[l.nodeid]?.icon,
+      icon: metadata[l.nodeid]?.icon ?? DefaultMIcons.NOTE,
       id: l.nodeid,
       category: namespaces.find((n) => n.id === l.namespace)?.name
     }))
 
     const sLinks = sharedNodes.map((l) => ({
       label: getNameFromPath(l.path),
-      icon: metadata[l.nodeid]?.icon,
+      icon: metadata[l.nodeid]?.icon ?? DefaultMIcons.SHARED_NOTE,
       id: l.nodeid,
       category: SHARED_NAMESPACE.name
     }))
@@ -49,7 +50,7 @@ const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert', isMe
     return [...mLinks, ...sLinks]
   }
 
-  const noteLinks = getQuickLinks()
+  const noteLinks = items ?? getQuickLinks()
 
   return (
     <Menu
@@ -59,8 +60,8 @@ const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert', isMe
       searchPlaceholder="Search for a Note..."
       root={root}
       values={
-        <StyledButton onClick={onClick}>
-          <IconDisplay icon={DefaultMIcons.EMBED} size={12} />
+        <StyledButton>
+          <IconDisplay icon={icon ?? DefaultMIcons.EMBED} size={12} />
           {title}
         </StyledButton>
       }
@@ -79,5 +80,3 @@ const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert', isMe
     </Menu>
   )
 }
-
-export default InsertMenu

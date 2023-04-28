@@ -1,3 +1,5 @@
+import { NodeEditorContent } from './Editor'
+
 export interface HighlightMetaBlock {
   parentTagName: string
   parentIndex: number
@@ -39,6 +41,11 @@ export interface Highlight {
      * Source URL of the webpage on which the highlight was made
      */
     sourceUrl: string
+
+    /**
+     * Block Content
+     */
+    content: NodeEditorContent
   }
 
   /**

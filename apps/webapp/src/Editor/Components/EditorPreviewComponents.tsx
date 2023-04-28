@@ -3,6 +3,7 @@ import { createPlateUI, withProps } from '@udecode/plate'
 import { StyledElement } from '@udecode/plate-styled-components'
 
 import {
+    ELEMENT_CAPTURE,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
@@ -16,7 +17,7 @@ import {
   ELEMENT_TASK_VIEW_LINK,
   ELEMENT_TODO_LI
 } from '@mexit/core'
-import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
+import { CaptureElement, LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
 import TagWrapper from '../../Components/Editor/TagWrapper'
 import Todo from '../../Components/Todo'
@@ -46,6 +47,7 @@ export const editorPreviewComponents = createPlateUI({
   [ELEMENT_TABLE]: TableWrapper,
   [ELEMENT_MENTION]: MentionElement as any,
   [ELEMENT_TASK_VIEW_LINK]: TaskViewLink as any,
+  [ELEMENT_CAPTURE]: CaptureElement,
   [ELEMENT_SECTION_SEPARATOR]: SectionSeparator
 })
 

@@ -1,13 +1,17 @@
 import toast from 'react-hot-toast'
 
+import { createPlateEditor, createPlateUI } from '@udecode/plate'
+
 import {
   DefaultMIcons,
+  ELEMENT_TAG,
   extractMetadata,
   generateHighlightId,
   getHighlightBlockMap,
   Highlight,
   mog,
   NodeProperties,
+  SaveableRange,
   SEPARATOR,
   SingleNamespace,
   useAuthStore,
@@ -18,8 +22,12 @@ import {
   useMetadataStore,
   useRecentsStore
 } from '@mexit/core'
+import { getDeserializeSelectionToNodes } from '@mexit/shared'
 
+import { CopyTag } from '../Editor/components/Tags/CopyTag'
+import { generateEditorPluginsWithComponents } from '../Editor/plugins'
 import { useSputlitStore } from '../Stores/useSputlitStore'
+import { serializeContent } from '../Utils/serializer'
 
 import { useEditorStore } from './useEditorStore'
 import { useHighlights } from './useHighlights'
@@ -57,6 +65,7 @@ export function useSaveChanges() {
   const updateMetadata = useMetadataStore((s) => s.updateMetadata)
   const addRecent = useRecentsStore((store) => store.addRecent)
   const addHighlight = useHighlightStore((s) => s.addHighlight)
+  const addHighlightInStore = useHighlightStore((s) => s.addHighlightEntity)
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const { saveHighlight } = useHighlights()
@@ -140,6 +149,61 @@ export function useSaveChanges() {
   }
 
   /**
+   * Add Highlight Entity
+   */
+
+  type SelectionHighlight = {
+    html: string
+    range: SaveableRange
+  }
+
+  const saveHighlightEntity = async (selection: SelectionHighlight) => {
+    if (!selection) return
+
+    const editor = createPlateEditor({
+      plugins: generateEditorPluginsWithComponents(
+        createPlateUI({
+          [ELEMENT_TAG]: CopyTag
+        }),
+        {
+          exclude: { dnd: true }
+        }
+      )
+    })
+
+    const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, false)
+
+    const isCapturedHighlight = selection?.range && window.location.href
+
+    const highlight = isCapturedHighlight && {
+      entityId: generateHighlightId(),
+      properties: {
+        sourceUrl: selection?.range && window.location.href,
+        saveableRange: selection?.range,
+        content
+      }
+    }
+
+    try {
+      await saveHighlight(
+        {
+          ...highlight,
+          properties: {
+            ...highlight?.properties,
+            content: serializeContent(content, '')
+          }
+        },
+        document.title
+      )
+      addHighlightInStore(highlight)
+      toast('Highlight saved!')
+    } catch (err) {
+      console.error(err)
+      toast('An error occured while saving the highlight. Please try again.')
+    }
+  }
+
+  /**
    * Creates highlight entity from selection
    * Does not add the highlight to the store as that requires content to generate blockmap
    *
@@ -152,16 +216,31 @@ export function useSaveChanges() {
       entityId: generateHighlightId(),
       properties: {
         sourceUrl: selection?.range && window.location.href,
-        saveableRange: selection?.range
+        saveableRange: selection?.range,
+        content: serializeContent(content, '')
       }
     }
+
     if (highlight) {
       // Save highlight
+      const updateContent = content?.map((block) => {
+        return {
+          ...block,
+          metadata: {
+            elementMetadata: {
+              id: highlight.entityId,
+              type: 'highlightV1'
+            }
+          }
+        }
+      })
+
       const sourceTitle = document.title
       await saveHighlight(highlight, sourceTitle)
       // Extract the blockids for which we have captured highlights
-      const blockHighlightMap = getHighlightBlockMap(nodeid, content)
+      const blockHighlightMap = getHighlightBlockMap(nodeid, updateContent)
       mog('BLOCKHIGHLIGHT MAP', { blockHighlightMap })
+
       // Add highlight in local store and nodeblockmap
       addHighlight(highlight, blockHighlightMap)
       return { highlight, blockHighlightMap }
@@ -299,6 +378,7 @@ export function useSaveChanges() {
 
   return {
     saveIt,
+    saveHighlightEntity,
     appendAndSave
   }
 }

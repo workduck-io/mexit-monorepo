@@ -126,6 +126,13 @@ export const applyArrayTransformation = (a: any[], t: ArrayTransform): any[] => 
   return newa
 }
 
+export const idUpdateFunction = (block) => {
+  return {
+    ...block,
+    id: generateTempId()
+  }
+}
+
 export const updateIds = (blockToUpdate: any, withType?: boolean, idGenerator: () => string = generateTempId) => {
   const block = Object.assign({}, blockToUpdate)
   const addIdIfType = withType && block?.type

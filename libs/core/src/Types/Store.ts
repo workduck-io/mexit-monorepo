@@ -86,7 +86,8 @@ export const DefaultMIcons = {
   TAG: getMIcon('ICON', 'ri:hashtag'),
   TEMPLATE: getMIcon('ICON', 'ri:magic-line'),
   DELETE: getMIcon('ICON', 'ri:delete-bin-5-line'),
-  PROMPT: getMIcon('ICON', 'material-symbols:charger-outline')
+  PROMPT: getMIcon('ICON', 'material-symbols:charger-outline'),
+  HIGHLIGHT: getMIcon('ICON', 'ri:mark-pen-line')
 }
 
 export interface SingleNamespace {

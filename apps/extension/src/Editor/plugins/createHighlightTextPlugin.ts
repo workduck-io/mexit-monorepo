@@ -3,7 +3,6 @@ import { createPluginFactory, Decorate } from '@udecode/plate-core'
 
 import { useBlockHighlightStore } from '@mexit/core'
 
-
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const decorateHighlightElement: Decorate =
   (editor, { key, type }) =>
