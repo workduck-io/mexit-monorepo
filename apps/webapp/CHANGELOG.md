@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.23.5
+
+### Patch Changes
+
+- 4167d678: Capture with Page Ballon Toolbar
+- 0b05dfe9: Transform Text Only Highlights
+
 ## 0.23.4
 
 ### Patch Changes
