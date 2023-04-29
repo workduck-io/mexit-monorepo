@@ -1,8 +1,10 @@
 import { uniq } from 'lodash'
 
+import { Highlight } from '../Types'
 import { NodeEditorContent, NodeMetadata } from '../Types/Editor'
 import { MIcon } from '../Types/Store'
 
+import { updateIds } from './dataTransform'
 import { ELEMENT_MENTION } from './editorElements'
 import { generateTempId } from './idGenerator'
 
@@ -123,3 +125,31 @@ export const insertItemInArray = <T>(array: T[], items: Array<T>, index: number)
   ...items,
   ...array.slice(index)
 ]
+
+export const getHighlightContent = (highlight: Highlight) => {
+  const blockContent = highlight.properties.content
+  if (blockContent)
+    return blockContent.map((block) => ({
+      ...updateIds(block),
+      metadata: {
+        elementMetadata: {
+          id: highlight.entityId,
+          type: 'highlightV1'
+        }
+      }
+    }))
+
+  return [
+    {
+      type: ELEMENT_PARAGRAPH,
+      id: generateTempId(),
+      metadata: {
+        elementMetadata: {
+          id: highlight.entityId,
+          type: 'highlightV1'
+        }
+      },
+      children: [{ text: highlight.properties?.saveableRange?.text ?? '' }]
+    }
+  ]
+}

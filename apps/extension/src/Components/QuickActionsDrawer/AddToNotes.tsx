@@ -1,8 +1,8 @@
 import {
   DrawerType,
   getHighlightBlockMap,
+  getHighlightContent,
   Highlight,
-  updateIds,
   useDataStore,
   useHighlightStore,
   useLayoutStore
@@ -32,17 +32,7 @@ const AddToNotes = () => {
       }
     })
 
-    const content = highlight.properties.content?.map((block) => {
-      return {
-        ...updateIds(block),
-        metadata: {
-          elementMetadata: {
-            id: highlight.entityId,
-            type: 'highlightV1'
-          }
-        }
-      }
-    })
+    const content = getHighlightContent(highlight)
 
     appendAndSave({
       content,
