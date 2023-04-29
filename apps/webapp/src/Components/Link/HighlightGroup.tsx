@@ -8,13 +8,11 @@ import markPenLine from '@iconify/icons-ri/mark-pen-line'
 import { Icon } from '@iconify/react'
 
 import {
-  ELEMENT_PARAGRAPH,
-  generateTempId,
   getHighlightBlockMap,
+  getHighlightContent,
   Highlight,
   Highlights,
   Link,
-  updateIds,
   useHighlightStore,
   useMetadataStore
 } from '@mexit/core'
@@ -73,34 +71,6 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
 
   const [open, setOpen] = React.useState(false)
   const highlightMap = getHighlightMap(highlight.entityId) ?? {}
-
-  const getHighlightContent = (highlight: Highlight) => {
-    const blockContent = highlight.properties.content
-    if (blockContent)
-      return blockContent.map((block) => ({
-        ...updateIds(block),
-        metadata: {
-          elementMetadata: {
-            id: highlight.entityId,
-            type: 'highlightV1'
-          }
-        }
-      }))
-
-    return [
-      {
-        type: ELEMENT_PARAGRAPH,
-        id: generateTempId(),
-        metadata: {
-          elementMetadata: {
-            id: highlight.entityId,
-            type: 'highlightV1'
-          }
-        },
-        children: [{ text: highlight.properties.saveableRange?.text ?? '' }]
-      }
-    ]
-  }
 
   const handleAddToNote = async (noteId: string) => {
     const content = getHighlightContent(highlight)
