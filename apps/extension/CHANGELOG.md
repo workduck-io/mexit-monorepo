@@ -1,5 +1,12 @@
 # mexit
 
+## 0.19.24
+
+### Patch Changes
+
+- 4167d678: Capture with Page Ballon Toolbar
+- 0b05dfe9: Transform Text Only Highlights
+
 ## 0.19.23
 
 ### Patch Changes
