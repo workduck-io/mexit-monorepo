@@ -15,8 +15,11 @@ import {
   ELEMENT_MENTION,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE,
   ELEMENT_TAG,
+  ELEMENT_TD,
   ELEMENT_TODO_LI,
+  ELEMENT_TR,
   ELEMENT_UL,
   mog
 } from '@mexit/core'
@@ -39,7 +42,10 @@ const InlineElementsArray = [
   ELEMENT_H3,
   ELEMENT_H4,
   ELEMENT_H5,
-  ELEMENT_H6
+  ELEMENT_H6,
+  ELEMENT_TABLE,
+  ELEMENT_TR,
+  ELEMENT_TD
 ] as const
 
 const MultiLineElementsArray = [
@@ -150,6 +156,9 @@ const useTypeMap = (multiline: boolean): TypeMap => {
         </a>
       )
     },
+    [ELEMENT_TABLE]: ({ children }) => <>{children}</>,
+    [ELEMENT_TR]: ({ children }) => <>{children}</>,
+    [ELEMENT_TD]: ({ children }) => <>{children}</>,
 
     /* Tag
     {
@@ -266,6 +275,7 @@ const RenderPlateless = React.memo<RenderPlatelessProps>(
       content &&
       content.map((node, i) => {
         if (Object.keys(typeMap).includes(node?.type)) {
+          console.log('RENDERING ITEM', { s: Object.keys(typeMap) })
           const RenderItem = typeMap[node?.type]
           return (
             <RenderItem key={`${node?.type}-${i}`} node={node}>
