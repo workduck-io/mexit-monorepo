@@ -128,7 +128,7 @@ const CreateTodoModal = ({ children }) => {
   const isContent = data?.type === 'content'
   const description = !isContent
     ? 'By default, new Task is added to Daily Tasks. You can select a different type of note from the menu if you prefer.'
-    : 'By defautl, new Content is saved as Drafts. You can select a different type of note from the menu if you prefer.'
+    : 'By default, new Content is saved as Drafts. You can select a different type of note from the menu if you prefer.'
 
   return (
     <Modal
