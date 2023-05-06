@@ -27,13 +27,6 @@ import { useSnippets } from '../../Hooks/useSnippets'
 import { useTaskFromSelection } from '../../Hooks/useTaskFromSelection'
 
 export const useOnNewItem = () => {
-  const ICONS = {
-    snippet: 'ri:quill-pen-line',
-    note: 'ri:file-list-2-line',
-    space: 'heroicons-outline:view-grid',
-    todo: 'ri:task-line'
-  }
-
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
 
@@ -64,6 +57,12 @@ export const useOnNewItem = () => {
     ])
 
     openModal(ModalsType.todo, todo)
+  }
+
+  const onNewContent = () => {
+    openModal(ModalsType.todo, {
+      type: 'content'
+    })
   }
 
   const onNewSnippet = () => {
@@ -107,12 +106,12 @@ export const useOnNewItem = () => {
       })
   }
 
-  const getQuickNewItems = () => {
+  const getQuickNewItems = (withMIcon = false) => {
     const data = {
       note: {
         id: 0,
         name: 'New Note',
-        icon: ICONS.note,
+        icon: withMIcon ? DefaultMIcons.NOTE : DefaultMIcons.NOTE.value,
         onSelect: () => {
           const activeNamesapce = useUserPreferenceStore.getState().activeNamespace
           const spaceId = activeNamesapce ?? getDefaultNamespaceId()
@@ -123,20 +122,26 @@ export const useOnNewItem = () => {
       space: {
         id: 1,
         name: 'New Space',
-        icon: ICONS.space,
+        icon: withMIcon ? DefaultMIcons.SPACE : DefaultMIcons.SPACE.value,
         onSelect: onNewSpace
       },
       task: {
         id: 2,
         name: 'New Task',
-        icon: ICONS.todo,
+        icon: withMIcon ? DefaultMIcons.TASK : DefaultMIcons.TASK.value,
         onSelect: onNewTask
       },
       snippet: {
         id: 3,
         name: 'New Snippet',
-        icon: ICONS.snippet,
+        icon: withMIcon ? DefaultMIcons.SNIPPET : DefaultMIcons.SNIPPET.value,
         onSelect: onNewSnippet
+      },
+      content: {
+        id: 4,
+        name: 'New Content',
+        icon: withMIcon ? DefaultMIcons.TEXT : DefaultMIcons.TEXT.value,
+        onSelect: onNewContent
       }
     }
 

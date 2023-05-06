@@ -140,6 +140,13 @@ interface Props {
    * Which element to render the portal in
    */
   root?: HTMLElement | null
+
+  /**
+   * Menu Type
+   */
+  type?: 'default' | 'modal'
+
+  initialFocus?: boolean
 }
 
 export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonElement>>(
@@ -154,9 +161,11 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       allowSearch,
       onCreate,
       onMouseEnter,
+      type,
       noPadding,
       onMouseLeave,
       handleKeyDown,
+      initialFocus,
       searchPlaceholder,
       className,
       root,
@@ -367,6 +376,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
             <FloatingFocusManager
               context={context}
               modal={!nested}
+              initialFocus={initialFocus}
               returnFocus={!nested}
               // Touch-based screen readers will be able to navigate back to the
               // reference and click it to dismiss the menu without clicking an item.
@@ -375,6 +385,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
               order={['reference', 'content']}
             >
               <MenuWrapper
+                type={type}
                 {...getFloatingProps({
                   className: MenuClassName,
                   ref: floating,
@@ -417,6 +428,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
                           listItemsRef.current[index] = node
                         },
                         onClick(e) {
+                          e.stopPropagation()
                           child.props.onClick?.(e)
                           tree?.events.emit('click')
                         },

@@ -39,6 +39,7 @@ export const getPureContent = (todo: TodoType) => {
 
 export const useTodoKanban = () => {
   const updateTodo = useTodoStore((s) => s.updateTodoOfNode)
+  const moveTodoInStore = useTodoStore((s) => s.moveTodo)
 
   const { updateBlocks } = useSearch()
   const { setInfoOfBlockInContent } = useUpdateBlock()
@@ -68,21 +69,28 @@ export const useTodoKanban = () => {
     updateTodoLocally(todo, { priority: newPriority })
   }
 
+  const moveTodo = (todoId: string, fromId: string, toId: string) => {
+    moveTodoInStore(todoId, fromId, toId)
+  }
+
   const getBlocksBoard = (groupedItems: Record<string, Array<SearchResult>>) => {
+    const fromItems = Object.entries(groupedItems).map(([key, items]) => {
+      return {
+        id: key,
+        title: key,
+        cards: items
+      }
+    })
+
     const board: BlockKanbanBoard = {
-      columns: Object.entries(groupedItems).map(([key, items]) => {
-        return {
-          id: key,
-          title: key,
-          cards: items
-        }
-      })
+      columns: fromItems
     }
 
     return board
   }
 
   return {
+    moveTodo,
     getPureContent,
     getBlocksBoard,
     changePriority,

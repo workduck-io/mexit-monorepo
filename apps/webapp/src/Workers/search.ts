@@ -1,6 +1,6 @@
 import { Indexes, ISearchQuery, IUpdateDoc, SearchResult, SearchX } from '@workduck-io/mex-search'
 
-import { Highlight, ILink, Link, mog, PersistentData, Reminder } from '@mexit/core'
+import { Highlight, ILink, Link, mog, MoveBlocksType, PersistentData, Reminder } from '@mexit/core'
 
 import { exposeX } from './worker-utils'
 
@@ -120,6 +120,24 @@ const searchWorker = {
       mog('Searching Broke:', { e })
       return []
     }
+  },
+  moveBlocks: (options: MoveBlocksType) => {
+    const { fromNodeId: fromId, toNodeId: toId, blockIds } = options
+
+    blockIds.forEach((blockId) => searchX._graphX.removeLink(fromId, blockId))
+    blockIds.forEach((blockId) => searchX._graphX.addLink(toId, blockId, { type: 'CHILD' }))
+    blockIds.forEach((blockId) => {
+      const { tags, ...rest } = searchX._indexMap[Indexes.MAIN].get(blockId)
+
+      searchX._indexMap[Indexes.MAIN].update(blockId, {
+        ...rest,
+        parent: toId,
+        tags: tags.filter((t: string) => t !== fromId).concat(toId)
+      })
+    })
+
+    // searchX.moveBlocks(options.fromNodeId, options.toNodeId, options.blockIds)
+    console.log('H', searchX._graphX.getLink('NODE_ENLNwH3AecWtPfdtxbdbz', 'TEMP_Gchnp'))
   }
 }
 

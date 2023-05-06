@@ -6,6 +6,7 @@ import { type ExposedToThreadType } from '@workduck-io/mex-threads.js/types/mast
 import {
   ILink,
   mog,
+  MoveBlocksType,
   NodeEditorContent,
   PersistentData,
   SearchRepExtra,
@@ -79,6 +80,15 @@ export const updateILink = async (ilink: ILink) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
     await searchWorker.updateILink(ilink)
+  } catch (error) {
+    mog('AddDocIndexError', { error })
+  }
+}
+
+export const moveBlocks = async (options: MoveBlocksType) => {
+  try {
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
+    await searchWorker.moveBlocks(options)
   } catch (error) {
     mog('AddDocIndexError', { error })
   }

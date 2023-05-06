@@ -1,4 +1,5 @@
 import { Document } from '@workduck-io/flexsearch'
+import { Indexes } from '@workduck-io/mex-search'
 
 import { Link } from '../Stores/link.store'
 import { Snippets } from '../Stores/snippet.store'
@@ -41,6 +42,13 @@ export interface GenericSearchData {
   text: string
   data?: any
   tag?: string[]
+}
+
+export interface MoveBlocksType {
+  indexKey?: Indexes
+  fromNodeId: string
+  toNodeId: string
+  blockIds: string[]
 }
 
 export interface SearchIndex {

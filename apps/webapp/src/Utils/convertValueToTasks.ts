@@ -1,6 +1,6 @@
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL } from '@udecode/plate'
 
-import { ELEMENT_MEDIA_EMBED, ELEMENT_TODO_LI, generateTempId, NodeEditorContent } from '@mexit/core'
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TODO_LI, generateTempId, NodeEditorContent, TodoStatus } from '@mexit/core'
 
 /**
  * Converts the content to a list of tasks
@@ -14,12 +14,14 @@ import { ELEMENT_MEDIA_EMBED, ELEMENT_TODO_LI, generateTempId, NodeEditorContent
  *   - Elements that are not convertable -> Are left as is
  *   - Empty paragraphs -> Are removed
  */
-export const convertValueToTasks = (val: NodeEditorContent): NodeEditorContent => {
+export const convertValueToTasks = (val: NodeEditorContent, blockData: Record<string, any> = {}): NodeEditorContent => {
   return val.reduce((p, node) => {
     const basicConvertedNode = {
       type: ELEMENT_TODO_LI,
       id: generateTempId(),
-      children: [node]
+      children: [node],
+      status: TodoStatus.todo,
+      ...blockData
     }
     if (node.type === ELEMENT_TODO_LI) {
       return [...p, node]
@@ -71,24 +73,28 @@ export const convertValueToTasks = (val: NodeEditorContent): NodeEditorContent =
                   {
                     type: ELEMENT_TODO_LI,
                     id: generateTempId(),
-                    children: child2.children
+                    status: TodoStatus.todo,
+                    children: child2.children,
+                    ...blockData
                   }
                 ]
               } else if (child2.type === ELEMENT_UL || child2.type === ELEMENT_OL) {
                 // If list is embedded in another list
                 // Recursive go brrrr
-                const convertedTasksForList = convertValueToTasks([child2])
+                const convertedTasksForList = convertValueToTasks([child2], blockData)
                 return [...p3, ...convertedTasksForList]
               } else if (child2.type === ELEMENT_PARAGRAPH) {
                 // This is applied for external content which does not insert LIC
-                return [...p3, ...convertValueToTasks([child2])]
+                return [...p3, ...convertValueToTasks([child2]), blockData]
               } else if (child2.text !== undefined) {
                 return [
                   ...p3,
                   {
                     type: ELEMENT_TODO_LI,
                     id: generateTempId(),
-                    children: [child2]
+                    status: TodoStatus.todo,
+                    children: [child2],
+                    ...blockData
                   }
                 ]
               }

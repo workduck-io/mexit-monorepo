@@ -15,3 +15,10 @@ export const Group = styled.span`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
 `
+
+export const MediaGroup = styled(Group)`
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`

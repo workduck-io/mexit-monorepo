@@ -70,10 +70,11 @@ export const TodoBase = ({
   }, [animate])
 
   const onPriorityChange = (priority: PriorityDataType) => {
-    if (controls && controls.onChangePriority) controls.onChangePriority(todoid, priority.type, element)
-    else {
-      updatePriority(parentNodeId, todoid, priority.type)
+    if (controls && controls.onChangePriority) {
+      controls.onChangePriority(todoid, priority.type, element)
+    } else {
       element && insertInEditor(element, { priority: priority.type })
+      updatePriority(parentNodeId, todoid, priority.type)
     }
     setAnimate(true)
   }

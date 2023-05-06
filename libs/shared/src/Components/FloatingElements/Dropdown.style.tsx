@@ -136,7 +136,7 @@ export const RootMenuWrapper = styled.button<{
   }
 `
 
-export const MenuWrapper = styled.div`
+export const MenuWrapper = styled.div<{ type?: 'modal' }>`
   ${({ theme }) => generateStyle(theme.generic.contextMenu.menu)}
   padding: 4px;
   border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
@@ -145,7 +145,7 @@ export const MenuWrapper = styled.div`
   outline: 0;
   max-height: 300px;
   overflow-y: auto;
-  z-index: 11;
+  z-index: ${({ type }) => (type === 'modal' ? 101 : 11)};
   ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[0])}
 `
 

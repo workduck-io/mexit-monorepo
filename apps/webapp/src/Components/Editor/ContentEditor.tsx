@@ -21,7 +21,6 @@ import { EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
 import { useApi } from '../../Hooks/API/useNodeAPI'
-import { createViewFilterStore, ViewFilterProvider } from '../../Hooks/todo/useTodoFilters'
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useComments } from '../../Hooks/useComments'
 import { useBufferStore, useEditorBuffer } from '../../Hooks/useEditorBuffer'
@@ -169,18 +168,16 @@ const ContentEditor = () => {
 
   return (
     <EditorWrapper comboboxOpen={isComboOpen} isUserEditing={isUserEditing} ref={editorWrapperRef}>
-      <ViewFilterProvider createStore={createViewFilterStore}>
-        <Editor
-          onAutoSave={onAutoSave}
-          onFocusClick={onFocusClick}
-          includeBlockInfo={true}
-          onChange={onChangeSave}
-          content={nodeContent}
-          nodeUID={nodeid}
-          readOnly={viewOnly}
-          autoFocus={false}
-        />
-      </ViewFilterProvider>
+      <Editor
+        onAutoSave={onAutoSave}
+        onFocusClick={onFocusClick}
+        includeBlockInfo={true}
+        onChange={onChangeSave}
+        content={nodeContent}
+        nodeUID={nodeid}
+        readOnly={viewOnly}
+        autoFocus={false}
+      />
     </EditorWrapper>
   )
 }

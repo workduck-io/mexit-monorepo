@@ -4,8 +4,14 @@ import { CheckBoxWrapper, EditorStyles } from '@mexit/shared'
 
 import { ModalSection } from '../../../Style/Refactor'
 
-export const TaskEditorWrapper = styled.section`
-  padding: ${({ theme }) => theme.spacing.small};
+export const TaskEditorWrapper = styled.section<{ withMaxHeight?: boolean }>`
+  padding: ${({ theme }) => theme.spacing.medium};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background: ${({ theme }) => theme.tokens.surfaces.app};
+  margin: ${({ theme }) => theme.spacing.large} 0;
+  ${({ withMaxHeight }) => withMaxHeight && `height: 22vh;`}
+  max-height: 24vh;
+  overflow: hidden auto;
 `
 
 export const TaskEditorStyle = styled(EditorStyles)`
@@ -20,6 +26,7 @@ export const TaskEditorStyle = styled(EditorStyles)`
 
 export const ScrollableModalSection = styled(ModalSection)`
   width: 40vw;
+  min-width: 600px;
   max-height: 50vh;
 
   ${CheckBoxWrapper} {

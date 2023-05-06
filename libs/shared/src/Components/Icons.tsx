@@ -122,7 +122,7 @@ export const DefaultMIcons = {
   ADD: getMIcon('ICON', 'ic:round-plus'),
   CLEAR: getMIcon('ICON', 'ic:round-clear'),
   REMINDER: getMIcon('ICON', 'ri:timer-flash-line'),
-  TEXT: getMIcon('ICON', 'ri:text'),
+  TEXT: getMIcon('ICON', 'ri:paragraph'),
   GROUPBY: getMIcon('ICON', 'fluent:group-list-20-filled'),
   SELECT: getMIcon('ICON', 'bxs:select-multiple'),
   IMAGE: getMIcon('ICON', 'bx:image'),

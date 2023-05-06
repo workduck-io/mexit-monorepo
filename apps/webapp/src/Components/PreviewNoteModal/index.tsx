@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import Modal from 'react-modal'
 
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
@@ -7,7 +7,15 @@ import { useTheme } from 'styled-components'
 
 import { Button, MexIcon } from '@workduck-io/mex-components'
 
-import { defaultContent, ModalsType,NodeEditorContent, NodeType, useContentStore , useMetadataStore, useModalStore } from '@mexit/core'
+import {
+  defaultContent,
+  ModalsType,
+  NodeEditorContent,
+  NodeType,
+  useContentStore,
+  useMetadataStore,
+  useModalStore
+} from '@mexit/core'
 import {
   EditorContainer,
   EditorPreviewControls,
@@ -38,6 +46,7 @@ const PreviewNoteModal = () => {
   const addValueInBuffer = useBufferStore((store) => store.add)
   const getContent = useContentStore((store) => store.getContent)
   const noteMetadata = useMetadataStore((s) => s.metadata.notes[modalData?.noteId])
+  const contentStore = useContentStore((s) => s.contents[modalData?.noteId])
 
   const theme = useTheme()
   const { getNodeType, getSharedNode } = useNodes()
@@ -50,7 +59,7 @@ const PreviewNoteModal = () => {
   const content = useMemo(() => {
     const data = getContent(modalData?.noteId)
     return data?.content || defaultContent.content
-  }, [modalData])
+  }, [modalData, contentStore])
 
   const { noteTitle, noteLink } = useMemo(() => {
     return {
@@ -62,10 +71,13 @@ const PreviewNoteModal = () => {
   const { accessWhenShared } = usePermissions()
   const readOnly = useMemo(() => isReadonly(accessWhenShared(modalData?.noteId)), [modalData?.noteId])
 
+  useEffect(() => {
+    if (isOpen) saveAndClearBuffer(false)
+  }, [isOpen])
+
   if (!isOpen) return <></>
 
   const onRequestClose = () => {
-    saveAndClearBuffer(false)
     toggleModal(undefined)
   }
 

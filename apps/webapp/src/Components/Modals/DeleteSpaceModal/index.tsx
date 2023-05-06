@@ -7,7 +7,15 @@ import { useTheme } from 'styled-components'
 import { Button, DisplayShortcut, LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { API, DefaultMIcons, ModalsType, useDataStore, useLayoutStore , useModalStore , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+import {
+  API,
+  DefaultMIcons,
+  ModalsType,
+  useDataStore,
+  useLayoutStore,
+  useModalStore,
+  userPreferenceStore as useUserPreferenceStore
+} from '@mexit/core'
 import { Group, IconDisplay, PrimaryText } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../../Hooks/API/useNamespaceAPI'

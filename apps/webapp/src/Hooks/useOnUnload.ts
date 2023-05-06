@@ -4,6 +4,9 @@ import { mog, useAuthStore } from '@mexit/core'
 
 import { useEditorBuffer, useSnippetBuffer } from './useEditorBuffer'
 
+/**
+ * Hook that saves the notes and snippets buffer when the user leaves the page.
+ */
 export const useOnUnload = () => {
   const authenticated = useAuthStore((s) => s.authenticated)
   const { saveAndClearBuffer: clearNotesBuffer } = useEditorBuffer()
