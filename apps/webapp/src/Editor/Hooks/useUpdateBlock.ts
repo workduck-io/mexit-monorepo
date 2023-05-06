@@ -1,3 +1,5 @@
+import { toast } from 'react-hot-toast'
+
 import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
 import { ELEMENT_PARAGRAPH, useContentStore } from '@mexit/core'
@@ -26,6 +28,13 @@ const useUpdateBlock = () => {
     }
   }
 
+  const getNoteContent = (noteId: string) => {
+    const bufferContent = useBufferStore.getState().getBuffer(noteId)
+    const existingContent = useContentStore.getState().getContent(noteId)?.content
+
+    return bufferContent || existingContent
+  }
+
   /*
     Update block's data inside a Note. 
 
@@ -39,10 +48,8 @@ const useUpdateBlock = () => {
       useBuffer: boolean
     }
   ) => {
-    const bufferContent = useBufferStore.getState().getBuffer(noteId)
-    const existingContent = useContentStore.getState().getContent(noteId)?.content
+    const content = getNoteContent(noteId)
 
-    const content = bufferContent || existingContent
     let updatedBlock
 
     const updateInBuffer = options.useBuffer !== false
@@ -69,6 +76,36 @@ const useUpdateBlock = () => {
     }
   }
 
+  const insertInNote = (noteId: string, blockId: string, blocks: Array<BlockDataType>) => {
+    const content = getNoteContent(noteId)
+    if (content) {
+      const blockIndex = content.findIndex((b) => b.id === blockId)
+      const newContent = [...content]
+      newContent.splice(blockIndex, 1, ...blocks)
+      addInBuffer(noteId, newContent)
+    }
+  }
+
+  // Returns true if move block is successful
+  const moveBlockFromNode = (fromNoteId: string, toNoteId: string, block: BlockDataType): boolean => {
+    const updatedSourceContent = getNoteContent(fromNoteId)
+    const updateDestinationContent = getNoteContent(toNoteId)
+
+    if (updateDestinationContent && updatedSourceContent) {
+      addInBuffer(toNoteId, [...updateDestinationContent, block])
+      addInBuffer(
+        fromNoteId,
+        updatedSourceContent?.filter((b) => b.id !== block.id)
+      )
+
+      return true
+    } else {
+      toast('Unable to move block')
+    }
+
+    return false
+  }
+
   const getSelectionInMarkdown = () => {
     const editor = getPlateEditorRef()
     if (!editor.selection) return
@@ -79,14 +116,12 @@ const useUpdateBlock = () => {
     return selectedText
   }
 
-  const addBlockInContent = (noteId: string, block: BlockDataType) => {
-    const bufferContent = useBufferStore.getState().getBuffer(noteId)
-    const existingContent = useContentStore.getState().getContent(noteId)?.content
-
-    const content = bufferContent || existingContent
+  const addBlockInContent = (noteId: string, block: BlockDataType, type?: 'add' | 'delete') => {
+    const content = getNoteContent(noteId)
 
     if (content?.length > 0) {
-      const updatedContent = [...content, ...(block as any)]
+      const updatedContent =
+        type === 'delete' ? content.filter((b) => b.id !== block.id) : [...content, ...(block as any)]
       updateFromContent(noteId, updatedContent)
     }
   }
@@ -95,7 +130,9 @@ const useUpdateBlock = () => {
     insertInEditor,
     setInfoOfBlockInContent,
     addBlockInContent,
-    getSelectionInMarkdown
+    getSelectionInMarkdown,
+    moveBlockFromNode,
+    insertInNote
   }
 }
 

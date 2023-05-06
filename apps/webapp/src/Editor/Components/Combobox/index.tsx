@@ -3,7 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { flip, offset, shift } from '@floating-ui/react-dom-interactions'
 import { getRangeBoundingClientRect, PortalBody, usePlateEditorRef, useVirtualFloating } from '@udecode/plate'
 
-import { NodeEditorContent, Shortcut, useComboboxIsOpen, useComboboxStore, useContentStore , useMetadataStore } from '@mexit/core'
+import {
+  NodeEditorContent,
+  Shortcut,
+  useComboboxIsOpen,
+  useComboboxStore,
+  useContentStore,
+  useMetadataStore
+} from '@mexit/core'
 import { ComboboxRoot } from '@mexit/shared'
 
 import { useSnippets } from '../../../Hooks/useSnippets'

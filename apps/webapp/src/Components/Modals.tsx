@@ -4,11 +4,10 @@ import BlockModal from '../Editor/Components/Blocks/BlockModal'
 import HelpModal from '../Views/HelpModal'
 
 import ShareModal from './Mentions/ShareModal'
-import CreateTodoModal from './Modals/CreateTodoModal'
+import CreateTodoModal, { CreateNewSection } from './Modals/CreateTodoModal'
 import DeleteSpaceModal from './Modals/DeleteSpaceModal'
 import Lookup from './Modals/Lookup'
 import MangeSpacesModal from './Modals/ManageSpacesModal'
-// import Refactor from './Refactor'
 import Delete from './Refactor/DeleteModal'
 import CreateReminderModal from './Reminders/CreateReminderModal'
 import TemplateModal from './Template/TemplateModal'
@@ -28,7 +27,9 @@ const Modals = () => {
       <BlockModal />
       <ShareModal />
       <CreateReminderModal />
-      <CreateTodoModal />
+      <CreateTodoModal>
+        <CreateNewSection />
+      </CreateTodoModal>
       <TaskViewModal />
       <PreviewNoteModal />
       <MangeSpacesModal />

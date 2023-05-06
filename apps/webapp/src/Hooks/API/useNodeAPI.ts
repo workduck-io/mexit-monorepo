@@ -13,8 +13,9 @@ import {
   removeNulls,
   useAuthStore,
   useContentStore,
-useMetadataStore,  useTodoStore
- } from '@mexit/core'
+  useMetadataStore,
+  useTodoStore
+} from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
@@ -23,6 +24,7 @@ import { runBatchWorker } from '../../Workers/controller'
 import { useInternalLinks } from '../useInternalLinks'
 import { useLastOpened } from '../useLastOpened'
 import { useLinks } from '../useLinks'
+import { useNamespaces } from '../useNamespaces'
 import { useNodes } from '../useNodes'
 import { useSnippets } from '../useSnippets'
 import { useUpdater } from '../useUpdater'
@@ -36,6 +38,7 @@ export const useApi = () => {
   const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
   const { updateFromContent } = useUpdater()
   const { getSharedNode } = useNodes()
+  const { getNamespaceOfNodeid } = useNamespaces()
   const { updateSnippets, getSnippet } = useSnippets()
 
   const currentUser = useAuthStore((store) => store.userDetails)
@@ -138,6 +141,25 @@ export const useApi = () => {
     if (res) {
       // toast('Task added!')
     }
+  }
+
+  /**
+   * Move Block from One Note to Another without block Data
+   */
+
+  const moveBlock = async (blockId: string, sourceNodeId: string, destinationNodeId: string) => {
+    const sourceNamespaceId = getNamespaceOfNodeid(sourceNodeId)?.id
+    const destinationNamespaceId = getNamespaceOfNodeid(destinationNodeId)?.id
+
+    const res = await API.node.move({
+      blockId,
+      sourceNodeId,
+      destinationNodeId,
+      sourceNamespaceId,
+      destinationNamespaceId
+    })
+
+    return res
   }
 
   /*
@@ -395,6 +417,7 @@ export const useApi = () => {
     saveSnippetAPI,
     getAllSnippetsByWorkspace,
     getById,
+    moveBlock,
     refactorHierarchy,
     deleteAllVersionOfSnippet
   }

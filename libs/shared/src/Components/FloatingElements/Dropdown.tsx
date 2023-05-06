@@ -140,6 +140,11 @@ interface Props {
    * Which element to render the portal in
    */
   root?: HTMLElement | null
+
+  /**
+   * Menu Type
+   */
+  type?: 'default' | 'modal'
 }
 
 export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonElement>>(
@@ -154,6 +159,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       allowSearch,
       onCreate,
       onMouseEnter,
+      type,
       noPadding,
       onMouseLeave,
       handleKeyDown,
@@ -375,6 +381,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
               order={['reference', 'content']}
             >
               <MenuWrapper
+                type={type}
                 {...getFloatingProps({
                   className: MenuClassName,
                   ref: floating,
@@ -417,6 +424,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
                           listItemsRef.current[index] = node
                         },
                         onClick(e) {
+                          e.stopPropagation()
                           child.props.onClick?.(e)
                           tree?.events.emit('click')
                         },

@@ -74,6 +74,7 @@ export const apiURLs = {
     updateMetadata: (uid: string) => `${API_BASE_URLS.node}/metadata/${uid}`,
     bulkCreate: `${API_BASE_URLS.node}/bulk`,
     refactor: `${API_BASE_URLS.node}/refactor`,
+    move: `${API_BASE_URLS.node}/block/movement`,
     deleteBlock: `${API_BASE_URLS.node}/delete`,
     makePublic: (uid: string) => `${API_BASE_URLS.node}/${uid}/makePublic`,
     makePrivate: (uid: string) => `${API_BASE_URLS.node}/${uid}/makePrivate`,

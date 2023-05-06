@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import React, { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMediaQuery } from 'react-responsive'
@@ -7,11 +8,13 @@ import Board from '@asseinfo/react-kanban'
 import { get } from 'lodash'
 import { useTheme } from 'styled-components'
 
-import { Entities, SearchResult } from '@workduck-io/mex-search'
+import { Entities, Indexes, SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
 import {
+  ELEMENT_PARAGRAPH,
   mog,
+  MoveBlocksType,
   PriorityType,
   SEPARATOR,
   useLayoutStore,
@@ -31,6 +34,7 @@ import {
   TaskListWrapper
 } from '@mexit/shared'
 
+import useUpdateBlock from '../../../Editor/Hooks/useUpdateBlock'
 import { useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
 import { KanbanBoardColumn, useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
 import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
@@ -38,6 +42,9 @@ import useGroupHelper from '../../../Hooks/useGroupHelper'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
+import { useSearch } from '../../../Hooks/useSearch'
+import { convertValueToTasks } from '../../../Utils/convertValueToTasks'
+import { getBlock } from '../../../Utils/parseData'
 import ViewBlockRenderer from '../ViewBlockRenderer'
 
 /**
@@ -54,10 +61,14 @@ const KanbanView: React.FC<any> = (props) => {
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
   const atViews = useMatch(`${ROUTE_PATHS.view}/*`)
-  const { getBlocksBoard, changeStatus, changePriority } = useTodoKanban()
+  const { getBlocksBoard, changeStatus, changePriority, moveTodo } = useTodoKanban()
 
   const { goTo } = useRouting()
   const { push } = useNavigation()
+  const { moveBlocksInIndex, updateBlocks, removeDocument } = useSearch()
+  const appendTodos = useTodoStore((store) => store.appendTodos)
+
+  const { moveBlockFromNode, insertInNote, setInfoOfBlockInContent } = useUpdateBlock()
   const { accessWhenShared } = usePermissions()
   const { enableShortcutHandler } = useEnableShortcutHandler()
   const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
@@ -66,35 +77,119 @@ const KanbanView: React.FC<any> = (props) => {
     return getBlocksBoard(props.results)
   }, [props.results])
 
-  const handleTaskEvents = (block: SearchResult, field: string, newValue: any) => {
-    if (!block || !field || newValue === 'Ungrouped') return
+  const handleBlockEvents = (block: SearchResult, field: string, move: { fromColumnId: any; toColumnId: any }) => {
+    if (!block || !field || move.toColumnId === 'Ungrouped') return
 
-    const todoField = field?.split(SEPARATOR)?.at(-1)
+    const noteId: string = block.parent
+    const blockField = field?.split(SEPARATOR)?.at(-1)
+    const blockContent = getBlock(noteId, block.id)
 
-    const todo = useTodoStore.getState().getTodoOfNodeWithoutCreating(block.parent, block.id)
-    const readOnly = todo?.nodeid && isReadonly(accessWhenShared(todo?.nodeid))
-
-    if (todo && !readOnly) {
-      switch (todoField) {
-        case 'priority':
-          changePriority(todo, newValue)
-          break
+    if (blockContent) {
+      switch (blockField) {
         case 'status':
-          changeStatus(todo, newValue)
+        case 'priority':
+        case 'entity':
+          const content = convertValueToTasks(
+            [blockContent],
+            blockField === 'entity'
+              ? {}
+              : {
+                  [blockField]: move.toColumnId
+                }
+          )
+
+          insertInNote(block.parent, block.id, content)
+          appendTodos(noteId, content)
+
+          removeDocument(Indexes.MAIN, block.id)
+          updateBlocks({
+            id: noteId,
+            contents: content
+          })
+          break
+
+        case 'parent':
+          const updated = moveBlockFromNode(move.fromColumnId, move.toColumnId, blockContent)
+          if (updated) {
+            const moveBlockRequest: MoveBlocksType = {
+              toNodeId: move.toColumnId,
+              fromNodeId: move.fromColumnId,
+              blockIds: [block.id],
+              indexKey: Indexes.MAIN
+            }
+            moveBlocksInIndex(moveBlockRequest)
+          }
           break
       }
-    } else {
-      toast('Cannot move task in a note with Read only permission')
     }
   }
 
-  const handleCardMove = (card, source, destination) => {
-    switch (card.entity) {
-      case Entities.TASK:
-        if (source !== destination) handleTaskEvents(card, groupBy, destination.toColumnId)
-        break
-      default:
-        mog('card move', { card, source, destination })
+  const handleTaskEvents = (block: SearchResult, field: string, move: { fromColumnId: any; toColumnId: any }) => {
+    if (!block || !field || move.toColumnId === 'Ungrouped') return
+
+    const noteId = block.parent
+    const todoField = field?.split(SEPARATOR)?.at(-1)
+    const todo = useTodoStore.getState().getTodoOfNodeWithoutCreating(noteId, block.id)
+
+    if (todo) {
+      switch (todoField) {
+        case 'priority':
+          changePriority(todo, move.toColumnId)
+          break
+        case 'status':
+          changeStatus(todo, move.toColumnId)
+          break
+        case 'entity':
+          const updatedBlock = setInfoOfBlockInContent(noteId, {
+            blockId: block.id,
+            blockData: {
+              type: ELEMENT_PARAGRAPH
+            },
+            useBuffer: true
+          })
+          updateBlocks({
+            id: noteId,
+            contents: [updatedBlock]
+          })
+          break
+        case 'parent':
+          if (todo.content) {
+            const updatedBlock = todo.content?.at(0)
+            if (updatedBlock) {
+              const updated = moveBlockFromNode(move.fromColumnId, move.toColumnId, updatedBlock)
+              if (updated) {
+                const moveBlockRequest: MoveBlocksType = {
+                  toNodeId: move.toColumnId,
+                  fromNodeId: move.fromColumnId,
+                  blockIds: [updatedBlock.id],
+                  indexKey: Indexes.MAIN
+                }
+                moveTodo(todo.id, move.fromColumnId, move.toColumnId)
+                moveBlocksInIndex(moveBlockRequest)
+              }
+            }
+          }
+      }
+    }
+  }
+
+  const handleCardMove = (card, { fromColumnId }, { toColumnId }) => {
+    const hasOnlyReadPermission = isReadonly(accessWhenShared(card.parent))
+
+    if (hasOnlyReadPermission) {
+      toast('Cannot move task in a note with Read only permission')
+      return
+    }
+
+    if (fromColumnId !== toColumnId) {
+      switch (card.entity) {
+        case Entities.TASK:
+          handleTaskEvents(card, groupBy, { fromColumnId, toColumnId })
+          break
+        case Entities.CONTENT_BLOCK:
+          handleBlockEvents(card, groupBy, { fromColumnId, toColumnId })
+          break
+      }
     }
   }
 
@@ -119,26 +214,10 @@ const KanbanView: React.FC<any> = (props) => {
     }
   }
 
-  // const handleCardMoveNext = () => {
-  //   if (!selectedCard) return
-
-  //   const todoFromCard = getTodoFromCard(selectedCard)
-  //   const newStatus = getNextStatus(todoFromCard.metadata.status)
-  //   changeStatus(todoFromCard, newStatus)
-  // }
-
-  // const handleCardMovePrev = () => {
-  //   if (!selectedCard) return
-  //   const todoFromCard = getTodoFromCard(selectedCard)
-  //   const newStatus = getPrevStatus(todoFromCard.metadata.status)
-  //   // mog('new status', { newStatus, todoFromCard, selectedCard })
-  //   changeStatus(todoFromCard, newStatus)
-  // }
-
   const changeSelectedPriority = (priority: PriorityType) => {
     if (!selectedCard) return
 
-    handleCardMove(selectedCard, 'priority', priority)
+    handleCardMove(selectedCard, { fromColumnId: 'priority' }, { toColumnId: priority })
   }
 
   const selectNewCard = (direction: 'up' | 'down' | 'left' | 'right') => {
@@ -218,7 +297,6 @@ const KanbanView: React.FC<any> = (props) => {
           selectedColumnId = nextColumn.id
         }
         if (nextCard) {
-          // mog('selected card', { selectedCard, nextCard })
           setSelectedCard(nextCard)
         }
         break
@@ -228,7 +306,6 @@ const KanbanView: React.FC<any> = (props) => {
 
   const eventWrapper = (fn: (event) => void): ((event) => void) => {
     return (e) => {
-      // console.log('event', { e })
       enableShortcutHandler(() => {
         e.preventDefault()
         fn(e)

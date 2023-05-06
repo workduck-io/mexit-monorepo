@@ -11,7 +11,13 @@ import { useSingleton } from '@tippyjs/react'
 import { IconButton, LoadingButton, ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { MIcon } from '@mexit/core'
 import {
+  DefaultMIcons,
+  GenericFlex,
+  IconDisplay,
+  Menu,
+  MenuItem,
   PrimaryText,
   TaskHeader as StyledTaskHeader,
   TaskHeaderTitleSection,
@@ -25,6 +31,7 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useViews } from '../Hooks/useViews'
 import { useViewStore } from '../Stores/useViewStore'
 
+import { useOnNewItem } from './FleetContainer/useOnNewItem'
 import ViewBreadcrumbs from './Views/ViewBreadcrumbs'
 import { useTaskViewModalStore } from './TaskViewModal'
 
@@ -92,6 +99,39 @@ const ViewChangeStatus = ({ viewId }) => {
   }, [viewId, onSaveView, isCurrentViewChanged])
 
   return <PrimaryText>{isCurrentViewChanged && '*'}</PrimaryText>
+}
+
+const CreateNewMenu = () => {
+  const { getQuickNewItems } = useOnNewItem()
+
+  const items = useMemo(() => {
+    const sections = getQuickNewItems(true)
+    return [sections.task, sections.content].map((item) => {
+      return {
+        ...item,
+        label: item.name,
+        id: item.id.toString()
+      }
+    })
+  }, [])
+
+  return (
+    <Menu
+      key="wd-mexit-space-selector"
+      noHover
+      border
+      values={
+        <GenericFlex>
+          <IconDisplay icon={DefaultMIcons.ADD} size={24} />
+          Add New
+        </GenericFlex>
+      }
+    >
+      {items.map((op) => {
+        return <MenuItem key={op.id} icon={op.icon as MIcon} onClick={op.onSelect} label={op.label} />
+      })}
+    </Menu>
+  )
 }
 
 const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
@@ -209,6 +249,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
             </TaskViewHeaderWrapper>
           )}
         </TaskHeaderTitleSection>
+        <CreateNewMenu />
       </StyledTaskHeader>
     </>
   )

@@ -13,6 +13,7 @@ import FloatingButton from './Components/FloatingButton'
 import Init from './Components/Init'
 import Main from './Components/Main'
 import Modals from './Components/Modals'
+import { createViewFilterStore, ViewFilterProvider } from './Hooks/todo/useTodoFilters'
 import { useForceLogout } from './Stores/useAuth'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
@@ -38,8 +39,10 @@ const AutoThemeSwitch = () => {
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Provider legacySupport={false}>
-      <AutoThemeSwitch />
-      {children}
+      <ViewFilterProvider createStore={createViewFilterStore}>
+        <AutoThemeSwitch />
+        {children}
+      </ViewFilterProvider>
     </Provider>
   )
 }

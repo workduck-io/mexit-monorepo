@@ -1,6 +1,6 @@
 import { Indexes, ISearchQuery, IUpdateDoc, SearchResult, SearchX } from '@workduck-io/mex-search'
 
-import { Highlight, ILink, Link, mog, PersistentData, Reminder } from '@mexit/core'
+import { Highlight, ILink, Link, mog, MoveBlocksType, PersistentData, Reminder } from '@mexit/core'
 
 import { exposeX } from './worker-utils'
 
@@ -120,6 +120,10 @@ const searchWorker = {
       mog('Searching Broke:', { e })
       return []
     }
+  },
+  moveBlocks: (options: MoveBlocksType) => {
+    const { fromNodeId, toNodeId, blockIds } = options
+    searchX.moveBlocks(fromNodeId, toNodeId, blockIds)
   }
 }
 

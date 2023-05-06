@@ -178,7 +178,6 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
   return useCallback(
     () => () => {
       const isOpen = !!useComboboxStore.getState().targetRange
-
       let changed: boolean | undefined = false
       changed = changeHandler !== undefined ? changeHandler() : false
       if (changed) return

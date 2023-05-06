@@ -134,6 +134,8 @@ export const idUpdateFunction = (block) => {
 }
 
 export const updateIds = (blockToUpdate: any, withType?: boolean, idGenerator: () => string = generateTempId) => {
+  if (!blockToUpdate) return
+
   const block = Object.assign({}, blockToUpdate)
   const addIdIfType = withType && block?.type
 

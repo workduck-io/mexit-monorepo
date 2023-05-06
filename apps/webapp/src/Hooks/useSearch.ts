@@ -8,6 +8,7 @@ import {
   ELEMENT_INLINE_BLOCK,
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
+  MoveBlocksType,
   SearchRepExtra,
   useAuthStore,
   useContentStore,
@@ -17,6 +18,7 @@ import {
 
 import {
   addDoc,
+  moveBlocks,
   removeDoc,
   searchIndex,
   searchIndexByNodeId,
@@ -118,6 +120,11 @@ export const useSearch = () => {
     documentUpdated()
   }
 
+  const moveBlocksInIndex = async (options: MoveBlocksType) => {
+    await moveBlocks(options)
+    documentUpdated()
+  }
+
   const removeDocument = async (key: Indexes, id: string) => {
     await removeDoc(key, id)
     documentUpdated()
@@ -141,6 +148,7 @@ export const useSearch = () => {
   return {
     addDocument,
     updateBlocks,
+    moveBlocksInIndex,
     updateDocument,
     removeDocument,
     queryIndex,

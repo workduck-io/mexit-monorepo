@@ -14,10 +14,25 @@ interface InsertMenuProps {
   title?: string
   icon?: MIcon
   root?: any
+  allowSearch?: boolean
   isMenu?: boolean
+  type?: 'default' | 'modal'
+  initialFocus?: boolean
+  selected?: string
 }
 
-export const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert', items, isMenu, root, icon }) => {
+export const InsertMenu: React.FC<InsertMenuProps> = ({
+  onClick,
+  title = 'Insert',
+  items,
+  allowSearch = true,
+  selected,
+  isMenu,
+  root,
+  initialFocus,
+  icon,
+  type
+}) => {
   if (!isMenu) {
     return (
       <StyledButton onClick={onClick}>
@@ -54,17 +69,13 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert
 
   return (
     <Menu
-      allowSearch
+      allowSearch={allowSearch}
       noBackground
+      type={type}
       noPadding
       searchPlaceholder="Search for a Note..."
       root={root}
-      values={
-        <StyledButton>
-          <IconDisplay icon={icon ?? DefaultMIcons.EMBED} size={12} />
-          {title}
-        </StyledButton>
-      }
+      values={<AnchorNode selected={selected} items={noteLinks} icon={icon} title={title} />}
     >
       {noteLinks.map((item) => {
         return (
@@ -78,5 +89,19 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({ onClick, title = 'Insert
         )
       })}
     </Menu>
+  )
+}
+
+const AnchorNode = ({ selected, items, icon, title }) => {
+  const selectedItem = selected && items.find((i) => i.id === selected)
+
+  const itemIcon = selectedItem?.icon ?? icon ?? DefaultMIcons.EMBED
+  const label = selectedItem?.label ?? title
+
+  return (
+    <StyledButton>
+      <IconDisplay icon={itemIcon} size={12} />
+      {label}
+    </StyledButton>
   )
 }

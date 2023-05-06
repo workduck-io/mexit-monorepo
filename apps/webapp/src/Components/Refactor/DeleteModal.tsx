@@ -145,7 +145,6 @@ const Delete = () => {
       <WrappedNodeSelect
         autoFocusSelectAll
         autoFocus
-        // menuOpen
         disallowReserved
         defaultValue={
           del

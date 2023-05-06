@@ -46,6 +46,7 @@ const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabe
     <TodoActionWrapper>
       <Menu
         noHover
+        type="modal"
         noBackground
         onMouseEnter={() => setSelected(true)}
         onMouseLeave={() => setSelected(false)}
@@ -59,7 +60,7 @@ const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabe
               icon={getMIcon('ICON', priority.icon)}
               color={iconColor}
               key={priority.title}
-              onClick={() => onPriorityChangeHide(priority)}
+              onClick={(e) => onPriorityChangeHide(priority)}
               label={priority.title}
             />
           )

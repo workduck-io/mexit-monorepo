@@ -41,7 +41,7 @@ const FleetContainer = () => {
   }, [open])
 
   const sections = useMemo(() => {
-    const sections = getQuickNewItems()
+    const sections = getQuickNewItems() as any
     if (atSnippets) return [sections.snippet, sections.note, sections.task, sections.space]
     if (atViews) {
       return [sections.task, sections.note, sections.snippet, sections.space]

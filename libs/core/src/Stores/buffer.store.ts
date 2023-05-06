@@ -17,4 +17,4 @@ const bufferStoreConfig = (set, get) => ({
   clear: () => set({ buffer: {} })
 })
 
-export const useBufferStore = createStore(bufferStoreConfig, StoreIdentifier.BUFFER, false)
+export const useBufferStore = createStore(bufferStoreConfig, StoreIdentifier.BUFFER, true)

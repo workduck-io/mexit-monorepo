@@ -23,6 +23,10 @@ export class NodeAPI {
     return await this.client.patch(apiURLs.node.append(id), data, options)
   }
 
+  async move(data, options?: Options) {
+    return await this.client.patch(apiURLs.node.move, data, options)
+  }
+
   async refactor(data, options?: Options) {
     return await this.client.post(apiURLs.node.refactor, data, options)
   }

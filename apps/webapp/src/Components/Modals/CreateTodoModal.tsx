@@ -1,27 +1,39 @@
 import React, { useEffect, useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 
 import { getPlateEditorRef, PlateProvider } from '@udecode/plate'
+import { useTheme } from 'styled-components'
 
 import { Button, DisplayShortcut, LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { ModalsType, mog, useModalStore } from '@mexit/core'
+import { getDefaultContent, ModalsType, mog, useModalStore } from '@mexit/core'
+import { DefaultMIcons, IconDisplay, InsertMenu, PrimaryText } from '@mexit/shared'
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useApi } from '../../Hooks/API/useNodeAPI'
-import { ModalControls, ModalHeader } from '../../Style/Refactor'
+import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
+import { ModalControls } from '../../Style/Refactor'
 import TaskEditor from '../CreateTodoModal/TaskEditor'
 import { ScrollableModalSection, TaskEditorWrapper } from '../CreateTodoModal/TaskEditor/styled'
+import { Group } from '../Editor/Banner/styled'
+import Editor from '../Editor/Editor'
 
-const CreateTodoModal = () => {
+import { DeletionWarning, Header, Title } from './DeleteSpaceModal/styled'
+
+const CreateTodoModal = ({ children }) => {
   const isOpen = useModalStore((store) => store.open === ModalsType.todo)
   const setOpen = useModalStore((store) => store.toggleOpen)
+  const data = useModalStore((store) => store.data)
   const { addBlockInContent } = useUpdateBlock()
   const setModalData = useModalStore((store) => store.setData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { createNewNote } = useCreateNewNote()
   const { appendToNode } = useApi()
+  const theme = useTheme()
+  const [selectedNoteId, setSelectedNoteId] = useState<string | undefined>()
 
   const onCreateTask = async () => {
     setIsLoading(true)
@@ -31,8 +43,9 @@ const CreateTodoModal = () => {
     if (openedTodo) {
       try {
         if (todoBlock) {
-          await appendToNode(openedTodo.nodeid, todoBlock)
-          addBlockInContent(openedTodo.nodeid, todoBlock)
+          const noteId = selectedNoteId || openedTodo.nodeid
+          await appendToNode(noteId, todoBlock)
+          addBlockInContent(noteId, todoBlock)
           toast('Task created!')
         }
       } catch (err) {
@@ -45,9 +58,45 @@ const CreateTodoModal = () => {
     }
   }
 
+  const onCreateContent = async () => {
+    setIsLoading(true)
+
+    const content = getPlateEditorRef()?.children
+    try {
+      if (content) {
+        const noteId = selectedNoteId || ''
+        if (selectedNoteId) {
+          await appendToNode(noteId, content)
+          addBlockInContent(noteId, content)
+        } else {
+          createNewNote({
+            noteContent: content,
+            noRedirect: true
+          })
+        }
+        toast('Added Content!')
+      }
+    } catch (err) {
+      toast('Error occured while creating Task')
+      mog('Error occured while creating Task', { err })
+    } finally {
+      setIsLoading(false)
+      setOpen(undefined)
+    }
+  }
+
+  const handleCreate = () => {
+    if (data?.type === 'content') {
+      onCreateContent()
+    } else {
+      onCreateTask()
+    }
+  }
+
   useEffect(() => {
     if (!isOpen) {
       setModalData(undefined)
+      setSelectedNoteId(null)
     }
   }, [isOpen])
 
@@ -77,16 +126,54 @@ const CreateTodoModal = () => {
     setOpen(undefined)
   }
 
+  const isContent = data?.type === 'content'
+  const description = !isContent
+    ? 'By default, new Task is added to Daily Tasks. You can select a different type of note from the menu if you prefer.'
+    : 'By default, new Content is saved as Drafts. You can select a different type of note from the menu if you prefer.'
+
   return (
     <Modal
+      shouldFocusAfterRender
+      shouldCloseOnEsc={false}
+      shouldReturnFocusAfterClose
       className={'ModalContentSplit'}
       overlayClassName="ModalOverlay"
       onRequestClose={onRequestClose}
       isOpen={isOpen}
     >
-      <ScrollableModalSection>
-        <ModalHeader>New Task</ModalHeader>
-        <NewTodoSection />
+      <ScrollableModalSection id="menu-wrapper">
+        <Header>
+          <Group>
+            <Title>
+              Add a new&nbsp;
+              <Group>
+                <IconDisplay
+                  icon={isContent ? DefaultMIcons.TEXT : DefaultMIcons.TASK}
+                  size={28}
+                  color={theme.tokens.colors.primary.default}
+                />{' '}
+                <PrimaryText>{isContent ? 'Content' : 'Task'}</PrimaryText>
+              </Group>{' '}
+              ?
+            </Title>
+          </Group>
+        </Header>
+        <DeletionWarning>
+          <Group>
+            <span>{description}</span>
+            <InsertMenu
+              type="modal"
+              title="Select Note"
+              selected={selectedNoteId}
+              isMenu
+              onClick={(noteId: string) => {
+                setSelectedNoteId(noteId)
+              }}
+            />
+          </Group>
+        </DeletionWarning>
+        <ErrorBoundary FallbackComponent={() => <></>}>{children}</ErrorBoundary>
+
         <ModalControls>
           <Button large onClick={onRequestClose}>
             Cancel
@@ -94,10 +181,9 @@ const CreateTodoModal = () => {
           <LoadingButton
             style={{ marginLeft: '1rem' }}
             primary
-            autoFocus={true}
             large
             loading={isLoading}
-            onClick={onCreateTask}
+            onClick={handleCreate}
             disabled={false}
           >
             Add <DisplayShortcut shortcut={'$mod+Enter'} />
@@ -105,6 +191,29 @@ const CreateTodoModal = () => {
         </ModalControls>
       </ScrollableModalSection>
     </Modal>
+  )
+}
+
+export const CreateNewSection = () => {
+  const data = useModalStore((store) => store.data)
+
+  switch (data?.type) {
+    case 'content':
+      return <NewContentSection />
+    default:
+      return <NewTodoSection />
+  }
+}
+
+const NewContentSection = () => {
+  const content = [getDefaultContent()]
+
+  return (
+    <TaskEditorWrapper withMaxHeight>
+      <PlateProvider id="NODE_EDITOR">
+        <Editor includeBlockInfo={false} content={content} nodeUID="NODE_EDITOR" />
+      </PlateProvider>
+    </TaskEditorWrapper>
   )
 }
 
