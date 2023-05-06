@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.23.6
+
+### Patch Changes
+
+- bd2ffca9: Move Blocks, Add Blocks In Views Added
+
 ## 0.23.5
 
 ### Patch Changes
