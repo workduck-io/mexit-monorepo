@@ -5,10 +5,10 @@ import styled, { css, useTheme } from 'styled-components'
 
 import { SearchResult } from '@workduck-io/mex-search'
 
+import { ModalsType, useModalStore } from '@mexit/core'
 import { Group, MexIcon } from '@mexit/shared'
 
 import { SearchBlockIcons } from '../../../Editor/Components/Blocks/BlockIcons'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 
 import { SlideDownKeyFrames, SlideUpKeyFrames } from './BlockContainer/styled'
 import { Chevron, GroupHeader } from './BlockContainer'
@@ -61,14 +61,14 @@ type BlockProps = {
 
 const ContentBlock: React.FC<BlockProps> = ({ block }) => {
   const theme = useTheme()
-  const { goTo } = useRouting()
   const [isOpen, setIsOpen] = useState(false)
+  const toggleModal = useModalStore((store) => store.toggleOpen)
 
   const handleToggleAccordion = (ev) => {
     setIsOpen(!isOpen)
 
     if (ev.detail === 2) {
-      goTo(ROUTE_PATHS.node, NavigationType.push, block.parent)
+      toggleModal(ModalsType.previewNote, { noteId: block.parent, blockId: block.id })
     }
   }
 

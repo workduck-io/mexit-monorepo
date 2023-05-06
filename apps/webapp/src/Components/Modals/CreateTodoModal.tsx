@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 
@@ -162,7 +163,6 @@ const CreateTodoModal = ({ children }) => {
             <span>{description}</span>
             <InsertMenu
               type="modal"
-              initialFocus={false}
               title="Select Note"
               selected={selectedNoteId}
               isMenu
@@ -172,7 +172,7 @@ const CreateTodoModal = ({ children }) => {
             />
           </Group>
         </DeletionWarning>
-        {children}
+        <ErrorBoundary FallbackComponent={() => <></>}>{children}</ErrorBoundary>
 
         <ModalControls>
           <Button large onClick={onRequestClose}>

@@ -73,7 +73,6 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({
       noBackground
       type={type}
       noPadding
-      initialFocus={initialFocus}
       searchPlaceholder="Search for a Note..."
       root={root}
       values={<AnchorNode selected={selected} items={noteLinks} icon={icon} title={title} />}

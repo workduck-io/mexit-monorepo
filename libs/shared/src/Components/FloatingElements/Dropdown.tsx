@@ -145,8 +145,6 @@ interface Props {
    * Menu Type
    */
   type?: 'default' | 'modal'
-
-  initialFocus?: boolean
 }
 
 export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonElement>>(
@@ -165,7 +163,6 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       noPadding,
       onMouseLeave,
       handleKeyDown,
-      initialFocus,
       searchPlaceholder,
       className,
       root,
@@ -376,7 +373,6 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
             <FloatingFocusManager
               context={context}
               modal={!nested}
-              initialFocus={initialFocus}
               returnFocus={!nested}
               // Touch-based screen readers will be able to navigate back to the
               // reference and click it to dismiss the menu without clicking an item.

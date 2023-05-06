@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import Modal from 'react-modal'
 
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
@@ -78,6 +79,7 @@ const PreviewNoteModal = () => {
   if (!isOpen) return <></>
 
   const onRequestClose = () => {
+    saveAndClearBuffer(false)
     toggleModal(undefined)
   }
 
@@ -142,15 +144,17 @@ const PreviewNoteModal = () => {
             </PreviewActionHeader>
           </EditorPreviewControls>
           <EditorContainer>
-            <Editor
-              focusBlockId={modalData?.blockId}
-              content={content}
-              onChange={onChange}
-              options={{ focusOptions: false }}
-              readOnly={readOnly}
-              autoFocus
-              nodeUID={modalData?.noteId}
-            />
+            <ErrorBoundary FallbackComponent={() => <></>}>
+              <Editor
+                focusBlockId={modalData?.blockId}
+                content={content}
+                onChange={onChange}
+                options={{ focusOptions: false }}
+                readOnly={readOnly}
+                autoFocus
+                nodeUID={modalData?.noteId}
+              />
+            </ErrorBoundary>
           </EditorContainer>
         </PreviewNoteContainer>
       </PlateProvider>

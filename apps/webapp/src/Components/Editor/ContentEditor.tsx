@@ -70,7 +70,7 @@ const ContentEditor = () => {
       return returnLastUpdatedContentOnError(nodeid, fsContent?.content)
     } else {
       setInternalUpdate(false)
-      const fromContent = useContentStore.getState().contents[nodeid].content
+      const fromContent = useContentStore.getState().contents[nodeid]?.content
       return returnLastUpdatedContentOnError(nodeid, fromContent)
     }
   }, [nodeid, fsContent])

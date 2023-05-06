@@ -136,7 +136,7 @@ export const RootMenuWrapper = styled.button<{
   }
 `
 
-export const MenuWrapper = styled.div<{ type?: 'modal' }>`
+export const MenuWrapper = styled.div<{ type?: 'modal' | 'default' }>`
   ${({ theme }) => generateStyle(theme.generic.contextMenu.menu)}
   padding: 4px;
   border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
