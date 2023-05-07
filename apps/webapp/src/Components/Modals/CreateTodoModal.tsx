@@ -105,14 +105,14 @@ const CreateTodoModal = ({ children }) => {
       '$mod+Enter': (event) => {
         if (isOpen) {
           event.preventDefault()
-          onCreateTask()
+          handleCreate()
         }
       }
     })
     return () => {
       unsubscribe()
     }
-  }, [isOpen])
+  }, [isOpen, selectedNoteId])
 
   if (!isOpen) return <></>
 
