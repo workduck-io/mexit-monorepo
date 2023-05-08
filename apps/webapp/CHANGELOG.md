@@ -5,7 +5,7 @@
 ### Patch Changes
 
 - 5d014875: Upgrade mex-search package version to 0.0.9
-- c97e722f: Permission checks on parent notes
+- c97e722f: Permission check on parent notes In Views
 
 ## 0.23.6
 
