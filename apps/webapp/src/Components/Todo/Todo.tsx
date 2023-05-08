@@ -96,7 +96,7 @@ export const TodoBase = ({
   return (
     <TodoContainer
       key={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
-      id={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
+      id="mexit-todo-container"
       checked={todo?.metadata.status === TodoStatus.completed}
     >
       <CheckBoxWrapper id={`TodoStatusFor_${todo.id}_${oid}`} contentEditable={false}>

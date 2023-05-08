@@ -9,14 +9,13 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
   API,
-  DefaultMIcons,
   ModalsType,
   useDataStore,
   useLayoutStore,
   useModalStore,
   userPreferenceStore as useUserPreferenceStore
 } from '@mexit/core'
-import { Group, IconDisplay, PrimaryText } from '@mexit/shared'
+import { DefaultMIcons, Group, IconDisplay, MexIcon, PrimaryText } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../../Hooks/API/useNamespaceAPI'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
@@ -116,6 +115,14 @@ const DeleteSpaceModal = () => {
               ?
             </Title>
           </Group>
+          <MexIcon
+            color={theme.tokens.text.fade}
+            $cursor
+            height={24}
+            width={24}
+            icon={DefaultMIcons.CLEAR.value}
+            onClick={onRequestClose}
+          />
         </Header>
         <DeletionWarning>
           All (<PrimaryText>{notesSize}</PrimaryText>) Note(s) created within this Space will be permanently deleted.{' '}

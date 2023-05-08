@@ -4,19 +4,21 @@ import { useLocation } from 'react-router-dom'
 
 import archiveLine from '@iconify/icons-ri/archive-line'
 import { Icon } from '@iconify/react'
+import { useTheme } from 'styled-components'
 import create from 'zustand'
 
 import { Button, DisplayShortcut, PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { isReserved, RefactorPath, useEditorStore, useHelpStore } from '@mexit/core'
-import { isOnEditableElement } from '@mexit/shared'
+import { DefaultMIcons, isOnEditableElement, MexIcon } from '@mexit/shared'
 
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useDelete } from '../../Hooks/useDelete'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { DeleteIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
+import { DeleteIcon, MockRefactorMap, ModalControls, MRMHead, MRMRow } from '../../Style/Refactor'
+import { Header, Title } from '../Modals/DeleteSpaceModal/styled'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 
 interface DeleteStoreState {
@@ -63,8 +65,9 @@ const Delete = () => {
   const { getMockArchive, execArchive } = useDelete()
   const shortcuts = useHelpStore((store) => store.shortcuts)
 
-  const location = useLocation()
+  const theme = useTheme()
   const { goTo } = useRouting()
+  const location = useLocation()
 
   const openModal = useDeleteStore((store) => store.openModal)
   const closeModal = useDeleteStore((store) => store.closeModal)
@@ -141,7 +144,17 @@ const Delete = () => {
 
   return (
     <Modal className="ModalContent" overlayClassName="ModalOverlay" onRequestClose={closeModal} isOpen={open}>
-      <ModalHeader>Archive</ModalHeader>
+      <Header>
+        <Title>Archive</Title>
+        <MexIcon
+          color={theme.tokens.text.fade}
+          $cursor
+          height={24}
+          width={24}
+          icon={DefaultMIcons.CLEAR.value}
+          onClick={closeModal}
+        />
+      </Header>
       <WrappedNodeSelect
         autoFocusSelectAll
         autoFocus

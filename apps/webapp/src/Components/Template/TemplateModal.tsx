@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 
+import { useTheme } from 'styled-components'
+
 import { LoadingButton, Title } from '@workduck-io/mex-components'
 
 import { API, ModalsType, mog, Snippet, useMetadataStore, useModalStore, useSnippetStore } from '@mexit/core'
-import { ButtonFields, TemplateContainer } from '@mexit/shared'
+import { ButtonFields, DefaultMIcons, FlexBetween, MexIcon, TemplateContainer } from '@mexit/shared'
 
 import { defaultContent } from '../../Data/baseData'
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
@@ -18,6 +20,7 @@ import SidebarList from '../Sidebar/SidebarList'
 import { RemovalButton } from './TemplateModal.styles'
 
 const TemplateModal = () => {
+  const theme = useTheme()
   const { getILinkFromNodeid } = useLinks()
   const { toggleOpen, open, data } = useModalStore()
 
@@ -93,18 +96,32 @@ const TemplateModal = () => {
     toggleOpen(ModalsType.template)
   }
 
+  const onRequestClose = () => {
+    toggleOpen(ModalsType.template)
+  }
+
   return (
     <Modal
       className="ModalContent"
       overlayClassName="ModalOverlay"
-      onRequestClose={() => toggleOpen(ModalsType.template)}
+      onRequestClose={onRequestClose}
       isOpen={open === ModalsType.template}
     >
       <InviteWrapper>
         {templates.length !== 0 ? (
           !currentTemplate ? (
             <>
-              <Title>Set Template for {getTitleFromPath(node?.path)}</Title>
+              <FlexBetween>
+                <Title>Set Template for {getTitleFromPath(node?.path)}</Title>
+                <MexIcon
+                  color={theme.tokens.text.fade}
+                  $cursor
+                  height={24}
+                  width={24}
+                  icon={DefaultMIcons.CLEAR.value}
+                  onClick={onRequestClose}
+                />
+              </FlexBetween>
               <p>Auto fill new notes using template</p>
             </>
           ) : (
