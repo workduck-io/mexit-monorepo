@@ -133,7 +133,7 @@ const AIPreviewContainer: React.FC<AIPreviewProps> = (props) => {
               Replace
             </StyledButton>
           )}
-          <InsertMenu root={props.root} isMenu={props.insertInNote} onClick={handleOnInsert} />
+          <InsertMenu type="modal" root={props.root} isMenu={props.insertInNote} onClick={handleOnInsert} />
         </Group>
       </AIContainerFooter>
     </StyledAIContainer>

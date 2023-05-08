@@ -7,7 +7,7 @@ import { ModalSection } from '../../../Style/Refactor'
 export const TaskEditorWrapper = styled.section<{ withMaxHeight?: boolean }>`
   padding: ${({ theme }) => theme.spacing.medium};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background: ${({ theme }) => theme.tokens.surfaces.app};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[0]};
   margin: ${({ theme }) => theme.spacing.large} 0;
   ${({ withMaxHeight }) => withMaxHeight && `height: 22vh;`}
   max-height: 24vh;

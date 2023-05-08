@@ -192,7 +192,13 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
     const { x, y, reference, floating, strategy, refs, context } = useFloating<HTMLButtonElement>({
       open,
       onOpenChange: setOpen,
-      middleware: [offset({ mainAxis: 4, alignmentAxis: nested ? -5 : 0 }), flip(), shift()],
+      middleware: [
+        offset({ mainAxis: 4, alignmentAxis: nested ? -5 : 0 }),
+        flip(),
+        shift({
+          padding: 25
+        })
+      ],
       placement: nested ? 'right-start' : 'bottom-start',
       nodeId
       // whileElementsMounted: autoUpdate
@@ -216,7 +222,8 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
         ignoreMouse: nested
       }),
       useDismiss(context, {
-        escapeKey: true
+        escapeKey: true,
+        bubbles: false
       }),
       useListNavigation(context, {
         listRef: listItemsRef,

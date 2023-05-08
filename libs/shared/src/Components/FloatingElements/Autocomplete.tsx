@@ -169,6 +169,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
         {open && items.length > 0 && !disableMenu && (
           <FloatingFocusManager context={context} initialFocus={-1} visuallyHiddenDismiss>
             <AutoCompleteSuggestions
+              type="modal"
               {...getFloatingProps({
                 className: MenuClassName,
                 ref: refs.setFloating,

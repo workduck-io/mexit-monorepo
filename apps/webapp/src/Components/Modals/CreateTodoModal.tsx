@@ -10,7 +10,7 @@ import { Button, DisplayShortcut, LoadingButton } from '@workduck-io/mex-compone
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getDefaultContent, ModalsType, mog, useModalStore } from '@mexit/core'
-import { DefaultMIcons, IconDisplay, InsertMenu, PrimaryText } from '@mexit/shared'
+import { DefaultMIcons, IconDisplay, InsertMenu, MexIcon, PrimaryText } from '@mexit/shared'
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useApi } from '../../Hooks/API/useNodeAPI'
@@ -157,6 +157,14 @@ const CreateTodoModal = ({ children }) => {
               ?
             </Title>
           </Group>
+          <MexIcon
+            color={theme.tokens.text.fade}
+            $cursor
+            height={24}
+            width={24}
+            icon={DefaultMIcons.CLEAR.value}
+            onClick={onRequestClose}
+          />
         </Header>
         <DeletionWarning>
           <Group>
