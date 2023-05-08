@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.25
+
+### Patch Changes
+
+- 5d014875: Upgrade mex-search package version to 0.0.9
+
 ## 0.19.24
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.23.7
+
+### Patch Changes
+
+- 5d014875: Upgrade mex-search package version to 0.0.9
+- c97e722f: Permission checks on parent notes
+
 ## 0.23.6
 
 ### Patch Changes
