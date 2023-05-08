@@ -77,6 +77,10 @@ const KanbanView: React.FC<any> = (props) => {
     return getBlocksBoard(props.results)
   }, [props.results])
 
+  const checkIsNoteReadOnly = (noteId: string) => {
+    return isReadonly(accessWhenShared(noteId))
+  }
+
   const handleBlockEvents = (block: SearchResult, field: string, move: { fromColumnId: any; toColumnId: any }) => {
     if (!block || !field || move.toColumnId === 'Ungrouped') return
 
@@ -109,6 +113,13 @@ const KanbanView: React.FC<any> = (props) => {
           break
 
         case 'parent':
+          const hasPermission = !checkIsNoteReadOnly(move.toColumnId)
+
+          if (!hasPermission) {
+            toast('You do not have permission to move this block')
+            return
+          }
+
           const updated = moveBlockFromNode(move.fromColumnId, move.toColumnId, blockContent)
           if (updated) {
             const moveBlockRequest: MoveBlocksType = {
@@ -153,7 +164,8 @@ const KanbanView: React.FC<any> = (props) => {
           })
           break
         case 'parent':
-          if (todo.content) {
+          const hasPermission = !checkIsNoteReadOnly(move.toColumnId)
+          if (todo.content && hasPermission) {
             const updatedBlock = todo.content?.at(0)
             if (updatedBlock) {
               const updated = moveBlockFromNode(move.fromColumnId, move.toColumnId, updatedBlock)
@@ -168,16 +180,18 @@ const KanbanView: React.FC<any> = (props) => {
                 moveBlocksInIndex(moveBlockRequest)
               }
             }
+          } else {
+            toast('You do not have permission to move this block')
           }
       }
     }
   }
 
   const handleCardMove = (card, { fromColumnId }, { toColumnId }) => {
-    const hasOnlyReadPermission = isReadonly(accessWhenShared(card.parent))
+    const hasOnlyReadPermission = checkIsNoteReadOnly(card.parent)
 
     if (hasOnlyReadPermission) {
-      toast('Cannot move task in a note with Read only permission')
+      toast('You do not have permission to move this block')
       return
     }
 
