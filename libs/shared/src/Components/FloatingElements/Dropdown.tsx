@@ -360,6 +360,8 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
                   className: cx(MenuItemClassName, { open }),
                   role: 'menuitem',
                   onKeyDown(event) {
+                    event.stopPropagation()
+
                     // Prevent more than one menu from being open.
                     if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
                       setOpen(false)

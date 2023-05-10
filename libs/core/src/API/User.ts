@@ -32,4 +32,8 @@ export class UserAPI {
   async registerStatus(cacheConfig?: CacheConfig, options?: Options) {
     return await this.client.get(apiURLs.user.registerStatus, cacheConfig, options)
   }
+
+  async getAllUsersOfWorkspace(cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.user.getAllUserRecordsOfWorkspace, cacheConfig, options)
+  }
 }

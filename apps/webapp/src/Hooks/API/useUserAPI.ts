@@ -1,4 +1,11 @@
-import { API, mog, useAuthStore, UserPreferences , userPreferenceStore as useUserPreferenceStore, useUserCacheStore } from '@mexit/core'
+import {
+  API,
+  mog,
+  useAuthStore,
+  UserPreferences,
+  userPreferenceStore as useUserPreferenceStore,
+  useUserCacheStore
+} from '@mexit/core'
 
 import { USER_ID_REGEX } from '../../Utils/constants'
 
@@ -66,6 +73,7 @@ export const useUserService = () => {
             name: resp?.name
           })
         }
+
         return {
           id,
           email: resp?.metadata?.email ?? undefined,
@@ -83,7 +91,6 @@ export const useUserService = () => {
     try {
       if (name === undefined && alias === undefined) return false
       return await API.user.updateInfo({ id, name, alias }).then((resp: any) => {
-        mog('Response', { data: resp })
         updateUserDetails({ name: resp?.name, alias: resp?.alias })
         return true
       })

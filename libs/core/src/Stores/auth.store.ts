@@ -1,26 +1,56 @@
-import { AppInitStatus, UserDetails } from '../Types/Auth'
+import { AppInitStatus, UserDetails, Workspace } from '../Types/Auth'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
-export const authStoreConfig = (set, get) => ({
-  isForgottenPassword: false,
-  authenticated: false,
+const getAuthStoreInitialState = () => ({
   registered: false,
-  userDetails: undefined as UserDetails | undefined,
+  authenticated: false,
+  isForgottenPassword: false,
   appInitStatus: AppInitStatus.START,
-  workspaceDetails: undefined,
+
+  users: [] as Array<UserDetails>,
+  workspaces: [] as Array<Workspace>,
+  userDetails: undefined as UserDetails | undefined,
+  workspaceDetails: undefined as Workspace | undefined
+})
+
+export const authStoreConfig = (set, get) => ({
+  ...getAuthStoreInitialState(),
+
+  // * User workspaces
+  setWorkspaces: (workspaces: Array<Workspace>) => set({ workspaces }),
+  addWorkspace: (workspace: Workspace) => set({ workspaces: [...get().workspaces, workspace] }),
+  removeWorkspace: (workspaceId: string) => {
+    const workspaces = get().workspaces.filter((workspace) => workspace.id !== workspaceId)
+    set({ workspaces })
+  },
+
+  // Users of the current workspace
+  setUsers: (users: Array<UserDetails>) => set({ users }),
+
+  // * Change workspace and start init process by setting appInitStatus to AppInitStatus.RUNNING
+  setActiveWorkspace: (workspaceId: string) => {
+    const workspace = get().workspaces.find((w) => w.id === workspaceId)
+    console.log('workspace', { workspace })
+    if (workspace) set({ workspaceDetails: workspace, appInitStatus: AppInitStatus.RUNNING })
+  },
   setAppInitStatus: (appInitStatus) => set({ appInitStatus }),
   setIsUserAuthenticated: () => set({ authenticated: true, appInitStatus: AppInitStatus.COMPLETE }),
-  setAuthenticated: (userDetails: UserDetails, workspaceDetails) =>
-    set({ appInitStatus: AppInitStatus.RUNNING, userDetails, workspaceDetails, registered: false }),
-  // setAuthenticatedUserDetails: (userDetails: UserDetails) => set({ authenticated: true, userDetails }),
-  setUnAuthenticated: () =>
+  setAuthenticated: (userDetails: UserDetails, workspaceDetails) => {
+    const workspaces = get().workspaces
+
     set({
-      authenticated: false,
-      userDetails: undefined,
-      appInitStatus: AppInitStatus.START,
-      workspaceDetails: undefined
-    }),
+      appInitStatus: AppInitStatus.RUNNING,
+      workspaces: [...workspaces, workspaceDetails],
+      userDetails,
+      workspaceDetails,
+      registered: false
+    })
+  },
+  setUnAuthenticated: () => {
+    const initState = getAuthStoreInitialState()
+    set(initState)
+  },
   setRegistered: (registered: boolean) => set({ registered }),
   setIsForgottenPassword: (isForgottenPassword: boolean) => set({ isForgottenPassword }),
   getWorkspaceId: (): string | undefined => {

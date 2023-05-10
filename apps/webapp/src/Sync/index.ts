@@ -11,8 +11,10 @@ import {
   useMetadataStore,
   useRecentsStore,
   useReminderStore,
-userPreferenceStore as useUserPreferenceStore,  useSmartCaptureStore,
-  useSnippetStore } from '@mexit/core'
+  userPreferenceStore as useUserPreferenceStore,
+  useSmartCaptureStore,
+  useSnippetStore
+} from '@mexit/core'
 
 import { syncStoreState } from './syncStore'
 

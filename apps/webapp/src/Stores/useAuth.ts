@@ -8,6 +8,7 @@ import {
   API,
   mog,
   RegisterFormData,
+  Store,
   useAppStore,
   useAuthStore,
   useCommentStore,
@@ -30,6 +31,7 @@ import {
   useTodoStore,
   useUserCacheStore
 } from '@mexit/core'
+import { DefaultMIcons } from '@mexit/shared'
 
 import { getEmailStart } from '../Utils/constants'
 import { terminateAllWorkers } from '../Workers/controller'
@@ -203,7 +205,7 @@ export const useAuthentication = () => {
       name: name
     }
 
-    const workspaceDetails = { id: workspaceID, name: 'WORKSPACE_NAME' }
+    const workspaceDetails = { id: workspaceID, name: 'My Workspace', icon: DefaultMIcons.WORKSPACE }
 
     return { userDetails, workspaceDetails }
   }
@@ -241,9 +243,14 @@ export const useInitializeAfterAuth = () => {
                     email: email,
                     alias: res.alias ?? res.metadata?.alias ?? res.properties?.alias ?? name,
                     id: res.id,
-                    name
+                    name,
+                    roles: res.roles ?? res.metadata?.roles ?? []
                   }
-                  const workspaceDetails = { id: res.activeWorkspace, name: 'WORKSPACE_NAME' }
+                  const workspaceDetails = {
+                    id: res.activeWorkspace,
+                    icon: res.icon ?? DefaultMIcons.WORKSPACE,
+                    name: 'Test Workspace'
+                  }
                   return { workspaceDetails, userDetails }
                 } else {
                   throw new Error('Could Not Fetch User Records')
@@ -262,6 +269,8 @@ export const useInitializeAfterAuth = () => {
         name: userDetails.name,
         alias: userDetails.alias
       })
+
+      Store.setStore(userDetails.id)
 
       if (forceRefreshToken) await refreshToken()
       setAuthenticated(userDetails, workspaceDetails)

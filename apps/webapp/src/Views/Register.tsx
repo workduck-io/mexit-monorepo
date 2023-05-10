@@ -38,6 +38,7 @@ export const Register = () => {
   const { resendCode } = useAuth()
   const { initializeAfterAuth } = useInitializeAfterAuth()
   const { useQuery } = useRouting()
+  const invite = useQuery()
 
   const regErrors = registerForm.formState.errors
   const verErrors = verifyForm.formState.errors
@@ -67,7 +68,8 @@ export const Register = () => {
   }
 
   const onVerifySubmit = async (data: VerifyFormData) => {
-    const metadata = { invite: useQuery().get('invite') }
+    const metadata = { invite: invite.get('invite') }
+
     try {
       const loginData = await verifySignup(data.code, metadata)
       await initializeAfterAuth(loginData, true, false, true)

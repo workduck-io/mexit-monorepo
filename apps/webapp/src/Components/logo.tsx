@@ -7,7 +7,7 @@ import styled, { css, useTheme } from 'styled-components'
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { mog, useEditorStore, useHelpStore , useLayoutStore } from '@mexit/core'
+import { mog, useEditorStore, useHelpStore, useLayoutStore } from '@mexit/core'
 import { FadeInOut, FocusModeProp, focusStyles } from '@mexit/shared'
 
 import { useKeyListener } from '../Hooks/useChangeShortcutListener'
@@ -144,6 +144,12 @@ export const SidebarToggles = () => {
   const { getFocusProps } = useLayout()
   const { endColumnWidth } = useSidebarTransition()
 
+  const handleToogleSidebar = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    toggleSidebar()
+  }
+
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
       [shortcuts.toggleSidebar.keystrokes]: (event) => {
@@ -176,7 +182,7 @@ export const SidebarToggles = () => {
         <SidebarToggleWrapper
           side="left"
           $isVisible={!isUserEditing}
-          onClick={toggleSidebar}
+          onClick={handleToogleSidebar}
           expanded={sidebar.expanded}
           show={sidebar.show}
           {...getFocusProps(focusMode)}

@@ -4,12 +4,8 @@ import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { API, mog } from '@mexit/core'
-import { BackCard, CenteredColumn, List, Title } from '@mexit/shared'
-
-import { useInviteStore } from '../../Stores/useInviteStore'
-
-// import { APIScratchpad, useAPIScratchpad } from '../../Hooks/API/scratchpad'
+import { API, useInviteStore, useUserCacheStore } from '@mexit/core'
+import { BackCard, CenteredColumn, Group, List, Title } from '@mexit/shared'
 
 const Margin = styled.div`
   margin: 0.5rem 1rem;
@@ -21,15 +17,22 @@ const Invite = () => {
       const invites = await API.invite.getAll()
       useInviteStore.getState().setInvites(invites)
     }
+
+    async function getAllUsers() {
+      const users = await API.user.getAllUsersOfWorkspace()
+      console.log('USERS', { users })
+    }
+
     getInvites()
+    getAllUsers()
   }, [])
 
+  const users = useUserCacheStore((store) => store.cache)
   const invites = useInviteStore((store) => store.invites)
   const addInvite = useInviteStore((store) => store.addInvite)
 
   const inviteUser = async () => {
     const invite = await API.invite.create({})
-    mog('Invite added', { invite })
     addInvite(invite)
   }
 
@@ -41,6 +44,11 @@ const Invite = () => {
           {invites.map((invite) => (
             <List>{invite.id}</List>
           ))}
+        </Margin>
+        <Margin>
+          {users.map((item) => {
+            return <Group>{item.name}</Group>
+          })}
         </Margin>
         <Button onClick={inviteUser}>Create Invite</Button>
         <br />

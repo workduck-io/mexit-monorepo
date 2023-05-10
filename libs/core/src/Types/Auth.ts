@@ -1,5 +1,7 @@
 import { State } from 'zustand'
 
+import { MIcon } from './Store'
+
 export interface LoginFormData {
   email: string
   password: string
@@ -8,6 +10,12 @@ export interface LoginFormData {
 export interface Option {
   label: string
   value: string
+}
+
+export interface Workspace {
+  id: string
+  name?: string
+  icon?: MIcon
 }
 
 export interface RegisterFormData {
@@ -48,6 +56,7 @@ export interface UserDetails {
   id?: string
   name: string
   alias: string
+  roles?: Array<string>
 }
 
 export interface WorkspaceDetails {

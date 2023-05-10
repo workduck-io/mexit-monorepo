@@ -40,6 +40,7 @@ import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
 import ViewPage from './Views/ViewPage'
+import JoinWorkspace from './Views/Workspace/Join'
 import * as Actions from './Actions'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
@@ -264,11 +265,20 @@ export const Switch = ({ children }) => {
   )
 }
 
+const JoinWorkspaceRoutes = () => {
+  return (
+    <Routes>
+      <Route path="join" element={<JoinWorkspace />} />
+    </Routes>
+  )
+}
+
 const PageRoutes = () => {
   return (
     <Switch>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
+        <Route path={`${ROUTE_PATHS.workspace}/*`} element={<JoinWorkspaceRoutes />} />
         <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<OAuthRoute />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={`${ROUTE_PATHS.share}/:nodeId`} element={<PublicNodeView />} />

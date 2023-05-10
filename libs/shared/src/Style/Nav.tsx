@@ -147,7 +147,6 @@ export const NavLogoWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding: ${({ theme }) => theme.spacing.small};
-  padding-left: 5rem;
   transition: padding 0.5s ease;
 
   cursor: pointer;
@@ -332,11 +331,6 @@ export const NavWrapper = styled(animated.div)<NavWrapperProps>`
 
   ${EndLinkContainer} {
     margin-top: auto;
-  }
-
-  ${NavLogoWrapper} {
-    padding: 0px 22px 0px;
-    padding-top: ${({ theme }) => (theme.additional.hasBlocks ? 8 : 30)}px;
   }
 
   ${CollapseWrapper} {

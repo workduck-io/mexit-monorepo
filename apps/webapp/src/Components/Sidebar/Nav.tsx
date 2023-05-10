@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import archiveLine from '@iconify/icons-ri/archive-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
@@ -15,11 +15,9 @@ import {
   Link,
   MainLinkContainer,
   MainNav,
-  NavLogoWrapper,
   NavTitle,
   NavWrapper,
-  SideNav,
-  WDLogo
+  SideNav
 } from '@mexit/shared'
 
 import useNavlinks, { GetIcon } from '../../Data/links'
@@ -30,6 +28,7 @@ import { SidebarToggles } from '../logo'
 
 import SidebarTabs from './SidebarTabs'
 import { useSidebarTransition } from './Transition'
+import WorkspaceSwitcher from './WorkspaceSwitcher'
 
 const NavHeader: React.FC<{ target: any }> = ({ target }) => {
   const { getLinks } = useNavlinks()
@@ -99,15 +98,32 @@ const NavFooter: React.FC<{ target: any }> = ({ target }) => {
   )
 }
 
-const Nav = () => {
+const NavContent = () => {
+  const focusMode = useLayoutStore((store) => store.focusMode)
+
+  const location = useLocation()
+  const { getFocusProps } = useLayout()
+  const [source, target] = useSingleton()
+
+  return (
+    showNav(location.pathname) && (
+      <MainNav {...getFocusProps(focusMode)}>
+        <NavTooltip singleton={source} />
+
+        <WorkspaceSwitcher />
+        <NavHeader target={target} />
+        <NavFooter target={target} />
+      </MainNav>
+    )
+  )
+}
+
+const Nav = ({ children }) => {
   const sidebar = useLayoutStore((store) => store.sidebar)
   const focusMode = useLayoutStore((store) => store.focusMode)
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
   const isUserEditing = useEditorStore((state) => state.isEditing)
   const { getFocusProps } = useLayout()
-
-  const [source, target] = useSingleton()
-  const shortcuts = useHelpStore((store) => store.shortcuts)
 
   const location = useLocation()
   const onDoubleClickToggle = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -131,21 +147,7 @@ const Nav = () => {
         $show={sidebar.show}
         {...getFocusProps(focusMode)}
       >
-        {showNav(location.pathname) && (
-          <MainNav {...getFocusProps(focusMode)}>
-            <NavTooltip singleton={source} />
-
-            <NavTooltip key={shortcuts.showHome.title} singleton={target} content={<TitleWithShortcut title="Home" />}>
-              <NavLogoWrapper>
-                <NavLink to={ROUTE_PATHS.home}>
-                  <WDLogo height={'40'} width={'40'} />
-                </NavLink>
-              </NavLogoWrapper>
-            </NavTooltip>
-            <NavHeader target={target} />
-            <NavFooter target={target} />
-          </MainNav>
-        )}
+        {children}
         <SideNav
           onMouseUp={(e) => e.stopPropagation()}
           style={springProps}
@@ -160,9 +162,16 @@ const Nav = () => {
           <SidebarTabs />
         </SideNav>
       </NavWrapper>
-      <SidebarToggles />
     </>
   )
 }
 
-export default Nav
+const NavContainer = () => {
+  return (
+    <Nav>
+      <NavContent />
+      <SidebarToggles />
+    </Nav>
+  )
+}
+export default NavContainer

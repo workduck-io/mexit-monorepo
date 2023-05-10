@@ -58,8 +58,8 @@ const Settings = () => {
             Shortcuts
           </SettingTitle>
           <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="invite">
-            <Icon icon={informationLine} />
-            Invite
+            <Icon icon="icon-park-solid:app-switch" />
+            Workspace
           </SettingTitle>
           <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="about">
             <Icon icon={informationLine} />
