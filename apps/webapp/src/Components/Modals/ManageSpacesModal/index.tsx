@@ -1,7 +1,13 @@
 import { useEffect } from 'react'
 import Modal from 'react-modal'
 
-import { isReservedNamespace, ModalsType, useDataStore, useModalStore , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+import {
+  isReservedNamespace,
+  ModalsType,
+  useDataStore,
+  useModalStore,
+  userPreferenceStore as useUserPreferenceStore
+} from '@mexit/core'
 import { Description, getMIcon, IconDisplay, MexIcon, PrimaryText } from '@mexit/shared'
 
 import { useUserService } from '../../../Hooks/API/useUserAPI'

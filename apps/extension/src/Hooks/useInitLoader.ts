@@ -147,17 +147,17 @@ export const useInitLoader = () => {
   const getAllLinks = async () => {
     const d = await wInitLinks()
     const links = extractLinksFromData(d)
-    setLinks(links)
+    if (links) setLinks(links)
   }
 
   const getAllHighlights = async () => {
     const d = await wInitHighlights()
-    setHighlights(d)
+    if (d) setHighlights(d)
   }
 
   const getAllSmartCaptures = async () => {
     const d = await wInitSmartCaptures()
-    setConfig(d)
+    if (d) setConfig(d)
   }
 
   const fetchAll = async () => {

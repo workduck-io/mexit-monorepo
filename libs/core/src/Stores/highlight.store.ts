@@ -94,7 +94,7 @@ const highlightStoreConfig = (set, get) => ({
   addHighlight: (highlight, { nodeId, blockIds }) => {
     set(
       produce((draft: any) => {
-        draft.highlights.unshift(highlight)
+        draft.highlights?.unshift(highlight)
 
         blockIds.forEach((blockId: string) => {
           addToHighlightBlockMap(draft.highlightBlockMap, {
