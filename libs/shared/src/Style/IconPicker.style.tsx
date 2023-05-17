@@ -51,4 +51,7 @@ export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; colo
     width: 100%;
     height: 100%;
   }
+
+  .mexit-icon-image {
+  }
 `

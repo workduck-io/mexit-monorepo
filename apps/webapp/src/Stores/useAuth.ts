@@ -8,7 +8,6 @@ import {
   API,
   mog,
   RegisterFormData,
-  Store,
   useAppStore,
   useAuthStore,
   useCommentStore,
@@ -269,8 +268,6 @@ export const useInitializeAfterAuth = () => {
         name: userDetails.name,
         alias: userDetails.alias
       })
-
-      Store.setStore(userDetails.id)
 
       if (forceRefreshToken) await refreshToken()
       setAuthenticated(userDetails, workspaceDetails)

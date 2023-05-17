@@ -1,23 +1,7 @@
+import { ModalsType } from '../Types'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
-export enum ModalsType {
-  blocks,
-  delete,
-  deleteSpace,
-  refactor,
-  lookup,
-  rename,
-  releases,
-  reminders,
-  share,
-  help,
-  todo,
-  template,
-  manageSpaces,
-  quickNew,
-  previewNote
-}
 // * Create Unified Store for all Modals
 // * This would make sure only one modal is present in DOM at a time.
 const modalStoreConfig = (set, get) => ({

@@ -41,7 +41,7 @@ interface ShareModalData {
   changedInvitedUsers?: ChangedInvitedUser[]
 }
 
-export const shareModalConfig = (set, get) => ({
+const shareModalConfig = (set, get) => ({
   open: false,
   focus: true,
   context: 'note' as ShareContext,

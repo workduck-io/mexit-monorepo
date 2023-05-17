@@ -248,3 +248,25 @@ export enum NodeType {
   ARCHIVED,
   MISSING
 }
+
+export type BlockMetaDataType = {
+  source?: string // * NodeId or Website URL
+  origin?: string
+}
+
+export type BlocksType = Record<string, BlockType>
+
+export type BlockType = {
+  id: string
+  children: BlockType[]
+  type: string
+  text?: string
+  blockMeta?: BlockMetaDataType
+}
+
+export enum ContextMenuActionType {
+  move = 'Move',
+  send = 'Send'
+}
+
+export type ModalOpenType = ContextMenuActionType | undefined

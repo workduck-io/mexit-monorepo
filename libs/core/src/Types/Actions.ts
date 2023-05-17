@@ -43,6 +43,13 @@ export interface ActionGroup {
   tag?: string
 }
 
+export enum PollActions {
+  'hierarchy' = 'hierarchy',
+  'shared' = 'shared',
+  'bookmarks' = 'bookmarks',
+  'snippets' = 'snippets'
+}
+
 export type ActionGroupType = ActionGroup & { connected?: boolean }
 
 export type AppsType = Record<string, ActionGroupType>

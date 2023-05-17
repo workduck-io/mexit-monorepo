@@ -14,7 +14,7 @@ type ItemLoading = {
   message?: string
 }
 
-export const comboboxStoreConfig = (set) => ({
+const comboboxStoreConfig = (set) => ({
   key: ComboboxKey.TAG,
   setKey: setStoreValue(set, 'key', 'setKey'),
 

@@ -25,7 +25,7 @@ export interface UserPreferenceStore extends UserPreferences {
   removeExcludedSmartCaptureField: (page: string, fieldId: string) => void
 }
 
-export const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
+const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
   version: 'unset',
   theme: { themeId: 'xem', mode: 'dark' },
   lastOpenedNotes: {},

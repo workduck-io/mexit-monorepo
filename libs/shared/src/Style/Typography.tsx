@@ -1,6 +1,12 @@
 import styled, { css } from 'styled-components'
 
-export const Title = styled.h1<{ colored?: boolean }>`
+export const Title = styled.h1<{ colored?: boolean; noMargin?: boolean }>`
+  ${({ noMargin }) =>
+    noMargin &&
+    css`
+      margin: 0;
+    `}
+
   ${({ theme, colored }) =>
     colored &&
     css`

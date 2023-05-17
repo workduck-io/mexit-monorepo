@@ -15,6 +15,7 @@ import {
   usePromptStore,
   userPreferenceStore as useUserPreferenceStore,
   useSnippetStore,
+  useStore,
   withTimeout
 } from '@mexit/core'
 
@@ -24,11 +25,13 @@ import { getSearchIndexInitState, initSearchIndex, startRequestsWorkerService } 
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
 import { usePromptAPI } from './API/usePromptAPI'
+import { useUserService } from './API/useUserAPI'
 import { useViewAPI } from './API/useViewsAPI'
 import { useFetchShareData } from './useFetchShareData'
 import { useHighlightSync } from './useHighlights'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
+import { useRouting } from './useRouting'
 import { useSmartCapture } from './useSmartCapture'
 import { useUserPreferences } from './useSyncUserPreferences'
 import { useURLsAPI } from './useURLs'
@@ -47,12 +50,16 @@ export const useInitLoader = () => {
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
   const userPrefHydrated = useUserPreferenceStore((s) => s._hasHydrated)
   const linksStoreHydrated = useLinkStore((s) => s._hasHydrated)
+  const setAppInitStatus = useAuthStore((store) => store.setAppInitStatus)
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
   const { getAllViews } = useViewAPI()
   const { getAllLinks } = useURLsAPI()
+  const { goTo } = useRouting()
   const { updateBaseNode } = useNodes()
+  const { restore } = useStore()
+  const { getAllWorkspaces } = useUserService()
   const { fetchAllHighlights } = useHighlightSync()
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
@@ -98,6 +105,18 @@ export const useInitLoader = () => {
   }
 
   useEffect(() => {
+    if (initalizeApp === AppInitStatus.SWITCH) {
+      restore().then((res) => {
+        if (!res) setAppInitStatus(AppInitStatus.RUNNING)
+        else {
+          console.timeEnd('Took Backup and Restored in')
+          setAppInitStatus(AppInitStatus.COMPLETE)
+        }
+      })
+    }
+  }, [initalizeApp])
+
+  useEffect(() => {
     API.setWorkspaceHeader(getWorkspaceId())
 
     const startWorkers = async () => {
@@ -123,6 +142,7 @@ export const useInitLoader = () => {
 
     if (
       initalizeApp !== AppInitStatus.START &&
+      initalizeApp !== AppInitStatus.SWITCH &&
       userPrefHydrated &&
       snippetHydrated &&
       dataStoreHydrated &&
@@ -133,6 +153,7 @@ export const useInitLoader = () => {
       startWorkers()
         .then(async () => {
           await updateCurrentUserPreferences()
+          getAllWorkspaces()
 
           if (initalizeApp === AppInitStatus.RUNNING) {
             backgroundFetch()

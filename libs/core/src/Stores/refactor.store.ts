@@ -4,7 +4,7 @@ import { createStore } from '../Utils/storeCreator'
 
 import { RefactorPath } from './rename.store'
 
-export const refactorStoreConfig = (set) => ({
+const refactorStoreConfig = (set) => ({
   open: false,
   mockRefactored: [] as NodeLink[],
   from: undefined as string | undefined,

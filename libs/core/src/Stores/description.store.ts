@@ -1,7 +1,7 @@
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
-export const descriptionStoreConfig = (set, get) => ({
+const descriptionStoreConfig = (set, get) => ({
   descriptions: {},
   updateDescription: (snippetID, state) => {
     const oldDescriptions = get().descriptions

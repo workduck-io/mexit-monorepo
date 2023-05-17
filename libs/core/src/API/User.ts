@@ -36,4 +36,8 @@ export class UserAPI {
   async getAllUsersOfWorkspace(cacheConfig?: CacheConfig, options?: Options) {
     return await this.client.get(apiURLs.user.getAllUserRecordsOfWorkspace, cacheConfig, options)
   }
+
+  async addExistingUserToWorkspace(inviteCode: string, options?: Options) {
+    return await this.client.post(apiURLs.user.addExistingUserToWorkspace, { invite: inviteCode }, options)
+  }
 }

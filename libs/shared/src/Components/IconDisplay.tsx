@@ -7,6 +7,8 @@ import { MIcon } from '@mexit/core'
 import { IconWrapper } from '../Style/IconPicker.style'
 import { WDLogo } from '../Utils/Logo'
 
+import { DEFAULT_IMAGE_URL } from './ProjectIcon'
+
 interface IconDisplayProps {
   icon: MIcon
   size?: number
@@ -28,7 +30,22 @@ const IconItem = ({ type, value }) => {
     case 'ICON':
       return <Icon icon={value} />
     case 'URL':
-      return <img alt="Icon" src={resolveIconURL(value)} />
+      return (
+        <img
+          alt="Icon"
+          className="mexit-icon-image"
+          src={resolveIconURL(value)}
+          onError={(e) => {
+            e.currentTarget.style.display = 'none'
+            e.currentTarget.onerror = null
+            e.currentTarget.src = DEFAULT_IMAGE_URL
+            e.currentTarget.style.display = 'block'
+            e.currentTarget.style.borderRadius = '8px'
+            e.currentTarget.style.height = '32px'
+            e.currentTarget.style.width = '32px'
+          }}
+        />
+      )
     case 'MEX':
       return <WDLogo />
     default:

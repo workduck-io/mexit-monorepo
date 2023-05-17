@@ -1,7 +1,8 @@
 import merge from 'deepmerge'
 
-import { AccessLevel, InvitedUser, Mentionable, ShareContext, UserAccessTable } from '../Types/Mentions'
+import { AccessLevel, InvitedUser, Mentionable, ShareContext } from '../Types/Mentions'
 import { StoreIdentifier } from '../Types/Store'
+import { addAccessToUser } from '../Utils'
 import { mog } from '../Utils/mog'
 import { createStore } from '../Utils/storeCreator'
 
@@ -63,21 +64,3 @@ export const mentionStoreConfig = (set, get) => ({
 })
 
 export const useMentionStore = createStore(mentionStoreConfig, StoreIdentifier.MENTIONS, true)
-
-export const addAccessToUser = (user: any, id: string, context: ShareContext, accessLevel: AccessLevel) => {
-  const access: UserAccessTable = user.access || {
-    note: {},
-    space: {}
-  }
-  access[context][id] = accessLevel
-  user.access = access
-  return user
-}
-
-export const getUserFromUseridHookless = (userId: string) => {
-  const mentionable = useMentionStore.getState().mentionable
-
-  const user = mentionable.find((user) => user.id === userId)
-
-  if (user) return user
-}

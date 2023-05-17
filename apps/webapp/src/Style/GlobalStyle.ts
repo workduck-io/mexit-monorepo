@@ -122,6 +122,24 @@ const GlobalStyle = createGlobalStyle`
     z-index: 100000;
   }
 
+  @keyframes fadeInAnimate {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutAnimate {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
   ${({ theme }) => theme.custom && customStyles[theme.custom]}
 
   /* The margin added to grid wrapper by spaceBlocks was resulting in unnecessary margin causing offcenter content and scroll */

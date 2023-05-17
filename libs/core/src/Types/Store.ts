@@ -71,7 +71,9 @@ export enum StoreIdentifier {
   SPUTLIT = 'sputlit',
   COMBOBOX = 'combobox',
   TODO = 'todo',
-  INIT = 'init'
+  INIT = 'init',
+  INVITE = 'invite',
+  BACKUP = 'backup'
 }
 
 export const getStoreName = (key: StoreIdentifier, isExtension?: boolean) => {
@@ -87,7 +89,8 @@ export const DefaultMIcons = {
   TEMPLATE: getMIcon('ICON', 'ri:magic-line'),
   DELETE: getMIcon('ICON', 'ri:delete-bin-5-line'),
   PROMPT: getMIcon('ICON', 'material-symbols:charger-outline'),
-  HIGHLIGHT: getMIcon('ICON', 'ri:mark-pen-line')
+  HIGHLIGHT: getMIcon('ICON', 'ri:mark-pen-line'),
+  WORKSPACE: getMIcon('ICON', 'icon-park-solid:app-switch')
 }
 
 export interface SingleNamespace {

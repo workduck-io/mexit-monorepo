@@ -132,12 +132,13 @@ const Search = () => {
     ref: React.Ref<HTMLDivElement>
   ) => {
     const node = getNode(item.parent, true)
-    const nodeType = getNodeType(node.nodeid)
     if (!item || !node) {
       // eslint-disable-next-line
       // @ts-ignore
       return <Result {...props} ref={ref}></Result>
     }
+
+    const nodeType = getNodeType(node.nodeid)
     const con = contents[item.parent]
     const content = con ? con.content : defaultContent.content
     const storedNoteIcon = useMetadataStore((s) => s.metadata.notes[item.parent]?.icon)
@@ -198,6 +199,8 @@ const Search = () => {
       const content = con ? con.content : defaultContent.content
       const node = getNode(item.parent, true)
       const icon = useMetadataStore.getState().metadata.notes[item.id]?.icon
+
+      if (!node) return null
 
       const edNode = { ...node, title: node.path, id: node.nodeid }
       return (

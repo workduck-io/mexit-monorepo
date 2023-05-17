@@ -120,12 +120,16 @@ export const TextArea = styled.textarea`
   }
 `
 
-export const AuthForm = styled.form`
+export const AuthForm = styled.form<{ noStyle?: boolean }>`
   width: 100%;
 
-  button {
-    font-size: 1.2rem;
-  }
+  ${({ noStyle }) =>
+    !noStyle &&
+    css`
+      button {
+        font-size: 1.2rem;
+      }
+    `}
 `
 
 export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?: any }>`

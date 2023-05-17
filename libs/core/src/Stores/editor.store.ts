@@ -33,7 +33,7 @@ const getInitialEditorStoreState = () => ({
   trigger: undefined as ComboTriggerType | undefined
 })
 
-export const editorStoreConfig = (set, get) => ({
+const editorStoreConfig = (set, get) => ({
   ...getInitialEditorStoreState(),
   notifyWithBanner: (showBanner: boolean) => set({ isBannerVisible: showBanner }),
   setTrigger: (trigger) => set({ trigger }),

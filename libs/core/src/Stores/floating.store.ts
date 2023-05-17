@@ -1,10 +1,6 @@
+import { FloatingElementType } from '../Types'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
-
-export enum FloatingElementType {
-  BALLON_TOOLBAR = 'BALLON_TOOLBAR',
-  AI_POPOVER = 'AI_POPOVER'
-}
 
 const floatingStoreConfig = (set, get) => ({
   floatingElement: undefined as FloatingElementType | undefined,

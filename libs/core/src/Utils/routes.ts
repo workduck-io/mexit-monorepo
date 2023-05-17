@@ -14,6 +14,7 @@ export const API_BASE_URLS = {
   snippet: `${MEXIT_BACKEND_URL_BASE}/snippet`,
   loch: `${MEXIT_BACKEND_URL_BASE}/loch`,
   share: `${MEXIT_BACKEND_URL_BASE}/shared`,
+  workspace: `${MEXIT_BACKEND_URL_BASE}/workspace`,
   user: `${MEXIT_BACKEND_URL_BASE}/user`,
   view: `${MEXIT_BACKEND_URL_BASE}/view`,
   link: `${MEXIT_BACKEND_URL_BASE}/link`,
@@ -119,6 +120,8 @@ export const apiURLs = {
 
   user: {
     getUserRecords: `${API_BASE_URLS.user}/`,
+    addExistingUserToWorkspace: `${API_BASE_URLS.user}/workspace`,
+    getAllWorkspace: `${API_BASE_URLS.user}/workspace/all`,
     getAllUserRecordsOfWorkspace: `${API_BASE_URLS.user}/all`,
     getFromEmail: (email: string) => `${API_BASE_URLS.user}/email/${encodeURIComponent(email)}`,
     getFromUserId: (userId: string) => `${API_BASE_URLS.user}/${encodeURIComponent(userId)}`,
@@ -126,6 +129,11 @@ export const apiURLs = {
     updatePreference: `${API_BASE_URLS.user}/preference`,
     getUserByLinkedin: (url: string) => `${API_BASE_URLS.user}/linkedin/${url}`,
     registerStatus: `${API_BASE_URLS.user}/status`
+  },
+
+  workspace: {
+    update: API_BASE_URLS.workspace,
+    all: `${API_BASE_URLS.workspace}/all`
   },
 
   view: {

@@ -30,7 +30,7 @@ const getInitData = () => ({
   slashCommands: { default: defaultCommands, internal: [] }
 })
 
-export const dataStoreConfig = (set, get) => ({
+const dataStoreConfig = (set, get) => ({
   ...getInitData(),
 
   setAllSpaces: (spaces) => {

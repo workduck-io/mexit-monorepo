@@ -281,7 +281,7 @@ export const SearchViewContainer = styled.div`
 `
 
 export const SearchContainer = styled.div`
-  margin: ${({ theme: { spacing } }) => `calc(2 * ${spacing.large}) ${spacing.large} ${spacing.medium}`};
+  margin: ${({ theme: { spacing } }) => `calc(2 * ${spacing.large}) ${spacing.large} 0`};
   position: relative;
   min-height: 60vh;
 `

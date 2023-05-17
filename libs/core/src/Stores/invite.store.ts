@@ -19,7 +19,7 @@ const inviteStoreConfig = (set, get) => ({
   addInvite: (invite: Invite) => {
     const oldinvites = get().invites
 
-    set({ invites: [...oldinvites, invite] })
+    set({ invites: [invite, ...oldinvites] })
   }
 })
 

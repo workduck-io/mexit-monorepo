@@ -52,7 +52,9 @@ export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
-  const isAppInit = useAuthStore((store) => store.appInitStatus === AppInitStatus.RUNNING)
+  const isAppInit = useAuthStore(
+    (store) => store.appInitStatus === AppInitStatus.RUNNING || store.appInitStatus === AppInitStatus.SWITCH
+  )
 
   const location = useLocation()
 

@@ -22,6 +22,7 @@
   "dependencies": {
     "@workduck-io/mex-search": "0.0.9",
     "buffer": "^6.0.3",
+    "idb": "^7.1.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-remove-scroll": "^2.5.5"

@@ -40,7 +40,7 @@ const addToHighlightBlockMap = (
 }
 
 // LOOK Typed constructor
-export const highlightStoreConfig = (set, get) => ({
+const highlightStoreConfig = (set, get) => ({
   highlights: [],
   highlightBlockMap: {},
   setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => set({ highlightBlockMap }),

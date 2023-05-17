@@ -4,9 +4,7 @@ import styled, { css } from 'styled-components'
 
 import { generateStyle } from '@workduck-io/mex-themes'
 
-import { fadeIn } from '@mexit/shared'
-
-export const VerticalCenter = styled.div<{ fade?: boolean }>`
+export const VerticalCenter = styled.div`
   display: flex;
   align-items: center;
   background: ${({ theme }) => theme.tokens.surfaces.sidebar};
@@ -14,13 +12,7 @@ export const VerticalCenter = styled.div<{ fade?: boolean }>`
   flex-direction: column;
   position: absolute;
   width: 100%;
-
-  animation: ${({ fade }) =>
-    fade
-      ? css`
-          ${fadeIn} 0.25s ease-in-out
-        `
-      : ''};
+  gap: ${({ theme }) => theme.spacing.small};
 `
 
 export const FlexEndButton = styled.div`
@@ -31,6 +23,18 @@ export const FlexEndButton = styled.div`
 export const StyledSpaceSwitcher = styled.div`
   position: relative;
   width: 100%;
+`
+
+export const CloseSpaceSwitcher = styled.div<{ $isOpen: boolean }>`
+  transition: all 0.2s linear;
+  ${({ $isOpen }) =>
+    $isOpen
+      ? css`
+          transform: rotateZ(-45deg);
+        `
+      : css`
+          transform: rotateZ(0deg);
+        `}
 `
 
 export const StyledHover = css`
@@ -56,21 +60,31 @@ export const ActiveWorkspaceWrapper = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.small};
 `
 
-export const IconContainer = styled.div`
+export const IconContainer = styled.div<{ primary?: boolean }>`
   box-sizing: border-box;
   padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
 
-  ${StyledHover}
+  ${({ primary, theme }) =>
+    primary
+      ? css`
+          background: ${theme.tokens.colors.primary.active};
+          :hover {
+            background: ${theme.tokens.colors.primary.hover};
+          }
+          /* color: ${theme.tokens.text.default}; */
+          border-radius: ${theme.borderRadius.small};
+        `
+      : StyledHover}
 `
 
-export const WorkspaceIconContainer = styled(animated.div)<{ active?: boolean }>`
+export const WorkspaceIconContainer = styled(animated.div)<{ $active?: boolean }>`
   box-sizing: border-box;
   padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
 
   ${StyledHover}
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  ${({ active, theme }) =>
-    active &&
+  ${({ $active, theme }) =>
+    $active &&
     css`
       opacity: 0.7;
       border: 1px solid ${theme.tokens.surfaces.separator};

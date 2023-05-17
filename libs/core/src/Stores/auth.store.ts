@@ -1,5 +1,7 @@
 import { AppInitStatus, UserDetails, Workspace } from '../Types/Auth'
 import { StoreIdentifier } from '../Types/Store'
+import { mog } from '../Utils'
+import { getLocalStorage } from '../Utils/storage'
 import { createStore } from '../Utils/storeCreator'
 
 const getAuthStoreInitialState = () => ({
@@ -14,11 +16,25 @@ const getAuthStoreInitialState = () => ({
   workspaceDetails: undefined as Workspace | undefined
 })
 
-export const authStoreConfig = (set, get) => ({
+const authStoreConfig = (set, get) => ({
   ...getAuthStoreInitialState(),
 
   // * User workspaces
   setWorkspaces: (workspaces: Array<Workspace>) => set({ workspaces }),
+  updateWorkspace: (workspace: Partial<Workspace>) => {
+    const workspaces = get().workspaces
+    const existingWorkspace = workspaces.find((w) => w.id === workspace.id)
+
+    const updatedWorkspaceDetails = { ...existingWorkspace, ...workspace }
+    mog('Workspace', { updatedWorkspaceDetails })
+
+    set({ workspaces: [...workspaces, updatedWorkspaceDetails] })
+
+    if (get().workspaceDetails?.id === workspace.id) {
+      mog('Updating Workspace')
+      set({ workspaceDetails: updatedWorkspaceDetails })
+    }
+  },
   addWorkspace: (workspace: Workspace) => set({ workspaces: [...get().workspaces, workspace] }),
   removeWorkspace: (workspaceId: string) => {
     const workspaces = get().workspaces.filter((workspace) => workspace.id !== workspaceId)
@@ -31,8 +47,7 @@ export const authStoreConfig = (set, get) => ({
   // * Change workspace and start init process by setting appInitStatus to AppInitStatus.RUNNING
   setActiveWorkspace: (workspaceId: string) => {
     const workspace = get().workspaces.find((w) => w.id === workspaceId)
-    console.log('workspace', { workspace })
-    if (workspace) set({ workspaceDetails: workspace, appInitStatus: AppInitStatus.RUNNING })
+    if (workspace) set({ workspaceDetails: workspace })
   },
   setAppInitStatus: (appInitStatus) => set({ appInitStatus }),
   setIsUserAuthenticated: () => set({ authenticated: true, appInitStatus: AppInitStatus.COMPLETE }),
@@ -68,6 +83,6 @@ export const authStoreConfig = (set, get) => ({
 
 export const useAuthStore = createStore(authStoreConfig, StoreIdentifier.AUTH, true, {
   storage: {
-    web: typeof window !== 'undefined' ? localStorage : undefined
+    web: getLocalStorage()
   }
 })

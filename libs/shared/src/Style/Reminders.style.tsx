@@ -2,7 +2,7 @@ import styled, { createGlobalStyle, css } from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { REMINDERS_DIMENSIONS, ReminderStatus } from '@mexit/core'
+import { ReminderStatus } from '@mexit/core'
 
 import { IntegrationTitle } from './Integrations'
 import { Description } from './Typography'
@@ -32,6 +32,19 @@ export const ReminderGroupWrapper = styled.div`
     margin: 0;
   }
 `
+
+const BASE_REMINDER_HEIGHT = 80
+const BASE_TITLE_HEIGHT = 20
+export const BASE_WIDTH = 500
+const BASE_PADDING = 12
+
+const REMINDERS_DIMENSIONS = {
+  height: 100,
+  width: BASE_WIDTH + BASE_PADDING * 2,
+  baseWidth: BASE_WIDTH,
+  padding: BASE_PADDING,
+  offset: 20
+}
 
 const ReminderWidth = css`calc(${REMINDERS_DIMENSIONS.baseWidth}px - ${({ theme }) => theme.spacing.medium} * 2)`
 

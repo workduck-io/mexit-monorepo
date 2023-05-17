@@ -9,8 +9,6 @@ import {
 
 import { USER_ID_REGEX } from '../../Utils/constants'
 
-import { useAPIHeaders } from './useAPIHeaders'
-
 export interface TempUser {
   email: string
   id?: string
@@ -41,7 +39,8 @@ export const useUserService = () => {
   const addUser = useUserCacheStore((s) => s.addUser)
   const getUser = useUserCacheStore((s) => s.getUser)
   const updateUserDetails = useAuthStore((s) => s.updateUserDetails)
-  const { workspaceHeaders } = useAPIHeaders()
+  const setWorkspaces = useAuthStore((store) => store.setWorkspaces)
+  const updateWorkspace = useAuthStore((store) => store.updateWorkspace)
 
   const getUserDetails = async (email: string): Promise<TempUser> => {
     const user = getUser({ email })
@@ -125,6 +124,25 @@ export const useUserService = () => {
     }
   }
 
+  const getAllWorkspaces = async (): Promise<any> => {
+    try {
+      const workspaces = await API.workspace.getAllWorkspaces()
+      setWorkspaces(workspaces)
+    } catch (e) {
+      mog('Error Fetching All Workspaces', { error: e })
+      return undefined
+    }
+  }
+
+  const updateWorkspaceDetails = async (id: string, data: Record<string, any>): Promise<void> => {
+    try {
+      await API.workspace.update(data)
+      updateWorkspace({ id, ...data })
+    } catch (e) {
+      mog('Error Fetching All Workspaces', { error: e })
+    }
+  }
+
   const getAllKnownUsers = () => {
     const cache = useUserCacheStore.getState().cache
     return cache
@@ -135,7 +153,9 @@ export const useUserService = () => {
     getUserDetails,
     getUserDetailsUserId,
     updateUserInfo,
+    updateWorkspaceDetails,
     updateUserPreferences,
+    getAllWorkspaces,
     getCurrentUser
   }
 }

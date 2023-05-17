@@ -8,7 +8,7 @@ const getInitialMetadata = () => ({
   namespaces: {}
 })
 
-export const metadataStoreConfig = (set, get): MetaDataStoreType => ({
+const metadataStoreConfig = (set, get): MetaDataStoreType => ({
   metadata: getInitialMetadata(),
   initMetadata: (metadata) => set({ metadata }),
   addMetadata: (field, record) => {

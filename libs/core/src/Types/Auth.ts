@@ -16,6 +16,8 @@ export interface Workspace {
   id: string
   name?: string
   icon?: MIcon
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface RegisterFormData {
@@ -73,7 +75,8 @@ export enum AppInitStatus {
   START,
   RUNNING,
   COMPLETE,
-  ERROR
+  ERROR,
+  SWITCH
 }
 
 export interface AuthStoreState extends State {

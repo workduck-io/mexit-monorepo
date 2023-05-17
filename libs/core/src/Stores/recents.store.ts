@@ -1,8 +1,7 @@
+import { MAX_RECENT_SIZE } from '../Types'
 import { StoreIdentifier } from '../Types/Store'
 import { remove } from '../Utils/lodashUtils'
 import { createStore } from '../Utils/storeCreator'
-
-export const MAX_RECENT_SIZE = 10
 
 export type RecentsType = {
   lastOpened: string[]
@@ -16,7 +15,7 @@ export type RecentsType = {
   initRecents: (recentList: Array<string>) => void
 }
 
-export const recentsStoreConfig = (set, get): RecentsType => ({
+const recentsStoreConfig = (set, get): RecentsType => ({
   lastOpened: [],
   recentResearchNodes: [],
   setRecentResearchNodes: (nodes: Array<string>) => {

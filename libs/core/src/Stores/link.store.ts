@@ -19,7 +19,7 @@ export interface Link {
   updatedAt?: number
 }
 
-export const linkStoreConstructor = (set, get) => ({
+const linkStoreConstructor = (set, get) => ({
   links: [] as Link[],
   setLinks: (links: Link[]) => set({ links }),
   addLink: (link: Link) => {

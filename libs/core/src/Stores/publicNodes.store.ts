@@ -2,7 +2,7 @@ import { Contents, ILink, NodeEditorContent, NodeMetadata, NodeProperties } from
 import { SingleNamespace, StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
-export const publicNodeStoreConfig = (set, get) => ({
+const publicNodeStoreConfig = (set, get) => ({
   iLinks: [] as ILink[],
   contents: {} as Contents,
   currentNode: null as NodeProperties | null,
