@@ -104,6 +104,16 @@ export const NotFoundText = styled.div`
   }
 `
 
+export const ImageUploadInput = styled.input`
+  display: none;
+`
+
+export const RelativeContainer = styled.div`
+  position: relative;
+  width: fit-content;
+  height: auto;
+`
+
 export const TextArea = styled.textarea`
   ${({ theme }) => generateStyle(theme.generic.form.input)};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};

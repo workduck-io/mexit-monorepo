@@ -50,7 +50,7 @@ const Settings = () => {
               <Icon icon={keyboardBoxLine} />
               Shortcuts
             </SettingTitle>
-            <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="invite">
+            <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="workspace">
               <Icon icon="icon-park-solid:app-switch" />
               Workspace
             </SettingTitle>

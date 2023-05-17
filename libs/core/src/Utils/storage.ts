@@ -2,16 +2,21 @@
 
 import { IDBPDatabase, openDB } from 'idb'
 
+import { mog } from './mog'
+
 export const getLocalStorage = () => {
   return typeof window !== 'undefined' ? window.localStorage : null
 }
 
-let instance: BackupStorageClass
-export class BackupStorageClass {
-  private db: IDBPDatabase
-  private storeName
+let instance: BackupStorageClass | null = null
 
-  constructor() {
+class BackupStorageClass {
+  private database: string
+  private db: IDBPDatabase
+
+  constructor(database: string) {
+    this.database = database
+
     if (instance) {
       throw new Error('New instance cannot be created!!')
     }
@@ -20,56 +25,71 @@ export class BackupStorageClass {
     instance = this
   }
 
-  async openDatabase(): Promise<void> {
-    this.db = await openDB('mexit-backup', this.version, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains(this.objectStoreName)) {
-          const objectStore = db.createObjectStore(this.objectStoreName, { keyPath: 'id' })
-          objectStore.createIndex('by-name', 'name')
+  async createObjectStore(tableNames: string[]) {
+    try {
+      this.db = await openDB(this.database, 1, {
+        upgrade(db: IDBPDatabase) {
+          for (const tableName of tableNames) {
+            if (db.objectStoreNames.contains(tableName)) {
+              continue
+            }
+            db.createObjectStore(tableName)
+          }
         }
-      }
-    })
+      })
+    } catch (error) {
+      return false
+    }
   }
 
-  public async closeDB() {
-    if (this.db) this.db.close()
+  async getValue(tableName: string, key: string) {
+    const tx = this.db.transaction(tableName, 'readonly')
+    const store = tx.objectStore(tableName)
+    const result = await store.get(key)
+
+    mog('Get Data ', { result })
+    return result
   }
 
-  add(item) {
-    return new Promise((resolve, reject) => {
-      const objectStore = this.getObjectStore('readwrite')
-      const request = objectStore.add(item)
-
-      request.onsuccess = () => {
-        resolve('Item added successfully')
-      }
-
-      request.onerror = (event) => {
-        reject(`Failed to add item: ${event.target.error}`)
-      }
-    })
+  async getAllValue(tableName: string) {
+    const tx = this.db.transaction(tableName, 'readonly')
+    const store = tx.objectStore(tableName)
+    const result = await store.getAll()
+    mog('Get All Data', { result })
+    return result
   }
 
-  getItem(id: string) {
-    return new Promise((resolve, reject) => {
-      const objectStore = this.getObjectStore('readonly')
-      const request = objectStore.get(id)
+  async putValue(tableName: string, key: string, value: string) {
+    const tx = this.db.transaction(tableName, 'readwrite')
+    const store = tx.objectStore(tableName)
 
-      request.onsuccess = (event) => {
-        const item = event.target.result
+    const result = await store.put(value, key)
+    mog('Put Data ', { result })
+    return result
+  }
 
-        if (item) {
-          resolve(item)
-        } else {
-          reject(`Item with ID '${id}' not found`)
-        }
-      }
+  async putBulkValue(tableName: string, values: object[]) {
+    const tx = this.db.transaction(tableName, 'readwrite')
+    const store = tx.objectStore(tableName)
+    for (const value of values) {
+      const result = await store.put(value)
+      mog('Put Bulk Data ', { result })
+    }
+    return this.getAllValue(tableName)
+  }
 
-      request.onerror = (event) => {
-        reject(`Failed to get item: ${event.target.error}`)
-      }
-    })
+  async deleteValue(tableName: string, id: number) {
+    const tx = this.db.transaction(tableName, 'readwrite')
+    const store = tx.objectStore(tableName)
+    const result = await store.get(id)
+    if (!result) {
+      mog('Id not found', { id })
+      return result
+    }
+    await store.delete(id)
+    mog('Deleted Data', { id })
+    return id
   }
 }
 
-export const BackupStorage = new BackupStorageClass()
+export const BackupStorage = new BackupStorageClass('mexit-backup')

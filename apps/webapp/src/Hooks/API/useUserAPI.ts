@@ -1,5 +1,7 @@
 import {
   API,
+  BackupStorage,
+  getMIcon,
   mog,
   useAuthStore,
   UserPreferences,
@@ -40,6 +42,7 @@ export const useUserService = () => {
   const getUser = useUserCacheStore((s) => s.getUser)
   const updateUserDetails = useAuthStore((s) => s.updateUserDetails)
   const setWorkspaces = useAuthStore((store) => store.setWorkspaces)
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const updateWorkspace = useAuthStore((store) => store.updateWorkspace)
 
   const getUserDetails = async (email: string): Promise<TempUser> => {
@@ -127,7 +130,10 @@ export const useUserService = () => {
   const getAllWorkspaces = async (): Promise<any> => {
     try {
       const workspaces = await API.workspace.getAllWorkspaces()
-      setWorkspaces(workspaces)
+      if (workspaces) {
+        BackupStorage.createObjectStore(workspaces.map((item) => item.id))
+        setWorkspaces(workspaces)
+      }
     } catch (e) {
       mog('Error Fetching All Workspaces', { error: e })
       return undefined
@@ -137,7 +143,13 @@ export const useUserService = () => {
   const updateWorkspaceDetails = async (id: string, data: Record<string, any>): Promise<void> => {
     try {
       await API.workspace.update(data)
-      updateWorkspace({ id, ...data })
+
+      const metadata = data?.workspaceMetadata
+
+      if (metadata) {
+        const { workspaceMetadata, ...rest } = data
+        updateWorkspace({ id, icon: getMIcon('URL', metadata.imageUrl), ...rest })
+      } else updateWorkspace({ id, ...data })
     } catch (e) {
       mog('Error Fetching All Workspaces', { error: e })
     }

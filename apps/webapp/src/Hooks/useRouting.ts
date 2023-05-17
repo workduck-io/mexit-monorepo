@@ -17,6 +17,7 @@ export const ROUTE_PATHS = {
   node: '/editor', // * /node/:nodeid
   search: '/search',
   settings: '/settings',
+  workspaceSettings: '/settings/workspace',
   //   integrations: '/integrations',
   snippets: '/snippets',
   snippet: '/snippets/node', // * /snippets/node/:snippetid

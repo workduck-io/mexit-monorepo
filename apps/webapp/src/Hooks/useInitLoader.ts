@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 import {
   API,
   AppInitStatus,
+  BackupStorage,
   mog,
   runBatch,
   useAppStore,
@@ -20,7 +22,12 @@ import {
 } from '@mexit/core'
 
 import { useAuthentication } from '../Stores/useAuth'
-import { getSearchIndexInitState, initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
+import {
+  getSearchIndexInitState,
+  initSearchIndex,
+  restoreSearchIndex,
+  startRequestsWorkerService
+} from '../Workers/controller'
 
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
@@ -31,7 +38,6 @@ import { useFetchShareData } from './useFetchShareData'
 import { useHighlightSync } from './useHighlights'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
-import { useRouting } from './useRouting'
 import { useSmartCapture } from './useSmartCapture'
 import { useUserPreferences } from './useSyncUserPreferences'
 import { useURLsAPI } from './useURLs'
@@ -51,12 +57,12 @@ export const useInitLoader = () => {
   const userPrefHydrated = useUserPreferenceStore((s) => s._hasHydrated)
   const linksStoreHydrated = useLinkStore((s) => s._hasHydrated)
   const setAppInitStatus = useAuthStore((store) => store.setAppInitStatus)
+  const navigate = useNavigate()
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
   const { getAllViews } = useViewAPI()
   const { getAllLinks } = useURLsAPI()
-  const { goTo } = useRouting()
   const { updateBaseNode } = useNodes()
   const { restore } = useStore()
   const { getAllWorkspaces } = useUserService()
@@ -104,14 +110,22 @@ export const useInitLoader = () => {
     }
   }
 
+  const restoreIndexIndex = async () => {
+    const workspaceId = getWorkspaceId()
+
+    const backup = await BackupStorage.getValue(workspaceId, 'mexit-search-index')
+    if (backup) restoreSearchIndex(backup)
+  }
+
   useEffect(() => {
     if (initalizeApp === AppInitStatus.SWITCH) {
+      // restoreIndexIndex()
+
       restore().then((res) => {
-        if (!res) setAppInitStatus(AppInitStatus.RUNNING)
-        else {
-          console.timeEnd('Took Backup and Restored in')
-          setAppInitStatus(AppInitStatus.COMPLETE)
-        }
+        const appInitStatus = res ? AppInitStatus.COMPLETE : AppInitStatus.RUNNING
+        setAppInitStatus(appInitStatus)
+
+        navigate('/', { replace: true })
       })
     }
   }, [initalizeApp])
@@ -122,6 +136,7 @@ export const useInitLoader = () => {
     const startWorkers = async () => {
       const searchIndexInitState = await getSearchIndexInitState()
       const promises = [startRequestsWorkerService()]
+
       if (!searchIndexInitState) {
         const initData = {
           ilinks: useDataStore.getState().ilinks,

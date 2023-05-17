@@ -43,6 +43,7 @@ export enum ModalsType {
   share,
   help,
   todo,
+  upload,
   template,
   manageSpaces,
   quickNew,

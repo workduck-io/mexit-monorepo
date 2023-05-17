@@ -1,47 +1,89 @@
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 import { NavLink } from 'react-router-dom'
 
-import { CenteredColumn, LoadingButton, NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
+import { CenteredColumn, NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 
-import { API, useAuthStore, Workspace } from '@mexit/core'
-import { Group, IconDisplay, Loading, Title, WDLogo } from '@mexit/shared'
+import { API, AppInitStatus, useAuthStore, useStore, Workspace } from '@mexit/core'
+import { DefaultMIcons, FadeContainer, Group, IconDisplay, Loading, Margin, Title, WDLogo } from '@mexit/shared'
 
 import Input from '../../Components/Input'
-import { ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { DeletionWarning } from '../../Components/Modals/DeleteSpaceModal/styled'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { resetSearchIndex } from '../../Workers/controller'
 
-import { JoinContainer, Page, PageHeader } from './styled'
+import { JoinContainer, Page, PageHeader, StyledPrimaryButton } from './styled'
 
 const JoinWorkspace = () => {
   const [join, setJoin] = useState<boolean>(true)
   const [loading, setLoading] = useState(true)
+  const authenticated = useAuthStore((store) => store.authenticated)
   const [workspaceDetails, setWorkspaceDetails] = useState<Workspace | undefined>()
   const addWorkspace = useAuthStore((store) => store.addWorkspace)
   const activeWorkspace = useAuthStore((store) => store.workspaceDetails)
   const setActiveWorkspace = useAuthStore((store) => store.setActiveWorkspace)
+  const setAppInitStatus = useAuthStore((store) => store.setAppInitStatus)
 
+  const { backup } = useStore()
   const { useQuery } = useRouting()
 
-  const query = useQuery()
+  const code = useQuery().get('invite') || ''
+  const { goTo } = useRouting()
+
+  const {
+    handleSubmit,
+    register,
+    getValues,
+    formState: { errors, isDirty }
+  } = useForm({
+    defaultValues: {
+      invite: code
+    }
+  })
+
+  const getWorkspaceById = async (inviteCode: string) => {
+    if (!inviteCode) return
+
+    try {
+      const res = await API.invite.get(inviteCode)
+      if (res.workspaceId) {
+        const workspace = useAuthStore.getState().workspaces.find((w) => w.id === res.workspaceId)
+        if (workspace)
+          return {
+            existing: true,
+            workspace
+          }
+      } else {
+        const workspaceFromId = await API.workspace.getWorkspaceByIds({
+          ids: [res.workspaceId]
+        })
+
+        if (workspaceFromId) {
+          return {
+            workspace: workspaceFromId?.[res.workspaceId],
+            existing: false
+          }
+        }
+      }
+    } catch (er) {
+      console.error('Unable to get workspace from invite code', er)
+    }
+  }
 
   useEffect(() => {
-    const code = query.get('invite')
-
     async function getWorkspaceDetails(inviteCode: string) {
-      const res = await API.invite.get(inviteCode)
-
-      if (res.workspaceId) {
-        const isUserInWorkspace = useAuthStore.getState().workspaces.find((w) => w.id === res.workspaceId)
-
-        if (isUserInWorkspace) {
-          setJoin(false)
-          setWorkspaceDetails(isUserInWorkspace)
-        }
+      const workspaceJoinDetails = await getWorkspaceById(inviteCode)
+      if (workspaceJoinDetails) {
+        setJoin(!workspaceJoinDetails?.existing)
+        setWorkspaceDetails(workspaceJoinDetails.workspace)
       }
 
       setLoading(false)
     }
 
-    getWorkspaceDetails(code)
+    if (code) getWorkspaceDetails(code)
+    else setLoading(false)
 
     return () => setJoin(true)
   }, [])
@@ -50,9 +92,38 @@ const JoinWorkspace = () => {
     //
   }
 
-  const handleJoinWorkspace = async () => {
-    const code = query.get('invite')
-    if (code) API.user.addExistingUserToWorkspace(code)
+  const handleJoinWorkspace = async (value) => {
+    if (!authenticated) {
+      goTo(`${ROUTE_PATHS.register}?invite=${value.invite}`, NavigationType.replace)
+      return
+    }
+
+    const inviteCode = getValues('invite')
+
+    try {
+      const data = await API.user.addExistingUserToWorkspace(inviteCode)
+      const workspaceId = data?.workspaceId
+
+      if (workspaceId) {
+        const resp = await API.workspace.getWorkspaceByIds({
+          ids: [data.workspaceId]
+        })
+
+        if (resp?.[workspaceId]) {
+          setWorkspaceDetails(resp[workspaceId])
+
+          backup().then(() => {
+            resetSearchIndex()
+            setAppInitStatus(AppInitStatus.SWITCH)
+          })
+
+          addWorkspace(resp[workspaceId], true)
+        }
+      }
+    } catch (err) {
+      toast('Something went wrong!')
+      console.error('Unable to add user to Workspace', err)
+    }
   }
 
   return (
@@ -64,37 +135,50 @@ const JoinWorkspace = () => {
           </NavLink>
         </NavTooltip>
       </PageHeader>
-      <CenteredColumn>
-        {loading ? (
-          <Loading dots={5} />
-        ) : (
-          <>
-            {workspaceDetails && (
+      <FadeContainer fade>
+        <CenteredColumn>
+          {loading ? (
+            <Loading transparent dots={5} />
+          ) : (
+            <>
               <Group>
-                <IconDisplay icon={workspaceDetails?.icon} size={32} />
-                <h3>{workspaceDetails?.name}</h3>
+                <IconDisplay icon={workspaceDetails?.icon ?? DefaultMIcons.WORKSPACE} size={32} />
+                {workspaceDetails && <h3>{workspaceDetails?.name}</h3>}
               </Group>
-            )}
-            {join ? (
-              <JoinContainer>
-                <Title>Join Workspace</Title>
-                <Input
-                  name="invite"
-                  inputProps={{
-                    placeholder: 'Enter Invite Code...'
-                  }}
-                  transparent
-                />
-                <LoadingButton onClick={handleJoinWorkspace}>Join</LoadingButton>
-              </JoinContainer>
-            ) : (
-              <JoinContainer>
-                <Title>You&apos;ve joined already!</Title>
-              </JoinContainer>
-            )}
-          </>
-        )}
-      </CenteredColumn>
+              {join ? (
+                <JoinContainer onSubmit={handleSubmit(handleJoinWorkspace)}>
+                  <Title noMargin>{workspaceDetails?.name ? 'Join this workspace' : 'Join a new Workspace'}</Title>
+                  {!workspaceDetails?.name && (
+                    <DeletionWarning align>Have an invite code? Enter it here to get started!</DeletionWarning>
+                  )}
+                  <Margin />
+                  <Input
+                    name="invite"
+                    inputProps={{
+                      autoFocus: true,
+                      placeholder: 'Invite Code...',
+                      ...register('invite', {
+                        required: true
+                      })
+                    }}
+                  />
+                  <StyledPrimaryButton
+                    type="submit"
+                    disabled={errors.invite !== undefined || (!isDirty && !code)}
+                    async
+                  >
+                    {authenticated ? 'Join' : 'Register to Join'}
+                  </StyledPrimaryButton>
+                </JoinContainer>
+              ) : (
+                <JoinContainer>
+                  <Title center>You&apos;re already a member of this Workspace!</Title>
+                </JoinContainer>
+              )}
+            </>
+          )}
+        </CenteredColumn>
+      </FadeContainer>
     </Page>
   )
 }

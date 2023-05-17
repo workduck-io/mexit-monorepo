@@ -158,7 +158,7 @@ const SettingsRoutes = () => {
       >
         <Route index element={<UserPage />} />
         <Route path="about" element={<About />} />
-        <Route path="invite" element={<Invite />} />
+        <Route path="workspace" element={<Invite />} />
         <Route path="themes" element={<Themes />} />
         <Route path="user" element={<UserPage />} />
         <Route path="shortcuts" element={<Shortcuts />} />

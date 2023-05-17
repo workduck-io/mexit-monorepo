@@ -125,3 +125,29 @@ export const MainHeader = styled.div`
     margin: 0;
   }
 `
+
+export const StyledItemOverlay = styled.div<{ onHover?: boolean }>`
+  position: absolute;
+  z-index: 1;
+  background: rgba(${({ theme }) => theme.rgbTokens.surfaces.app}, 0.6);
+  left: 0;
+  top: 0;
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  ${centeredCss}
+  height: 100%;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  color: ${({ theme }) => theme.tokens.text.default};
+  transition: opacity 0.5s;
+
+  ${({ onHover }) =>
+    onHover &&
+    css`
+      opacity: 0;
+      :hover {
+        border: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
+        opacity: 1;
+      }
+    `};
+`

@@ -27,6 +27,7 @@ export interface RegisterFormData {
   password: string
   confirmPassword?: string
   alias: string
+  invite?: string
 }
 
 export interface ForgotPasswordFormData {

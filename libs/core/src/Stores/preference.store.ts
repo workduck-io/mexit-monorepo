@@ -150,7 +150,7 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     space: mergedSpacePreferences,
     theme: {
       ...theme,
-      themeId: theme.themeId.toLowerCase()
+      themeId: theme?.themeId?.toLowerCase()
     },
     smartCaptureExcludedFields: local.smartCaptureExcludedFields
   }

@@ -10,17 +10,17 @@ export const PageHeader = styled.header`
   padding: ${({ theme }) => `${theme.spacing.large} ${theme.spacing.large} 0`};
 `
 
-export const JoinContainer = styled.div`
+export const JoinContainer = styled.form`
   margin: ${({ theme }) => theme.spacing.large} 0;
   display: flex;
-  width: 400px;
+  width: 440px;
   flex-direction: column;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
+`
 
-  ${PrimaryButton} {
-    width: 100%;
-  }
+export const StyledPrimaryButton = styled(PrimaryButton)`
+  width: 100%;
 `
 
 export const Page = styled.div`

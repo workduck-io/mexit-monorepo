@@ -32,6 +32,13 @@ export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; colo
       font-size: ${calcSize};
       width: ${calcSize};
       height: ${calcSize};
+
+      img {
+        background-size: cover;
+        background-position: center;
+        max-width: ${calcSize};
+        max-height: ${calcSize};
+      }
     `
   }}
 

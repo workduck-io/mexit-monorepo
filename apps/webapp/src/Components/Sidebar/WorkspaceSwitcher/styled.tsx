@@ -10,14 +10,18 @@ export const VerticalCenter = styled.div`
   background: ${({ theme }) => theme.tokens.surfaces.sidebar};
   height: calc(100vh - 90px);
   flex-direction: column;
+  padding-bottom: ${({ theme }) => theme.spacing.small};
   position: absolute;
   width: 100%;
   gap: ${({ theme }) => theme.spacing.small};
 `
 
 export const FlexEndButton = styled.div`
+  display: flex;
+  flex-direction: column;
   justify-self: flex-end;
   margin-top: auto;
+  gap: ${({ theme }) => theme.spacing.medium};
 `
 
 export const StyledSpaceSwitcher = styled.div`
@@ -80,13 +84,14 @@ export const IconContainer = styled.div<{ primary?: boolean }>`
 export const WorkspaceIconContainer = styled(animated.div)<{ $active?: boolean }>`
   box-sizing: border-box;
   padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
-
+  position: relative;
   ${StyledHover}
   border-radius: ${({ theme }) => theme.borderRadius.small};
   ${({ $active, theme }) =>
     $active &&
     css`
       opacity: 0.7;
+      color: ${theme.tokens.colors.primary.default};
       border: 1px solid ${theme.tokens.surfaces.separator};
       background-color: ${theme.tokens.surfaces.sidebar};
     `}

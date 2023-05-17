@@ -464,7 +464,7 @@ const SearchView = <Item,>({
           currentView={view}
           availableViews={[ViewType.List, ViewType.Card]}
           onChangeView={(view) => {
-            mog('onChangeView', { view })
+            // mog('onChangeView', { view })
             setView(view)
           }}
         />

@@ -133,7 +133,8 @@ export const apiURLs = {
 
   workspace: {
     update: API_BASE_URLS.workspace,
-    all: `${API_BASE_URLS.workspace}/all`
+    all: `${API_BASE_URLS.workspace}/all`,
+    ids: `${API_BASE_URLS.workspace}/data/ids`
   },
 
   view: {

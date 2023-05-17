@@ -20,7 +20,7 @@ export const useHighlights = () => {
 
   const getHighlight = useCallback(
     (highlightId: string) => {
-      const highlight = highlights.find((h) => h.entityId === highlightId)
+      const highlight = highlights?.find((h) => h.entityId === highlightId)
       return highlight
     },
     [highlights, hasHydrated]

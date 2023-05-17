@@ -128,7 +128,7 @@ const Nav = ({ children }) => {
   const location = useLocation()
   const onDoubleClickToggle = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.detail === 2) {
-      toggleSidebar()
+      // toggleSidebar()
 
       if (window && window.getSelection) {
         const sel = window.getSelection()

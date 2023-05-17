@@ -29,7 +29,14 @@ export const Register = () => {
   const [reqCode, setReqCode] = useState(false)
   const [password, setPassword] = useState<string>()
   const [arePasswordEqual, setArePasswordEqual] = useState<boolean>(true)
-  const registerForm = useForm<RegisterFormData>()
+  const { useQuery } = useRouting()
+  const invite = useQuery()
+
+  const registerForm = useForm<RegisterFormData>({
+    defaultValues: {
+      invite: invite.get('invite')
+    }
+  })
   const verifyForm = useForm<VerifyFormData>()
 
   const { registerDetails, verifySignup } = useAuthentication()
@@ -37,8 +44,6 @@ export const Register = () => {
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const { resendCode } = useAuth()
   const { initializeAfterAuth } = useInitializeAfterAuth()
-  const { useQuery } = useRouting()
-  const invite = useQuery()
 
   const regErrors = registerForm.formState.errors
   const verErrors = verifyForm.formState.errors
@@ -60,7 +65,8 @@ export const Register = () => {
   }
 
   const onRegisterSubmit = async (data: RegisterFormData) => {
-    await registerDetails(data).then((s) => {
+    const { invite, ...registerData } = data
+    await registerDetails(registerData).then((s) => {
       if (s === 'UsernameExistsException') {
         toast('You have already registered, please verify code.')
       }
@@ -68,7 +74,8 @@ export const Register = () => {
   }
 
   const onVerifySubmit = async (data: VerifyFormData) => {
-    const metadata = { invite: invite.get('invite') }
+    const invite = registerForm.getValues('invite')
+    const metadata = invite ? { invite } : {}
 
     try {
       const loginData = await verifySignup(data.code, metadata)
@@ -184,6 +191,18 @@ export const Register = () => {
               ></InputFormError>
 
               {!arePasswordEqual ? <PasswordNotMatch /> : undefined}
+
+              <InputFormError
+                name="invite"
+                label="Invite Code"
+                inputProps={{
+                  placeholder: 'Got an invite? Enter it here!',
+                  ...registerForm.register('invite', {
+                    required: true
+                  })
+                }}
+                errors={regErrors}
+              ></InputFormError>
 
               <ButtonFields position="center">
                 <LoadingButton

@@ -2,10 +2,11 @@ import { useForm } from 'react-hook-form'
 
 import edit2Line from '@iconify/icons-ri/edit-2-line'
 
+import { useAuth } from '@workduck-io/dwindle'
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 
 import { useAuthStore } from '@mexit/core'
-import { AuthForm, Group, IconDisplay } from '@mexit/shared'
+import { AuthForm, Group, ImageUploader } from '@mexit/shared'
 
 import { InputFormError } from '../../../Components/Input'
 import { useUserService } from '../../../Hooks/API/useUserAPI'
@@ -15,6 +16,7 @@ const WorkspaceDetails = () => {
   const activeWorkspace = useAuthStore((store) => store.workspaceDetails)
 
   const updateUserForm = useForm()
+  const { uploadImageToS3 } = useAuth()
   const { updateWorkspaceDetails } = useUserService()
   const updErrors = updateUserForm.formState.errors
 
@@ -22,11 +24,22 @@ const WorkspaceDetails = () => {
     await updateWorkspaceDetails(activeWorkspace.id, data)
   }
 
+  const handleUploadImage = (imageUrl: string) => {
+    if (imageUrl) {
+      onUpdateSave({
+        workspaceMetadata: {
+          imageUrl
+        },
+        name: activeWorkspace?.name
+      })
+    }
+  }
+
   return (
     <StyledWorkspaceDetails>
       <SmallHeading>Details</SmallHeading>
       <WorkspaceDetailsContainer>
-        <IconDisplay icon={activeWorkspace.icon} size={48} />
+        <ImageUploader onUpload={handleUploadImage} uploader={uploadImageToS3} icon={activeWorkspace?.icon} size={48} />
         <AuthForm noStyle onSubmit={updateUserForm.handleSubmit(onUpdateSave)}>
           <InputFormError
             name="name"

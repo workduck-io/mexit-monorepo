@@ -1,6 +1,5 @@
 import { AppInitStatus, UserDetails, Workspace } from '../Types/Auth'
 import { StoreIdentifier } from '../Types/Store'
-import { mog } from '../Utils'
 import { getLocalStorage } from '../Utils/storage'
 import { createStore } from '../Utils/storeCreator'
 
@@ -20,22 +19,30 @@ const authStoreConfig = (set, get) => ({
   ...getAuthStoreInitialState(),
 
   // * User workspaces
-  setWorkspaces: (workspaces: Array<Workspace>) => set({ workspaces }),
+  setWorkspaces: (workspaces: Array<Workspace>) => {
+    const activeWorkspace = get().workspaceDetails
+    const updatedWorkspaceDetails = workspaces?.find((i) => i.id === activeWorkspace?.id)
+
+    set({ workspaces, ...(updatedWorkspaceDetails ? { workspaceDetails: updatedWorkspaceDetails } : {}) })
+  },
   updateWorkspace: (workspace: Partial<Workspace>) => {
     const workspaces = get().workspaces
     const existingWorkspace = workspaces.find((w) => w.id === workspace.id)
 
     const updatedWorkspaceDetails = { ...existingWorkspace, ...workspace }
-    mog('Workspace', { updatedWorkspaceDetails })
 
-    set({ workspaces: [...workspaces, updatedWorkspaceDetails] })
+    set({
+      workspaces: workspaces.map((w) => (w.id === workspace.id ? updatedWorkspaceDetails : w))
+    })
 
     if (get().workspaceDetails?.id === workspace.id) {
-      mog('Updating Workspace')
       set({ workspaceDetails: updatedWorkspaceDetails })
     }
   },
-  addWorkspace: (workspace: Workspace) => set({ workspaces: [...get().workspaces, workspace] }),
+  addWorkspace: (workspace: Workspace, active = false) => {
+    const existing = get().workspaces.filter((i) => i.id !== workspace?.id)
+    set({ workspaces: [...existing, workspace], ...(active ? { workspaceDetails: workspace } : {}) })
+  },
   removeWorkspace: (workspaceId: string) => {
     const workspaces = get().workspaces.filter((workspace) => workspace.id !== workspaceId)
     set({ workspaces })

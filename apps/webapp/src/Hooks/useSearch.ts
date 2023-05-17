@@ -8,6 +8,7 @@ import {
   ELEMENT_INLINE_BLOCK,
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
+  mog,
   MoveBlocksType,
   SearchRepExtra,
   useAuthStore,
@@ -18,6 +19,7 @@ import {
 
 import {
   addDoc,
+  backupSearchIndex,
   moveBlocks,
   removeDoc,
   searchIndex,
@@ -90,6 +92,12 @@ export const useSearch = () => {
     documentUpdated()
   }
 
+  const backupIndex = async (storeName: string) => {
+    const backup = await backupSearchIndex()
+    mog('BACKUP', { backup })
+    // BackupStorage.putValue(storeName, 'mexit-search-index', backup)
+  }
+
   const updateDocument = async (doc: IUpdateDoc) => {
     const extra = getSearchExtra()
 
@@ -150,6 +158,7 @@ export const useSearch = () => {
     updateBlocks,
     moveBlocksInIndex,
     updateDocument,
+    backupIndex,
     removeDocument,
     queryIndex,
     queryIndexByNodeId,

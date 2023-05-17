@@ -59,24 +59,16 @@ export const createStore = <T extends object, R extends boolean>(
           // TODO: Backup to storage
           const workspaceId = getWorkspaceIdFromStorage()
           if (workspaceId && !isExtension()) {
-            const backupKey = 'mexit-user-backup'
-
-            const storage = new BackupStorage(backupKey)
             const storeToBackup = get()
-            storage.set(`${workspaceId}-${storeName}`, JSON.stringify(storeToBackup))
+            BackupStorage.putValue(workspaceId, storeName, JSON.stringify(storeToBackup))
           }
         },
         initializeFromBackup: async () => {
-          console.log('CALLING INIT')
           // TODO: Initialize from stored backup
           const workspaceId = getWorkspaceIdFromStorage()
 
           if (workspaceId && !isExtension()) {
-            const backupKey = 'mexit-user-backup'
-
-            const storage = new BackupStorage(backupKey)
-            const storedBackup = await storage.get(`${workspaceId}-${storeName}`)
-
+            const storedBackup = await BackupStorage.getValue(workspaceId, storeName)
             if (storedBackup) {
               const back = JSON.parse(storedBackup)
               set(back)
