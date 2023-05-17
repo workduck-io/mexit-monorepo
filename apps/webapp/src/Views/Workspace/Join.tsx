@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { NavLink } from 'react-router-dom'
 
+import { useAuth } from '@workduck-io/dwindle'
 import { CenteredColumn, NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 
 import { API, AppInitStatus, useAuthStore, useStore, Workspace } from '@mexit/core'
@@ -26,6 +27,7 @@ const JoinWorkspace = () => {
   const setAppInitStatus = useAuthStore((store) => store.setAppInitStatus)
 
   const { backup } = useStore()
+  const { refreshToken } = useAuth()
   const { useQuery } = useRouting()
 
   const code = useQuery().get('invite') || ''
@@ -47,22 +49,25 @@ const JoinWorkspace = () => {
 
     try {
       const res = await API.invite.get(inviteCode)
+
       if (res.workspaceId) {
         const workspace = useAuthStore.getState().workspaces.find((w) => w.id === res.workspaceId)
-        if (workspace)
+
+        if (workspace) {
           return {
             existing: true,
             workspace
           }
-      } else {
-        const workspaceFromId = await API.workspace.getWorkspaceByIds({
-          ids: [res.workspaceId]
-        })
+        } else {
+          const workspaceFromId = await API.workspace.getWorkspaceByIds({
+            ids: [res.workspaceId]
+          })
 
-        if (workspaceFromId) {
-          return {
-            workspace: workspaceFromId?.[res.workspaceId],
-            existing: false
+          if (workspaceFromId) {
+            return {
+              workspace: workspaceFromId?.[res.workspaceId],
+              existing: false
+            }
           }
         }
       }
@@ -88,23 +93,36 @@ const JoinWorkspace = () => {
     return () => setJoin(true)
   }, [])
 
-  const handleOnShow = () => {
-    //
-  }
-
   const handleJoinWorkspace = async (value) => {
     if (!authenticated) {
       goTo(`${ROUTE_PATHS.register}?invite=${value.invite}`, NavigationType.replace)
       return
     }
 
-    const inviteCode = getValues('invite')
+    const inviteCode = getValues('invite')?.trim()
 
     try {
+      if (inviteCode) {
+        const workspaceJoinDetails = await getWorkspaceById(inviteCode)
+
+        if (workspaceJoinDetails) {
+          setJoin(!workspaceJoinDetails?.existing)
+          setWorkspaceDetails(workspaceJoinDetails.workspace)
+
+          if (workspaceJoinDetails?.existing) return
+        } else {
+          // * If error is thrown, it means that the invite code is invalid
+          toast('Invalid invite code!')
+          return
+        }
+      }
+
       const data = await API.user.addExistingUserToWorkspace(inviteCode)
+
       const workspaceId = data?.workspaceId
 
       if (workspaceId) {
+        await refreshToken()
         const resp = await API.workspace.getWorkspaceByIds({
           ids: [data.workspaceId]
         })

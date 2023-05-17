@@ -130,7 +130,8 @@ export const useUserService = () => {
   const getAllWorkspaces = async (): Promise<any> => {
     try {
       const workspaces = await API.workspace.getAllWorkspaces()
-      if (workspaces) {
+
+      if (workspaces?.length > 0) {
         BackupStorage.createObjectStore(workspaces.map((item) => item.id))
         setWorkspaces(workspaces)
       }

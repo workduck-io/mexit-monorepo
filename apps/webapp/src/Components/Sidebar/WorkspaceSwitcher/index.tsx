@@ -178,7 +178,11 @@ const WorkspaceSwitcher = () => {
           ) : (
             <NavTooltip delay={400} content={<TitleWithShortcut title="Switch Workspace" />}>
               <NavLogoWrapper onClick={handleOnShow}>
-                <IconDisplay color={theme.tokens.colors.primary.default} icon={active?.icon} size={32} />
+                <IconDisplay
+                  color={theme.tokens.colors.primary.default}
+                  icon={active?.icon ?? DefaultMIcons.WORKSPACE}
+                  size={32}
+                />
               </NavLogoWrapper>
             </NavTooltip>
           )}
