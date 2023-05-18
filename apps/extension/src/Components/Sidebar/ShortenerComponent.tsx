@@ -44,7 +44,7 @@ const UrlTitleWrapper = styled(LinkTitleWrapper)`
   text-overflow: ellipsis;
 `
 
-const FaviconImage = ({ source }: { source: string }) => {
+export const FaviconImage = ({ source }: { source: string }) => {
   return <img height="20px" width="20px" src={getFavicon(source)} />
 }
 

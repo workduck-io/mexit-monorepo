@@ -67,3 +67,11 @@ export const SidebarContainer = styled.div`
   font-size: 1em;
   color: ${({ theme }) => theme.tokens.text.heading};
 `
+
+export const DomainWithHighlight = styled.div`
+  margin: ${({ theme }) => theme.spacing.small} 0;
+  display: flex;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.medium};
+`

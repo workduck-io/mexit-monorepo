@@ -91,6 +91,7 @@ export const List = styled.section<{ scrollable?: boolean; $noMargin?: boolean; 
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.small};
   overflow: hidden auto;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
   overscroll-behavior: contain;
 `
 

@@ -57,7 +57,7 @@ const Highlights = () => {
     >
       {pageHighlights?.length > 0 ? (
         <List $noMargin scrollable>
-          <HighlightGroups highlights={pageHighlights} />
+          <HighlightGroups highlights={pageHighlights} all={showAll} />
         </List>
       ) : (
         <>

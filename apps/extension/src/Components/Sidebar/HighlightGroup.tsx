@@ -7,6 +7,7 @@ import {
   camelCase,
   deleteQueryParams,
   DrawerType,
+  getFavicon,
   Highlight,
   Highlights,
   useHighlightStore,
@@ -16,14 +17,18 @@ import {
   CardFooter,
   Container,
   DefaultMIcons,
+  DrawerHeaderDesc,
   FooterFlexButton,
   GenericFlex,
   getMIcon,
+  Group,
+  HighlightGroupWrapper,
   IconDisplay,
   MexIcon,
   PrimaryText,
   SingleHighlightWrapper,
   SnippetContentPreview,
+  StickyHeader,
   VerticalSeperator
 } from '@mexit/shared'
 
@@ -31,6 +36,7 @@ import { useHighlights } from '../../Hooks/useHighlights'
 import { useLinks } from '../../Hooks/useLinks'
 
 import { NodeCardHeader } from './NodeCard'
+import { DomainWithHighlight } from './styled'
 
 const HIGHLIGHT_TEXT_MAX_LENGTH = 300
 
@@ -138,14 +144,52 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
   )
 }
 
-export const HighlightGroups = ({ highlights }: { highlights: Highlights }) => {
-  return open && highlights ? (
-    <>
-      {highlights.map((highlight) => {
-        if (!highlight) return null
+export const HighlightGroups = ({ highlights, all }: { highlights: Highlights; all?: boolean }) => {
+  // group by sourceUrl
+  const groupedHighlights = useMemo(() => {
+    const groupedHighlights = {} as Record<string, Highlight[]>
 
-        return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} />
+    highlights.forEach((highlight) => {
+      if (!highlight) return
+
+      const sourceUrl = new URL(highlight.properties?.sourceUrl)?.origin
+
+      if (!groupedHighlights[sourceUrl]) {
+        groupedHighlights[sourceUrl] = []
+      }
+
+      groupedHighlights[sourceUrl].push(highlight)
+    })
+
+    return groupedHighlights
+  }, [highlights])
+
+  const highlightWithDomains = Object.entries(groupedHighlights)
+
+  return (
+    <>
+      {highlightWithDomains.map(([origin, highlightList]) => {
+        if (highlightList.length === 0) return null
+        const faviconURL = getFavicon(origin)
+
+        return (
+          <DomainWithHighlight>
+            {highlightWithDomains.length > 1 && (
+              <StickyHeader>
+                <Group>
+                  <img src={faviconURL} />
+                  <DrawerHeaderDesc>{origin}</DrawerHeaderDesc>
+                </Group>
+              </StickyHeader>
+            )}
+            <HighlightGroupWrapper>
+              {highlightList.map((highlight) => {
+                return <SingleHighlightWithToggle highlight={highlight} />
+              })}
+            </HighlightGroupWrapper>
+          </DomainWithHighlight>
+        )
       })}
     </>
-  ) : null
+  )
 }

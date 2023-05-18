@@ -92,6 +92,24 @@ export const CenteredColumn = styled(Centered)`
   flex-direction: column;
 `
 
+export const StickyHeader = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+
+  margin-top: ${({ theme }) => theme.spacing.small};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+  padding: ${({ theme }) => theme.spacing.small};
+
+  img {
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    max-height: 64px;
+    max-width: 64px;
+  }
+`
+
 export const CenterSpace = styled(CenteredColumn)`
   padding: 1rem 0;
 `
