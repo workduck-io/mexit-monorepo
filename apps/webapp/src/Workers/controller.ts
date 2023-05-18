@@ -85,6 +85,10 @@ export const updateILink = async (ilink: ILink) => {
   }
 }
 
+export const resetSearchIndex = async () => {
+  if (searchWorker) searchWorker?.reset()
+}
+
 export const moveBlocks = async (options: MoveBlocksType) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
@@ -150,6 +154,28 @@ export const getSearchIndexInitState = async () => {
     return await searchWorker.getInitState()
   } catch (error) {
     mog('InitSearchWorkerError', { error })
+  }
+}
+
+export const backupSearchIndex = async () => {
+  try {
+    if (!searchWorker) {
+      await startSearchWorker()
+    }
+    return await searchWorker.backup()
+  } catch (error) {
+    mog('BackupSearchWorkerError', { error })
+  }
+}
+
+export const restoreSearchIndex = async (data: string) => {
+  try {
+    if (!searchWorker) {
+      await startSearchWorker()
+    }
+    return await searchWorker.restore(data)
+  } catch (error) {
+    mog('BackupSearchWorkerError', { error })
   }
 }
 

@@ -1,8 +1,15 @@
-import { API, mog, useAuthStore, UserPreferences , userPreferenceStore as useUserPreferenceStore, useUserCacheStore } from '@mexit/core'
+import {
+  API,
+  BackupStorage,
+  getMIcon,
+  mog,
+  useAuthStore,
+  UserPreferences,
+  userPreferenceStore as useUserPreferenceStore,
+  useUserCacheStore
+} from '@mexit/core'
 
 import { USER_ID_REGEX } from '../../Utils/constants'
-
-import { useAPIHeaders } from './useAPIHeaders'
 
 export interface TempUser {
   email: string
@@ -34,7 +41,9 @@ export const useUserService = () => {
   const addUser = useUserCacheStore((s) => s.addUser)
   const getUser = useUserCacheStore((s) => s.getUser)
   const updateUserDetails = useAuthStore((s) => s.updateUserDetails)
-  const { workspaceHeaders } = useAPIHeaders()
+  const setWorkspaces = useAuthStore((store) => store.setWorkspaces)
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+  const updateWorkspace = useAuthStore((store) => store.updateWorkspace)
 
   const getUserDetails = async (email: string): Promise<TempUser> => {
     const user = getUser({ email })
@@ -66,6 +75,7 @@ export const useUserService = () => {
             name: resp?.name
           })
         }
+
         return {
           id,
           email: resp?.metadata?.email ?? undefined,
@@ -83,7 +93,6 @@ export const useUserService = () => {
     try {
       if (name === undefined && alias === undefined) return false
       return await API.user.updateInfo({ id, name, alias }).then((resp: any) => {
-        mog('Response', { data: resp })
         updateUserDetails({ name: resp?.name, alias: resp?.alias })
         return true
       })
@@ -118,6 +127,35 @@ export const useUserService = () => {
     }
   }
 
+  const getAllWorkspaces = async (): Promise<any> => {
+    try {
+      const workspaces = await API.workspace.getAllWorkspaces()
+
+      if (workspaces?.length > 0) {
+        BackupStorage.createObjectStore(workspaces.map((item) => item.id))
+        setWorkspaces(workspaces)
+      }
+    } catch (e) {
+      mog('Error Fetching All Workspaces', { error: e })
+      return undefined
+    }
+  }
+
+  const updateWorkspaceDetails = async (id: string, data: Record<string, any>): Promise<void> => {
+    try {
+      await API.workspace.update(data)
+
+      const metadata = data?.workspaceMetadata
+
+      if (metadata) {
+        const { workspaceMetadata, ...rest } = data
+        updateWorkspace({ id, icon: getMIcon('URL', metadata.imageUrl), ...rest })
+      } else updateWorkspace({ id, ...data })
+    } catch (e) {
+      mog('Error Fetching All Workspaces', { error: e })
+    }
+  }
+
   const getAllKnownUsers = () => {
     const cache = useUserCacheStore.getState().cache
     return cache
@@ -128,7 +166,9 @@ export const useUserService = () => {
     getUserDetails,
     getUserDetailsUserId,
     updateUserInfo,
+    updateWorkspaceDetails,
     updateUserPreferences,
+    getAllWorkspaces,
     getCurrentUser
   }
 }

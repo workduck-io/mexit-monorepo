@@ -1,6 +1,4 @@
-import { apiURLs, generateNodeUID, getAllParentPaths, getNodeIcon, ILink, mog, SEPARATOR, useAuthStore, useDataStore } from '@mexit/core'
-
-import client from '../Utils/fetchClient'
+import { API, generateNodeUID, getAllParentPaths, getNodeIcon, ILink, mog, SEPARATOR, useDataStore } from '@mexit/core'
 
 import { getNodeidFromPathAndLinks } from './useLinks'
 
@@ -11,21 +9,11 @@ const appendToText = (text: string, textToAppend: string, separator = SEPARATOR)
 
 export const useInternalLinks = () => {
   const setILinks = useDataStore((store) => store.setIlinks)
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const ilinks = useDataStore((store) => store.ilinks)
   const checkValidILink = useDataStore((store) => store.checkValidILink)
 
   const getILinks = async () => {
-    return await client
-      .get(apiURLs.namespaces.getHierarchy, {
-        headers: {
-          'mex-workspace-id': getWorkspaceId()
-        }
-      })
-      .then((res: any) => {
-        return res.data
-      })
-      .catch(console.error)
+    return await API.namespace.getHeirarchy()
   }
 
   const refreshILinks = async () => {

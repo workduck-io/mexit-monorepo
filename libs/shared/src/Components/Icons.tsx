@@ -129,7 +129,9 @@ export const DefaultMIcons = {
   AI: getMIcon('ICON', 'carbon:magic-wand-filled'),
   EMBED: getMIcon('ICON', 'lucide:file-input'),
   INSERT: getMIcon('ICON', 'ri:arrow-go-back-line'),
-  SEARCH: getMIcon('ICON', 'ri:search-line')
+  SEARCH: getMIcon('ICON', 'ri:search-line'),
+  WORKSPACE: getMIcon('ICON', 'icon-park-solid:app-switch'),
+  PEOPLE: getMIcon('ICON', 'bi:people')
 }
 
 export const ForwardlinkIcon = {

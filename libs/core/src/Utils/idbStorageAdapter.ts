@@ -20,7 +20,6 @@ const IDBStorage = {
     if (name === '_hasHydrated') {
       return null
     }
-
     set(name, value)
   },
   removeItem: async (name: string): Promise<void> => {

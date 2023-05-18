@@ -2,7 +2,7 @@ import { PromptDataType, PromptStoreType } from '../Types/Prompt'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
-export const promptStoreConfig = (set, get): PromptStoreType => ({
+const promptStoreConfig = (set, get): PromptStoreType => ({
   prompts: {},
   results: {},
   resultIndexes: {},

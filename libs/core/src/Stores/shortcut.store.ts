@@ -3,7 +3,7 @@ import { StoreIdentifier } from '../Types/Store'
 import { EXCLUDED_KEYS_MODIFIERS, getKeyFromKeycode, KEY_MODIFIERS } from '../Utils/keyMap'
 import { createStore } from '../Utils/storeCreator'
 
-export const shortcutStoreConfig = (set, get) => ({
+const shortcutStoreConfig = (set, get) => ({
   excludedKeys: new Set(EXCLUDED_KEYS_MODIFIERS),
   modifiers: new Set(KEY_MODIFIERS),
   currentShortcut: {} as any,

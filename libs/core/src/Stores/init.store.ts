@@ -1,7 +1,7 @@
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
-export const initStoreConfig = (set, get) => ({
+const initStoreConfig = (set, get) => ({
   iframeAdded: false,
   setIframeAdded: (iframeAdded: boolean) => {
     set({ iframeAdded })

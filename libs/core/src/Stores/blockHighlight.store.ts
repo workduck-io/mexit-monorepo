@@ -13,7 +13,7 @@ const getInitialStoreState = () => ({
   }
 })
 
-export const blockHighlightStoreConfig = (set, get) => ({
+const blockHighlightStoreConfig = (set, get) => ({
   ...getInitialStoreState(),
   addHighlightedBlockId: (id: string, key: string) => {
     const { highlighted } = get()

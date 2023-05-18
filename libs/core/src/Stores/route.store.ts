@@ -1,6 +1,7 @@
 import { produce } from 'immer'
 
 import { StoreIdentifier } from '../Types/Store'
+import { BannerType } from '../Utils'
 import { createStore } from '../Utils/storeCreator'
 
 type Route = string
@@ -11,11 +12,6 @@ type RouteInformation = {
 }
 
 type RoutesRecord = Record<Route, RouteInformation>
-
-export enum BannerType {
-  editor = 'editor-banner',
-  release = 'release-banner'
-}
 
 const routeStoreConfig = (set, get) => ({
   routes: {} as RoutesRecord,

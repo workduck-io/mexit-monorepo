@@ -14,9 +14,11 @@ export const API_BASE_URLS = {
   snippet: `${MEXIT_BACKEND_URL_BASE}/snippet`,
   loch: `${MEXIT_BACKEND_URL_BASE}/loch`,
   share: `${MEXIT_BACKEND_URL_BASE}/shared`,
+  workspace: `${MEXIT_BACKEND_URL_BASE}/workspace`,
   user: `${MEXIT_BACKEND_URL_BASE}/user`,
   view: `${MEXIT_BACKEND_URL_BASE}/view`,
   link: `${MEXIT_BACKEND_URL_BASE}/link`,
+  invite: `${MEXIT_BACKEND_URL_BASE}/user/invite`,
   reminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
   smartcapture: `${MEXIT_BACKEND_URL_BASE}/capture`,
   comment: `${MEXIT_BACKEND_URL_BASE}/comment`,
@@ -118,13 +120,22 @@ export const apiURLs = {
 
   user: {
     getUserRecords: `${API_BASE_URLS.user}/`,
+    addExistingUserToWorkspace: `${API_BASE_URLS.user}/workspace`,
+    getAllWorkspace: `${API_BASE_URLS.user}/workspace/all`,
     getAllUserRecordsOfWorkspace: `${API_BASE_URLS.user}/all`,
     getFromEmail: (email: string) => `${API_BASE_URLS.user}/email/${encodeURIComponent(email)}`,
     getFromUserId: (userId: string) => `${API_BASE_URLS.user}/${encodeURIComponent(userId)}`,
     updateInfo: `${API_BASE_URLS.user}/info`,
     updatePreference: `${API_BASE_URLS.user}/preference`,
     getUserByLinkedin: (url: string) => `${API_BASE_URLS.user}/linkedin/${url}`,
-    registerStatus: `${API_BASE_URLS.user}/status`
+    registerStatus: `${API_BASE_URLS.user}/status`,
+    updateActiveWorkspace: `${API_BASE_URLS.user}/workspace/active`
+  },
+
+  workspace: {
+    update: API_BASE_URLS.workspace,
+    all: `${API_BASE_URLS.workspace}/all`,
+    ids: `${API_BASE_URLS.workspace}/data/ids`
   },
 
   view: {
@@ -139,6 +150,12 @@ export const apiURLs = {
     saveLink: `${API_BASE_URLS.link}/shorten`,
     deleteLink: (linkId: string) => `${API_BASE_URLS.link}/${linkId}`,
     shortendLink: (shortId: string, workspaceId: string) => `${API_BASE_URLS.url}/${workspaceId}/${shortId}`
+  },
+
+  invite: {
+    getById: (inviteId: string) => `${API_BASE_URLS.invite}/${inviteId}`,
+    getAll: `${API_BASE_URLS.invite}`,
+    create: `${API_BASE_URLS.invite}`
   },
 
   reminders: {

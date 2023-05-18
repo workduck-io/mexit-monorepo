@@ -138,7 +138,7 @@ export const SnippetsInfoBar = () => {
     if (search === '') {
       setSearchedSnippets(snippets)
     }
-  }, [search])
+  }, [search, snippets])
 
   const theme = useTheme()
 

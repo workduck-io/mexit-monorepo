@@ -17,7 +17,7 @@ export interface SnippetEditorStore {
 export type SnippetID = string
 export type Snippets = Record<SnippetID, Snippet>
 
-export const snippetStoreConfig = (set, get) => ({
+const snippetStoreConfig = (set, get) => ({
   snippets: {} as Snippets,
 
   initSnippets: (snippets: Snippets) =>

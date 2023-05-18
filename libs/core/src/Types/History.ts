@@ -18,3 +18,5 @@ export interface AIEvent {
 export type AIEventHistory = [AIEvent, AIEvent]
 
 export type AIEventsHistory = Array<AIEventHistory>
+
+export const MAX_RECENT_SIZE = 10

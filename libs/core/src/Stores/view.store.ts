@@ -8,7 +8,7 @@ const getDefaultViewStoreState = () => ({
   currentView: undefined
 })
 
-export const viewStoreConfig = (set, get) => ({
+const viewStoreConfig = (set, get) => ({
   ...getDefaultViewStoreState(),
   clear: () => set(getDefaultViewStoreState()),
   setCurrentView: (view: View) =>

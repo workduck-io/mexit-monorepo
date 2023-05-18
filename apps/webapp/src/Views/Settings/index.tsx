@@ -9,18 +9,12 @@ import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import {
-  MainHeader,
-  PageContainer,
-  SettingsContainer,
-  SettingsContent,
-  SettingsOptions,
-  SettingTitle,
-  Title
-} from '@mexit/shared'
+import { SearchContainer, SettingsContent, SettingsOptions, SettingTitle, Title } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useAuthentication } from '../../Stores/useAuth'
+
+import { SettingsContainer, SettingsSidebar } from './styled'
 
 const Margin = styled.div`
   margin: 1rem 1rem 0.5rem 0;
@@ -39,36 +33,42 @@ const Settings = () => {
   }
 
   return (
-    <PageContainer>
-      <MainHeader>
-        <Title>Settings</Title>
-      </MainHeader>
+    <SearchContainer>
       <SettingsContainer>
-        <SettingsOptions>
-          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="user">
-            <Icon icon={user3Line} />
-            Profile
-          </SettingTitle>
-          <SettingTitle tabIndex={-1} to="themes">
-            <Icon icon={paintBrushFill} />
-            Themes
-          </SettingTitle>
-          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="shortcuts">
-            <Icon icon={keyboardBoxLine} />
-            Shortcuts
-          </SettingTitle>
-          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="about">
-            <Icon icon={informationLine} />
-            About
-          </SettingTitle>
-          <Margin />
-          <Button onClick={onLogout}>Logout</Button>
-        </SettingsOptions>
+        <SettingsSidebar>
+          <Title noMargin>Settings</Title>
+          <SettingsOptions>
+            <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="user">
+              <Icon icon={user3Line} />
+              Profile
+            </SettingTitle>
+            <SettingTitle tabIndex={-1} to="themes">
+              <Icon icon={paintBrushFill} />
+              Themes
+            </SettingTitle>
+            <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="shortcuts">
+              <Icon icon={keyboardBoxLine} />
+              Shortcuts
+            </SettingTitle>
+            <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="workspace">
+              <Icon icon="icon-park-solid:app-switch" />
+              Workspace
+            </SettingTitle>
+            <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="about">
+              <Icon icon={informationLine} />
+              About
+            </SettingTitle>
+            <Margin />
+            <Button style={{ width: '100%' }} onClick={onLogout}>
+              Logout
+            </Button>
+          </SettingsOptions>
+        </SettingsSidebar>
         <SettingsContent>
           <Outlet />
         </SettingsContent>
       </SettingsContainer>
-    </PageContainer>
+    </SearchContainer>
   )
 }
 

@@ -4,7 +4,7 @@ import { createStore } from '../Utils/storeCreator'
 
 const MAX_HISTORY_SIZE = 25
 
-export const historyStoreConfig = (set, get) => ({
+const historyStoreConfig = (set, get) => ({
   stack: [] as Array<string>,
   currentNodeIndex: -1,
   ai: [] as AIEventsHistory,

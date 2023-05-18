@@ -275,7 +275,6 @@ const RenderPlateless = React.memo<RenderPlatelessProps>(
       content &&
       content.map((node, i) => {
         if (Object.keys(typeMap).includes(node?.type)) {
-          console.log('RENDERING ITEM', { s: Object.keys(typeMap) })
           const RenderItem = typeMap[node?.type]
           return (
             <RenderItem key={`${node?.type}-${i}`} node={node}>

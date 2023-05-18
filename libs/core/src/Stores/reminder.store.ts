@@ -28,7 +28,7 @@ export interface ReminderStoreState {
   setModalOpen: (modalOpen: boolean) => void
 }
 
-export const reminderStoreConfig = (set, get) => ({
+const reminderStoreConfig = (set, get) => ({
   reminders: [],
   setReminders: (reminders: Reminder[]) => set({ reminders }),
   addReminder: (reminder: Reminder) => set((state) => ({ reminders: [...state.reminders, reminder] })),

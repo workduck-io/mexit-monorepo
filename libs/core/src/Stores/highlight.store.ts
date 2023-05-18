@@ -40,7 +40,7 @@ const addToHighlightBlockMap = (
 }
 
 // LOOK Typed constructor
-export const highlightStoreConfig = (set, get) => ({
+const highlightStoreConfig = (set, get) => ({
   highlights: [],
   highlightBlockMap: {},
   setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => set({ highlightBlockMap }),
@@ -94,7 +94,7 @@ export const highlightStoreConfig = (set, get) => ({
   addHighlight: (highlight, { nodeId, blockIds }) => {
     set(
       produce((draft: any) => {
-        draft.highlights.unshift(highlight)
+        draft.highlights?.unshift(highlight)
 
         blockIds.forEach((blockId: string) => {
           addToHighlightBlockMap(draft.highlightBlockMap, {

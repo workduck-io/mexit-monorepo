@@ -1,5 +1,5 @@
 // Direct properties are collated in the properties for api
-import { BlockMetaDataType } from '../Stores/block.store'
+import { BlockMetaDataType } from '../Types'
 import { ElementHighlightMetadata } from '../Types/Highlight'
 
 // and then unfurled when converting back to editor content

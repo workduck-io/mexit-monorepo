@@ -1,5 +1,7 @@
 import { State } from 'zustand'
 
+import { MIcon } from './Store'
+
 export interface LoginFormData {
   email: string
   password: string
@@ -10,6 +12,14 @@ export interface Option {
   value: string
 }
 
+export interface Workspace {
+  id: string
+  name?: string
+  icon?: MIcon
+  createdAt?: string
+  updatedAt?: string
+}
+
 export interface RegisterFormData {
   name: string
   roles: Option[]
@@ -17,6 +27,7 @@ export interface RegisterFormData {
   password: string
   confirmPassword?: string
   alias: string
+  invite?: string
 }
 
 export interface ForgotPasswordFormData {
@@ -48,6 +59,7 @@ export interface UserDetails {
   id?: string
   name: string
   alias: string
+  roles?: Array<string>
 }
 
 export interface WorkspaceDetails {
@@ -64,7 +76,8 @@ export enum AppInitStatus {
   START,
   RUNNING,
   COMPLETE,
-  ERROR
+  ERROR,
+  SWITCH
 }
 
 export interface AuthStoreState extends State {

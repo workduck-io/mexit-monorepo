@@ -7,7 +7,7 @@ export interface RefactorPath {
   namespaceID?: string
 }
 
-export const renameStoreConfig = (set) => ({
+const renameStoreConfig = (set) => ({
   open: false,
   mockRefactored: [] as NodeLink[],
   from: undefined as string | undefined,

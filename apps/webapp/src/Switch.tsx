@@ -35,10 +35,12 @@ import { Register } from './Views/Register'
 import Search from './Views/Search'
 import Settings from './Views/Settings'
 import About from './Views/Settings/About'
+import Invite from './Views/Settings/Invite'
 import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
 import ViewPage from './Views/ViewPage'
+import JoinWorkspace from './Views/Workspace/Join'
 import * as Actions from './Actions'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
@@ -50,7 +52,9 @@ export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
-  const isAppInit = useAuthStore((store) => store.appInitStatus === AppInitStatus.RUNNING)
+  const isAppInit = useAuthStore(
+    (store) => store.appInitStatus === AppInitStatus.RUNNING || store.appInitStatus === AppInitStatus.SWITCH
+  )
 
   const location = useLocation()
 
@@ -154,6 +158,7 @@ const SettingsRoutes = () => {
       >
         <Route index element={<UserPage />} />
         <Route path="about" element={<About />} />
+        <Route path="workspace" element={<Invite />} />
         <Route path="themes" element={<Themes />} />
         <Route path="user" element={<UserPage />} />
         <Route path="shortcuts" element={<Shortcuts />} />
@@ -262,11 +267,20 @@ export const Switch = ({ children }) => {
   )
 }
 
+const JoinWorkspaceRoutes = () => {
+  return (
+    <Routes>
+      <Route path="join" element={<JoinWorkspace />} />
+    </Routes>
+  )
+}
+
 const PageRoutes = () => {
   return (
     <Switch>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
+        <Route path={`${ROUTE_PATHS.workspace}/*`} element={<JoinWorkspaceRoutes />} />
         <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<OAuthRoute />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={`${ROUTE_PATHS.share}/:nodeId`} element={<PublicNodeView />} />

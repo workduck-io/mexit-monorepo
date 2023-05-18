@@ -104,6 +104,16 @@ export const NotFoundText = styled.div`
   }
 `
 
+export const ImageUploadInput = styled.input`
+  display: none;
+`
+
+export const RelativeContainer = styled.div`
+  position: relative;
+  width: fit-content;
+  height: auto;
+`
+
 export const TextArea = styled.textarea`
   ${({ theme }) => generateStyle(theme.generic.form.input)};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
@@ -120,12 +130,16 @@ export const TextArea = styled.textarea`
   }
 `
 
-export const AuthForm = styled.form`
+export const AuthForm = styled.form<{ noStyle?: boolean }>`
   width: 100%;
 
-  button {
-    font-size: 1.2rem;
-  }
+  ${({ noStyle }) =>
+    !noStyle &&
+    css`
+      button {
+        font-size: 1.2rem;
+      }
+    `}
 `
 
 export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?: any }>`

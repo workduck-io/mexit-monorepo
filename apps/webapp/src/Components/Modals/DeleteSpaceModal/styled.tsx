@@ -102,7 +102,13 @@ export const MoveSpaceSection = styled.section`
   }
 `
 
-export const DeletionWarning = styled.div`
+export const DeletionWarning = styled.div<{ align?: boolean }>`
+  ${({ align }) =>
+    align &&
+    css`
+      text-align: center;
+    `}
+
   line-height: 1.4;
   color: ${({ theme }) => theme.tokens.text.fade};
 `

@@ -13,7 +13,7 @@ export interface ReactionStore {
   addNoteReactions: (reactions: Reaction[], nodeid: string) => void
 }
 
-export const reactionStoreConfig = (set, get): ReactionStore => ({
+const reactionStoreConfig = (set, get): ReactionStore => ({
   reactions: [],
   clear: () => set({ reactions: [] }),
   setReactions: (reactions) => set({ reactions }),

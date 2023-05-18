@@ -13,3 +13,8 @@ export interface HelpState {
   toggleModal: () => void
   closeModal: () => void
 }
+
+export enum FloatingElementType {
+  BALLON_TOOLBAR = 'BALLON_TOOLBAR',
+  AI_POPOVER = 'AI_POPOVER'
+}

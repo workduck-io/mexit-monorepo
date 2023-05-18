@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
@@ -20,7 +20,7 @@ import {
 
 import { GoogleLoginButton } from '../Components/Buttons/Buttons'
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
-import { ROUTE_PATHS } from '../Hooks/useRouting'
+import { ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useAuthentication, useInitializeAfterAuth } from '../Stores/useAuth'
 import { StyledRolesSelectComponents } from '../Style/Select'
 import { ALIAS_REG, EMAIL_REG, PASSWORD } from '../Utils/constants'
@@ -29,7 +29,14 @@ export const Register = () => {
   const [reqCode, setReqCode] = useState(false)
   const [password, setPassword] = useState<string>()
   const [arePasswordEqual, setArePasswordEqual] = useState<boolean>(true)
-  const registerForm = useForm<RegisterFormData>()
+  const { useQuery } = useRouting()
+  const invite = useQuery()
+
+  const registerForm = useForm<RegisterFormData>({
+    defaultValues: {
+      invite: invite.get('invite')
+    }
+  })
   const verifyForm = useForm<VerifyFormData>()
 
   const { registerDetails, verifySignup } = useAuthentication()
@@ -58,7 +65,8 @@ export const Register = () => {
   }
 
   const onRegisterSubmit = async (data: RegisterFormData) => {
-    await registerDetails(data).then((s) => {
+    const { invite, ...registerData } = data
+    await registerDetails(registerData).then((s) => {
       if (s === 'UsernameExistsException') {
         toast('You have already registered, please verify code.')
       }
@@ -66,7 +74,9 @@ export const Register = () => {
   }
 
   const onVerifySubmit = async (data: VerifyFormData) => {
-    const metadata = { tag: 'MEXIT_WEBAPP' }
+    const invite = registerForm.getValues('invite')
+    const metadata = invite ? { invite } : {}
+
     try {
       const loginData = await verifySignup(data.code, metadata)
       await initializeAfterAuth(loginData, true, false, true)
@@ -181,6 +191,18 @@ export const Register = () => {
               ></InputFormError>
 
               {!arePasswordEqual ? <PasswordNotMatch /> : undefined}
+
+              <InputFormError
+                name="invite"
+                label="Invite Code"
+                inputProps={{
+                  placeholder: 'Got an invite? Enter it here!',
+                  ...registerForm.register('invite', {
+                    required: true
+                  })
+                }}
+                errors={regErrors}
+              ></InputFormError>
 
               <ButtonFields position="center">
                 <LoadingButton

@@ -7,7 +7,7 @@ export interface CacheStore {
   addGravatarAbsent: (value: string) => void
 }
 
-export const requestCacheConfig = (set, get) => ({
+const requestCacheConfig = (set, get) => ({
   gravatarAbsent: [],
   addGravatarAbsent: (value: string) => {
     if (!get().gravatarAbsent.includes(value)) {

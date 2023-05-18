@@ -6,7 +6,7 @@ import { StoreIdentifier } from '../Types/Store'
 import { defaultShortcuts } from '../Utils/defaultShortcutsData'
 import { createStore } from '../Utils/storeCreator'
 
-export const helpStoreConfig = (set, get) => ({
+const helpStoreConfig = (set, get) => ({
   open: false,
   shortcuts: defaultShortcuts,
   toggleModal: () =>

@@ -6,11 +6,14 @@ import { getStoreName, StoreIdentifier } from '../Types/Store'
 import { asyncLocalStorage } from './chromeStorageAdapter'
 import { IDBStorage } from './idbStorageAdapter'
 import { isExtension } from './isExtension'
+import { BackupStorage, getLocalStorage } from './storage'
 
 export type TypeMap<T, R extends boolean> = R extends true
   ? T & {
       _hasHydrated: boolean
       setHasHydrated: (state) => void
+      initializeFromBackup: () => Promise<boolean>
+      backup: () => Promise<void>
     }
   : T
 
@@ -19,6 +22,16 @@ export type SetterFunction<T> = (set: any, get: any) => T
 export type StorageType = {
   web: Storage
   extension: Storage
+}
+
+const getWorkspaceIdFromStorage = () => {
+  const storeName = getStoreName(StoreIdentifier.AUTH, isExtension())
+  const authStorage = getLocalStorage().getItem(storeName)
+
+  if (authStorage) {
+    const workspace = JSON.parse(authStorage)?.state?.workspaceDetails
+    return workspace?.id
+  }
 }
 
 export const createStore = <T extends object, R extends boolean>(
@@ -32,6 +45,8 @@ export const createStore = <T extends object, R extends boolean>(
   }
 ): UseBoundStore<TypeMap<T, R>, StoreApi<TypeMap<T, R>>> => {
   if (isPersist) {
+    const storeName = getStoreName(name, isExtension())
+
     const configX = (set, get): TypeMap<T, true> => {
       return {
         _hasHydrated: false,
@@ -40,24 +55,48 @@ export const createStore = <T extends object, R extends boolean>(
             _hasHydrated: state
           })
         },
+        backup: async () => {
+          // TODO: Backup to storage
+          const workspaceId = getWorkspaceIdFromStorage()
+          if (workspaceId && !isExtension()) {
+            const storeToBackup = get()
+            BackupStorage.putValue(workspaceId, storeName, JSON.stringify(storeToBackup))
+          }
+        },
+        initializeFromBackup: async () => {
+          // TODO: Initialize from stored backup
+          const workspaceId = getWorkspaceIdFromStorage()
+
+          if (workspaceId && !isExtension()) {
+            const storedBackup = await BackupStorage.getValue(workspaceId, storeName)
+            if (storedBackup) {
+              const back = JSON.parse(storedBackup)
+              set(back)
+              return true
+            }
+          }
+
+          return false
+        },
         ...config(set, get)
       }
     }
 
     const { storage, ...storeOptions } = persistOptions || {}
-    const storeName = getStoreName(name, isExtension())
+
+    const getStorage = () => {
+      const webStorage = storage?.web ?? IDBStorage
+      const extensionStorage = storage?.extension ?? asyncLocalStorage
+
+      return isExtension() ? extensionStorage : webStorage
+    }
 
     return create<TypeMap<T, R>>(
       devtools(
         persist(configX, {
           name: storeName,
           ...storeOptions,
-          getStorage: () => {
-            const webStorage = storage?.web ?? IDBStorage
-            const extensionStorage = storage?.extension ?? asyncLocalStorage
-
-            return isExtension() ? extensionStorage : webStorage
-          },
+          getStorage,
           onRehydrateStorage: () => (state) => {
             state.setHasHydrated(true)
           }

@@ -83,6 +83,21 @@ const searchWorker = {
     }
   },
 
+  backup: () => {
+    // return {
+    //   _indexMap: Object.entries(searchX._indexMap).map(([key, item]) => item.export()),
+    //   _graphX: searchX._graphX.exportToDot()
+    // }
+  },
+
+  restore: (data: string) => {
+    // const parsedData = JSON.parse(data)
+    // if (parsedData?._indexMap && parsedData?._graphX) {
+    //   searchX._indexMap = parsedData._indexMap
+    //   searchX._graphX = fromDot(parsedData._graphX)
+    // }
+  },
+
   searchIndexByNodeId: (indexKey, nodeId, query) => {
     return searchX.search({
       indexKey,

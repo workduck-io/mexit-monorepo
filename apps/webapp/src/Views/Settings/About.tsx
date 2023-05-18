@@ -1,5 +1,3 @@
-import React from 'react'
-
 import linkedinIcon from '@iconify/icons-logos/linkedin-icon'
 import twitterIcon from '@iconify/icons-logos/twitter'
 import globeIcon from '@iconify/icons-ph/globe'

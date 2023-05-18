@@ -86,13 +86,6 @@ const UserPage = () => {
               <InfoDataText>{currentUserDetails?.email}</InfoDataText>
             </InfoData>
           </Info>
-          <Info>
-            <InfoLabel>Workspace</InfoLabel>
-            <InfoData>
-              <InfoDataText>{getWorkspaceId()}</InfoDataText>
-              <CopyButton text={getWorkspaceId()}></CopyButton>
-            </InfoData>
-          </Info>
 
           {IS_DEV && (
             <Info>

@@ -1,29 +1,8 @@
+import { BlocksType, BlockType, ModalOpenType } from '../Types'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
-export type BlockMetaDataType = {
-  source?: string // * NodeId or Website URL
-  origin?: string
-}
-
-type BlocksType = Record<string, BlockType>
-
-export type BlockType = {
-  id: string
-  children: BlockType[]
-  type: string
-  text?: string
-  blockMeta?: BlockMetaDataType
-}
-
-export enum ContextMenuActionType {
-  move = 'Move',
-  send = 'Send'
-}
-
-export type ModalOpenType = ContextMenuActionType | undefined
-
-export const blockStoreConfig = (set, get) => ({
+const blockStoreConfig = (set, get) => ({
   blocks: {} as BlocksType,
   isModalOpen: undefined as ModalOpenType,
   isBlockMode: false as boolean,

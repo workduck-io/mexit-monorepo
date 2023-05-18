@@ -4,10 +4,18 @@ import Compress from 'compress.js'
 
 import { mog } from '@mexit/core'
 
+interface CompressOptions {
+  quality?: number | undefined
+  size?: number | undefined
+  maxWidth?: number | undefined
+  maxHeight?: number | undefined
+  resize?: boolean | undefined
+}
+
 export type UploadImageFn = (data: string | ArrayBuffer) => Promise<string | ArrayBuffer>
 
 export const useUploadToCDN = (uploader: (base64string: string, options?: any) => Promise<string>) => {
-  const uploadImageToWDCDN = async (data: string): Promise<string> => {
+  const uploadImageToWDCDN = async (data: string, compressOptions: CompressOptions = {}): Promise<string> => {
     // mog('uploadImageToWDCDN', { data, tp: typeof data })
     if (typeof data === 'string') {
       try {
@@ -18,7 +26,8 @@ export const useUploadToCDN = (uploader: (base64string: string, options?: any) =
         const compressedImg = (
           await compress.compress([file], {
             size: 4,
-            quality: 0.9
+            quality: 0.9,
+            ...compressOptions
           })
         )[0]
 

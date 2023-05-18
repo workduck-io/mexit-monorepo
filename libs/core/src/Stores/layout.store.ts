@@ -1,30 +1,8 @@
 import { ExtInfobarMode, InfobarMode } from '@mexit/shared'
 
-import { Drawer, DrawerType } from '../Types/Layout'
+import { ContextMenu, Drawer, DrawerType } from '../Types/Layout'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
-
-export interface FocusMode {
-  on: boolean
-  hover: boolean
-}
-
-export enum ContextMenuType {
-  NOTES_TREE = 'NOTES_TREE',
-  NOTE_PLUS_BUTTON = 'NOTE_PLUS_BUTTON',
-  ARCHIVE_TREE = 'ARCHIVE_TREE',
-  SNIPPETS_LIST = 'SNIPPETS_LIST',
-  PROMPTS_LIST = 'PROMPTS_LIST',
-  NOTE_NAMESPACE = 'NOTE_NAMESPACE',
-  VIEW_LIST = 'VIEW_LIST',
-  EDITOR = 'EDITOR'
-}
-
-export type ContextMenu = {
-  item: any
-  type: ContextMenuType
-  coords: { x: number; y: number }
-}
 
 interface LayoutState {
   rhSidebar: {
@@ -74,7 +52,7 @@ const initializeLayoutStore = () => ({
   }
 })
 
-export const layoutStoreConfig = (set, get) => ({
+const layoutStoreConfig = (set, get) => ({
   ...initializeLayoutStore(),
   setToggleTop: (height: number) => set({ toggleTop: height }),
   toggleFocusMode: () => set((state) => ({ focusMode: { ...state.focusMode, on: !state.focusMode.on } })),

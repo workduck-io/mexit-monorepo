@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 import {
   API,
   AppInitStatus,
+  BackupStorage,
   mog,
   runBatch,
   useAppStore,
@@ -15,15 +17,22 @@ import {
   usePromptStore,
   userPreferenceStore as useUserPreferenceStore,
   useSnippetStore,
+  useStore,
   withTimeout
 } from '@mexit/core'
 
 import { useAuthentication } from '../Stores/useAuth'
-import { getSearchIndexInitState, initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
+import {
+  getSearchIndexInitState,
+  initSearchIndex,
+  restoreSearchIndex,
+  startRequestsWorkerService
+} from '../Workers/controller'
 
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
 import { usePromptAPI } from './API/usePromptAPI'
+import { useUserService } from './API/useUserAPI'
 import { useViewAPI } from './API/useViewsAPI'
 import { useFetchShareData } from './useFetchShareData'
 import { useHighlightSync } from './useHighlights'
@@ -47,12 +56,16 @@ export const useInitLoader = () => {
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
   const userPrefHydrated = useUserPreferenceStore((s) => s._hasHydrated)
   const linksStoreHydrated = useLinkStore((s) => s._hasHydrated)
+  const setAppInitStatus = useAuthStore((store) => store.setAppInitStatus)
+  const navigate = useNavigate()
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
   const { getAllViews } = useViewAPI()
   const { getAllLinks } = useURLsAPI()
   const { updateBaseNode } = useNodes()
+  const { restore } = useStore()
+  const { getAllWorkspaces } = useUserService()
   const { fetchAllHighlights } = useHighlightSync()
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
@@ -97,12 +110,33 @@ export const useInitLoader = () => {
     }
   }
 
+  const restoreIndexIndex = async () => {
+    const workspaceId = getWorkspaceId()
+
+    const backup = await BackupStorage.getValue(workspaceId, 'mexit-search-index')
+    if (backup) restoreSearchIndex(backup)
+  }
+
+  useEffect(() => {
+    if (initalizeApp === AppInitStatus.SWITCH) {
+      // restoreIndexIndex()
+
+      restore().then((res) => {
+        const appInitStatus = res ? AppInitStatus.COMPLETE : AppInitStatus.RUNNING
+        setAppInitStatus(appInitStatus)
+
+        navigate('/', { replace: true })
+      })
+    }
+  }, [initalizeApp])
+
   useEffect(() => {
     API.setWorkspaceHeader(getWorkspaceId())
 
     const startWorkers = async () => {
       const searchIndexInitState = await getSearchIndexInitState()
       const promises = [startRequestsWorkerService()]
+
       if (!searchIndexInitState) {
         const initData = {
           ilinks: useDataStore.getState().ilinks,
@@ -123,6 +157,7 @@ export const useInitLoader = () => {
 
     if (
       initalizeApp !== AppInitStatus.START &&
+      initalizeApp !== AppInitStatus.SWITCH &&
       userPrefHydrated &&
       snippetHydrated &&
       dataStoreHydrated &&
@@ -133,6 +168,7 @@ export const useInitLoader = () => {
       startWorkers()
         .then(async () => {
           await updateCurrentUserPreferences()
+          getAllWorkspaces()
 
           if (initalizeApp === AppInitStatus.RUNNING) {
             backgroundFetch()
