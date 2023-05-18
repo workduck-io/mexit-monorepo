@@ -2,7 +2,16 @@ import React, { useMemo } from 'react'
 
 import { useTheme } from 'styled-components'
 
-import { camelCase, DrawerType, Highlight, Highlights, useHighlightStore, useLayoutStore } from '@mexit/core'
+import {
+  appendQueryParams,
+  camelCase,
+  deleteQueryParams,
+  DrawerType,
+  Highlight,
+  Highlights,
+  useHighlightStore,
+  useLayoutStore
+} from '@mexit/core'
 import {
   CardFooter,
   Container,
@@ -92,23 +101,29 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
 
   const toShowText = willCollapse ? (open ? highlightText : strippedText) : highlightText
 
-  const openHighlight = () => {
-    const element = document.querySelector(`[data-highlight-id="${highlight.entityId}"]`)
+  const handleOpenHighlight = (e) => {
+    e.stopPropagation()
 
-    element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const onSamePage = highlight.properties?.sourceUrl == deleteQueryParams(window.location.href)
+    if (onSamePage) {
+      const element = document.querySelector(`[data-highlight-id="${highlight.entityId}"]`)
+
+      if (element) {
+        element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    } else {
+      if (highlight.properties?.sourceUrl == null) return
+      window.open(appendQueryParams(highlight.properties.sourceUrl, { scrollToCapture: highlight.entityId }))
+    }
   }
 
   const title = camelCase(toShowText.slice(0, 35))
 
   return (
-    <SingleHighlightWrapper onClick={() => openHighlight()}>
+    <SingleHighlightWrapper onClick={handleOpenHighlight}>
       <Container>
         <NodeCardHeader>
-          <GenericFlex
-            onClick={() => {
-              //
-            }}
-          >
+          <GenericFlex>
             <MexIcon color={theme.tokens.colors.primary.default} icon={DefaultMIcons.HIGHLIGHT.value} />
             <PrimaryText>{title}</PrimaryText>
           </GenericFlex>

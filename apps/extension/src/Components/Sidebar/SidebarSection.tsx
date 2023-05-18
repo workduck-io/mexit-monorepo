@@ -12,9 +12,16 @@ type SidebarSectionProps = {
   icon: MIcon
   children: ReactElement
   scrollable?: boolean
+  rightComponent?: ReactElement
 }
 
-const SidebarSection: React.FC<SidebarSectionProps> = ({ label, children, icon, scrollable = false }) => {
+const SidebarSection: React.FC<SidebarSectionProps> = ({
+  label,
+  children,
+  icon,
+  rightComponent,
+  scrollable = false
+}) => {
   const theme = useTheme()
 
   return (
@@ -24,6 +31,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({ label, children, icon, 
           <IconDisplay color={theme.tokens.text.fade} icon={icon} />
           <span>{label}</span>
         </GenericFlex>
+        {rightComponent}
       </SectionHeading>
       {children}
     </StyledSidebarSection>

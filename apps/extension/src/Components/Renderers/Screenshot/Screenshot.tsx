@@ -9,7 +9,7 @@ import { Icon } from '@iconify/react'
 
 import { Button, IconButton, PrimaryButton } from '@workduck-io/mex-components'
 
-import { mog, useAuthStore } from '@mexit/core'
+import { deleteQueryParams, mog, useAuthStore } from '@mexit/core'
 import { useDebounceEffect } from '@mexit/shared'
 
 import { useSaveChanges } from '../../../Hooks/useSaveChanges'
@@ -327,7 +327,7 @@ const Screenshot = () => {
         const appendContent = [
           { children: [{ text: '' }], type: 'img', url: imageURL },
           { text: '\n' },
-          { type: 'a', url: window.location.href, children: [{ text: 'Ref' }] }
+          { type: 'a', url: deleteQueryParams(window.location.href), children: [{ text: 'Ref' }] }
         ]
         appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
         resetSpotlitState()
