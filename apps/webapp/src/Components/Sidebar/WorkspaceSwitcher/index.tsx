@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components'
 
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 
-import { API_BASE_URLS, AppInitStatus, IS_DEV, useAuthStore, useStore } from '@mexit/core'
+import { API, API_BASE_URLS, AppInitStatus, IS_DEV, useAuthStore, useStore } from '@mexit/core'
 import { DefaultMIcons, IconDisplay, ItemOverlay, NavLogoWrapper, useItemSwitcher } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
@@ -61,18 +61,21 @@ const Workspaces = ({ setShow, active, show }) => {
     event?.stopPropagation()
 
     setShow(false)
-    console.time('Took Backup and Restored in')
 
     backup().then(() => {
       resetSearchIndex()
       setAppInitStatus(AppInitStatus.SWITCH)
     })
 
-    // if (active?.id) {
-    //   backupIndex(active.id)
-    // }
-
     setActiveWorkspace(id)
+
+    API.user
+      .updateActiveWorkspace({
+        activeWorkspace: id
+      })
+      .catch((e) => {
+        console.error(e)
+      })
   }
 
   const handleManageWorkspace = () => {

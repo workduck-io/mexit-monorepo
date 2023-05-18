@@ -128,7 +128,8 @@ export const apiURLs = {
     updateInfo: `${API_BASE_URLS.user}/info`,
     updatePreference: `${API_BASE_URLS.user}/preference`,
     getUserByLinkedin: (url: string) => `${API_BASE_URLS.user}/linkedin/${url}`,
-    registerStatus: `${API_BASE_URLS.user}/status`
+    registerStatus: `${API_BASE_URLS.user}/status`,
+    updateActiveWorkspace: `${API_BASE_URLS.user}/workspace/active`
   },
 
   workspace: {

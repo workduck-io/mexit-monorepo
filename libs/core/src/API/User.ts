@@ -40,4 +40,8 @@ export class UserAPI {
   async addExistingUserToWorkspace(inviteCode: string, options?: Options) {
     return await this.client.post(apiURLs.user.addExistingUserToWorkspace, { invite: inviteCode }, options)
   }
+
+  async updateActiveWorkspace(data, config?) {
+    return await this.client.post(apiURLs.user.updateActiveWorkspace, data, config)
+  }
 }
