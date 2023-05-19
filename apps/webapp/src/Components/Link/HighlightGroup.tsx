@@ -86,6 +86,14 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
     }
   }
 
+  const openLinkWithScroll = (e) => {
+    e.stopPropagation()
+
+    const url = new URL(highlight.properties.sourceUrl)
+    url.searchParams.append('scrollToCapture', highlight.entityId)
+    window.open(url, '_blank')
+  }
+
   const linkedNotes = useMemo(() => {
     const editableMap = getHighlightMap(highlight.entityId) ?? {}
 
@@ -116,7 +124,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
   }
 
   return (
-    <SingleHighlightWrapper padding>
+    <SingleHighlightWrapper onClick={openLinkWithScroll} padding>
       <HighlightText>{toShowText}</HighlightText>
       {willCollapse ? (
         <HighlightCollapsedToggle onClick={() => setOpen(!open)}>

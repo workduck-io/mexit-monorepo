@@ -20,10 +20,22 @@ export const PageContainer = styled.div<{ fade?: boolean }>`
     `}
 `
 
-export const Group = styled.span`
+export const Group = styled.span<{ gap?: 'small' | 'medium' | 'large' }>`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.small};
+
+  ${({ theme, gap = 'small' }) => {
+    switch (gap) {
+      case 'small':
+        return `gap: ${theme.spacing.small};`
+
+      case 'medium':
+        return `gap: ${theme.spacing.medium};`
+
+      case 'large':
+        return `gap: ${theme.spacing.large};`
+    }
+  }}
 `
 
 export const IconButtonWrapper = styled(Group)`
@@ -90,6 +102,24 @@ export const Centered = styled.div`
 
 export const CenteredColumn = styled(Centered)`
   flex-direction: column;
+`
+
+export const StickyHeader = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+
+  margin-top: ${({ theme }) => theme.spacing.small};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+  padding: ${({ theme }) => theme.spacing.small};
+
+  img {
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    max-height: 64px;
+    max-width: 64px;
+  }
 `
 
 export const CenterSpace = styled(CenteredColumn)`

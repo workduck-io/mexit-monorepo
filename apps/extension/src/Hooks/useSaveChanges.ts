@@ -4,6 +4,7 @@ import { createPlateEditor, createPlateUI } from '@udecode/plate'
 
 import {
   DefaultMIcons,
+  deleteQueryParams,
   ELEMENT_TAG,
   extractMetadata,
   generateHighlightId,
@@ -178,7 +179,7 @@ export function useSaveChanges() {
     const highlight = isCapturedHighlight && {
       entityId: generateHighlightId(),
       properties: {
-        sourceUrl: selection?.range && window.location.href,
+        sourceUrl: selection?.range && deleteQueryParams(window.location.href),
         saveableRange: selection?.range,
         content
       }
@@ -215,7 +216,7 @@ export function useSaveChanges() {
     const highlight = isCapturedHighlight && {
       entityId: generateHighlightId(),
       properties: {
-        sourceUrl: selection?.range && window.location.href,
+        sourceUrl: selection?.range && deleteQueryParams(window.location.href),
         saveableRange: selection?.range,
         content: serializeContent(content, '')
       }
@@ -237,9 +238,9 @@ export function useSaveChanges() {
 
       const sourceTitle = document.title
       await saveHighlight(highlight, sourceTitle)
+
       // Extract the blockids for which we have captured highlights
       const blockHighlightMap = getHighlightBlockMap(nodeid, updateContent)
-      mog('BLOCKHIGHLIGHT MAP', { blockHighlightMap })
 
       // Add highlight in local store and nodeblockmap
       addHighlight(highlight, blockHighlightMap)
@@ -278,8 +279,6 @@ export function useSaveChanges() {
   ) => {
     addRecentNote(nodeid)
     setContent(nodeid, content, metadata)
-    // if (highlight) addHighlight(highlight, blockHighlightMap)
-    // if (highlight) dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
 
     if (notification) {
       toast.success('Saved to Cloud')

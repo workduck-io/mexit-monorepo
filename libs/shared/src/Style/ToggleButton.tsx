@@ -1,5 +1,7 @@
 import styled, { css, keyframes } from 'styled-components'
 
+import { generateStyle } from '@workduck-io/mex-themes'
+
 export const Input = styled.input`
   height: 0;
   width: 0;
@@ -23,6 +25,62 @@ export const Label = styled.label<{ size: string; disabled: boolean }>`
     opacity: 0;
     width: 0;
     height: 0;
+  }
+`
+
+export const CheckBox = styled.input`
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  /* Remove most all native input styles */
+  appearance: none;
+  /* For iOS < 15 */
+  ${({ theme }) => generateStyle(theme.editor.elements.todo.checkbox)}
+  /* Not removed via appearance */
+
+    font: inherit;
+  color: currentColor;
+  width: 0.9em;
+  height: 0.9em;
+  padding: 0.5em;
+  border: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
+
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+
+  display: grid;
+  place-content: center;
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[4]};
+  }
+
+  &::before {
+    content: '';
+    width: 0.5em;
+    height: 0.5em;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em ${({ theme }) => theme.tokens.colors.primary.default};
+    /* Windows High Contrast Mode */
+    background-color: CanvasText;
+  }
+
+  &:checked {
+    border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+
+  &:disabled {
+    --form-control-color: ${({ theme }) => theme.tokens.text.disabled};
+
+    color: ${({ theme }) => theme.tokens.text.disabled};
+    cursor: not-allowed;
   }
 `
 

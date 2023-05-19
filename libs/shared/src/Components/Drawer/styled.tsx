@@ -29,10 +29,11 @@ export const DrawerContainer = styled(animated.div)`
   }
 `
 
-export const DrawerHeaderDesc = styled.div`
+export const DrawerHeaderDesc = styled.div<{ fade?: boolean }>`
   ${BodyFont}
   color: ${({ theme }) => theme.tokens.text.fade};
-  opacity: 0.9;
+
+  opacity: ${({ fade }) => (fade ? 0.6 : 0.9)};
 `
 
 export const DrawerHeaderContainer = styled.div<{ align?: 'start' | 'center' }>`

@@ -5,7 +5,7 @@ import linkM from '@iconify/icons-ri/link-m'
 import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
-import { apiURLs, getFavicon, useAuthStore, useLinkStore } from '@mexit/core'
+import { apiURLs, deleteQueryParams, getFavicon, useAuthStore, useLinkStore } from '@mexit/core'
 import {
   CopyButton,
   DefaultMIcons,
@@ -44,7 +44,7 @@ const UrlTitleWrapper = styled(LinkTitleWrapper)`
   text-overflow: ellipsis;
 `
 
-const FaviconImage = ({ source }: { source: string }) => {
+export const FaviconImage = ({ source }: { source: string }) => {
   return <img height="20px" width="20px" src={getFavicon(source)} />
 }
 
@@ -130,7 +130,10 @@ export const URLShortner = ({ alias, url, editable, isDuplicateAlias, updateAlia
     }
   }
 
-  const text = useMemo(() => (alias ? apiURLs.links.shortendLink(alias, workspaceId()) : window.location.href), [alias])
+  const text = useMemo(
+    () => (alias ? apiURLs.links.shortendLink(alias, workspaceId()) : deleteQueryParams(window.location.href)),
+    [alias]
+  )
 
   return !editable ? (
     alias ? (
@@ -185,10 +188,11 @@ export const ShortenerComponent = () => {
   const { updateAlias, saveLink, isDuplicateAlias } = useLinkURLs()
 
   const link = useMemo(() => {
-    const l = links.find((l) => l.url === window.location.href)
+    const url = deleteQueryParams(window.location.href)
+    const l = links.find((l) => l.url === url)
     return (
       l ?? {
-        url: window.location.href,
+        url: url,
         ...getGoodMeta(document)
       }
     )
@@ -203,11 +207,13 @@ export const ShortenerComponent = () => {
     }
   }
 
+  const url = deleteQueryParams(window.location.href)
+
   return (
     <UrlTitleWrapper>
       {!editable && !link?.alias && (
         <InputContainer>
-          <FaviconImage source={window.location.href} />
+          <FaviconImage source={url} />
           <ShortenerTitle>{window.location.hostname}</ShortenerTitle>
         </InputContainer>
       )}

@@ -24,7 +24,7 @@ export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; colo
   justify-content: center;
   color: inherit;
 
-  ${({ size }) => {
+  ${({ size, theme }) => {
     const calcSize = size ? `${size}px` : '1rem'
     return css`
       font-family: EmojiMart, 'Segoe UI Emoji', 'Segoe UI Symbol', 'Segoe UI', 'Apple Color Emoji', 'Twemoji Mozilla',
@@ -38,6 +38,7 @@ export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; colo
         background-position: center;
         max-width: ${calcSize};
         max-height: ${calcSize};
+        border-radius: ${theme.borderRadius.small}};
       }
     `
   }}

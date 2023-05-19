@@ -1,6 +1,6 @@
 import React, { MetaHTMLAttributes, useMemo, useState } from 'react'
 
-import { Link, Tag, useLinkStore } from '@mexit/core'
+import { deleteQueryParams, Link, Tag, useLinkStore } from '@mexit/core'
 import { AddTagMenu, LinkShortenAndTagsWrapper, TagsLabel } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
@@ -19,10 +19,11 @@ export const AddTags = () => {
   const [root, setRoot] = useState<any>()
 
   const link = useMemo(() => {
-    const l = links.find((l) => l.url === window.location.href)
+    const url = deleteQueryParams(window.location.href)
+    const l = links.find((l) => l.url === url)
     return (
       l ?? {
-        url: window.location.href,
+        url: url,
         ...getGoodMeta(document)
       }
     )

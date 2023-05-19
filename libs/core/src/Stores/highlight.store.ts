@@ -2,6 +2,7 @@ import { produce } from 'immer'
 
 import { ElementHighlightMetadata, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
 import { StoreIdentifier } from '../Types/Store'
+import { deleteQueryParams } from '../Utils'
 import { mog } from '../Utils/mog'
 import { createStore } from '../Utils/storeCreator'
 
@@ -117,8 +118,11 @@ const highlightStoreConfig = (set, get) => ({
   },
 
   getHighlightsOfUrl: (url: string) => {
+    const withoutScrollUrl = deleteQueryParams(url)
+
     const highlights = get().highlights ?? []
-    return highlights.filter((h) => h?.properties?.sourceUrl === url)
+
+    return highlights.filter((h) => h?.properties?.sourceUrl === withoutScrollUrl)
   },
 
   clearAllHighlightedBlocks: () => {

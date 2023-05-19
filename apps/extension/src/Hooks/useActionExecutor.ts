@@ -5,6 +5,7 @@ import {
   ActionType,
   CategoryType,
   createNodeWithUid,
+  deleteQueryParams,
   DRAFT_NODE,
   generateSnippetId,
   getNewDraftKey,
@@ -126,7 +127,8 @@ export function useActionExecutor() {
             if (item?.extras?.new) saveIt(false, true)
             else appendAndSave({ nodeid: node.nodeid, content, highlight: true })
 
-            if (!links.find((l) => l.url === window.location.href)) {
+            const urlToFind = deleteQueryParams(window.location.href)
+            if (!links.find((l) => l.url === urlToFind)) {
               const link = { url: window.location.href, title: document.title }
               saveLink(link)
             }

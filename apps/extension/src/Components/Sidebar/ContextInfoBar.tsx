@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { useHighlightStore } from '@mexit/core'
-import { CenteredFlex, DefaultMIcons, getMIcon, List, SnippetCards } from '@mexit/shared'
+import { CenteredFlex, DefaultMIcons, getMIcon, List, SnippetCards, Toggle } from '@mexit/shared'
 
 import { AddTags } from './AddTags'
 import { GenericCard } from './GenericCard'
@@ -30,28 +30,35 @@ const basicOnboarding = [
   }
 ]
 
-export function ContextInfoBar() {
+const Highlights = () => {
+  const [showAll, setShowAll] = useState(false)
+
   const highlights = useHighlightStore((state) => state.highlights)
   const getHighlightsOfUrl = useHighlightStore((state) => state.getHighlightsOfUrl)
 
   const pageHighlights = useMemo(() => {
-    return getHighlightsOfUrl(window.location.href)
-  }, [window.location, highlights])
+    const list = showAll ? highlights : getHighlightsOfUrl(window.location.href)
+
+    return list?.sort((a, b) => {
+      if (a?.createdAt && b?.createdAt) {
+        return a.createdAt - b.createdAt
+      }
+
+      return 0
+    })
+  }, [window.location, highlights, showAll])
 
   return (
-    <SnippetCards fullHeight>
-      <SidebarSection label="Shorten URL" icon={getMIcon('ICON', 'ri:link-m')}>
-        <ShortenerComponent />
-      </SidebarSection>
-      <SidebarSection label="Tags" icon={DefaultMIcons.TAG}>
-        <AddTags />
-      </SidebarSection>
+    <SidebarSection
+      scrollable
+      label="Captures"
+      icon={DefaultMIcons.HIGHLIGHT}
+      rightComponent={<Toggle size="small" onChange={setShowAll} text="All" />}
+    >
       {pageHighlights?.length > 0 ? (
-        <SidebarSection scrollable label="Captures" icon={DefaultMIcons.HIGHLIGHT}>
-          <List $noMargin scrollable>
-            <HighlightGroups highlights={pageHighlights} />
-          </List>
-        </SidebarSection>
+        <List $noMargin scrollable>
+          <HighlightGroups highlights={pageHighlights} all={showAll} />
+        </List>
       ) : (
         <>
           <CenteredFlex>
@@ -65,6 +72,22 @@ export function ContextInfoBar() {
           </SnippetCards>
         </>
       )}
+    </SidebarSection>
+  )
+
+  return <></>
+}
+
+export function ContextInfoBar() {
+  return (
+    <SnippetCards fullHeight>
+      <SidebarSection label="Shorten URL" icon={getMIcon('ICON', 'ri:link-m')}>
+        <ShortenerComponent />
+      </SidebarSection>
+      <SidebarSection label="Tags" icon={DefaultMIcons.TAG}>
+        <AddTags />
+      </SidebarSection>
+      <Highlights />
     </SnippetCards>
   )
 }

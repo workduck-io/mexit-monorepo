@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import md5 from 'md5'
 
 import {
+  deleteQueryParams,
   extractLinksFromData,
   Link,
   mog,
@@ -10,8 +11,9 @@ import {
   useAuthStore,
   useDataStore,
   useHighlightStore,
-useLinkStore,  WORKSPACE_HEADER
- } from '@mexit/core'
+  useLinkStore,
+  WORKSPACE_HEADER
+} from '@mexit/core'
 
 export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
@@ -47,12 +49,16 @@ export const useLinkURLs = () => {
   }
 
   const saveLink = async (link: Link) => {
-    const existingLink = links.find((l) => l.url === link.url)
+    const updatedLink = {
+      ...link,
+      url: deleteQueryParams(link.url)
+    }
+    const existingLink = links.find((l) => l.url === updatedLink.url)
     if (existingLink) {
-      await saveLinkAPI(link)
+      await saveLinkAPI(updatedLink)
     } else {
-      await saveLinkAPI(link).then(() => {
-        addLink(link)
+      await saveLinkAPI(updatedLink).then(() => {
+        addLink(updatedLink)
       })
     }
   }
