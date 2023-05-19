@@ -18,6 +18,7 @@ import {
   Container,
   DefaultMIcons,
   DrawerHeaderDesc,
+  FlexBetween,
   FooterFlexButton,
   GenericFlex,
   getMIcon,
@@ -176,10 +177,18 @@ export const HighlightGroups = ({ highlights, all }: { highlights: Highlights; a
           <DomainWithHighlight>
             {highlightWithDomains.length > 1 && (
               <StickyHeader>
-                <Group>
-                  <img src={faviconURL} />
-                  <DrawerHeaderDesc>{origin}</DrawerHeaderDesc>
-                </Group>
+                <FlexBetween>
+                  <Group
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      window.open(highlightList.at(0).properties.sourceUrl, '_blank')
+                    }}
+                  >
+                    <img src={faviconURL} />
+                    <DrawerHeaderDesc>{origin}</DrawerHeaderDesc>&nbsp;
+                  </Group>
+                  <DrawerHeaderDesc fade>{highlightList.length}&nbsp;</DrawerHeaderDesc>
+                </FlexBetween>
               </StickyHeader>
             )}
             <HighlightGroupWrapper>
