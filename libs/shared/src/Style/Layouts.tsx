@@ -20,10 +20,22 @@ export const PageContainer = styled.div<{ fade?: boolean }>`
     `}
 `
 
-export const Group = styled.span`
+export const Group = styled.span<{ gap?: 'small' | 'medium' | 'large' }>`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.small};
+
+  ${({ theme, gap = 'small' }) => {
+    switch (gap) {
+      case 'small':
+        return `gap: ${theme.spacing.small};`
+
+      case 'medium':
+        return `gap: ${theme.spacing.medium};`
+
+      case 'large':
+        return `gap: ${theme.spacing.large};`
+    }
+  }}
 `
 
 export const IconButtonWrapper = styled(Group)`

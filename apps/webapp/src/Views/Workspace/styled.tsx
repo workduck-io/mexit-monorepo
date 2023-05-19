@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
-import { PrimaryButton } from '@workduck-io/mex-components'
+import { LoadingButton } from '@workduck-io/mex-components'
+import { generateStyle } from '@workduck-io/mex-themes'
 
 export const PageHeader = styled.header`
   display: flex;
@@ -19,8 +20,9 @@ export const JoinContainer = styled.form`
   gap: ${({ theme }) => theme.spacing.small};
 `
 
-export const StyledPrimaryButton = styled(PrimaryButton)`
+export const StyledPrimaryButton = styled(LoadingButton)`
   width: 100%;
+  ${({ theme }) => generateStyle(theme.generic.button.primary)}
 `
 
 export const Page = styled.div`

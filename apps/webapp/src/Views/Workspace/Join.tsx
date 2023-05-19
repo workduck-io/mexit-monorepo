@@ -22,8 +22,6 @@ const JoinWorkspace = () => {
   const authenticated = useAuthStore((store) => store.authenticated)
   const [workspaceDetails, setWorkspaceDetails] = useState<Workspace | undefined>()
   const addWorkspace = useAuthStore((store) => store.addWorkspace)
-  const activeWorkspace = useAuthStore((store) => store.workspaceDetails)
-  const setActiveWorkspace = useAuthStore((store) => store.setActiveWorkspace)
   const setAppInitStatus = useAuthStore((store) => store.setAppInitStatus)
 
   const { backup } = useStore()
@@ -37,7 +35,7 @@ const JoinWorkspace = () => {
     handleSubmit,
     register,
     getValues,
-    formState: { errors, isDirty }
+    formState: { errors, isDirty, isSubmitting }
   } = useForm({
     defaultValues: {
       invite: code
@@ -159,7 +157,7 @@ const JoinWorkspace = () => {
             <Loading transparent dots={5} />
           ) : (
             <>
-              <Group>
+              <Group gap="medium">
                 <IconDisplay icon={workspaceDetails?.icon ?? DefaultMIcons.WORKSPACE} size={32} />
                 {workspaceDetails && <h3>{workspaceDetails?.name}</h3>}
               </Group>
@@ -182,8 +180,9 @@ const JoinWorkspace = () => {
                   />
                   <StyledPrimaryButton
                     type="submit"
-                    disabled={errors.invite !== undefined || (!isDirty && !code)}
-                    async
+                    primary
+                    loading={isSubmitting}
+                    alsoDisabled={errors.invite !== undefined || (!isDirty && !code)}
                   >
                     {authenticated ? 'Join' : 'Register to Join'}
                   </StyledPrimaryButton>

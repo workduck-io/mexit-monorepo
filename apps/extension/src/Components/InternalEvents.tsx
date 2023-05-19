@@ -256,7 +256,6 @@ function handleHighlighter() {
 
       if (scrollTo) {
         const element = document.querySelector(`[data-highlight-id="${scrollTo}"]`)
-        console.log('ELEMENT', { element })
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
