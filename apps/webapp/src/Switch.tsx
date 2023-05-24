@@ -190,6 +190,7 @@ const IntegrationRoutes = () => {
       />
       <Route path="portal/:actionGroupId" element={<Portals />} />
       <Route path="prompts/:actionGroupId" element={<PromptProvidersPage />} />
+      <Route path="calendars/:actionGroupId" element={<Portals />} />
     </Routes>
   )
 }

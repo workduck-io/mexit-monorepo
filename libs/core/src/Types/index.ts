@@ -1,5 +1,6 @@
 export * from './Actions'
 export * from './Auth'
+export * from './Calendar'
 export * from './Comment'
 export * from './Editor'
 export * from './FeatureFlags'

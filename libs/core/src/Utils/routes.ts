@@ -7,6 +7,8 @@ const { MEXIT_BACKEND_URL_BASE, MEX_API_GATEWAY_URL_BASE, MEXIT_FRONTEND_URL_BAS
 
 export const API_BASE_URLS = {
   bookmarks: `${MEXIT_BACKEND_URL_BASE}/userStar`,
+  calendar: `${MEXIT_BACKEND_URL_BASE}/calendar`,
+  oauth2: `${MEXIT_BACKEND_URL_BASE}/oauth2`,
   archive: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
   unarchive: `${MEXIT_BACKEND_URL_BASE}/node/unarchive`,
   namespace: `${MEXIT_BACKEND_URL_BASE}/namespace`,
@@ -39,6 +41,13 @@ export const apiURLs = {
   bookmarks: {
     create: (nodeID: string) => `${API_BASE_URLS.bookmarks}/${nodeID}`,
     getAll: `${API_BASE_URLS.bookmarks}`
+  },
+
+  calendar: {
+    getAllCalendarsProvider: `${API_BASE_URLS.calendar}/providers`,
+    getGoogleCalendarAuthUrl: `${API_BASE_URLS.oauth2}/getGoogleAuthUrl`,
+    getGoogleCalendarNewToken: `${API_BASE_URLS.oauth2}/getGoogleAccessToken`,
+    persistAuth: `${API_BASE_URLS.oauth2}/persist`
   },
 
   archive: {

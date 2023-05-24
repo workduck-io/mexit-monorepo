@@ -41,6 +41,7 @@ export enum StoreIdentifier {
   METADATA = 'metadata',
   PREFERENCES = 'preference',
   PROMPRTS = 'prompt',
+  CALENDARS = 'calendars',
   REACTIONS = 'reaction',
   REMINDERS = 'reminder',
   REQUESTCACHE = 'request-cache',

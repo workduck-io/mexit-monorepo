@@ -1,6 +1,13 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { mog, PromptProviderType, usePortalStore, usePromptStore } from '@mexit/core'
+import {
+  CalendarProviderType,
+  mog,
+  PromptProviderType,
+  useCalendarStore,
+  usePortalStore,
+  usePromptStore
+} from '@mexit/core'
 import { Flex, FullHeight, IntegrationContainer } from '@mexit/shared'
 
 import Section from '../Components/Portals/Section'
@@ -13,6 +20,7 @@ const PortalsPage = () => {
   const apps = usePortalStore((store) => store.apps)
   const connectedPortals = usePortalStore((store) => store.connectedPortals)
   const promptsProviders = usePromptStore((store) => store.providers)
+  const calendarProviders = useCalendarStore((store) => store.providers)
   const getIsPortalConnected = usePortalStore((store) => store.getIsPortalConnected)
 
   const { getConnectedPortals, sortPortals } = usePortals()
@@ -20,7 +28,7 @@ const PortalsPage = () => {
   useEffect(() => {
     getConnectedPortals()
   }, []) // eslint-disable-line
-  mog("apps", {apps, connectedPortals})
+  mog('apps', { apps, connectedPortals })
 
   const portals = useMemo(
     () => sortPortals(apps, (item: any) => !!getIsPortalConnected(item.actionGroupId)),
@@ -43,6 +51,13 @@ const PortalsPage = () => {
             title="Prompts"
             onClick={(item: PromptProviderType) =>
               goTo(`${ROUTE_PATHS.integrations}/prompts`, NavigationType.push, item.actionGroupId)
+            }
+          />
+          <Section
+            items={calendarProviders}
+            title="Calendars"
+            onClick={(item: CalendarProviderType) =>
+              goTo(`${ROUTE_PATHS.integrations}/calendars`, NavigationType.push, item.actionGroupId)
             }
           />
         </IntegrationContainer>
