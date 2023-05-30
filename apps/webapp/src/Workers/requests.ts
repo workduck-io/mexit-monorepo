@@ -235,7 +235,7 @@ const initializeHighlightsExtension = async () => {
     .then((d) => d.json())
     .then((d: any) => {
       const highlights =
-        d?.Items?.map((item) => {
+        d?.map((item) => {
           if (item?.properties?.content) {
             const content = deserializeContent(item.properties.content)
             item.properties.content = content
@@ -243,7 +243,7 @@ const initializeHighlightsExtension = async () => {
 
           return {
             properties: item?.properties,
-            entityId: item?.entityId
+            entityId: item?.entityRefID
           } as Highlight
         }) ?? []
 

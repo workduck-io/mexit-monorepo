@@ -6,8 +6,9 @@ export const useHighlightAPI = () => {
   const saveHighlight = async (h: Highlight) => {
     const reqData = {
       // workspaceId: getWorkspaceId(),
-      properties: h.properties,
-      entityId: h.entityId
+      data: {
+        properties: h.properties
+      }
     }
     const res = await API.highlight.save(reqData)
     mog('We saved that highlight', { res })

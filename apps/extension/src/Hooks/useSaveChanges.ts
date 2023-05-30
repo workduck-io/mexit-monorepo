@@ -177,7 +177,6 @@ export function useSaveChanges() {
     const isCapturedHighlight = selection?.range && window.location.href
 
     const highlight = isCapturedHighlight && {
-      entityId: generateHighlightId(),
       properties: {
         sourceUrl: selection?.range && deleteQueryParams(window.location.href),
         saveableRange: selection?.range,
@@ -186,7 +185,7 @@ export function useSaveChanges() {
     }
 
     try {
-      await saveHighlight(
+      const highlightId = await saveHighlight(
         {
           ...highlight,
           properties: {
@@ -196,7 +195,10 @@ export function useSaveChanges() {
         },
         document.title
       )
-      addHighlightInStore(highlight)
+      addHighlightInStore({
+        entityId: highlightId,
+        ...highlight
+      })
       toast('Highlight saved!')
     } catch (err) {
       console.error(err)

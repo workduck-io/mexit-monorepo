@@ -159,7 +159,11 @@ export const useHighlightAPI = () => {
       type: 'HIGHLIGHT',
       subType: 'ADD_HIGHLIGHT',
       headers: workspaceHeaders(),
-      body: highlight
+      body: {
+        data: {
+          properties: highlight.properties
+        }
+      }
     }
 
     const response = await chrome.runtime.sendMessage(request)

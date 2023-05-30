@@ -27,7 +27,7 @@ export interface Highlight {
   /**
    * ID of the highlight
    */
-  entityId: string
+  entityId?: string
 
   /**
    * Properties of the highlight
