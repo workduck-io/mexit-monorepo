@@ -2,8 +2,13 @@ import { config } from './config'
 
 type AllNamespaceOption = 'onlyShared' | 'onlyWorkspace'
 
-const { MEXIT_BACKEND_URL_BASE, MEX_API_GATEWAY_URL_BASE, MEXIT_FRONTEND_URL_BASE, MEXIT_LINK_SHORTENER_URL_BASE } =
-  config.baseURLs
+const {
+  MEXIT_BACKEND_URL_BASE,
+  MEX_API_GATEWAY_URL_BASE,
+  MEXIT_FRONTEND_URL_BASE,
+  GOOGLE_CAL_BASE,
+  MEXIT_LINK_SHORTENER_URL_BASE
+} = config.baseURLs
 
 export const API_BASE_URLS = {
   bookmarks: `${MEXIT_BACKEND_URL_BASE}/userStar`,
@@ -33,6 +38,7 @@ export const API_BASE_URLS = {
   url: `${MEXIT_LINK_SHORTENER_URL_BASE}/link`,
   cdn: 'https://cdn.workduck.io',
   public: `${MEXIT_BACKEND_URL_BASE}/public`,
+  googleCalendar: `${GOOGLE_CAL_BASE}/primary/events`,
   shareFrontend: `${MEXIT_FRONTEND_URL_BASE}/share`,
   frontend: MEXIT_FRONTEND_URL_BASE
 }

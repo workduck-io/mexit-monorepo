@@ -12,7 +12,7 @@ import { mog, usePortalStore } from '@mexit/core'
 import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { usePortals } from '../../Hooks/usePortals'
-import { GlobalSectionContainer,GlobalSectionHeader } from '../../Style/GlobalSection'
+import { GlobalSectionContainer, GlobalSectionHeader } from '../../Style/GlobalSection'
 import CreateInput from '../createInput'
 import { QuickLink } from '../NodeSelect/NodeSelect'
 

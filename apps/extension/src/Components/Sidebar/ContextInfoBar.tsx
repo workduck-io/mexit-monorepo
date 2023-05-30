@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
-import { useHighlightStore } from '@mexit/core'
+import { useCalendarStore, useHighlightStore } from '@mexit/core'
 import { CenteredFlex, DefaultMIcons, getMIcon, List, SnippetCards, Toggle } from '@mexit/shared'
 
 import { AddTags } from './AddTags'
@@ -29,6 +29,24 @@ const basicOnboarding = [
     description: 'Use [[ to link to your public notes, use snippets and insert website shortcuts that you have created'
   }
 ]
+
+const UpcomingEvents = () => {
+  const calendarEvents = useCalendarStore((state) => state.events)
+
+  useEffect(() => {
+    // API.calendar.
+  }, [])
+
+  return (
+    <SidebarSection label="Upcoming Events" icon={DefaultMIcons.NOTIFICATION}>
+      <List $noMargin scrollable>
+        {calendarEvents.map((event) => (
+          <></>
+        ))}
+      </List>
+    </SidebarSection>
+  )
+}
 
 const Highlights = () => {
   const [showAll, setShowAll] = useState(false)
@@ -87,6 +105,7 @@ export function ContextInfoBar() {
       <SidebarSection label="Tags" icon={DefaultMIcons.TAG}>
         <AddTags />
       </SidebarSection>
+      <UpcomingEvents />
       <Highlights />
     </SnippetCards>
   )

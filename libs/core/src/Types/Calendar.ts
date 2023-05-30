@@ -8,12 +8,6 @@ export type CalendarProviderType = {
   description: string
 }
 
-export type CalendarStoreType = {
-  providers: Array<CalendarProviderType>
-  setCalendarProviders: (providers: Array<CalendarProviderType>) => void
-  reset: () => void
-}
-
 export type PersistAuth = {
   accessToken: string
   refreshToken: string

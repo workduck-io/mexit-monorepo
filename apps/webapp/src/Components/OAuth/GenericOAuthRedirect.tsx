@@ -11,7 +11,19 @@ import { useAuthentication, useInitializeAfterAuth } from '../../Stores/useAuth'
 
 import { checkCustomProtocolHandler } from './checkCustomProtocol'
 
-const allowedServices = ['google', 'telegram', 'slack', 'asana', 'figma', 'github', 'jira', 'linear', 'whatsapp']
+const allowedServices = [
+  'google',
+  'telegram',
+  'slack',
+  'asana',
+  'figma',
+  'google_cal',
+  'github',
+  'jira',
+  'linear',
+  'whatsapp',
+  'calendars'
+]
 
 const GenericOAuthRedirect = () => {
   const [hasDesktopApp, setHasDesktopApp] = useState<boolean>(true)
@@ -31,6 +43,7 @@ const GenericOAuthRedirect = () => {
       case 'telegram':
       case 'google':
       case 'slack':
+      case 'google_cal':
       case 'whatsapp':
         return true
 
@@ -53,10 +66,17 @@ const GenericOAuthRedirect = () => {
         const { loginStatus, loginData } = await loginViaGoogle(
           code,
           config.cognito.APP_CLIENT_ID,
+
           `${API_BASE_URLS.oauth}/google`
         )
         await initializeAfterAuth(loginData, true, true, false)
         navigate('/')
+        break
+      }
+      case 'google_cal': {
+        console.log('GOOGLE AUTH', { token: searchParams.get('access_token') })
+
+        // navigate(`/integrations/calendars/${serviceName.toUpperCase()}`)
         break
       }
 

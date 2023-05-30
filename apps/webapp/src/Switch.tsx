@@ -21,6 +21,7 @@ import { useSaveNodeName } from './Hooks/useSaveNodeName'
 import useSocket from './Hooks/useSocket'
 import { SocketActionType } from './Types/Socket'
 import Archive from './Views/Archive'
+import CalendarService from './Views/Calendars'
 import DraftView from './Views/DraftView'
 import EditorView from './Views/EditorView'
 import { ForgotPassword } from './Views/ForgotPassword'
@@ -190,7 +191,7 @@ const IntegrationRoutes = () => {
       />
       <Route path="portal/:actionGroupId" element={<Portals />} />
       <Route path="prompts/:actionGroupId" element={<PromptProvidersPage />} />
-      <Route path="calendars/:actionGroupId" element={<Portals />} />
+      <Route path="calendars/:actionGroupId" element={<CalendarService />} />
     </Routes>
   )
 }
