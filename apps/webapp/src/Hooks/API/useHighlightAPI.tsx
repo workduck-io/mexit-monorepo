@@ -6,8 +6,9 @@ export const useHighlightAPI = () => {
   const saveHighlight = async (h: Highlight) => {
     const reqData = {
       // workspaceId: getWorkspaceId(),
-      properties: h.properties,
-      entityId: h.entityId
+      data: {
+        properties: h.properties
+      }
     }
     const res = await API.highlight.save(reqData)
     mog('We saved that highlight', { res })
@@ -23,17 +24,19 @@ export const useHighlightAPI = () => {
       expiry: GET_REQUEST_MINIMUM_GAP_IN_MS
     })
     try {
-      const highlights = res?.Items?.map((item: any) => {
-        if (item.properties?.content) {
-          const content = deserializeContent(item.properties.content)
-          item.properties.content = content
-        }
+      const highlights = res
+        ?.map((item: any) => {
+          if (item.properties?.content) {
+            const content = deserializeContent(item.properties.content)
+            item.properties.content = content
+          }
 
-        return {
-          properties: item?.properties,
-          entityId: item?.entityId
-        } as Highlight
-      }).filter((v: undefined | Highlight) => !!v)
+          return {
+            properties: item?.properties,
+            entityId: item?.entityRefID
+          } as Highlight
+        })
+        .filter((v: undefined | Highlight) => !!v)
       return highlights
     } catch (e) {
       mog('Error fetching highlights', { e })

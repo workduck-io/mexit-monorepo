@@ -119,6 +119,7 @@ const highlightStoreConfig = (set, get) => ({
 
   getHighlightsOfUrl: (url: string) => {
     const withoutScrollUrl = deleteQueryParams(url)
+    mog('GET URL', { url, withoutScrollUrl })
 
     const highlights = get().highlights ?? []
 
