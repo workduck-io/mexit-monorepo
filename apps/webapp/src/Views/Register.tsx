@@ -194,12 +194,10 @@ export const Register = () => {
 
               <InputFormError
                 name="invite"
-                label="Invite Code"
+                label="Invite Code (Optional)"
                 inputProps={{
                   placeholder: 'Got an invite? Enter it here!',
-                  ...registerForm.register('invite', {
-                    required: true
-                  })
+                  ...registerForm.register('invite', {})
                 }}
                 errors={regErrors}
               ></InputFormError>
