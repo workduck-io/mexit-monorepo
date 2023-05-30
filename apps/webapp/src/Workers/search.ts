@@ -28,7 +28,7 @@ const searchWorker = {
     try {
       searchX.initializeSearch({
         ilinks: fileData.ilinks,
-        highlights: fileData.highlights,
+        highlights: fileData.highlights as any,
         links: fileData.links,
         reminders: fileData.reminders,
         contents: { contents: fileData.contents } as any,
