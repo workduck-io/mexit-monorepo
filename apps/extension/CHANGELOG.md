@@ -1,5 +1,13 @@
 # mexit
 
+## 0.19.26
+
+### Patch Changes
+
+- e752e62e: Highlight V2 API changes
+- 97da6ab4: Multi-workspace support added
+- 08a7f42f: Show all highlights in Extension
+
 ## 0.19.25
 
 ### Patch Changes
