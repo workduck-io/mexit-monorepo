@@ -15,6 +15,8 @@ interface IconDisplayProps {
   className?: string
   isLoading?: boolean
   color?: string
+  onClick?: any
+  cursor?: boolean
 }
 
 const resolveIconURL = (value: string) => {
@@ -53,10 +55,10 @@ const IconItem = ({ type, value }) => {
   }
 }
 
-export const IconDisplay = ({ icon, size, isLoading, className, color }: IconDisplayProps) => {
+export const IconDisplay = ({ icon, ...rest }: IconDisplayProps) => {
   if (!icon) return null
   return (
-    <IconWrapper isLoading={isLoading} size={size} className={className} color={color}>
+    <IconWrapper {...rest}>
       <IconItem {...icon} />
     </IconWrapper>
   )

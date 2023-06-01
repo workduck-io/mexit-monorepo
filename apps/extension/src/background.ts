@@ -8,6 +8,7 @@ import { CaptureConsole } from '@sentry/integrations'
 import {
   handleActionRequest,
   handleAsyncActionRequest,
+  handleAsyncCalendarRequest,
   handleCaptureRequest,
   handleHighlightRequest,
   handleNodeContentRequest,
@@ -125,6 +126,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       ;(async () => {
         const res = await handleNodeContentRequest(request)
         console.log('Got response: ', res)
+        sendResponse(res)
+      })()
+      return true
+    }
+
+    case 'CALENDAR': {
+      ;(async () => {
+        const res = await handleAsyncCalendarRequest(request)
+        console.log('Got Calendar response: ', res)
         sendResponse(res)
       })()
       return true

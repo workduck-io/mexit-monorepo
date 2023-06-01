@@ -53,7 +53,8 @@ export const apiURLs = {
     getAllCalendarsProvider: `${API_BASE_URLS.calendar}/providers`,
     getGoogleCalendarAuthUrl: `${API_BASE_URLS.oauth2}/getGoogleAuthUrl`,
     getGoogleCalendarNewToken: `${API_BASE_URLS.oauth2}/getGoogleAccessToken`,
-    persistAuth: `${API_BASE_URLS.oauth2}/persist`
+    persistAuth: `${API_BASE_URLS.oauth2}/persist`,
+    getAuth: `${API_BASE_URLS.oauth2}/auth`
   },
 
   archive: {

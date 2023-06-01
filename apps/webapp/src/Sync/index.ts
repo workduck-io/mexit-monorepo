@@ -3,6 +3,7 @@ import { useAuthStore as useDwindleAuthStore } from '@workduck-io/dwindle'
 import {
   BroadcastSyncedChannel,
   useAuthStore,
+  useCalendarStore,
   useContentStore,
   useDataStore,
   useDescriptionStore,
@@ -100,6 +101,11 @@ const syncStores = () => {
     syncStoreState(useUserPreferenceStore, {
       name: BroadcastSyncedChannel.USER_PREFERENCES,
       sync: [{ field: 'theme' }]
+    })
+
+    syncStoreState(useCalendarStore, {
+      name: BroadcastSyncedChannel.CALENDAR,
+      sync: [{ field: 'tokens' }]
     })
   }
 }

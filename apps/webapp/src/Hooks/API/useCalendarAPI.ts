@@ -1,4 +1,4 @@
-import { API, PersistAuth, useCalendarStore } from '@mexit/core'
+import { API, mog, PersistAuth, useCalendarStore } from '@mexit/core'
 
 export const useCalendarAPI = () => {
   const setCalendarProviders = useCalendarStore((s) => s.setCalendarProviders)
@@ -24,6 +24,11 @@ export const useCalendarAPI = () => {
     return resp
   }
 
+  const getGoogleCalendarAuth = async () => {
+    const resp = await API.calendar.getAuth()
+    mog('AUTH', { resp })
+  }
+
   const persistAuthToken = async (data: PersistAuth) => {
     API.calendar
       .persistAuth(data)
@@ -35,6 +40,7 @@ export const useCalendarAPI = () => {
     getCalendarProviders,
     getGoogleCalendarAuthUrl,
     getGoogleCalendarNewToken,
-    persistAuthToken
+    persistAuthToken,
+    getGoogleCalendarAuth
   }
 }

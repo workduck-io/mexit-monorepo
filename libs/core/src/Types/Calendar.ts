@@ -12,5 +12,5 @@ export type PersistAuth = {
   accessToken: string
   refreshToken: string
   email: string
-  expiresIn: number
+  expiresIn?: number
 }

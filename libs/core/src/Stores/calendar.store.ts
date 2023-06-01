@@ -1,11 +1,15 @@
-import { CalendarProviderType } from '../Types/Calendar'
-import { StoreIdentifier } from '../Types/Store'
+import { CalendarProviderType, StoreIdentifier } from '../Types'
+import { getLocalStorage } from '../Utils'
 import { createStore } from '../Utils/storeCreator'
 
-export const calendarStoreConfig = (set, get) => ({
+const getInitCalendarStore = () => ({
   providers: [] as Array<CalendarProviderType>,
   events: [] as Array<any>,
-  tokens: {} as Record<string, string>,
+  tokens: {} as Record<string, string>
+})
+
+export const calendarStoreConfig = (set, get) => ({
+  ...getInitCalendarStore(),
   addToken: (service: string, token: string) =>
     set({
       tokens: {
@@ -18,8 +22,13 @@ export const calendarStoreConfig = (set, get) => ({
     set({ providers })
   },
   reset: () => {
-    set({ prompts: {}, providers: [], results: {}, resultIndexes: {}, userPromptAuthInfo: undefined })
+    const initState = getInitCalendarStore()
+    set(initState)
   }
 })
 
-export const useCalendarStore = createStore(calendarStoreConfig, StoreIdentifier.CALENDARS, true)
+export const useCalendarStore = createStore(calendarStoreConfig, StoreIdentifier.CALENDARS, true, {
+  storage: {
+    web: getLocalStorage()
+  }
+})

@@ -75,3 +75,36 @@ export const DomainWithHighlight = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
 `
+
+export const EventCard = styled.div`
+  ${BodyFont}
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  cursor: pointer;
+
+  :hover {
+    background: ${({ theme }) => theme.tokens.surfaces.app};
+  }
+`
+
+export const EventHeader = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`
+
+export const EventHeading = styled.div`
+  text-overflow: ellipsis;
+  color: ${({ theme }) => theme.tokens.text.default};
+  white-space: nowrap;
+  overflow-x: hidden;
+`
+
+export const Timestamp = styled.div`
+  font-size: 12px;
+  color: ${({ theme }) => theme.tokens.text.fade};
+  opacity: 0.7;
+`

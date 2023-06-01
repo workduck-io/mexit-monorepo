@@ -1,13 +1,28 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
+
+import { formatDistanceToNow } from 'date-fns'
 
 import { useCalendarStore, useHighlightStore } from '@mexit/core'
-import { CenteredFlex, DefaultMIcons, getMIcon, List, SnippetCards, Toggle } from '@mexit/shared'
+import {
+  CenteredFlex,
+  DefaultMIcons,
+  FadeContainer,
+  getMIcon,
+  Group,
+  IconDisplay,
+  List,
+  SnippetCards,
+  Toggle,
+  useCalendar,
+  useInterval
+} from '@mexit/shared'
 
 import { AddTags } from './AddTags'
 import { GenericCard } from './GenericCard'
 import { HighlightGroups } from './HighlightGroup'
 import { ShortenerComponent } from './ShortenerComponent'
 import SidebarSection from './SidebarSection'
+import { EventCard, EventHeading, Timestamp } from './styled'
 
 // TODO: add links to onboarding tutorials later
 // and maybe a check if the user doesn't want to see a card again
@@ -30,19 +45,68 @@ const basicOnboarding = [
   }
 ]
 
-const UpcomingEvents = () => {
-  const calendarEvents = useCalendarStore((state) => state.events)
-
-  useEffect(() => {
-    // API.calendar.
-  }, [])
+const CalendarEvent = ({ event }) => {
+  const [showActions, setShowActions] = useState(false)
 
   return (
-    <SidebarSection label="Upcoming Events" icon={DefaultMIcons.NOTIFICATION}>
-      <List $noMargin scrollable>
-        {calendarEvents.map((event) => (
-          <></>
-        ))}
+    <EventCard key={event.id} onMouseEnter={() => setShowActions(true)} onMouseLeave={() => setShowActions(false)}>
+      <Group>
+        <IconDisplay icon={DefaultMIcons.CALENDAR} />
+        <EventHeading>{event.summary}</EventHeading>
+      </Group>
+      {showActions ? (
+        <FadeContainer flex={false} fade>
+          <Group>
+            <IconDisplay icon={DefaultMIcons.NOTE} />
+            <IconDisplay
+              icon={DefaultMIcons.WEB_LINK}
+              onClick={() => {
+                window.open(event.links.meet, '_blank')
+              }}
+            />
+          </Group>
+        </FadeContainer>
+      ) : (
+        <FadeContainer flex={false} fade>
+          <Timestamp>{formatDistanceToNow(event.times.start)}</Timestamp>
+        </FadeContainer>
+      )}
+    </EventCard>
+  )
+}
+
+const UpcomingEvents = () => {
+  const [isFetching, setIsFetching] = useState(false)
+
+  const { getUpcomingEvents, getCalenderEvents } = useCalendar()
+  const calendarEvents = useCalendarStore((state) => state.events)
+
+  const fetchEvents = async () => {
+    setIsFetching(true)
+    try {
+      await getCalenderEvents()
+    } catch (err) {
+      console.error('Unable to fetch google events', err)
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
+  // Every 5 mins fetch calendar events
+  useInterval(fetchEvents, 30 * 60 * 1000)
+
+  const upcomingEvents = useMemo(() => {
+    return getUpcomingEvents()
+  }, [calendarEvents])
+
+  return (
+    <SidebarSection label="Upcoming Events" isLoading={isFetching} icon={DefaultMIcons.NOTIFICATION}>
+      <List $noMargin scrollable $maxHeight="8vh">
+        {upcomingEvents.map((event) => {
+          const desc = event.description ? `: ${event.description}` : ''
+
+          return <CalendarEvent event={event} />
+        })}
       </List>
     </SidebarSection>
   )

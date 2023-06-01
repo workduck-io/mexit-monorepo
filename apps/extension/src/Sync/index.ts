@@ -1,6 +1,7 @@
 import {
   BroadcastSyncedChannel,
   mog,
+  useCalendarStore,
   useContentStore,
   useDataStore,
   useHighlightStore,
@@ -107,6 +108,15 @@ const messagePassing = () => {
     {
       name: BroadcastSyncedChannel.HIGHLIGHTS,
       sync: [{ field: 'highlights' }, { field: 'highlightBlockMap' }]
+    },
+    onStateChange
+  )
+
+  storeChangeHandler(
+    useCalendarStore,
+    {
+      name: BroadcastSyncedChannel.CALENDAR,
+      sync: [{ field: 'tokens' }]
     },
     onStateChange
   )

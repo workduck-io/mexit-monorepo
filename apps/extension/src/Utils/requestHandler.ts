@@ -1,8 +1,10 @@
+import ky from 'ky'
+
 import { AIEvent, apiURLs, DEFAULT_NAMESPACE, defaultContent, ListItemType, mog } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
 
-import client from './fetchClient'
+import client, { getAuthStateFromChrome, setAuthStateChrome } from './fetchClient'
 import { deserializeContent, serializeContent } from './serializer'
 
 export const handleCaptureRequest = ({ subType, data }) => {
@@ -276,6 +278,53 @@ export const handleShortenerRequest = ({ subType, body, headers }) => {
         })
         .catch((err) => {
           return { message: null, error: err }
+        })
+    }
+  }
+}
+
+const _refreshTokenHook = (state) => async (request, _, response) => {
+  if (response && response.status === 401) {
+    try {
+      const res = await client.get(apiURLs.calendar.getGoogleCalendarNewToken).json()
+      setAuthStateChrome({ ...state, accessToken: res })
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  return
+}
+
+export const handleAsyncCalendarRequest = async ({ subType, data }) => {
+  switch (subType) {
+    case 'GET_EVENTS':
+      // eslint-disable-next-line no-case-declarations
+      const state = await getAuthStateFromChrome('mexit-calendars-extension')
+      return await ky
+        .get(data.url, {
+          hooks: {
+            beforeRequest: [(request) => request.headers.set('authorization', `Bearer ${state.tokens['GOOGLE_CAL']}`)],
+            afterResponse: [_refreshTokenHook(state)]
+          }
+        })
+        .json()
+        .then((d: any) => {
+          return { message: d, error: null }
+        })
+        .catch((err) => {
+          console.error('Unable to fetch calendar', err)
+          return {
+            message: null,
+            error: null
+          }
+        })
+    case 'REFRESH_GOOGLE_CALENDAR_TOKEN': {
+      return client
+        .get(apiURLs.calendar.getGoogleCalendarNewToken)
+        .json()
+        .then((d: any) => {
+          return { message: d.data, error: null }
         })
     }
   }

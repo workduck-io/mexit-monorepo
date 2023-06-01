@@ -132,7 +132,8 @@ export const DefaultMIcons = {
   SEARCH: getMIcon('ICON', 'ri:search-line'),
   WORKSPACE: getMIcon('ICON', 'icon-park-solid:app-switch'),
   PEOPLE: getMIcon('ICON', 'bi:people'),
-  NOTIFICATION: getMIcon('ICON', 'bx:notification')
+  NOTIFICATION: getMIcon('ICON', 'bx:notification'),
+  CALENDAR: getMIcon('ICON', 'mdi:calendar')
 }
 
 export const ForwardlinkIcon = {

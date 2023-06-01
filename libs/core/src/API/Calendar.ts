@@ -15,16 +15,16 @@ export class CalendarAPI {
     return await this.client.post(apiURLs.calendar.persistAuth, data, options)
   }
 
-  async getGoogleCalendarEvents(url: string, cacheConfig?: CacheConfig, options?: Options) {
-    return await this.client.get(url, cacheConfig, options)
-  }
-
   async getGoogleCalendarNewToken(cacheConfig?: CacheConfig, options?: Options) {
     return await this.client.get(apiURLs.calendar.getGoogleCalendarNewToken, cacheConfig, options)
   }
 
   async getAllCalendarProviders(cacheConfig?: CacheConfig, options?: Options) {
     return await this.client.get(apiURLs.calendar.getAllCalendarsProvider, cacheConfig, options)
+  }
+
+  async getAuth(cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.calendar.getAuth, cacheConfig, options)
   }
 
   async getGoogleCalendarAuthUrl(config?) {
