@@ -18,15 +18,26 @@ export const fadeOut = keyframes`
   }
 `
 
-export const FadeContainer = styled.section<{ fade: boolean }>`
-  display: flex;
-  flex: 1;
+export const FadeContainer = styled.section<{ fade: boolean; flex?: boolean }>`
+  ${({ flex = true }) =>
+    flex &&
+    css`
+      display: flex;
+      flex: 1;
+    `}
+
   animation: ${({ fade }) =>
     fade
       ? css`
           ${fadeIn} 0.25s ease-in-out
         `
       : ''};
+`
+
+export const FadeText = styled.span`
+  color: ${({ theme }) => theme.tokens.text.fade};
+  opacity: 0.5;
+  font-size: 14px;
 `
 
 export const FadeSpan = styled.span`

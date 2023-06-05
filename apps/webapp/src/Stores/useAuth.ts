@@ -10,6 +10,7 @@ import {
   RegisterFormData,
   useAppStore,
   useAuthStore,
+  useCalendarStore,
   useCommentStore,
   useContentStore,
   useDataStore,
@@ -65,6 +66,7 @@ export const useAuthentication = () => {
   const clearMetadataStore = useMetadataStore((s) => s.reset)
   const clearPromptStore = usePromptStore((s) => s.reset)
   const resetEditorStore = useEditorStore((s) => s.reset)
+  const clearCalendarStore = useCalendarStore((s) => s.reset)
 
   const clearReminders = useReminderStore((r) => r.clearReminders)
   const clearTodos = useTodoStore((s) => s.clearTodos)
@@ -136,6 +138,7 @@ export const useAuthentication = () => {
     clearViews()
     clearUsersCache()
     resetEditorStore()
+    clearCalendarStore()
     API.reset()
   }
 

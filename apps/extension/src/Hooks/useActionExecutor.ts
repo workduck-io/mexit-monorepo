@@ -124,8 +124,12 @@ export function useActionExecutor() {
               namespace: namespace.id
             })
 
-            if (item?.extras?.new) saveIt(false, true)
-            else appendAndSave({ nodeid: node.nodeid, content, highlight: true })
+            if (item?.extras?.new) {
+              saveIt({
+                saveAndExit: false,
+                notification: true
+              })
+            } else appendAndSave({ nodeid: node.nodeid, content, highlight: true })
 
             const urlToFind = deleteQueryParams(window.location.href)
             if (!links.find((l) => l.url === urlToFind)) {

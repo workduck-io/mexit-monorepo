@@ -66,6 +66,7 @@ type BaseURLs =
   | 'MEXIT_WEBSOCKET_URL'
   | 'MEXIT_LINK_SHORTENER_URL_BASE'
   | 'MEXIT_AUTH_URL_BASE'
+  | 'GOOGLE_CAL_BASE'
 
 const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
   [STAGE.prod]: {
@@ -74,7 +75,8 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-staging.workduck.io/api/v1',
     MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io',
     MEXIT_LINK_SHORTENER_URL_BASE: 'https://url.workduck.io',
-    MEXIT_AUTH_URL_BASE: 'https://workduck.auth.us-east-1.amazoncognito.com'
+    MEXIT_AUTH_URL_BASE: 'https://workduck.auth.us-east-1.amazoncognito.com',
+    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
   },
   [STAGE.staging]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws.workduck.io/route',
@@ -82,7 +84,8 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-staging.workduck.io/api/v1',
     MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io',
     MEXIT_LINK_SHORTENER_URL_BASE: 'https://url.workduck.io',
-    MEXIT_AUTH_URL_BASE: 'https://workduck.auth.us-east-1.amazoncognito.com'
+    MEXIT_AUTH_URL_BASE: 'https://workduck.auth.us-east-1.amazoncognito.com',
+    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
   },
   [STAGE.test]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io/route',
@@ -90,7 +93,8 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-test.workduck.io/api/v1',
     MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io',
     MEXIT_LINK_SHORTENER_URL_BASE: 'https://url-test.workduck.io',
-    MEXIT_AUTH_URL_BASE: 'https://workduck-testing.auth.us-east-1.amazoncognito.com'
+    MEXIT_AUTH_URL_BASE: 'https://workduck-testing.auth.us-east-1.amazoncognito.com',
+    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
   },
   [STAGE.local]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io/route',
@@ -98,7 +102,8 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     MEXIT_BACKEND_URL_BASE: 'http://localhost:5002/api/v1',
     MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io',
     MEXIT_LINK_SHORTENER_URL_BASE: 'https://url-test.workduck.io',
-    MEXIT_AUTH_URL_BASE: 'https://workduck-testing.auth.us-east-1.amazoncognito.com'
+    MEXIT_AUTH_URL_BASE: 'https://workduck-testing.auth.us-east-1.amazoncognito.com',
+    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
   }
 }
 

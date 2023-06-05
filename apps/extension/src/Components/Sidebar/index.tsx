@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { useAuthStore, useLayoutStore } from '@mexit/core'
+import { mog, useAuthStore, useLayoutStore } from '@mexit/core'
 import { Drawer, ExtInfobarMode, Group, InfoBarWrapper, LoginInfoBar, Tabs, WDLogo } from '@mexit/shared'
 
 import { useRightSidebarShortcuts } from '../../Hooks/useRightSidebarShortcuts'
@@ -68,6 +68,14 @@ export const ExtInfoBar = () => {
       unsubscribe()
     }
   }, [])
+
+  useEffect(() => {
+    if (!authenticated) {
+      chrome.storage.local.clear().then(() => {
+        mog('Cleared local storage')
+      })
+    }
+  }, [authenticated])
 
   if (!rhSidebar?.show) return null
 

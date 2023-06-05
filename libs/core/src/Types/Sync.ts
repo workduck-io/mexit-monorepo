@@ -29,7 +29,8 @@ export enum BroadcastSyncedChannel {
   ROUTES_INFO = 'routes-information',
   HIGHLIGHTS = 'highlights',
   LAYOUT = 'layout',
-  TEST_BROADCASTING = 'test-broadcasting'
+  TEST_BROADCASTING = 'test-broadcasting',
+  CALENDAR = 'calendar'
 }
 
 export enum SharedStoreKey {

@@ -7,10 +7,8 @@ import {
   deleteQueryParams,
   ELEMENT_TAG,
   extractMetadata,
-  generateHighlightId,
   getHighlightBlockMap,
   Highlight,
-  mog,
   NodeProperties,
   SaveableRange,
   SEPARATOR,
@@ -75,78 +73,97 @@ export function useSaveChanges() {
   /**
    * Save
    */
-  const saveIt = async (saveAndExit = false, notification = false) => {
-    // mog('saveIt', { saveAndExit, notification })
+  const saveIt = async (options = { saveAndExit: false, notification: false }) => {
     setVisualState(VisualState.animatingOut)
 
     const node = useSputlitStore.getState().node
-    const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
     const selection = useSputlitStore.getState().selection
-    const editorState = useEditorStore.getState().nodeContent
-    // mog('nodeContent', editorState)
+    const nodeContent = useEditorStore.getState().nodeContent
 
+    addRecent(node.nodeid)
+
+    setContent(node.nodeid, nodeContent)
+    setSelection(undefined)
+    setActiveItem()
+
+    const { highlight, blockHighlightMap } = await createHighlightEntityFromSelection(
+      selection,
+      node.nodeid,
+      nodeContent
+    )
+
+    const res = await saveNode({
+      notify: options.notification,
+      content: nodeContent,
+      node,
+      reqData: highlight ? { highlightId: highlight.entityId } : {}
+    })
+
+    if (res) {
+      const nodeid = res.nodeId
+      const content = res.content
+
+      dispatchAfterSave(
+        { nodeid, content, metadata: res.metadata, highlight, blockHighlightMap },
+        options.saveAndExit,
+        options.notification
+      )
+    }
+  }
+
+  const saveNode = async ({ node, content, notify, reqData }) => {
     const parentILink = getParentILink(node.path)
     const isRoot = node.path.split(SEPARATOR).length === 1
     const isSingle = !!parentILink || isRoot
+    const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
 
     dispatchLinkUpdates(node, namespace, isSingle)
 
-    const request = {
+    const saveNodeRequest = {
       type: 'CAPTURE_HANDLER',
       subType: isSingle ? 'SAVE_NODE' : 'BULK_CREATE_NODES',
       data: {
         path: isSingle ? undefined : createNoteHierarchyString(node.path, namespace.id),
         id: node.nodeid,
         title: node.title,
-        content: editorState,
-        referenceID: isSingle ? parentILink?.nodeid : undefined,
+        content,
+        referenceID: isSingle ? parentILink.nodeid : undefined,
         workspaceID: workspaceDetails.id,
         namespaceID: namespace.id,
-        highlightId: undefined
+        highlightId: undefined,
+        ...(reqData ?? {})
       }
     }
 
-    mog('request', { request })
+    const response = await chrome.runtime.sendMessage(saveNodeRequest)
 
-    setContent(node.nodeid, editorState)
-
-    setSelection(undefined)
-    addRecent(node.nodeid)
-    setActiveItem()
-
-    const { highlight, blockHighlightMap } = await createHighlightEntityFromSelection(
-      selection,
-      node.nodeid,
-      editorState
-    )
-
-    if (highlight) {
-      request.data.highlightId = highlight.entityId
-    }
-
-    mog('Request and things', { request, node, editorState, highlight })
-    chrome.runtime.sendMessage(request, (response) => {
+    if (response) {
       const { message, error } = response
-      // mog('Response', { response })
 
-      if (error && notification) {
+      if (error && notify) {
         toast.error('An Error Occured. Please try again.')
-      } else {
-        const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
-
-        const nodeid = !bulkCreateRequest ? message.id : message.node.id
-        const content = message.content ?? request.data.content
-        const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
-
-        setContent(nodeid, content)
-
-        const title = !bulkCreateRequest ? message.title : message.node.title
-        updateDocument({ id: nodeid, contents: content, title })
-
-        mog('DispatchAfterSave', { response, nodeid, content, metadata, highlight, blockHighlightMap })
-        dispatchAfterSave({ nodeid, content, metadata, highlight, blockHighlightMap }, saveAndExit, notification)
+        return
       }
-    })
+
+      if (message) {
+        const nodeId = message.node?.id ?? message.id
+        const nodeContent = message.content ?? content
+        const title = message.node?.title ?? message.title
+        const metadata = extractMetadata(message.node ?? message, { icon: DefaultMIcons.NOTE })
+
+        setContent(nodeId, nodeContent)
+        updateMetadata('notes', nodeId, metadata)
+        updateDocument({ id: nodeId, contents: nodeContent, title })
+        addRecentNote(nodeId)
+
+        return {
+          nodeId: nodeId,
+          content: nodeContent,
+          title,
+          metadata
+        }
+      }
+    }
   }
 
   /**
@@ -184,25 +201,26 @@ export function useSaveChanges() {
       }
     }
 
-    try {
-      const highlightId = await saveHighlight(
-        {
-          ...highlight,
-          properties: {
-            ...highlight?.properties,
-            content: serializeContent(content, '')
-          }
-        },
-        document.title
-      )
+    const highlightId = await saveHighlight(
+      {
+        ...highlight,
+        properties: {
+          ...highlight?.properties,
+          content: serializeContent(content, '')
+        }
+      },
+      document.title
+    )
+
+    if (highlightId) {
       addHighlightInStore({
         entityId: highlightId,
         ...highlight
       })
+
       toast('Highlight saved!')
-    } catch (err) {
-      console.error(err)
-      toast('An error occured while saving the highlight. Please try again.')
+    } else {
+      toast('Unable to save highlight currently, Please try again later')
     }
   }
 
@@ -215,8 +233,7 @@ export function useSaveChanges() {
    */
   const createHighlightEntityFromSelection = async (selection: any, nodeid: string, content: any[]) => {
     const isCapturedHighlight = selection?.range && window.location.href
-    const highlight = isCapturedHighlight && {
-      entityId: generateHighlightId(),
+    const highlight: Highlight = isCapturedHighlight && {
       properties: {
         sourceUrl: selection?.range && deleteQueryParams(window.location.href),
         saveableRange: selection?.range,
@@ -226,28 +243,33 @@ export function useSaveChanges() {
 
     if (highlight) {
       // Save highlight
-      const updateContent = content?.map((block) => {
-        return {
-          ...block,
-          metadata: {
-            elementMetadata: {
-              id: highlight.entityId,
-              type: 'highlightV1'
+      const sourceTitle = document.title
+      const highlightId = await saveHighlight(highlight, sourceTitle)
+
+      if (highlightId) {
+        const updateContent = content?.map((block) => {
+          return {
+            ...block,
+            metadata: {
+              elementMetadata: {
+                id: highlightId,
+                type: 'highlightV1'
+              }
             }
           }
-        }
-      })
+        })
 
-      const sourceTitle = document.title
-      await saveHighlight(highlight, sourceTitle)
+        highlight.entityId = highlightId
 
-      // Extract the blockids for which we have captured highlights
-      const blockHighlightMap = getHighlightBlockMap(nodeid, updateContent)
+        // Extract the blockids for which we have captured highlights
+        const blockHighlightMap = getHighlightBlockMap(nodeid, updateContent)
 
-      // Add highlight in local store and nodeblockmap
-      addHighlight(highlight, blockHighlightMap)
-      return { highlight, blockHighlightMap }
+        // Add highlight in local store and nodeblockmap
+        addHighlight(highlight, blockHighlightMap)
+        return { highlight, blockHighlightMap }
+      }
     }
+
     return { highlight: undefined, blockHighlightMap: undefined }
   }
 
@@ -274,14 +296,7 @@ export function useSaveChanges() {
     }
   }
   // Dispatches new items to the stores
-  const dispatchAfterSave = (
-    { nodeid, content, metadata, highlight, blockHighlightMap }: DispatchData,
-    saveAndExit = false,
-    notification = false
-  ) => {
-    addRecentNote(nodeid)
-    setContent(nodeid, content, metadata)
-
+  const dispatchAfterSave = ({ nodeid }: DispatchData, saveAndExit = false, notification = false) => {
     if (notification) {
       toast.success('Saved to Cloud')
     }
@@ -380,6 +395,7 @@ export function useSaveChanges() {
   return {
     saveIt,
     saveHighlightEntity,
-    appendAndSave
+    appendAndSave,
+    saveNode
   }
 }

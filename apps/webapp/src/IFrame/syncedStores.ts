@@ -20,4 +20,5 @@ export const syncStoresWithExtension = (extension) => {
   listenChannel(BroadcastSyncedChannel.METADATA, extension)
   listenChannel(BroadcastSyncedChannel.DESCRIPTIONS, extension)
   listenChannel(BroadcastSyncedChannel.SMART_CAPTURE, extension)
+  listenChannel(BroadcastSyncedChannel.CALENDAR, extension)
 }

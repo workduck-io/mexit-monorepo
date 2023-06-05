@@ -3,13 +3,14 @@ import { ReactElement } from 'react'
 import { useTheme } from 'styled-components'
 
 import { MIcon } from '@mexit/core'
-import { GenericFlex, IconDisplay } from '@mexit/shared'
+import { GenericFlex, IconDisplay, Loading } from '@mexit/shared'
 
 import { SectionHeading, StyledSidebarSection } from './styled'
 
 type SidebarSectionProps = {
   label: string
   icon: MIcon
+  isLoading?: boolean
   children: ReactElement
   scrollable?: boolean
   rightComponent?: ReactElement
@@ -20,6 +21,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
   children,
   icon,
   rightComponent,
+  isLoading,
   scrollable = false
 }) => {
   const theme = useTheme()
@@ -30,6 +32,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
         <GenericFlex>
           <IconDisplay color={theme.tokens.text.fade} icon={icon} />
           <span>{label}</span>
+          {isLoading && <Loading dots={2} transparent />}
         </GenericFlex>
         {rightComponent}
       </SectionHeading>

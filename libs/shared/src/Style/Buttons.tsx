@@ -2,10 +2,8 @@ import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { BodyFont } from './Search'
-
 export const StyledButton = styled(Button)`
-  ${BodyFont}
+  font-size: 14px !important;
 `
 
 // export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {

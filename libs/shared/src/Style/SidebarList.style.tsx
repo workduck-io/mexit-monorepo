@@ -42,7 +42,7 @@ export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
   display: flex;
   align-items: center;
   padding: 0 ${({ theme }) => theme.spacing.small};
-  margin: ${({ theme }) => `0 0`};
+  margin: 0;
   margin-top: ${({ noMargin, theme }) => (noMargin ? '0' : theme.spacing.medium)};
   background: ${({ theme }) => theme.generic.form.input.surface};
   border-radius: ${({ theme }) => theme.borderRadius.small};
@@ -80,16 +80,29 @@ export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
   }
 `
 
-export const List = styled.section<{ scrollable?: boolean; $noMargin?: boolean; padding?: boolean }>`
+export const List = styled.section<{
+  scrollable?: boolean
+  $noMargin?: boolean
+  padding?: boolean
+  $maxHeight?: string
+}>`
   ${({ $noMargin }) =>
     !$noMargin &&
     css`
       margin-top: ${({ theme }) => theme.spacing.medium};
     `}
 
+  ${({ $maxHeight }) =>
+    $maxHeight
+      ? css`
+          max-height: ${$maxHeight};
+        `
+      : css`
+          gap: ${({ theme }) => theme.spacing.small};
+        `}
+
   display:flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.small};
   overflow: hidden auto;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   overscroll-behavior: contain;

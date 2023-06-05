@@ -4,6 +4,7 @@ import { KYClient } from '@workduck-io/dwindle'
 
 import { AiAPI } from './AI'
 import { BookmarkAPI } from './Bookmarks'
+import { CalendarAPI } from './Calendar'
 import { CommentAPI } from './Comment'
 import { HighlightAPI } from './Highlight'
 import { InviteAPI } from './Invite'
@@ -30,6 +31,7 @@ class APIClass {
   public bookmark: BookmarkAPI
   public reaction: ReactionAPI
   public comment: CommentAPI
+  public calendar: CalendarAPI
   public namespace: NamespaceAPI
   public view: ViewAPI
   public loch: LochAPI
@@ -58,6 +60,7 @@ class APIClass {
     this.bookmark = new BookmarkAPI(this.client)
     this.reaction = new ReactionAPI(this.client)
     this.comment = new CommentAPI(this.client)
+    this.calendar = new CalendarAPI(this.client)
     this.namespace = new NamespaceAPI(this.client)
     this.loch = new LochAPI(this.client)
     this.prompt = new PromptAPI(this.client)

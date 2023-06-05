@@ -7,12 +7,12 @@ import { config } from '@mexit/core'
 
 const AWS_AUTH_KEY = 'aws-auth-mexit'
 
-const getAuthStateFromChrome = async () => {
-  const authState = (await chrome.storage.local.get(AWS_AUTH_KEY))?.[AWS_AUTH_KEY]
+export const getAuthStateFromChrome = async (key: string = AWS_AUTH_KEY) => {
+  const authState = (await chrome.storage.local.get(key))?.[key]
   return JSON.parse(authState ?? '{}')?.state
 }
 
-const setAuthStateChrome = async (data) => {
+export const setAuthStateChrome = async (data) => {
   const sData = JSON.stringify(data)
   return await chrome.storage.local.set({
     [AWS_AUTH_KEY]: sData

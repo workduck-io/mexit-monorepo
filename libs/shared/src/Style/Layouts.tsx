@@ -126,10 +126,17 @@ export const CenterSpace = styled(CenteredColumn)`
   padding: 1rem 0;
 `
 
-export const SpaceBetweenHorizontalFlex = styled.div`
+export const SpaceBetweenHorizontalFlex = styled.div<{ width?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  ${({ width }) =>
+    width &&
+    css`
+      width: 100%;
+      padding: 0.5em;
+    `}
 `
 
 export const ContentSpacing = css`
@@ -156,7 +163,7 @@ export const MainHeader = styled.div`
   }
 `
 
-export const StyledItemOverlay = styled.div<{ onHover?: boolean }>`
+export const StyledItemOverlay = styled.div<{ $onHover?: boolean }>`
   position: absolute;
   z-index: 1;
   background: rgba(${({ theme }) => theme.rgbTokens.surfaces.app}, 0.6);
@@ -171,8 +178,8 @@ export const StyledItemOverlay = styled.div<{ onHover?: boolean }>`
   color: ${({ theme }) => theme.tokens.text.default};
   transition: opacity 0.5s;
 
-  ${({ onHover }) =>
-    onHover &&
+  ${({ $onHover }) =>
+    $onHover &&
     css`
       opacity: 0;
       :hover {

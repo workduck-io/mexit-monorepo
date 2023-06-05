@@ -1,7 +1,21 @@
-import { BroadcastSyncedChannel, useAuthStore, useContentStore, useDataStore, useDescriptionStore, useHighlightStore, useLayoutStore, useLinkStore, useMetadataStore, useRecentsStore, userPreferenceStore as useUserPreferenceStore,useSmartCaptureStore, useSnippetStore  } from '@mexit/core'
+import {
+  BroadcastSyncedChannel,
+  useAuthStore,
+  useCalendarStore,
+  useContentStore,
+  useDataStore,
+  useDescriptionStore,
+  useHighlightStore,
+  useLayoutStore,
+  useLinkStore,
+  useMetadataStore,
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useSmartCaptureStore,
+  useSnippetStore
+} from '@mexit/core'
 
 import useInternalAuthStore from '../Hooks/useAuthStore'
-
 
 const getStore = (channel: BroadcastSyncedChannel) => {
   switch (channel) {
@@ -27,6 +41,8 @@ const getStore = (channel: BroadcastSyncedChannel) => {
       return useMetadataStore
     case BroadcastSyncedChannel.LINKS:
       return useLinkStore
+    case BroadcastSyncedChannel.CALENDAR:
+      return useCalendarStore
     case BroadcastSyncedChannel.SMART_CAPTURE:
       return useSmartCaptureStore
     case BroadcastSyncedChannel.USER_PREFERENCES:

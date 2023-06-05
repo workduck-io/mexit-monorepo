@@ -29,6 +29,7 @@ import {
   startRequestsWorkerService
 } from '../Workers/controller'
 
+import { useCalendarAPI } from './API/useCalendarAPI'
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
 import { usePromptAPI } from './API/usePromptAPI'
@@ -71,6 +72,7 @@ export const useInitLoader = () => {
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
   const { getAllPrompts, getPromptProviders, getUserPromptAuth } = usePromptAPI()
+  const { getCalendarProviders } = useCalendarAPI()
   const { getAllSmartCaptures } = useSmartCapture()
   const { updateCurrentUserPreferences } = useUserPreferences()
 
@@ -85,6 +87,7 @@ export const useInitLoader = () => {
         fetchAllHighlights(),
         getAllPrompts(),
         getPromptProviders(),
+        getCalendarProviders(),
         getUserPromptAuth()
       ])
     } catch (err) {

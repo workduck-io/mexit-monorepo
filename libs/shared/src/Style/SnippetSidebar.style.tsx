@@ -30,7 +30,7 @@ export const SnippetCardHeader = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  font-size: 1.1rem;
+  font-size: 1.1em;
   cursor: pointer;
   user-select: none;
   &:hover {

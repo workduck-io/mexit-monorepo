@@ -18,11 +18,19 @@ export const IconLoading = (theme: any) => keyframes`
   100% { color: ${theme.tokens.colors.yellow}; }
 `
 
-export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; color?: string }>`
+export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; color?: string; cursor?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
   color: inherit;
+
+  ${({ cursor }) =>
+    cursor &&
+    css`
+      :hover {
+        cursor: pointer;
+      }
+    `}
 
   ${({ size, theme }) => {
     const calcSize = size ? `${size}px` : '1rem'

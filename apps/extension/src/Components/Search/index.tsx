@@ -166,7 +166,10 @@ const Search = () => {
   const onBackClick = () => {
     if (!previewMode) {
       setPreviewMode(true)
-      saveIt(false, true)
+      saveIt({
+        saveAndExit: false,
+        notification: true
+      })
     }
   }
 
