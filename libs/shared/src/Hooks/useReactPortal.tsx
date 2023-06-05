@@ -89,4 +89,4 @@ const Portal = ({ id, children }) => {
   return createPortal(children, target)
 }
 
-export { Portal,usePortal }
+export { Portal, usePortal }

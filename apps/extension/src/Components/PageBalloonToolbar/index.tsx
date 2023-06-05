@@ -1,6 +1,3 @@
-import { useState } from 'react'
-
-import { useTheme } from 'styled-components'
 import Highlighter from 'web-highlighter'
 
 import { useLinkStore } from '@mexit/core'
@@ -21,16 +18,13 @@ import { getSelectionHTML } from '../../Utils/getSelectionHTML'
 import { sanitizeHTML } from '../../Utils/sanitizeHTML'
 
 const PageBallonToolbar = () => {
-  const [isOptionOpen, setIsOptionOpen] = useState<string | null>(null)
   const closePageToolbar = useBalloonToolbarStore((store) => store.setOpen)
 
-  const theme = useTheme()
   const { saveLink } = useLinkURLs()
   const { handleOpenAIPreview } = useAIOptions()
   const { saveHighlightEntity } = useSaveChanges()
 
   const onAIPreviewClick = (event) => {
-    setIsOptionOpen(null)
     event.preventDefault()
 
     const content = getSelectionHTML()
@@ -39,8 +33,6 @@ const PageBallonToolbar = () => {
   }
 
   const handleHighlight = () => {
-    setIsOptionOpen(null)
-
     const { html } = getSelectionHTML()
     const selectionRange = window.getSelection().getRangeAt(0)
     const content = sanitizeHTML(html)
@@ -67,10 +59,6 @@ const PageBallonToolbar = () => {
     })
   }
 
-  const handleOpenOption = (id: string) => {
-    setIsOptionOpen(id)
-  }
-
   return (
     <BallonToolbaWithoutEvent
       portalElement={getElementById('mexit-container')}
@@ -85,18 +73,6 @@ const PageBallonToolbar = () => {
         <IconDisplay size={20} icon={DefaultMIcons.AI} />
         <span>Enhance</span>
       </IconButtonWrapper>
-
-      {/* <ToolbarButton
-        icon={<IconDisplay color={theme.tokens.colors.primary.hover} size={20} icon={DefaultMIcons.AI} />}
-        onMouseDown={onAIPreviewClick}
-      />
-      <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.HIGHLIGHT} />} onMouseDown={handleHighlight} /> */}
-
-      {/* <BallonOptionsUnwrapper active={isOptionOpen} onClick={handleOpenOption} id="Add To">
-        <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.SNIPPET} />} onMouseDown={handleThese} />
-        <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.NOTE} />} onMouseDown={handleThese} />
-        <ToolbarButton icon={<IconDisplay size={20} icon={DefaultMIcons.TASK} />} onMouseDown={handleThese} />
-      </BallonOptionsUnwrapper> */}
     </BallonToolbaWithoutEvent>
   )
 }

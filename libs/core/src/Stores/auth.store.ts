@@ -8,7 +8,6 @@ const getAuthStoreInitialState = () => ({
   authenticated: false,
   isForgottenPassword: false,
   appInitStatus: AppInitStatus.START,
-
   users: [] as Array<UserDetails>,
   workspaces: [] as Array<Workspace>,
   userDetails: undefined as UserDetails | undefined,

@@ -34,6 +34,12 @@ export const FadeContainer = styled.section<{ fade: boolean; flex?: boolean }>`
       : ''};
 `
 
+export const FadeText = styled.span`
+  color: ${({ theme }) => theme.tokens.text.fade};
+  opacity: 0.5;
+  font-size: 14px;
+`
+
 export const FadeSpan = styled.span`
   color: ${({ theme }) => theme.tokens.text.fade} !important;
   animation: ${fadeIn} 0.25s ease-in-out;

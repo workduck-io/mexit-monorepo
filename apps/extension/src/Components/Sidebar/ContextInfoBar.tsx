@@ -1,26 +1,30 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { formatDistanceToNow } from 'date-fns'
 
-import { useCalendarStore, useHighlightStore } from '@mexit/core'
+import { API_BASE_URLS, DrawerType, useCalendarStore, useHighlightStore, useLayoutStore } from '@mexit/core'
 import {
   CenteredFlex,
   DefaultMIcons,
   FadeContainer,
+  FadeText,
   getMIcon,
   Group,
   IconDisplay,
   List,
+  SidebarListFilter,
   SnippetCards,
+  SpaceBetweenHorizontalFlex,
+  StyledButton,
   Toggle,
   useCalendar,
   useInterval
 } from '@mexit/shared'
 
-import { AddTags } from './AddTags'
+import { useSaveChanges } from '../../Hooks/useSaveChanges'
+
 import { GenericCard } from './GenericCard'
 import { HighlightGroups } from './HighlightGroup'
-import { ShortenerComponent } from './ShortenerComponent'
 import SidebarSection from './SidebarSection'
 import { EventCard, EventHeading, Timestamp } from './styled'
 
@@ -47,6 +51,35 @@ const basicOnboarding = [
 
 const CalendarEvent = ({ event }) => {
   const [showActions, setShowActions] = useState(false)
+  const openDrawer = useLayoutStore((store) => store.setDrawer)
+
+  const { getNodeForMeeting } = useCalendar()
+  const { saveNode } = useSaveChanges()
+
+  const openMeetingNote = async () => {
+    try {
+      openDrawer({
+        type: DrawerType.LOADING,
+        data: {
+          isLoading: true,
+          title: 'Creating Meeting Note'
+        }
+      })
+      const nodeId = await getNodeForMeeting(event, saveNode)
+
+      if (nodeId) {
+        openMeetLink(`${API_BASE_URLS.frontend}/editor/${nodeId}`)
+      }
+    } catch (err) {
+      console.error('Unable To Create Meeting Note', err)
+    } finally {
+      openDrawer(null)
+    }
+  }
+
+  const openMeetLink = (url?: string) => {
+    window.open(url ?? event.links.meet, '_blank')
+  }
 
   return (
     <EventCard key={event.id} onMouseEnter={() => setShowActions(true)} onMouseLeave={() => setShowActions(false)}>
@@ -57,13 +90,8 @@ const CalendarEvent = ({ event }) => {
       {showActions ? (
         <FadeContainer flex={false} fade>
           <Group>
-            <IconDisplay icon={DefaultMIcons.NOTE} />
-            <IconDisplay
-              icon={DefaultMIcons.WEB_LINK}
-              onClick={() => {
-                window.open(event.links.meet, '_blank')
-              }}
-            />
+            <IconDisplay icon={DefaultMIcons.NOTE} onClick={openMeetingNote} />
+            <IconDisplay icon={DefaultMIcons.WEB_LINK} onClick={openMeetLink} />
           </Group>
         </FadeContainer>
       ) : (
@@ -78,8 +106,9 @@ const CalendarEvent = ({ event }) => {
 const UpcomingEvents = () => {
   const [isFetching, setIsFetching] = useState(false)
 
-  const { getUpcomingEvents, getCalenderEvents } = useCalendar()
+  const { getUpcomingEvents, getCalenderEvents, getCalendarAuth } = useCalendar()
   const calendarEvents = useCalendarStore((state) => state.events)
+  const calendarToken = useCalendarStore((store) => store.tokens['GOOGLE_CAL'])
 
   const fetchEvents = async () => {
     setIsFetching(true)
@@ -92,6 +121,22 @@ const UpcomingEvents = () => {
     }
   }
 
+  useEffect(() => {
+    getCalendarAuth()
+  }, [])
+
+  const onCalendarConnect = () => {
+    // TODO: Add redirect from new window on login if `extension` flag is present
+    // using window.opener in web app
+    window.open(`${API_BASE_URLS.frontend}/integrations/calendars/GOOGLE_CAL`)
+  }
+
+  useEffect(() => {
+    if (calendarToken) {
+      fetchEvents()
+    }
+  }, [calendarToken])
+
   // Every 5 mins fetch calendar events
   useInterval(fetchEvents, 30 * 60 * 1000)
 
@@ -99,15 +144,33 @@ const UpcomingEvents = () => {
     return getUpcomingEvents()
   }, [calendarEvents])
 
+  const hasUpcomingEvents = upcomingEvents?.length > 0
+
   return (
     <SidebarSection label="Upcoming Events" isLoading={isFetching} icon={DefaultMIcons.NOTIFICATION}>
-      <List $noMargin scrollable $maxHeight="8vh">
-        {upcomingEvents.map((event) => {
-          const desc = event.description ? `: ${event.description}` : ''
+      {calendarToken && hasUpcomingEvents ? (
+        <List $noMargin scrollable $maxHeight="140px">
+          {upcomingEvents.map((event) => {
+            const desc = event.description ? `: ${event.description}` : ''
 
-          return <CalendarEvent event={event} />
-        })}
-      </List>
+            return <CalendarEvent event={event} />
+          })}
+        </List>
+      ) : (
+        <SidebarListFilter noMargin>
+          <SpaceBetweenHorizontalFlex width>
+            <Group>
+              <IconDisplay icon={getMIcon('ICON', 'logos:google-calendar')} />
+              <FadeText>
+                {calendarToken && !hasUpcomingEvents
+                  ? 'There are no upcoming events'
+                  : 'Connect Calendar to get updates'}
+              </FadeText>
+            </Group>
+            {!calendarToken && <StyledButton onClick={onCalendarConnect}>Connect</StyledButton>}
+          </SpaceBetweenHorizontalFlex>
+        </SidebarListFilter>
+      )}
     </SidebarSection>
   )
 }
@@ -163,12 +226,12 @@ const Highlights = () => {
 export function ContextInfoBar() {
   return (
     <SnippetCards fullHeight>
-      <SidebarSection label="Shorten URL" icon={getMIcon('ICON', 'ri:link-m')}>
+      {/* <SidebarSection label="Shorten URL" icon={getMIcon('ICON', 'ri:link-m')}>
         <ShortenerComponent />
       </SidebarSection>
       <SidebarSection label="Tags" icon={DefaultMIcons.TAG}>
         <AddTags />
-      </SidebarSection>
+      </SidebarSection> */}
       <UpcomingEvents />
       <Highlights />
     </SnippetCards>

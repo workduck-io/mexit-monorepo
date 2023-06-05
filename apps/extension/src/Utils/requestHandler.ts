@@ -298,6 +298,27 @@ const _refreshTokenHook = (state) => async (request, _, response) => {
 
 export const handleAsyncCalendarRequest = async ({ subType, data }) => {
   switch (subType) {
+    case 'GET_AUTH':
+      return await client
+        .get(apiURLs.calendar.getAuth)
+        .json()
+        .then((res: any) => {
+          if (res) {
+            const userId = res.userId
+            const token = res.actionAuth?.token?.[userId]?.accessToken
+
+            if (token) {
+              return { message: token, error: null }
+            }
+          }
+        })
+        .catch((err) => {
+          console.error('Unable to fetch calendar', err)
+          return {
+            message: null,
+            error: 'Unable to fetch auth token'
+          }
+        })
     case 'GET_EVENTS':
       // eslint-disable-next-line no-case-declarations
       const state = await getAuthStateFromChrome('mexit-calendars-extension')
@@ -306,7 +327,9 @@ export const handleAsyncCalendarRequest = async ({ subType, data }) => {
           hooks: {
             beforeRequest: [(request) => request.headers.set('authorization', `Bearer ${state.tokens['GOOGLE_CAL']}`)],
             afterResponse: [_refreshTokenHook(state)]
-          }
+          },
+          timeout: 20000,
+          retry: 0
         })
         .json()
         .then((d: any) => {
@@ -316,7 +339,7 @@ export const handleAsyncCalendarRequest = async ({ subType, data }) => {
           console.error('Unable to fetch calendar', err)
           return {
             message: null,
-            error: null
+            error: 'Unable to fetch calendar events'
           }
         })
     case 'REFRESH_GOOGLE_CALENDAR_TOKEN': {

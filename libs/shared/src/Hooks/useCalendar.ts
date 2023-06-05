@@ -1,6 +1,15 @@
-import { add, sub } from 'date-fns'
+import { add, format, sub } from 'date-fns'
 
-import { API, API_BASE_URLS, useCalendarStore } from '@mexit/core'
+import {
+  API_BASE_URLS,
+  generateNodeId,
+  getSlug,
+  MEETING_PREFIX,
+  MeetingSnippetContent,
+  SEPARATOR,
+  useCalendarStore,
+  useDataStore
+} from '@mexit/core'
 
 const MAX_EVENTS = 15
 
@@ -8,17 +17,29 @@ export const useCalendar = () => {
   const setEvents = useCalendarStore((state) => state.setEvents)
   const addToken = useCalendarStore((state) => state.addToken)
 
-  const _refreshTokenHook = async (request, _, response) => {
-    if (response && response.status === 401) {
-      try {
-        const res = await API.calendar.getGoogleCalendarNewToken()
-        addToken('GOOGLE_CAL', res.accessToken)
-      } catch (error) {
-        throw new Error(error)
-      }
-    }
+  const getNodeForMeeting = async (e: any, onCreate): Promise<string | undefined> => {
+    const title = `${getSlug(e.summary)} ${format(e.times.start, 'dd-MM-yyyy')}`
+    const meetNotePath = `${MEETING_PREFIX}${SEPARATOR}${title}`
+    const links = useDataStore.getState().ilinks
 
-    return
+    const link = links?.find((l) => l.path === meetNotePath)
+    if (link) return link.nodeid
+
+    const node = await onCreate({
+      node: {
+        nodeid: generateNodeId(),
+        title,
+        path: meetNotePath
+      },
+      content: MeetingSnippetContent({
+        title: e.summary,
+        date: e.times.start,
+        link: e.links.meet ?? e.links.event
+        // attendees: getAttendeeUserIDsFromCalendarEvent(e)
+      })
+    })
+
+    if (node) return node.nodeId
   }
 
   const getEvents = async (url: string) => {
@@ -94,17 +115,29 @@ export const useCalendar = () => {
     const now = new Date()
     const twoHoursFromNow = add(now, { hours: 2 })
     const events = useCalendarStore.getState().events
+
     const todayEvents = events
       .filter((event) => {
         const start = new Date(event.times.start)
-        return start <= twoHoursFromNow
+        console.log('START', { start, event, twoHoursFromNow, isStart: start <= twoHoursFromNow })
+        return start <= twoHoursFromNow && start >= now
       })
-      .sort((a, b) => a.times.start - b.times.start)
+      .sort((a, b) => b.times.start - a.times.start)
 
     return todayEvents
   }
 
+  const getCalendarAuth = async () => {
+    const res = await chrome.runtime.sendMessage({ type: 'CALENDAR', subType: 'GET_AUTH' })
+
+    if (!res?.error) {
+      addToken('GOOGLE_CAL', res?.message)
+    }
+  }
+
   return {
+    getCalendarAuth,
+    getNodeForMeeting,
     getUpcomingEvents,
     getCalenderEvents
   }

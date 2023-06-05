@@ -14,6 +14,7 @@ const PortalsPage = () => {
   const apps = usePortalStore((store) => store.apps)
   const connectedPortals = usePortalStore((store) => store.connectedPortals)
   const promptsProviders = usePromptStore((store) => store.providers)
+  const calendarTokens = useCalendarStore((store) => store.tokens)
   const calendarProviders = useCalendarStore((store) => store.providers)
   const getIsPortalConnected = usePortalStore((store) => store.getIsPortalConnected)
 
@@ -29,10 +30,26 @@ const PortalsPage = () => {
     [apps, connectedPortals] // eslint-disable-line
   )
 
+  const calendars = useMemo(() => {
+    return calendarProviders.map((provider) => {
+      return {
+        ...provider,
+        connected: calendarTokens?.[provider.actionGroupId]
+      }
+    })
+  }, [calendarProviders, calendarTokens])
+
   return (
     <Flex>
       <FullHeight>
         <IntegrationContainer>
+          <Section
+            items={calendars}
+            title="Calendars"
+            onClick={(item: CalendarProviderType) =>
+              goTo(`${ROUTE_PATHS.integrations}/calendars`, NavigationType.push, item.actionGroupId)
+            }
+          />
           <Section
             items={portals}
             title="Portals"
@@ -45,13 +62,6 @@ const PortalsPage = () => {
             title="Prompts"
             onClick={(item: PromptProviderType) =>
               goTo(`${ROUTE_PATHS.integrations}/prompts`, NavigationType.push, item.actionGroupId)
-            }
-          />
-          <Section
-            items={calendarProviders}
-            title="Calendars"
-            onClick={(item: CalendarProviderType) =>
-              goTo(`${ROUTE_PATHS.integrations}/calendars`, NavigationType.push, item.actionGroupId)
             }
           />
         </IntegrationContainer>

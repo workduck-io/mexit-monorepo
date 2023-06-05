@@ -8,5 +8,5 @@ type ItemOverlayProps = {
 }
 
 export const ItemOverlay: React.FC<ItemOverlayProps> = ({ children, onHover }) => {
-  return <StyledItemOverlay onHover={onHover}>{children}</StyledItemOverlay>
+  return <StyledItemOverlay $onHover={onHover}>{children}</StyledItemOverlay>
 }

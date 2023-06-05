@@ -41,23 +41,6 @@ export const Drawer: React.FC<DrawerProps> = ({ show, children }) => {
 
   const props = useSpring(style)
 
-  // useEffect(() => {
-  //   function handleClickOutside(event) {
-  //     if (ref.current && !ref.current.contains(event.target)) {
-  //       closeDrawer(undefined)
-  //     }
-  //   }
-
-  //   if (show) {
-  //     document.addEventListener('mousedown', handleClickOutside)
-  //   }
-
-  //   return () => {
-  //     // Unbind the event listener on clean up
-  //     document.removeEventListener('mousedown', handleClickOutside)
-  //   }
-  // }, [ref, show])
-
   return (
     // @ts-ignore
     <DrawerContainer ref={ref} style={props}>
