@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useHoverIntent } from 'react-use-hoverintent'
+import { animated, useSpring } from 'react-spring'
 
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
+import { useGesture } from '@use-gesture/react'
 import styled, { css } from 'styled-components'
 
 import { TitleWithShortcut } from '@workduck-io/mex-components'
@@ -10,7 +11,6 @@ import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { useLayoutStore } from '@mexit/core'
 import { WDLogo } from '@mexit/shared'
 
-import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { getElementById } from '../../Utils/cs-utils'
 
 const DragIcon = styled(Icon)<{ $show: boolean }>`
@@ -27,22 +27,11 @@ const DragIcon = styled(Icon)<{ $show: boolean }>`
     `}
 `
 
-const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean; $top: number }>`
-  position: fixed;
+const ToggleWrapper = styled(animated.div)`
   display: flex;
   align-items: center;
   width: max-content;
-
-  ${({ $expanded, $top, $endColumnWidth, theme }) =>
-    $expanded
-      ? css`
-          top: ${$top}px;
-          right: calc(${($endColumnWidth ?? '400px') + ' + ' + (theme.additional.hasBlocks ? 0 : -15)}px);
-        `
-      : css`
-          top: ${$top}px;
-          right: 0;
-        `}
+  position: relative;
 
   z-index: 9999999999;
   padding: 8px;
@@ -56,7 +45,8 @@ const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean
     width: 16px;
   }
 
-  &:hover {
+  &:hover,
+  &:active {
     cursor: pointer;
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
     background: ${({ theme }) => theme.tokens.colors.primary.default};
@@ -85,70 +75,54 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-
-  /* ::before {
-    content: '';
-    position: absolute;
-    bottom: 20px;
-    height: 20px;
-    width: 20px;
-    border-bottom-right-radius: ${({ theme }) => theme.borderRadius.large};
-    background: ${({ theme }) => theme.tokens.surfaces.sidebar};
-    color: ${({ theme }) => theme.tokens.text.fade};
-  } */
 `
 
 export const DraggableToggle = () => {
-  const [isHovering, intentRef, setIsHovering] = useHoverIntent({ timeout: 500 })
-  const [tracking, setTracking] = useState(false)
+  const [isHovering, setIsHovering] = useState(false)
   const { rhSidebar, toggleRHSidebar, toggleTop, setToggleTop } = useLayoutStore()
-  const { endColumnWidth } = useSidebarTransition()
+
+  // TODO: Not using this for now, was having issues with calc() inside api.start()
+  // const { endColumnWidth } = useSidebarTransition()
 
   const handleRef = useRef<any>(null)
 
-  useEffect(() => {
-    const handleMouseDown = (event: MouseEvent) => {
-      event.preventDefault()
-      event.stopPropagation()
-      setTracking(true)
-    }
+  const [{ x, y }, api] = useSpring(() => ({ x: '97vw', y: toggleTop }), [])
 
-    if (handleRef?.current) {
-      handleRef.current.addEventListener('mousedown', handleMouseDown)
-    }
-
-    return () => {
-      handleRef?.current?.removeEventListener('mousedown', handleMouseDown)
-    }
-  }, [handleRef?.current])
-
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      event.stopPropagation()
-
-      if (tracking) {
-        const newHeight = event.clientY
-        setToggleTop(newHeight)
+  const bind = useGesture(
+    {
+      onDrag: ({ offset: [, y] }) => {
+        api.start({ y })
+      },
+      onDragEnd: () => {
+        setToggleTop(y.get())
+      },
+      onHover: ({ hovering }) => {
+        setIsHovering(hovering)
+      },
+      onClick: () => {
+        toggleRHSidebar()
+      }
+    },
+    {
+      drag: {
+        from: () => [0, y.get()],
+        axis: 'y',
+        // filters click events when dragging
+        filterTaps: true,
+        pointer: {
+          keys: false
+        }
       }
     }
-
-    window.addEventListener('mousemove', handleMouseMove)
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, [tracking])
+  )
 
   useEffect(() => {
-    const handleMouseUp = (event) => {
-      if (tracking) setTracking(false)
-    }
-    window.addEventListener('mouseup', handleMouseUp)
+    api.start({ x: rhSidebar.expanded ? '63vw' : '97vw' })
+  }, [rhSidebar.expanded])
 
-    return () => {
-      window.removeEventListener('mouseup', handleMouseUp)
-    }
-  }, [tracking])
+  useEffect(() => {
+    console.log('vertical', { y, toggleTop })
+  }, [y, toggleTop])
 
   return (
     <Tippy
@@ -157,13 +131,7 @@ export const DraggableToggle = () => {
       appendTo={() => getElementById('ext-side-nav')}
       content={<TitleWithShortcut title={rhSidebar.expanded ? 'Collapse Sidebar' : 'Expand Sidebar'} />}
     >
-      <ToggleWrapper
-        $endColumnWidth={endColumnWidth}
-        ref={intentRef as any}
-        $top={toggleTop}
-        $expanded={rhSidebar.expanded}
-        onClick={toggleRHSidebar}
-      >
+      <ToggleWrapper {...bind()} style={{ x, y }}>
         <Wrapper>
           <WDLogo />
           <DragIcon ref={handleRef} $show={isHovering} icon="ic:outline-drag-indicator" />
