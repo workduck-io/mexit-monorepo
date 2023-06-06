@@ -130,7 +130,7 @@ export const DragIcon = styled(Icon)<{ $show: boolean }>`
 export const ToggleWrapper = styled(animated.div)`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 
   width: max-content;
   position: absolute;
@@ -150,6 +150,7 @@ export const Wrapper = styled.div`
   z-index: 1;
 
   padding: 8px;
+  margin: 0 0 8px 0;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   background: ${({ theme }) => theme.tokens.surfaces.sidebar};
   color: ${({ theme }) => theme.tokens.text.fade};
@@ -175,14 +176,25 @@ export const Wrapper = styled.div`
   }
 `
 
-export const Circle = styled(animated.div)`
+export const ButtonWrapper = styled(animated.div)`
+  display: flex;
+
   position: relative;
   z-index: 0;
-  align-self: flex-start;
 
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #111;
-  margin: 8px;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background: ${({ theme }) => theme.tokens.surfaces.sidebar};
+  color: ${({ theme }) => theme.tokens.text.fade};
+
+  &:hover,
+  &:active {
+    cursor: pointer;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
+
+    svg {
+      path {
+        fill: ${({ theme }) => theme.tokens.surfaces.sidebar};
+      }
+    }
+  }
 `

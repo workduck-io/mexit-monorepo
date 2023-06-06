@@ -226,12 +226,6 @@ const Highlights = () => {
 export function ContextInfoBar() {
   return (
     <SnippetCards fullHeight>
-      {/* <SidebarSection label="Shorten URL" icon={getMIcon('ICON', 'ri:link-m')}>
-        <ShortenerComponent />
-      </SidebarSection>
-      <SidebarSection label="Tags" icon={DefaultMIcons.TAG}>
-        <AddTags />
-      </SidebarSection> */}
       <UpcomingEvents />
       <Highlights />
     </SnippetCards>

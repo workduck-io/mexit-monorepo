@@ -11,7 +11,11 @@ import { WDLogo } from '@mexit/shared'
 
 import { getElementById } from '../../Utils/cs-utils'
 
-import { Circle, DragIcon, ToggleWrapper, Wrapper } from './styled'
+import { ShortenerComponent } from './ShortenerComponent'
+import { ButtonWrapper, DragIcon, ToggleWrapper, Wrapper } from './styled'
+
+// Change this if more buttons have to be added
+const FLOATING_BUTTONS = 1
 
 export const DraggableToggle = () => {
   const [isHovering, setIsHovering] = useState(false)
@@ -26,7 +30,7 @@ export const DraggableToggle = () => {
   const avatarTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
   const [{ x, y }, api] = useSpring(() => ({ x: '97vw', y: toggleTop }), [])
-  const [buttonSprings, buttonApi] = useSprings(3, (i) => ({ y: 0 }), [])
+  const [buttonSprings, buttonApi] = useSprings(FLOATING_BUTTONS, (i) => ({ y: 0 }), [])
 
   const bind = useGesture(
     {
@@ -54,9 +58,6 @@ export const DraggableToggle = () => {
             }))
           }, 1500)
         }
-      },
-      onClick: () => {
-        toggleRHSidebar()
       }
     },
     {
@@ -97,15 +98,15 @@ export const DraggableToggle = () => {
         appendTo={() => getElementById('ext-side-nav')}
         content={<TitleWithShortcut title={rhSidebar.expanded ? 'Collapse Sidebar' : 'Expand Sidebar'} />}
       >
-        <Wrapper>
+        <Wrapper onClick={() => toggleRHSidebar()}>
           <WDLogo />
           <DragIcon $show={isHovering} icon="ic:outline-drag-indicator" />
         </Wrapper>
       </Tippy>
 
-      {buttonSprings.map((springs, index) => (
-        <Circle key={index} ref={(ref) => (avatarRefs.current[index] = ref!)} style={springs} />
-      ))}
+      <ButtonWrapper ref={(ref) => (avatarRefs.current[0] = ref!)} style={buttonSprings[0]}>
+        <ShortenerComponent />
+      </ButtonWrapper>
     </ToggleWrapper>
   )
 }
