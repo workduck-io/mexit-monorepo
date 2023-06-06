@@ -25,8 +25,38 @@ const nanoid = customAlphabet(nolookalikes, 21)
 const generateRequestID = () => `REQUEST_${nanoid()}`
 
 let client: KyInstance
+let wsClient: WebSocket
 
 const initializeClient = (authToken: string, workspaceID: string) => {
+  wsClient = new WebSocket(
+    `wss://5bjjcc3nq3.execute-api.us-east-1.amazonaws.com/test?workspaceId=${workspaceID}&Authorizer=${authToken}`
+  )
+
+  const idToPortMap = {}
+  const broadcastChannel = new BroadcastChannel('WebSocketChannel')
+
+  // Let all connected contexts(tabs) know about state changes
+  wsClient.onopen = () => broadcastChannel.postMessage({ type: 'WSState', state: wsClient.readyState })
+  wsClient.onclose = () => broadcastChannel.postMessage({ type: 'WSState', state: wsClient.readyState })
+
+  // When we receive data from the server.
+  wsClient.onmessage = ({ data }) => {
+    console.log(data)
+    // Construct object to be passed to handlers
+    const parsedData = { data: JSON.parse(data), type: 'message' }
+    if (!parsedData.data.from) {
+      // Broadcast to all contexts(tabs). This is because
+      // no particular id was set on the from field here.
+      // We're using this field to identify which tab sent
+      // the message
+      broadcastChannel.postMessage(parsedData)
+    } else {
+      // Get the port to post to using the uuid, ie send to
+      // expected tab only.
+      idToPortMap[parsedData.data.from].postMessage(parsedData)
+    }
+  }
+
   client = ky.extend({
     hooks: {
       beforeRequest: [
