@@ -22,15 +22,12 @@ export const DraggableToggle = () => {
   const [editable, setEditable] = useState(false)
   const { rhSidebar, toggleRHSidebar, toggleTop, setToggleTop } = useLayoutStore()
 
-  // TODO: Not using this for now, was having issues with calc() inside api.start()
-  // const { endColumnWidth } = useSidebarTransition()
-
   const avatarRefs = useRef<HTMLDivElement[]>([])
   const avatarRefInitialPositions = useRef<number[]>([])
   const toggleRef = useRef<HTMLDivElement>(null)
   const avatarTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
-  const [{ x, y }, api] = useSpring(() => ({ x: '97vw', y: toggleTop }), [])
+  const [{ x, y }, api] = useSpring(() => ({ x: `${window.innerWidth - 40}px`, y: toggleTop }), [])
   const [buttonSprings, buttonApi] = useSprings(FLOATING_BUTTONS, (i) => ({ y: 0 }), [])
 
   const bind = useGesture(
@@ -53,6 +50,11 @@ export const DraggableToggle = () => {
         filterTaps: true,
         pointer: {
           keys: false
+        },
+        // Hard coding lower bound for now but would have to change if more buttons are added
+        bounds: {
+          top: -window.innerHeight,
+          bottom: -100
         }
       }
     }
@@ -72,7 +74,7 @@ export const DraggableToggle = () => {
   }, [])
 
   useEffect(() => {
-    api.start({ x: rhSidebar.expanded ? '62vw' : '96vw' })
+    api.start({ x: `${window.innerWidth - (rhSidebar.expanded ? 433 : 40)}px` })
   }, [rhSidebar.expanded])
 
   useEffect(() => {
