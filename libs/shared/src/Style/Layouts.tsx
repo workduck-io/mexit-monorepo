@@ -50,8 +50,9 @@ export const IconButtonWrapper = styled(Group)`
 `
 
 export const MexIcon = styled(Icon)<{ margin?: string; $noHover?: boolean; $cursor?: boolean }>`
-  padding: 1px;
+  padding: ${({ theme }) => theme.spacing.tiny};
   margin: ${({ margin }) => margin};
+
   &.delete {
     color: ${({ theme }) => theme.tokens.text.fade};
     &:hover {

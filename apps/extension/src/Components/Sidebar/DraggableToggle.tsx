@@ -19,6 +19,7 @@ const FLOATING_BUTTONS = 1
 
 export const DraggableToggle = () => {
   const [isHovering, setIsHovering] = useState(false)
+  const [editable, setEditable] = useState(false)
   const { rhSidebar, toggleRHSidebar, toggleTop, setToggleTop } = useLayoutStore()
 
   // TODO: Not using this for now, was having issues with calc() inside api.start()
@@ -42,22 +43,6 @@ export const DraggableToggle = () => {
       },
       onHover: ({ hovering }) => {
         setIsHovering(hovering)
-
-        if (hovering) {
-          if (avatarTimeoutRef.current) {
-            clearTimeout(avatarTimeoutRef.current)
-          }
-
-          buttonApi.start({
-            y: 0
-          })
-        } else {
-          avatarTimeoutRef.current = setTimeout(() => {
-            buttonApi.start((i) => ({
-              y: avatarRefInitialPositions.current[i]
-            }))
-          }, 1500)
-        }
       }
     },
     {
@@ -90,6 +75,24 @@ export const DraggableToggle = () => {
     api.start({ x: rhSidebar.expanded ? '62vw' : '96vw' })
   }, [rhSidebar.expanded])
 
+  useEffect(() => {
+    if (isHovering || editable) {
+      if (avatarTimeoutRef.current) {
+        clearTimeout(avatarTimeoutRef.current)
+      }
+
+      buttonApi.start({
+        y: 0
+      })
+    } else {
+      avatarTimeoutRef.current = setTimeout(() => {
+        buttonApi.start((i) => ({
+          y: avatarRefInitialPositions.current[i]
+        }))
+      }, 1500)
+    }
+  }, [isHovering, editable])
+
   return (
     <ToggleWrapper ref={toggleRef} {...bind()} style={{ x, y }}>
       <Tippy
@@ -105,7 +108,7 @@ export const DraggableToggle = () => {
       </Tippy>
 
       <ButtonWrapper ref={(ref) => (avatarRefs.current[0] = ref!)} style={buttonSprings[0]}>
-        <ShortenerComponent />
+        <ShortenerComponent editable={editable} setEditable={setEditable} />
       </ButtonWrapper>
     </ToggleWrapper>
   )

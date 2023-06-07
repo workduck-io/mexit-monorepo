@@ -6,15 +6,7 @@ import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
 import { apiURLs, deleteQueryParams, getFavicon, useAuthStore, useLinkStore } from '@mexit/core'
-import {
-  CopyButton,
-  DefaultMIcons,
-  DisplayShortcut,
-  GenericFlex,
-  Input,
-  MexIcon,
-  ShortenButton
-} from '@mexit/shared'
+import { CopyButton, DefaultMIcons, DisplayShortcut, GenericFlex, Input, MexIcon, ShortenButton } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
 
@@ -71,7 +63,7 @@ const StyledShortener = styled.div`
   justify-content: space-between;
   width: 100%;
 
-  padding: ${({ theme }) => theme.spacing.small};
+  padding: ${({ theme }) => theme.spacing.tiny};
 `
 
 export const URLShortner = ({ alias, url, editable, isDuplicateAlias, updateAlias, setEditable }) => {
@@ -152,9 +144,8 @@ export const URLShortner = ({ alias, url, editable, isDuplicateAlias, updateAlia
   )
 }
 
-export const ShortenerComponent = () => {
+export const ShortenerComponent = ({ editable, setEditable }: { editable: boolean; setEditable: any }) => {
   const { links } = useLinkStore()
-  const [editable, setEditable] = useState(false)
   const { updateAlias, saveLink, isDuplicateAlias } = useLinkURLs()
 
   const link = useMemo(() => {
