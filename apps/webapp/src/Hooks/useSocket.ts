@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
 
 import { useAuthStore as useDwindleStore } from '@workduck-io/dwindle'
@@ -39,12 +40,20 @@ const useSocket = () => {
     }
   }
 
-  const handleSocketMessage = (event) => {
-    if (event.data) {
-      const message = JSON.parse(event.data)
-      handleAction(message.action, message.data)
+  const handleSocketMessage = (message) => {
+    if (message) {
+      const data = typeof message.data === 'object' ? message.data : JSON.parse(message.data)
+      handleAction(message.type, message.data)
     }
   }
+
+  useEffect(() => {
+    const broadcastChannel = new BroadcastChannel('WebSocketChannel')
+
+    broadcastChannel.addEventListener('message', (event) => {
+      handleSocketMessage(event.data)
+    })
+  }, [])
 
   const utilFunctions = useWebSocket(
     config.baseURLs.MEXIT_WEBSOCKET_URL,

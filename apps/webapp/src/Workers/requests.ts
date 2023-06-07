@@ -36,8 +36,21 @@ const initializeClient = (authToken: string, workspaceID: string) => {
   const broadcastChannel = new BroadcastChannel('WebSocketChannel')
 
   // Let all connected contexts(tabs) know about state changes
-  wsClient.onopen = () => broadcastChannel.postMessage({ type: 'WSState', state: wsClient.readyState })
-  wsClient.onclose = () => broadcastChannel.postMessage({ type: 'WSState', state: wsClient.readyState })
+  wsClient.onopen = () => {
+    broadcastChannel.postMessage({
+      type: 'WSState',
+      data: {
+        state: wsClient.readyState
+      }
+    })
+  }
+  wsClient.onclose = () =>
+    broadcastChannel.postMessage({
+      type: 'WSState',
+      data: {
+        state: wsClient.close
+      }
+    })
 
   // When we receive data from the server.
   wsClient.onmessage = ({ data }) => {
