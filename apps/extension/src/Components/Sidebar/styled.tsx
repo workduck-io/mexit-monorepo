@@ -185,16 +185,4 @@ export const ButtonWrapper = styled(animated.div)`
   border-radius: ${({ theme }) => theme.borderRadius.small};
   background: ${({ theme }) => theme.tokens.surfaces.sidebar};
   color: ${({ theme }) => theme.tokens.text.fade};
-
-  &:hover,
-  &:active {
-    cursor: pointer;
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
-
-    svg {
-      path {
-        fill: ${({ theme }) => theme.tokens.surfaces.sidebar};
-      }
-    }
-  }
 `
