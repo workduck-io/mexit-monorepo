@@ -3,12 +3,16 @@ import { toast } from 'react-hot-toast'
 
 import linkM from '@iconify/icons-ri/link-m'
 import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react'
 import styled from 'styled-components'
+
+import { TitleWithShortcut } from '@workduck-io/mex-components'
 
 import { apiURLs, deleteQueryParams, getFavicon, useAuthStore, useLinkStore } from '@mexit/core'
 import { CopyButton, DefaultMIcons, DisplayShortcut, GenericFlex, Input, MexIcon, ShortenButton } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
+import { getElementById } from '../../Utils/cs-utils'
 
 const ShortenerWrapper = styled(ShortenButton)`
   padding: ${({ theme }) => theme.spacing.small};
@@ -108,39 +112,48 @@ export const URLShortner = ({ alias, url, editable, isDuplicateAlias, updateAlia
     [alias]
   )
 
-  return !editable ? (
-    alias ? (
-      <StyledShortener>
-        <CopyButton size="20" text={text} isIcon />
-      </StyledShortener>
-    ) : (
-      <ShortenerWrapper isShortend={!!alias} transparent onClick={() => setEditable(true)}>
-        <Icon width={20} height={20} icon={linkM} />
-      </ShortenerWrapper>
-    )
-  ) : (
-    <StyledShortener>
-      <InputContainer>
-        <Icon width={20} height={20} icon={linkM} />
-        <StyledInput
-          id={`shorten-url`}
-          name="ShortenUrlInput"
-          onKeyDown={handleSubmit}
-          onChange={(e) => handleChange(e)}
-          autoFocus
-          placeholder="Enter shorten URL"
-          defaultValue={short}
-        />
-      </InputContainer>
+  return (
+    <Tippy
+      theme="mex-bright"
+      placement="left"
+      appendTo={() => getElementById('ext-side-nav')}
+      content={<TitleWithShortcut title={!alias ? 'Shorten Link' : 'Copy Alias'} />}
+    >
+      {!editable ? (
+        alias ? (
+          <StyledShortener>
+            <CopyButton size="20" text={text} isIcon />
+          </StyledShortener>
+        ) : (
+          <ShortenerWrapper isShortend={!!alias} transparent onClick={() => setEditable(true)}>
+            <Icon width={20} height={20} icon={linkM} />
+          </ShortenerWrapper>
+        )
+      ) : (
+        <StyledShortener>
+          <InputContainer>
+            <Icon width={20} height={20} icon={linkM} />
+            <StyledInput
+              id={`shorten-url`}
+              name="ShortenUrlInput"
+              onKeyDown={handleSubmit}
+              onChange={(e) => handleChange(e)}
+              autoFocus
+              placeholder="Enter shorten URL"
+              defaultValue={short}
+            />
+          </InputContainer>
 
-      <GenericFlex>
-        <GenericFlex>
-          <DisplayShortcut shortcut="Enter" />
-          <FadedShortcut>&nbsp;to save</FadedShortcut>
-        </GenericFlex>
-        <MexIcon width={20} height={20} icon={DefaultMIcons.CLEAR.value} onClick={reset} />
-      </GenericFlex>
-    </StyledShortener>
+          <GenericFlex>
+            <GenericFlex>
+              <DisplayShortcut shortcut="Enter" />
+              <FadedShortcut>&nbsp;to save</FadedShortcut>
+            </GenericFlex>
+            <MexIcon width={20} height={20} icon={DefaultMIcons.CLEAR.value} onClick={reset} />
+          </GenericFlex>
+        </StyledShortener>
+      )}
+    </Tippy>
   )
 }
 
