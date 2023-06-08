@@ -1,3 +1,6 @@
+import { animated } from 'react-spring'
+
+import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
 import { BodyFont, GenericFlex, RHSideNav } from '@mexit/shared'
@@ -107,4 +110,79 @@ export const Timestamp = styled.div`
   font-size: 12px;
   color: ${({ theme }) => theme.tokens.text.fade};
   opacity: 0.7;
+`
+
+export const DragIcon = styled(Icon)<{ $show: boolean }>`
+  margin-right: -18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: margin-right 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+  ${(props) =>
+    props.$show &&
+    css`
+      margin-right: 0;
+      opacity: 1;
+      pointer-events: all;
+    `}
+`
+
+export const ToggleWrapper = styled(animated.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: max-content;
+  position: absolute;
+  z-index: 9999999999;
+
+  svg {
+    height: 16px;
+    width: 16px;
+  }
+`
+
+export const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+
+  padding: 8px;
+  margin: 0 0 8px 0;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background: ${({ theme }) => theme.tokens.surfaces.sidebar};
+  color: ${({ theme }) => theme.tokens.text.fade};
+  transition: right 0.2s ease-in-out, background 0.2s ease-in-out, width 0.2s ease-in-out;
+
+  ${DragIcon} {
+    cursor: ns-resize;
+  }
+
+  &:hover,
+  &:active {
+    cursor: pointer;
+    transition: background 0.1s ease;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
+    background: ${({ theme }) => theme.tokens.colors.primary.default};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
+
+    svg {
+      path {
+        fill: ${({ theme }) => theme.tokens.surfaces.sidebar};
+      }
+    }
+  }
+`
+
+export const ButtonWrapper = styled(animated.div)`
+  display: flex;
+
+  position: relative;
+  z-index: 0;
+
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background: ${({ theme }) => theme.tokens.surfaces.sidebar};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `

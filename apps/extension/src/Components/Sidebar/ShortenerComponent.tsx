@@ -3,45 +3,20 @@ import { toast } from 'react-hot-toast'
 
 import linkM from '@iconify/icons-ri/link-m'
 import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react'
 import styled from 'styled-components'
 
+import { TitleWithShortcut } from '@workduck-io/mex-components'
+
 import { apiURLs, deleteQueryParams, getFavicon, useAuthStore, useLinkStore } from '@mexit/core'
-import {
-  CopyButton,
-  DefaultMIcons,
-  DisplayShortcut,
-  GenericFlex,
-  Input,
-  LinkTitleWrapper,
-  MexIcon,
-  ShortenButton,
-  ShortenerTitle
-} from '@mexit/shared'
+import { CopyButton, DefaultMIcons, DisplayShortcut, GenericFlex, Input, MexIcon, ShortenButton } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
+import { getElementById } from '../../Utils/cs-utils'
 
 const ShortenerWrapper = styled(ShortenButton)`
   padding: ${({ theme }) => theme.spacing.small};
   font-size: 14px !important;
-`
-
-const UrlTitleWrapper = styled(LinkTitleWrapper)`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-
-  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
-  color: ${({ theme }) => theme.tokens.text.fade};
-  font-size: 1em;
-  width: 100%;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  /* padding: 0.25rem 0; */
-  padding: ${({ theme }) => theme.spacing.small};
-
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 `
 
 export const FaviconImage = ({ source }: { source: string }) => {
@@ -91,6 +66,8 @@ const StyledShortener = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  padding: ${({ theme }) => theme.spacing.tiny};
 `
 
 export const URLShortner = ({ alias, url, editable, isDuplicateAlias, updateAlias, setEditable }) => {
@@ -135,56 +112,53 @@ export const URLShortner = ({ alias, url, editable, isDuplicateAlias, updateAlia
     [alias]
   )
 
-  return !editable ? (
-    alias ? (
-      <StyledShortener>
-        <InputContainer>
-          <Icon width={20} height={20} icon={linkM} />
-          <Text>{alias}</Text>
-        </InputContainer>
-        <InputContainer>
-          <MexIcon width={20} height={20} icon={DefaultMIcons.EDIT.value} onClick={() => setEditable(true)} />
-          <CopyButton size="20" text={text} isIcon />
-        </InputContainer>
-      </StyledShortener>
-    ) : (
-      <InputContainer>
-        <ShortenerWrapper isShortend={!!alias} transparent onClick={() => setEditable(true)}>
-          <Icon width={20} height={20} icon={linkM} />
-          Shorten
-        </ShortenerWrapper>
-        <CopyButton size="20" text={text} isIcon />
-      </InputContainer>
-    )
-  ) : (
-    <StyledShortener>
-      <InputContainer>
-        <Icon width={20} height={20} icon={linkM} />
-        <StyledInput
-          id={`shorten-url`}
-          name="ShortenUrlInput"
-          onKeyDown={handleSubmit}
-          onChange={(e) => handleChange(e)}
-          autoFocus
-          placeholder="Enter shorten URL"
-          defaultValue={short}
-        />
-      </InputContainer>
+  return (
+    <Tippy
+      theme="mex-bright"
+      placement="left"
+      appendTo={() => getElementById('ext-side-nav')}
+      content={<TitleWithShortcut title={!alias ? 'Shorten Link' : 'Copy Alias'} />}
+    >
+      {!editable ? (
+        alias ? (
+          <StyledShortener>
+            <CopyButton size="20" text={text} isIcon />
+          </StyledShortener>
+        ) : (
+          <ShortenerWrapper isShortend={!!alias} transparent onClick={() => setEditable(true)}>
+            <Icon width={20} height={20} icon={linkM} />
+          </ShortenerWrapper>
+        )
+      ) : (
+        <StyledShortener>
+          <InputContainer>
+            <Icon width={20} height={20} icon={linkM} />
+            <StyledInput
+              id={`shorten-url`}
+              name="ShortenUrlInput"
+              onKeyDown={handleSubmit}
+              onChange={(e) => handleChange(e)}
+              autoFocus
+              placeholder="Enter shorten URL"
+              defaultValue={short}
+            />
+          </InputContainer>
 
-      <GenericFlex>
-        <GenericFlex>
-          <DisplayShortcut shortcut="Enter" />
-          <FadedShortcut>&nbsp;to save</FadedShortcut>
-        </GenericFlex>
-        <MexIcon width={20} height={20} icon={DefaultMIcons.CLEAR.value} onClick={reset} />
-      </GenericFlex>
-    </StyledShortener>
+          <GenericFlex>
+            <GenericFlex>
+              <DisplayShortcut shortcut="Enter" />
+              <FadedShortcut>&nbsp;to save</FadedShortcut>
+            </GenericFlex>
+            <MexIcon width={20} height={20} icon={DefaultMIcons.CLEAR.value} onClick={reset} />
+          </GenericFlex>
+        </StyledShortener>
+      )}
+    </Tippy>
   )
 }
 
-export const ShortenerComponent = () => {
+export const ShortenerComponent = ({ editable, setEditable }: { editable: boolean; setEditable: any }) => {
   const { links } = useLinkStore()
-  const [editable, setEditable] = useState(false)
   const { updateAlias, saveLink, isDuplicateAlias } = useLinkURLs()
 
   const link = useMemo(() => {
@@ -207,25 +181,14 @@ export const ShortenerComponent = () => {
     }
   }
 
-  const url = deleteQueryParams(window.location.href)
-
   return (
-    <UrlTitleWrapper>
-      {!editable && !link?.alias && (
-        <InputContainer>
-          <FaviconImage source={url} />
-          <ShortenerTitle>{window.location.hostname}</ShortenerTitle>
-        </InputContainer>
-      )}
-
-      <URLShortner
-        editable={editable}
-        setEditable={setEditable}
-        updateAlias={onUpdateAlias}
-        url={link?.url}
-        alias={link?.alias}
-        isDuplicateAlias={isDuplicateAlias}
-      />
-    </UrlTitleWrapper>
+    <URLShortner
+      editable={editable}
+      setEditable={setEditable}
+      updateAlias={onUpdateAlias}
+      url={link?.url}
+      alias={link?.alias}
+      isDuplicateAlias={isDuplicateAlias}
+    />
   )
 }

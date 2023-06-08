@@ -1,174 +1,117 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useHoverIntent } from 'react-use-hoverintent'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useSpring, useSprings } from 'react-spring'
 
-import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
-import styled, { css } from 'styled-components'
+import { useGesture } from '@use-gesture/react'
 
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 
 import { useLayoutStore } from '@mexit/core'
 import { WDLogo } from '@mexit/shared'
 
-import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { getElementById } from '../../Utils/cs-utils'
 
-const DragIcon = styled(Icon)<{ $show: boolean }>`
-  margin-right: -18px;
-  opacity: 0;
-  pointer-events: none;
-  transition: margin-right 0.2s ease-in-out, opacity 0.2s ease-in-out;
-  ${(props) =>
-    props.$show &&
-    css`
-      margin-right: 0;
-      opacity: 1;
-      pointer-events: all;
-    `}
-`
+import { ShortenerComponent } from './ShortenerComponent'
+import { ButtonWrapper, DragIcon, ToggleWrapper, Wrapper } from './styled'
 
-const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean; $top: number }>`
-  position: fixed;
-  display: flex;
-  align-items: center;
-  width: max-content;
-
-  ${({ $expanded, $top, $endColumnWidth, theme }) =>
-    $expanded
-      ? css`
-          top: ${$top}px;
-          right: calc(${($endColumnWidth ?? '400px') + ' + ' + (theme.additional.hasBlocks ? 0 : -15)}px);
-        `
-      : css`
-          top: ${$top}px;
-          right: 0;
-        `}
-
-  z-index: 9999999999;
-  padding: 8px;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  background: ${({ theme }) => theme.tokens.surfaces.sidebar};
-  color: ${({ theme }) => theme.tokens.text.fade};
-  transition: right 0.2s ease-in-out, background 0.2s ease-in-out, width 0.2s ease-in-out;
-
-  svg {
-    height: 16px;
-    width: 16px;
-  }
-
-  &:hover {
-    cursor: pointer;
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
-    background: ${({ theme }) => theme.tokens.colors.primary.default};
-    color: ${({ theme }) => theme.tokens.colors.primary.text};
-
-    svg {
-      path {
-        fill: ${({ theme }) => theme.tokens.surfaces.sidebar};
-      }
-    }
-  }
-
-  ${DragIcon} {
-    cursor: ns-resize;
-  }
-
-  &:active {
-    transition: background 0.1s ease;
-    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
-    color: ${({ theme }) => theme.tokens.colors.primary.text};
-  }
-`
-
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-
-  /* ::before {
-    content: '';
-    position: absolute;
-    bottom: 20px;
-    height: 20px;
-    width: 20px;
-    border-bottom-right-radius: ${({ theme }) => theme.borderRadius.large};
-    background: ${({ theme }) => theme.tokens.surfaces.sidebar};
-    color: ${({ theme }) => theme.tokens.text.fade};
-  } */
-`
+// Change this if more buttons have to be added
+const FLOATING_BUTTONS = 1
 
 export const DraggableToggle = () => {
-  const [isHovering, intentRef, setIsHovering] = useHoverIntent({ timeout: 500 })
-  const [tracking, setTracking] = useState(false)
+  const [isHovering, setIsHovering] = useState(false)
+  const [editable, setEditable] = useState(false)
   const { rhSidebar, toggleRHSidebar, toggleTop, setToggleTop } = useLayoutStore()
-  const { endColumnWidth } = useSidebarTransition()
 
-  const handleRef = useRef<any>(null)
+  const avatarRefs = useRef<HTMLDivElement[]>([])
+  const avatarRefInitialPositions = useRef<number[]>([])
+  const toggleRef = useRef<HTMLDivElement>(null)
+  const avatarTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
-  useEffect(() => {
-    const handleMouseDown = (event: MouseEvent) => {
-      event.preventDefault()
-      event.stopPropagation()
-      setTracking(true)
-    }
+  const [{ x, y }, api] = useSpring(() => ({ x: `${window.innerWidth - 40}px`, y: toggleTop }), [])
+  const [buttonSprings, buttonApi] = useSprings(FLOATING_BUTTONS, (i) => ({ y: 0 }), [])
 
-    if (handleRef?.current) {
-      handleRef.current.addEventListener('mousedown', handleMouseDown)
-    }
-
-    return () => {
-      handleRef?.current?.removeEventListener('mousedown', handleMouseDown)
-    }
-  }, [handleRef?.current])
-
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      event.stopPropagation()
-
-      if (tracking) {
-        const newHeight = event.clientY
-        setToggleTop(newHeight)
+  const bind = useGesture(
+    {
+      onDrag: ({ offset: [, y] }) => {
+        api.start({ y })
+      },
+      onDragEnd: () => {
+        setToggleTop(y.get())
+      },
+      onHover: ({ hovering }) => {
+        setIsHovering(hovering)
+      }
+    },
+    {
+      drag: {
+        from: () => [0, y.get()],
+        axis: 'y',
+        // filters click events when dragging
+        filterTaps: true,
+        pointer: {
+          keys: false
+        },
+        // Hard coding lower bound for now but would have to change if more buttons are added
+        bounds: {
+          top: -window.innerHeight,
+          bottom: -100
+        }
       }
     }
+  )
 
-    window.addEventListener('mousemove', handleMouseMove)
+  useLayoutEffect(() => {
+    if (avatarRefInitialPositions.current.length === 0) {
+      const { y: buttonY } = toggleRef.current.getBoundingClientRect()
 
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
+      avatarRefInitialPositions.current = avatarRefs.current.map((node) => buttonY - node.getBoundingClientRect().y)
     }
-  }, [tracking])
+
+    buttonApi.start((i) => ({
+      y: avatarRefInitialPositions.current[i],
+      immediate: true
+    }))
+  }, [])
 
   useEffect(() => {
-    const handleMouseUp = (event) => {
-      if (tracking) setTracking(false)
-    }
-    window.addEventListener('mouseup', handleMouseUp)
+    api.start({ x: `${window.innerWidth - (rhSidebar.expanded ? 433 : 40)}px` })
+  }, [rhSidebar.expanded])
 
-    return () => {
-      window.removeEventListener('mouseup', handleMouseUp)
+  useEffect(() => {
+    if (isHovering || editable) {
+      if (avatarTimeoutRef.current) {
+        clearTimeout(avatarTimeoutRef.current)
+      }
+
+      buttonApi.start({
+        y: 0
+      })
+    } else {
+      avatarTimeoutRef.current = setTimeout(() => {
+        buttonApi.start((i) => ({
+          y: avatarRefInitialPositions.current[i]
+        }))
+      }, 1500)
     }
-  }, [tracking])
+  }, [isHovering, editable])
 
   return (
-    <Tippy
-      theme="mex-bright"
-      placement="left"
-      appendTo={() => getElementById('ext-side-nav')}
-      content={<TitleWithShortcut title={rhSidebar.expanded ? 'Collapse Sidebar' : 'Expand Sidebar'} />}
-    >
-      <ToggleWrapper
-        $endColumnWidth={endColumnWidth}
-        ref={intentRef as any}
-        $top={toggleTop}
-        $expanded={rhSidebar.expanded}
-        onClick={toggleRHSidebar}
+    <ToggleWrapper ref={toggleRef} {...bind()} style={{ x, y }}>
+      <Tippy
+        theme="mex-bright"
+        placement="left"
+        appendTo={() => getElementById('ext-side-nav')}
+        content={<TitleWithShortcut title={rhSidebar.expanded ? 'Collapse Sidebar' : 'Expand Sidebar'} />}
       >
-        <Wrapper>
+        <Wrapper onClick={() => toggleRHSidebar()}>
           <WDLogo />
-          <DragIcon ref={handleRef} $show={isHovering} icon="ic:outline-drag-indicator" />
+          <DragIcon $show={isHovering} icon="ic:outline-drag-indicator" />
         </Wrapper>
-      </ToggleWrapper>
-    </Tippy>
+      </Tippy>
+
+      <ButtonWrapper ref={(ref) => (avatarRefs.current[0] = ref!)} style={buttonSprings[0]}>
+        <ShortenerComponent editable={editable} setEditable={setEditable} />
+      </ButtonWrapper>
+    </ToggleWrapper>
   )
 }
