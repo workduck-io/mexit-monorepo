@@ -26,7 +26,7 @@ const SIDEBAR_WIDTH = 276
 
 const initializeLayoutStore = () => ({
   // Focus mode
-  toggleTop: -500,
+  toggleTop: 500,
   showLoader: false,
   contextMenu: undefined as ContextMenu | undefined,
   focusMode: { on: false, hover: false },
