@@ -2,14 +2,12 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import styled from 'styled-components'
-import Cookies from 'universal-cookie'
 
 import { mog, usePublicNodeStore } from '@mexit/core'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
 import PublicDataInfobar from '../Components/Infobar/PublicNodeInfobar'
 import Presenter from '../Components/Presenter'
-import PublicNodeFloatingButton from '../Components/PublicNodeFloatingButton'
 import SplashScreen from '../Components/SplashScreen'
 import { defaultContent } from '../Data/baseData'
 import { useApi } from '../Hooks/API/useNodeAPI'
@@ -27,19 +25,8 @@ const PublicNodeView = () => {
   const navigate = useNavigate()
   const [node, setNode] = useState<any>()
   const [showLoader, setShowLoader] = useState(true)
-  const [firstVisit, setFirstVisit] = useState<boolean>(true)
 
   const { getContent, setContent, iLinks, namespace } = usePublicNodeStore()
-
-  useEffect(() => {
-    const cookies = new Cookies()
-    const timestamp = Date.now()
-
-    const existingCookie = cookies.get('mexit-sharing')
-
-    if (existingCookie) setFirstVisit(false)
-    cookies.set('mexit-sharing', timestamp, { path: '/' })
-  }, [])
 
   // TODO: check api store and before making a request again
   // content would be available inside usePublicNodesStore
@@ -84,7 +71,6 @@ const PublicNodeView = () => {
         <>
           <PublicNodeEditor nodeId={nodeId} node={node} namespaceId={namespace} />
           <PublicDataInfobar nodeId={nodeId} content={node?.content ?? defaultContent.content} />
-          <PublicNodeFloatingButton firstVisit={firstVisit} />
           <Presenter />
         </>
       )}

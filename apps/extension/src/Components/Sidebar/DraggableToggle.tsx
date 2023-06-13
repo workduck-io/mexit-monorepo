@@ -27,16 +27,16 @@ export const DraggableToggle = () => {
   const toggleRef = useRef<HTMLDivElement>(null)
   const avatarTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
-  const [{ x, y }, api] = useSpring(() => ({ x: `${window.innerWidth - 40}px`, y: toggleTop }), [])
+  const [{ top, right }, api] = useSpring(() => ({ top: toggleTop, right: 0 }), [])
   const [buttonSprings, buttonApi] = useSprings(FLOATING_BUTTONS, (i) => ({ y: 0 }), [])
 
   const bind = useGesture(
     {
       onDrag: ({ offset: [, y] }) => {
-        api.start({ y })
+        api.start({ top: y })
       },
       onDragEnd: () => {
-        setToggleTop(y.get())
+        setToggleTop(top.get())
       },
       onHover: ({ hovering }) => {
         setIsHovering(hovering)
@@ -44,7 +44,7 @@ export const DraggableToggle = () => {
     },
     {
       drag: {
-        from: () => [0, y.get()],
+        from: () => [0, top.get()],
         axis: 'y',
         // filters click events when dragging
         filterTaps: true,
@@ -53,8 +53,8 @@ export const DraggableToggle = () => {
         },
         // Hard coding lower bound for now but would have to change if more buttons are added
         bounds: {
-          top: -window.innerHeight,
-          bottom: -100
+          top: 0,
+          bottom: window.innerHeight - 100
         }
       }
     }
@@ -74,7 +74,7 @@ export const DraggableToggle = () => {
   }, [])
 
   useEffect(() => {
-    api.start({ x: `${window.innerWidth - (rhSidebar.expanded ? 433 : 40)}px` })
+    api.start({ right: rhSidebar.expanded ? 385 : 0 })
   }, [rhSidebar.expanded])
 
   useEffect(() => {
@@ -94,9 +94,8 @@ export const DraggableToggle = () => {
       }, 1500)
     }
   }, [isHovering, editable])
-
   return (
-    <ToggleWrapper ref={toggleRef} {...bind()} style={{ x, y }}>
+    <ToggleWrapper ref={toggleRef} {...bind()} style={{ top, right }}>
       <Tippy
         theme="mex-bright"
         placement="left"

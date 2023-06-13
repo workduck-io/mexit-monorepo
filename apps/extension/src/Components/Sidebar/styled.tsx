@@ -130,10 +130,10 @@ export const DragIcon = styled(Icon)<{ $show: boolean }>`
 export const ToggleWrapper = styled(animated.div)`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
 
   width: max-content;
-  position: absolute;
+  position: fixed;
   z-index: 9999999999;
 
   svg {
