@@ -5,7 +5,7 @@ import { useSpring } from 'react-spring'
 import { useTheme } from 'styled-components'
 
 import { useLayoutStore } from '@mexit/core'
-import { OverlaySidebarWindowWidth, size } from '@mexit/shared'
+import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 const sidebarCollapsedWidth = '86px'
 const sidebarExpandedWidth = '362px'
@@ -15,7 +15,6 @@ export const useSidebarTransition = () => {
   const rhSidebar = useLayoutStore((state) => state.rhSidebar)
   const theme = useTheme()
 
-  const isDesktop = useMediaQuery({ minWidth: size.wide })
   const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
 
   const sidebarStyle = useMemo(() => {
@@ -51,14 +50,14 @@ export const useSidebarTransition = () => {
       }
       return style
     }
-  }, [rhSidebar, overlaySidebar, isDesktop])
+  }, [rhSidebar, overlaySidebar])
   const rhSidebarSpringProps = useSpring(rhSidebarStyle)
 
   const { style: gridStyle, endColumnWidth } = useMemo(() => {
     const showSidebar = sidebar.show && sidebar.expanded
     const showRHSidebar = rhSidebar.show && rhSidebar.expanded
     const firstColumnWidth = `${showSidebar ? sidebarExpandedWidth : sidebarCollapsedWidth}`
-    const visibleEndColumnWidth = `${isDesktop ? '600px' : '400px'}`
+    const visibleEndColumnWidth = '400px'
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
     const themeGap = `${theme.additional.hasBlocks ? '4rem' : '0rem'}`
     // mog('Overlay', { overlaySidebar, showSidebar, showRHSidebar })
@@ -74,7 +73,7 @@ export const useSidebarTransition = () => {
       }
       return { style, endColumnWidth }
     }
-  }, [sidebar, isDesktop, rhSidebar, overlaySidebar, theme])
+  }, [sidebar, rhSidebar, overlaySidebar, theme])
 
   const gridSpringProps = useSpring({ to: gridStyle, immediate: !sidebar.show && !rhSidebar.show })
 
