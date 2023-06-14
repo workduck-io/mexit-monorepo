@@ -1,6 +1,7 @@
 import { useEditorStore } from '@mexit/core'
 import { DataInfobarHeader, DataInfobarWrapper, MexIcon, Title } from '@mexit/shared'
 
+import { Assistant } from '../Assistant'
 import TagsRelated, { TagsRelatedSuggestions } from '../Editor/TagsRelated'
 
 import Backlinks from './Backlinks'
@@ -21,6 +22,7 @@ const DataInfoBar = () => {
       <TagsRelatedSuggestions nodeid={node.nodeid} fromAnalysis />
       <Outline editorId={node.nodeid} />
       <Backlinks nodeid={node.nodeid} />
+      <Assistant />
     </DataInfobarWrapper>
   )
 }
