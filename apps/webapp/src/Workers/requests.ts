@@ -1,6 +1,7 @@
 import ky from 'ky'
 import { type KyInstance } from 'ky/distribution/types/ky'
 import { customAlphabet } from 'nanoid'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 
 import {
   apiURLs,
@@ -25,10 +26,10 @@ const nanoid = customAlphabet(nolookalikes, 21)
 const generateRequestID = () => `REQUEST_${nanoid()}`
 
 let client: KyInstance
-let wsClient: WebSocket
+let wsClient: ReconnectingWebSocket
 
 const initializeClient = (authToken: string, workspaceID: string) => {
-  wsClient = new WebSocket(
+  wsClient = new ReconnectingWebSocket(
     `wss://5bjjcc3nq3.execute-api.us-east-1.amazonaws.com/test?workspaceId=${workspaceID}&Authorizer=${authToken}`
   )
 
