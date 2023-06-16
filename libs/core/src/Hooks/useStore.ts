@@ -39,9 +39,7 @@ export const useStore = () => {
   const restore = async (): Promise<boolean> => {
     const workspaceId = getWorkspaceIdFromStorage()
     const result = await Promise.allSettled(
-      getBackupStores(getWorkspaceIdFromStorage()).map((utilFunc) =>
-        utilFunc?.getState()?.initializeFromBackup(workspaceId)
-      )
+      getBackupStores().map((utilFunc) => utilFunc?.getState()?.initializeFromBackup(workspaceId))
     )
 
     for (const res of result) {
