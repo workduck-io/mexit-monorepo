@@ -23,7 +23,7 @@
     "@udecode/plate": "^16.4.1",
     "@use-gesture/react": "^10.2.27",
     "@webcomponents/custom-elements": "1.5.0",
-    "@workduck-io/dwindle": "^0.1.7",
+    "@workduck-io/dwindle": "^0.2.0",
     "@workduck-io/mex-components": "^0.0.25",
     "@workduck-io/mex-themes": "^0.0.9",
     "@workduck-io/tinykeys": "^1.5.0",

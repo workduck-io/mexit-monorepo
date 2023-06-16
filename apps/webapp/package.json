@@ -32,7 +32,7 @@
     "@tippyjs/react": "^4.2.6",
     "@udecode/plate": "^16.4.1",
     "@uifabric/styling": "^7.20.0",
-    "@workduck-io/dwindle": "^0.1.7",
+    "@workduck-io/dwindle": "^0.2.0",
     "@workduck-io/flexsearch": "^0.7.22",
     "@workduck-io/mex-components": "^0.0.25",
     "@workduck-io/mex-themes": "^0.0.9",

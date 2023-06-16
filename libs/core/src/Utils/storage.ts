@@ -2,6 +2,8 @@
 
 import { IDBPDatabase, openDB } from 'idb'
 
+import { S3FileDownloadClient, S3FileUploadClient } from '@workduck-io/dwindle'
+
 import { mog } from './mog'
 
 export const getLocalStorage = () => {
@@ -66,6 +68,19 @@ class BackupStorageClass {
     const result = await store.put(value, key)
     mog('Put Data ', { result })
     return result
+  }
+
+  async backUpToS3(tableName: string) {
+    const result = await this.getAllValue(tableName)
+    return await S3FileUploadClient(JSON.stringify(result), {
+      fileName: `WORKSPACE_BACKUP_${tableName}`
+    })
+  }
+
+  async fetchFromS3(tableName: string) {
+    return await S3FileDownloadClient({
+      fileName: `WORKSPACE_BACKUP_${tableName}`
+    })
   }
 
   async putBulkValue(tableName: string, values: object[]) {
