@@ -6,14 +6,14 @@ import { getStoreName, StoreIdentifier } from '../Types/Store'
 import { asyncLocalStorage } from './chromeStorageAdapter'
 import { IDBStorage } from './idbStorageAdapter'
 import { isExtension } from './isExtension'
-import { BackupStorage, getLocalStorage } from './storage'
+import { BackupStorage } from './storage'
 
 export type TypeMap<T, R extends boolean> = R extends true
   ? T & {
       _hasHydrated: boolean
       setHasHydrated: (state) => void
-      initializeFromBackup: () => Promise<boolean>
-      backup: () => Promise<void>
+      initializeFromBackup: (workspaceId: string) => Promise<boolean>
+      backup: (workspaceId: string) => Promise<void>
     }
   : T
 
@@ -22,16 +22,6 @@ export type SetterFunction<T> = (set: any, get: any) => T
 export type StorageType = {
   web: Storage
   extension: Storage
-}
-
-const getWorkspaceIdFromStorage = () => {
-  const storeName = getStoreName(StoreIdentifier.AUTH, isExtension())
-  const authStorage = getLocalStorage().getItem(storeName)
-
-  if (authStorage) {
-    const workspace = JSON.parse(authStorage)?.state?.workspaceDetails
-    return workspace?.id
-  }
 }
 
 export const createStore = <T extends object, R extends boolean>(
@@ -55,18 +45,14 @@ export const createStore = <T extends object, R extends boolean>(
             _hasHydrated: state
           })
         },
-        backup: async () => {
+        backup: async (workspaceId) => {
           // TODO: Backup to storage
-          const workspaceId = getWorkspaceIdFromStorage()
           if (workspaceId && !isExtension()) {
             const storeToBackup = get()
             BackupStorage.putValue(workspaceId, storeName, JSON.stringify(storeToBackup))
           }
         },
-        initializeFromBackup: async () => {
-          // TODO: Initialize from stored backup
-          const workspaceId = getWorkspaceIdFromStorage()
-
+        initializeFromBackup: async (workspaceId) => {
           if (workspaceId && !isExtension()) {
             const storedBackup = await BackupStorage.getValue(workspaceId, storeName)
             if (storedBackup) {
