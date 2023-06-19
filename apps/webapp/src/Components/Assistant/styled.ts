@@ -1,19 +1,22 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-const MessageBubble = styled.div`
+import { AIEvent } from '@mexit/core'
+
+export const MessageBubble = styled.div<{ role: AIEvent['role'] }>`
   padding: ${({ theme }) => theme.spacing.small};
   margin: ${({ theme }) => theme.spacing.small};
 
   background-color: ${({ theme }) => theme.tokens.surfaces.modal};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-`
 
-export const UserPrompt = styled(MessageBubble)`
-  border-right: 5px solid ${({ theme }) => theme.colors.primary};
-`
-
-export const AssistantResponse = styled(MessageBubble)`
-  border-left: 5px solid ${({ theme }) => theme.colors.secondary};
+  ${({ role }) =>
+    role === 'user'
+      ? css`
+          border-right: 5px solid ${({ theme }) => theme.colors.primary};
+        `
+      : css`
+          border-left: 5px solid ${({ theme }) => theme.colors.secondary};
+        `}
 `
 
 export const PairWrapper = styled.div`

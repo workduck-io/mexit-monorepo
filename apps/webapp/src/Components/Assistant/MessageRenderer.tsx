@@ -1,20 +1,33 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
-import { AIEventsHistory } from '@mexit/core'
+import { useHistoryStore } from '@mexit/core'
 
-import { AssistantResponse, ConversationWrapper, PairWrapper, UserPrompt } from './styled'
+import { AssistantResponse } from './AssistantResponse'
+import { ConversationWrapper, MessageBubble } from './styled'
 
-const MessageRenderer = ({ conversationStack }: { conversationStack: AIEventsHistory }) => {
+const MessageRenderer = () => {
+  const aiHistory = useHistoryStore((store) => store.ai)
+
+  const filteredConversation = useMemo(() => {
+    // removing the first two messages because it's just a reply to the context
+    return aiHistory
+      .flat()
+      .filter((item) => item)
+      .slice(2)
+  }, [aiHistory])
+
   return (
     <ConversationWrapper>
-      {conversationStack?.map((event, i) => {
-        const [first, second] = event
-
+      {filteredConversation?.map((event, i) => {
         return (
-          <PairWrapper>
-            {first && <AssistantResponse>{first?.content} </AssistantResponse>}
-            {second && <UserPrompt>{second?.content}</UserPrompt>}
-          </PairWrapper>
+          <>
+            {
+              {
+                ['user']: <MessageBubble role={event.role}> {event.content}</MessageBubble>,
+                ['assistant']: <AssistantResponse event={event} />
+              }[event.role]
+            }
+          </>
         )
       })}
     </ConversationWrapper>

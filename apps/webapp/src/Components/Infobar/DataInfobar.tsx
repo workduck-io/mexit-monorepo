@@ -22,7 +22,7 @@ const DataInfoBar = () => {
       <TagsRelatedSuggestions nodeid={node.nodeid} fromAnalysis />
       <Outline editorId={node.nodeid} />
       <Backlinks nodeid={node.nodeid} />
-      <Assistant />
+      <Assistant nodeId={node.nodeid} />
     </DataInfobarWrapper>
   )
 }
