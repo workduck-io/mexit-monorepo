@@ -95,10 +95,10 @@ export const useAIOptions = () => {
     }
   }
 
-  const getUserQuery = (type: SupportedAIEventTypes, content?: string, role?: AIEvent['role']) => {
+  const getUserQuery = (type: SupportedAIEventTypes, content?: string) => {
     const aiEventsHistory = useHistoryStore.getState().ai
     const userQuery: AIEvent = {
-      role: role ?? 'user',
+      role: 'user',
       type
     }
 
@@ -114,12 +114,8 @@ export const useAIOptions = () => {
     }
   }
 
-  const performAIAction = async (
-    type: SupportedAIEventTypes,
-    content?: string,
-    role?: AIEvent['role']
-  ): Promise<void> => {
-    const { context, userQuery } = getUserQuery(type, content, role)
+  const performAIAction = async (type: SupportedAIEventTypes, content?: string): Promise<void> => {
+    const { context, userQuery } = getUserQuery(type, content)
 
     try {
       await aiRequestHandler({ context }, (res) => {
