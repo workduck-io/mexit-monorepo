@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
-import { getPlateEditorRef } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
-import { SupportedAIEventTypes, useEditorStore, useHistoryStore } from '@mexit/core'
+import {
+  convertContentToRawText,
+  getContent,
+  SupportedAIEventTypes,
+  useHistoryStore
+} from '@mexit/core'
 import { AutoComplete, DefaultMIcons, Group, IconDisplay, useAIOptions } from '@mexit/shared'
 
 import { AccordionContent, Chevron, GroupHeader } from '../Views/ViewBlockRenderer/BlockContainer'
@@ -12,18 +16,21 @@ import { AccordionContent, Chevron, GroupHeader } from '../Views/ViewBlockRender
 import { MessageRenderer } from './MessageRenderer'
 import { ConversationContainer } from './styled'
 
-const Assistant = () => {
+const Assistant = ({ nodeId }: { nodeId: string }) => {
   const [isOpen, setIsOpen] = useState(true)
+
   const theme = useTheme()
-  const node = useEditorStore((state) => state.node)
   const { performAIAction } = useAIOptions()
   const aiHistory = useHistoryStore((store) => store.ai)
-  const editor = getPlateEditorRef()
-
-  // const nodeContent = parseToMarkdown({ children: editor.getFragment(), type: ELEMENT_PARAGRAPH })?.trim()
 
   const handleOnEnter = async (value: string) => {
     try {
+      const content = getContent(nodeId)
+
+      if (aiHistory.length === 0 && content) {
+        await performAIAction(SupportedAIEventTypes.PROMPT, convertContentToRawText(content.content), 'system')
+      }
+
       await performAIAction(SupportedAIEventTypes.PROMPT, value)
     } catch (err) {
       console.error('Unable generate prompt result', err)
@@ -45,7 +52,7 @@ const Assistant = () => {
       </GroupHeader>
 
       <AccordionContent isOpen={isOpen}>
-        <MessageRenderer conversationStack={aiHistory} />
+        <MessageRenderer />
 
         <AutoComplete onEnter={handleOnEnter} clearOnEnter={true} defaultItems={[]} />
       </AccordionContent>
