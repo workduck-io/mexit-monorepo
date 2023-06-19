@@ -9,7 +9,7 @@ export enum SupportedAIEventTypes {
 export type ContentFormatType = 'markdown' | 'html' | 'audio' | 'video'
 
 export interface AIEvent {
-  role: 'user' | 'assistant'
+  role: 'user' | 'assistant' | 'system'
   content?: string
   inputFormat?: ContentFormatType
   type?: SupportedAIEventTypes
