@@ -19,10 +19,6 @@ export const MessageBubble = styled.div<{ role: AIEvent['role'] }>`
         `}
 `
 
-export const PairWrapper = styled.div`
-  margin: none;
-`
-
 export const ConversationWrapper = styled.div`
   margin: ${({ theme }) => theme.spacing.small} 0;
   height: 20rem;
