@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createPlateUI, withProps } from '@udecode/plate'
-import { StyledElement } from '@udecode/plate-styled-components'
+import { createPlateUI, StyledElement, withProps } from '@udecode/plate'
 
 import {
-    ELEMENT_CAPTURE,
+  ELEMENT_CAPTURE,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
@@ -15,7 +14,8 @@ import {
   ELEMENT_TAG,
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
-  ELEMENT_TODO_LI
+  ELEMENT_TODO_LI,
+  SuperBlocks
 } from '@mexit/core'
 import { CaptureElement, LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
@@ -24,6 +24,8 @@ import Todo from '../../Components/Todo'
 
 import { MentionElement } from './Mentions/MentionElement'
 import { QuickLinkElement } from './QuickLink/QuickLinkElement'
+import ContentSuperBlock from './SuperBlock/ContentSuperBlock'
+import { withSuperBlock } from './SuperBlock/withSuperBlock'
 import InlineBlock from './InlineBlock'
 import SectionSeparator from './SectionSeparator'
 import TaskViewLink from './TaskViewLink'
@@ -40,7 +42,7 @@ export const editorPreviewComponents = createPlateUI({
       }
     }
   }),
-  [ELEMENT_TODO_LI]: Todo as any,
+  [ELEMENT_TODO_LI]: withSuperBlock(Todo),
   [ELEMENT_TAG]: TagWrapper as any,
   [ELEMENT_ILINK]: QuickLinkElement as any,
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any,
@@ -54,7 +56,8 @@ export const editorPreviewComponents = createPlateUI({
 const components = createPlateUI({
   ...editorPreviewComponents,
   [ELEMENT_INLINE_BLOCK]: InlineBlock as any,
-  [ELEMENT_TASK_VIEW_BLOCK]: ViewBlock as any
+  [ELEMENT_TASK_VIEW_BLOCK]: ViewBlock as any,
+  [SuperBlocks.CONTENT]: ContentSuperBlock
 })
 
 export default components

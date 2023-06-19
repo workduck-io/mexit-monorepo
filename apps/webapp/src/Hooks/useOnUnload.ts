@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { mog, useAuthStore } from '@mexit/core'
+import { useAuthStore } from '@mexit/core'
 
 import { useEditorBuffer, useSnippetBuffer } from './useEditorBuffer'
 
@@ -15,7 +15,6 @@ export const useOnUnload = () => {
   useEffect(() => {
     if (authenticated) {
       const onUnload = () => {
-        mog('Saving notes and snippets...')
         clearNotesBuffer()
         clearSnippetsBuffer()
       }

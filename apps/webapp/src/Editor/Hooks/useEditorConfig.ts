@@ -13,7 +13,6 @@ import {
   ELEMENT_TAG,
   ELEMENT_TODO_LI,
   getMIcon,
-  mog,
   PromptRenderType,
   SEPARATOR,
   TodoStatus,
@@ -190,7 +189,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         slateElementType: 'internal',
         newItemHandler: (path, openedNoteId?) => {
           const openedNode = useDataStore.getState().ilinks.find((l) => l.nodeid === openedNoteId)
-          mog('new item here is', { path, openedNoteId, openedNode })
           const note = createNewNote({
             path: path.startsWith(SEPARATOR) ? `${openedNode?.path}${path}` : path,
             parent: path.startsWith(SEPARATOR)
@@ -210,7 +208,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         ? {
             slateElementType: ELEMENT_MENTION,
             onItemInsert: (alias) => {
-              mog('Inserted new item', { alias })
               grantUserAccessOnMention(alias, nodeid)
             },
             newItemHandler: (newAlias) => {
@@ -226,7 +223,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         slateElementType: ELEMENT_ILINK,
         newItemHandler: (path, openedNoteId?) => {
           const openedNode = useDataStore.getState().ilinks.find((l) => l.nodeid === openedNoteId)
-          mog('new item here is', { path, openedNoteId, openedNode })
           const note = createNewNote({
             path: path.startsWith(SEPARATOR) ? `${openedNode?.path}${path}` : path,
             parent: path.startsWith(SEPARATOR)

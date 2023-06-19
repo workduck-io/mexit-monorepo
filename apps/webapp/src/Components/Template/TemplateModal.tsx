@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 
 import { LoadingButton, Title } from '@workduck-io/mex-components'
 
-import { API, ModalsType, mog, Snippet, useMetadataStore, useModalStore, useSnippetStore } from '@mexit/core'
+import { API, ModalsType, Snippet, useMetadataStore, useModalStore, useSnippetStore } from '@mexit/core'
 import { ButtonFields, DefaultMIcons, FlexBetween, MexIcon, TemplateContainer } from '@mexit/shared'
 
 import { defaultContent } from '../../Data/baseData'
@@ -63,7 +63,7 @@ const TemplateModal = () => {
     if (nodeid) {
       const existingMetadata = useMetadataStore.getState().metadata.notes[nodeid]
       const newMeta = { icon: existingMetadata.icon, templateID: selectedTemplate?.id }
-      mog('META', { newMeta })
+      // mog('META', { newMeta })
       API.node
         .updateMetadata(nodeid, { metadata: newMeta })
         .then((r) => {

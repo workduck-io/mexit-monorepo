@@ -160,6 +160,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     // Comboboxes
     createTagPlugin(), // Tags
     createQuickLinkPlugin(), // Internal Links ILinks
+    createNormalizeTypesPlugin(),
 
     // // For Inline Blocks
     // createInlineBlockPlugin(),

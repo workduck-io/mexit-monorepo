@@ -25,7 +25,6 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TD,
   ELEMENT_TODO_LI,
-  ELEMENT_UL,
   getParentNode,
   getPluginType,
   insertEmptyCodeBlock,
@@ -66,11 +65,13 @@ const preFormat = (editor: PlateEditor<Value>) => unwrapList(editor)
 export const formatQuery = (editor: PlateEditor<Value>, options: AutoformatQueryOptions) => {
   const parentEntry = getParentNode(editor, editor.selection.focus)
   if (!parentEntry) return
+
   const [node] = parentEntry
 
   if (isElement(node) && node.type !== ELEMENT_CODE_LINE && node.type !== ELEMENT_CODE_BLOCK) {
     return true
   }
+
   return false
 }
 
@@ -132,17 +133,41 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     mode: 'block',
     type: ELEMENT_LI,
     match: ['* ', '- '],
+    triggerAtBlockStart: false,
     query: formatQuery,
-    preFormat,
+    // preFormat,
     format: (editor: PlateEditor<Value>) => {
       if (editor.selection) {
         const parentEntry = getParentNode(editor, editor.selection)
         if (!parentEntry) return
+
         const [node] = parentEntry
+
         if (isElement(node) && !isType(editor, node, ELEMENT_CODE_BLOCK) && !isType(editor, node, ELEMENT_CODE_LINE)) {
-          toggleList(editor, {
-            type: ELEMENT_UL
-          })
+          const content = [
+            {
+              type: 'ul',
+              id: generateTempId(),
+              children: [
+                {
+                  type: 'li',
+                  children: [
+                    {
+                      type: 'lic',
+                      children: [
+                        {
+                          type: 'p',
+                          text: ''
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+
+          insertNodes(editor, content)
         }
       }
     }
@@ -170,7 +195,7 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     mode: 'block',
     type: ELEMENT_TODO_LI,
     match: '[]',
-    triggerAtBlockStart: true,
+    triggerAtBlockStart: false,
     format: (editor: PlateEditor<Value>) => {
       setElements(editor, {
         type: ELEMENT_TODO_LI,
@@ -299,7 +324,7 @@ export const optionsExitBreakPlugin = {
 }
 
 const resetBlockTypesCommonRule = {
-  types: [ELEMENT_BLOCKQUOTE, ELEMENT_TODO_LI],
+  types: [ELEMENT_BLOCKQUOTE],
   defaultType: ELEMENT_PARAGRAPH
 }
 

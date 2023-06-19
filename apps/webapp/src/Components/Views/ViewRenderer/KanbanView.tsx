@@ -13,7 +13,6 @@ import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
 import {
   ELEMENT_PARAGRAPH,
-  mog,
   MoveBlocksType,
   PriorityType,
   SEPARATOR,
@@ -244,7 +243,6 @@ const KanbanView: React.FC<any> = (props) => {
       const columnId = get(selectedCard, groupBy) ?? 'Ungrouped'
       return column.id === columnId
     }) as KanbanBoardColumn
-    mog('selected column', { selectedColumn, selectedCard, groupBy, board })
 
     if (!selectedColumn) {
       selectFirst()
@@ -270,7 +268,6 @@ const KanbanView: React.FC<any> = (props) => {
 
       case 'down': {
         const nextCard = selectedColumn.cards[(selectedIndex + 1) % selectedColumnLength]
-        mog('nextCard', { nextCard, selectedColumn, selectedColumnLength, selectedIndex })
         if (nextCard) {
           // mog('selected card', { selectedCard, nextCard })
           setSelectedCard(nextCard)

@@ -17,9 +17,10 @@ import {
   mog,
   SelfMention,
   useEditorStore,
-  useMentionStore, 
+  useMentionStore,
   useShareModalStore,
-  useUserCacheStore} from '@mexit/core'
+  useUserCacheStore
+} from '@mexit/core'
 import {
   AccessTag,
   MentionTooltip,

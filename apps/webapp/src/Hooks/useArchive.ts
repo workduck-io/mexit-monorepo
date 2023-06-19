@@ -28,8 +28,6 @@ const useArchive = () => {
     const newArchiveNotes = [...archive, ...intersection]
     setArchive(newArchiveNotes)
 
-    mog('Archiving notes', { newArchiveNotes, intersection })
-
     return newArchiveNotes
   }
 
@@ -84,14 +82,11 @@ const useArchive = () => {
       .allArchived()
       .then((hierarchy) => {
         if (hierarchy) {
-          mog('getArchiveNotesHierarchy', { hierarchy })
-
+          // mog('getArchiveNotesHierarchy', { hierarchy })
           // const archivedNotes = hierarchyParser(hierarchy, { withParentNodeId: true, allowDuplicates: true })
-
           // if (archivedNotes && archivedNotes.length > 0) {
           //   const localILinks = useDataStore.getState().archive
           //   const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedNotes)
-
           //   runBatch(
           //     toUpdateLocal.map((ilink) =>
           //       getDataAPI(ilink.nodeid, false, false, false).then((data) => {
@@ -101,12 +96,11 @@ const useArchive = () => {
           //     )
           //   )
           // }
-
           // setArchive(archivedNotes)
         }
         return hierarchy
       })
-      .catch(mog)
+      .catch(console.error)
   }
 
   const cleanCachesAfterDelete = (nodes: ILink[]) => {
@@ -120,7 +114,6 @@ const useArchive = () => {
       if (removedPaths.includes(k)) return p
       return { ...p, [k]: v.filter((n) => !removedPaths.includes(n.nodeid)) }
     }, {})
-    mog('Cleaning Caches', { nodes, linkCache, tagsCache, removedPaths, cleanTagCache, cleanLinkCache })
     updateTagsCache(cleanTagCache)
     updateInternalLinks(cleanLinkCache)
   }

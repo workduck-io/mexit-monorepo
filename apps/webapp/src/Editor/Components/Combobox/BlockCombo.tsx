@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 import { DisplayShortcut, IconButton } from '@workduck-io/mex-components'
 import { Indexes } from '@workduck-io/mex-search'
 
-import { generateTempId, mog, useComboboxStore } from '@mexit/core'
+import { generateTempId, useComboboxStore } from '@mexit/core'
 import {
   ActionTitle,
   ComboboxItem,
@@ -66,7 +66,6 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
       const query = generateSearchQuery(trimmedSearch)
       queryIndexByNodeId(Indexes.MAIN, nodeId, query).then((res) => {
         const topFiveBlocks = res?.slice(0, 5)
-        mog('BLOCKS', { topFiveBlocks, res })
         setBlocks(topFiveBlocks)
         setIndex(0)
       })

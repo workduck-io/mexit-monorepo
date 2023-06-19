@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo } from 'react'
 import {
   Key,
   MiscKeys,
-  mog,
   Shortcut,
   ShortcutListner,
   useHelpStore,
@@ -93,7 +92,6 @@ const useChangeShortcutListener = (): ShortcutListner => {
         modifiers: getKeyModifiers(event)
       }
 
-      mog('key', { key })
       addInKeystrokes(key)
     },
     [currentShortcut, shortcut]

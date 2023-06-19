@@ -90,7 +90,6 @@ const Editor: React.FC<EditorProps> = ({
     editableProps: {
       spellCheck: false,
       readOnly,
-      // placeholder: "Let's try something here...",
       autoFocus
     },
     focusOptions: options?.focusOptions ?? {
@@ -125,6 +124,7 @@ const Editor: React.FC<EditorProps> = ({
   return (
     <EditorWrapper withShadow={withShadow}>
       <MexEditor
+        debug
         comboboxConfig={comboboxConfig}
         components={components}
         meta={{

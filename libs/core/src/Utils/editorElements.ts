@@ -45,3 +45,4 @@ export const ELEMENT_HR = 'hr'
 export const ELEMENT_SECTION_SEPARATOR = 'section_separator'
 
 export const ELEMENT_CAPTURE = 'capture'
+export const ELEMENT_GROUP = 'group-block'
