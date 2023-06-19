@@ -3,12 +3,7 @@ import React, { useState } from 'react'
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 import { useTheme } from 'styled-components'
 
-import {
-  convertContentToRawText,
-  getContent,
-  SupportedAIEventTypes,
-  useHistoryStore
-} from '@mexit/core'
+import { AIEvent, convertContentToRawText, getContent, SupportedAIEventTypes, useHistoryStore } from '@mexit/core'
 import { AutoComplete, DefaultMIcons, Group, IconDisplay, useAIOptions } from '@mexit/shared'
 
 import { AccordionContent, Chevron, GroupHeader } from '../Views/ViewBlockRenderer/BlockContainer'
@@ -20,18 +15,30 @@ const Assistant = ({ nodeId }: { nodeId: string }) => {
   const [isOpen, setIsOpen] = useState(true)
 
   const theme = useTheme()
-  const { performAIAction } = useAIOptions()
+  const { performAIAction, aiRequestHandler } = useAIOptions()
   const aiHistory = useHistoryStore((store) => store.ai)
+  const addInitialEvent = useHistoryStore((store) => store.addInitialEvent)
+  const addInAIHistory = useHistoryStore((store) => store.addInAIHistory)
 
   const handleOnEnter = async (value: string) => {
     try {
       const content = getContent(nodeId)
 
       if (aiHistory.length === 0 && content) {
-        await performAIAction(SupportedAIEventTypes.PROMPT, convertContentToRawText(content.content), 'system')
-      }
+        const queries: AIEvent[] = [
+          { content: convertContentToRawText(content.content), role: 'system' },
+          { content: value, role: 'user', type: SupportedAIEventTypes.PROMPT }
+        ]
 
-      await performAIAction(SupportedAIEventTypes.PROMPT, value)
+        await aiRequestHandler({ context: queries }, (res) => {
+          if (res?.content) {
+            addInitialEvent(queries[0])
+            addInAIHistory(queries[1], res)
+          }
+        })
+      } else {
+        await performAIAction(SupportedAIEventTypes.PROMPT, value)
+      }
     } catch (err) {
       console.error('Unable generate prompt result', err)
     }
