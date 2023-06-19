@@ -11,6 +11,7 @@ import {
   useAppStore,
   useAuthStore,
   useCalendarStore,
+  useChatStore,
   useCommentStore,
   useContentStore,
   useDataStore,
@@ -29,8 +30,7 @@ import {
   userPreferenceStore as useUserPreferenceStore,
   useSnippetStore,
   useTodoStore,
-  useUserCacheStore
-} from '@mexit/core'
+  useUserCacheStore} from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
 import { getEmailStart } from '../Utils/constants'
@@ -67,6 +67,7 @@ export const useAuthentication = () => {
   const clearPromptStore = usePromptStore((s) => s.reset)
   const resetEditorStore = useEditorStore((s) => s.reset)
   const clearCalendarStore = useCalendarStore((s) => s.reset)
+  const clearChatStore = useChatStore((s) => s.reset)
 
   const clearReminders = useReminderStore((r) => r.clearReminders)
   const clearTodos = useTodoStore((s) => s.clearTodos)
@@ -139,6 +140,7 @@ export const useAuthentication = () => {
     clearUsersCache()
     resetEditorStore()
     clearCalendarStore()
+    clearChatStore()
     API.reset()
   }
 

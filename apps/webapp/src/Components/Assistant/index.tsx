@@ -22,11 +22,11 @@ const Assistant = ({ nodeId }: { nodeId: string }) => {
 
   const handleOnEnter = async (value: string) => {
     try {
-      const content = getContent(nodeId)
+      const contentText = convertContentToRawText(getContent(nodeId)?.content)
 
-      if (aiHistory.length === 0 && content) {
+      if (aiHistory.length === 0 && contentText !== '') {
         const queries: AIEvent[] = [
-          { content: convertContentToRawText(content.content), role: 'system' },
+          { content: contentText, role: 'system' },
           { content: value, role: 'user', type: SupportedAIEventTypes.PROMPT }
         ]
 
@@ -59,7 +59,7 @@ const Assistant = ({ nodeId }: { nodeId: string }) => {
       </GroupHeader>
 
       <AccordionContent isOpen={isOpen}>
-        <MessageRenderer />
+        <MessageRenderer nodeId={nodeId} />
 
         <AutoComplete onEnter={handleOnEnter} clearOnEnter={true} defaultItems={[]} />
       </AccordionContent>

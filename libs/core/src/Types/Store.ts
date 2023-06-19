@@ -27,6 +27,7 @@ export const getMIcon = (type: MIcon['type'], value?: MIcon['value']) => {
 }
 
 export enum StoreIdentifier {
+  CHAT = 'chat',
   CONTENTS = 'contents',
   RECENTS = 'recents',
   SNIPPETS = 'snippets',
