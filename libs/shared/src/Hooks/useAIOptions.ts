@@ -132,6 +132,7 @@ export const useAIOptions = () => {
 
   return {
     performAIAction,
+    aiRequestHandler,
     handleOpenAIPreview,
     getAIMenuItems
   }

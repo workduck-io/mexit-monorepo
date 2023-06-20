@@ -50,7 +50,7 @@ export const GroupHeader = styled.div<{ isOpen?: boolean; padding?: boolean }>`
   cursor: pointer;
 `
 
-const AccordionContent = styled.div<{ isOpen?: boolean; height?: any }>`
+export const AccordionContent = styled.div<{ isOpen?: boolean; height?: any }>`
   overflow: hidden;
 
   ${({ isOpen }) =>
