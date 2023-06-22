@@ -65,7 +65,7 @@ export const useInitLoader = () => {
   const { getAllViews } = useViewAPI()
   const { getAllLinks } = useURLsAPI()
   const { updateBaseNode } = useNodes()
-  const { restore } = useStore()
+  const { restore, restoreFromS3 } = useStore()
   const { getAllWorkspaces } = useUserService()
   const { fetchAllHighlights } = useHighlightSync()
   const { logout } = useAuthentication()
@@ -171,15 +171,28 @@ export const useInitLoader = () => {
       startWorkers()
         .then(async () => {
           await updateCurrentUserPreferences()
-          getAllWorkspaces()
+          await getAllWorkspaces()
 
           if (initalizeApp === AppInitStatus.RUNNING) {
-            backgroundFetch()
-            try {
-              await withTimeout(fetchAll(), 60 * 1000, 'Oops, something went wrong while fetching workspace')
-            } catch (err) {
-              setManualReload(true)
-            }
+            restoreFromS3()
+              .then((res) => {
+                // TODO: can and should be done by a worker
+                initHighlightBlockMap(useDataStore.getState().ilinks, useContentStore.getState().contents)
+                updateBaseNode()
+                setIsUserAuthenticated()
+
+                setAppInitStatus(AppInitStatus.COMPLETE)
+              })
+              .catch(async (err) => {
+                mog('error while restoring backup', { err })
+
+                backgroundFetch()
+                try {
+                  await withTimeout(fetchAll(), 60 * 1000, 'Oops, something went wrong while fetching workspace')
+                } catch (err) {
+                  setManualReload(true)
+                }
+              })
           }
         })
         .catch((error) => {
