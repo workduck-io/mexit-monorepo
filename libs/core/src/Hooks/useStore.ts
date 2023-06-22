@@ -51,8 +51,24 @@ export const useStore = () => {
     return false
   }
 
+  const restoreFromS3 = async (): Promise<boolean> => {
+    const workspaceId = getWorkspaceIdFromStorage()
+    const backup = await BackupStorage.fetchFromS3(workspaceId)
+      .then((response) => response.transformToString())
+      .then((string) => {
+        return JSON.parse(string)
+      })
+
+    // First putting all the values back into backup store, then copy it to keyval db
+    await BackupStorage.putBulkValue(workspaceId, backup)
+    await restore()
+
+    return true
+  }
+
   return {
     backup,
-    restore
+    restore,
+    restoreFromS3
   }
 }
