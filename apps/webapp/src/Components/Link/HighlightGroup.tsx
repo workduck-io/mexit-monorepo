@@ -148,7 +148,6 @@ export const SingleHighlightWithToggle = ({ highlight, link }: { highlight: High
     loadNode(noteId, { highlightBlockId: blockId })
     goTo(ROUTE_PATHS.node, NavigationType.push, noteId)
     addRecent(noteId)
-    // push(noteId)
   }
 
   return (
