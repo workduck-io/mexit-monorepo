@@ -2,7 +2,7 @@ import { toast } from 'react-hot-toast'
 
 import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
-import { ELEMENT_PARAGRAPH, useContentStore } from '@mexit/core'
+import { ELEMENT_PARAGRAPH, useAuthStore, useContentStore } from '@mexit/core'
 import { parseToMarkdown } from '@mexit/shared'
 
 import { useBufferStore } from '../../Hooks/useEditorBuffer'
@@ -25,6 +25,36 @@ const useUpdateBlock = () => {
     if (editor) {
       const path = findNodePath(editor, blockElement)
       setNodes(editor, blockData, { at: path })
+    }
+  }
+
+  const updateMetadataProperties = (element: any, blockData: BlockDataType) => {
+    const editor = getPlateEditorRef()
+    const updatedBy = useAuthStore.getState().userDetails?.id
+
+    if (editor) {
+      const path = findNodePath(editor, element)?.slice(0, 1)
+
+      if (path) {
+        const metadata = element.metadata || {}
+        const properties = metadata.properties || {}
+
+        setNodes(
+          editor,
+          {
+            metadata: {
+              ...metadata,
+              updatedBy,
+              updatedAt: Date.now(),
+              properties: {
+                ...properties,
+                ...blockData
+              }
+            }
+          },
+          { at: path, mode: 'highest' }
+        )
+      }
     }
   }
 
@@ -132,7 +162,8 @@ const useUpdateBlock = () => {
     addBlockInContent,
     getSelectionInMarkdown,
     moveBlockFromNode,
-    insertInNote
+    insertInNote,
+    updateMetadataProperties
   }
 }
 

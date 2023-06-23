@@ -25,6 +25,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TD,
   ELEMENT_TODO_LI,
+  ExitBreakRule,
   getParentNode,
   getPluginType,
   insertEmptyCodeBlock,
@@ -33,7 +34,6 @@ import {
   isElement,
   isSelectionAtBlockStart,
   isType,
-  KEYS_HEADING,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
@@ -310,21 +310,13 @@ export const optionsExitBreakPlugin = {
       {
         hotkey: 'mod+shift+enter',
         before: true
-      },
-      {
-        hotkey: 'enter',
-        query: {
-          start: true,
-          end: true,
-          allow: KEYS_HEADING
-        }
       }
-    ]
+    ] as ExitBreakRule[]
   }
 }
 
 const resetBlockTypesCommonRule = {
-  types: [ELEMENT_BLOCKQUOTE],
+  types: [ELEMENT_BLOCKQUOTE, ELEMENT_TODO_LI],
   defaultType: ELEMENT_PARAGRAPH
 }
 

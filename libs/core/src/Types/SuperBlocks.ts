@@ -1,7 +1,7 @@
 export enum SuperBlocks {
-  CONTENT = 'content-super-block',
-  MEDIA = 'media-super-block',
-  TASK = 'task-super-block',
-  HIGHLIGHT = 'highlight-super-block',
-  CAPTURE = 'capture-super-block'
+  CONTENT = 'super-block-content',
+  MEDIA = 'super-block-media',
+  TASK = 'super-block-task',
+  HIGHLIGHT = 'super-block-highlight',
+  CAPTURE = 'super-block-capture'
 }

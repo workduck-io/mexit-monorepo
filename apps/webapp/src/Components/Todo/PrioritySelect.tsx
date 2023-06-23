@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 
 import { useTheme } from 'styled-components'
 
-import { Priority, PriorityDataType, PriorityType } from '@mexit/core'
-import { getMIcon, Menu, MenuItem, MexIcon, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
+import { getMenuItem, Priority, PriorityDataType, PriorityType } from '@mexit/core'
+import { getMIcon, InsertMenu, MexIcon, TodoActionButton } from '@mexit/shared'
 
 interface PriorityMenuSelect {
   value: PriorityType
-  onPriorityChange: (priority: PriorityDataType) => void
+  onPriorityChange: (priority: Partial<PriorityDataType>) => void
   withLabel?: boolean
   readOnly?: boolean
   isVisible?: boolean
@@ -31,8 +31,9 @@ const PriorityMenuButton = ({ color, value, selected, withLabel }) => {
 const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabel = false }: PriorityMenuSelect) => {
   const [selected, setSelected] = useState(false)
 
-  const onPriorityChangeHide = (priority: PriorityDataType) => {
-    onPriorityChange(priority)
+  const onPriorityChangeHide = (id: PriorityType) => {
+    console.log('ADDING ', { id })
+    onPriorityChange({ type: id })
   }
 
   const theme = useTheme()
@@ -43,30 +44,16 @@ const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabe
   }
 
   return (
-    <TodoActionWrapper>
-      <Menu
-        noHover
-        type="modal"
-        noBackground
-        onMouseEnter={() => setSelected(true)}
-        onMouseLeave={() => setSelected(false)}
-        values={
-          <PriorityMenuButton selected={isVisible || selected} color={iconColor} value={value} withLabel={withLabel} />
-        }
-      >
-        {Object.values(Priority).map((priority) => {
-          return (
-            <MenuItem
-              icon={getMIcon('ICON', priority.icon)}
-              color={iconColor}
-              key={priority.title}
-              onClick={(e) => onPriorityChangeHide(priority)}
-              label={priority.title}
-            />
-          )
-        })}
-      </Menu>
-    </TodoActionWrapper>
+    <InsertMenu
+      isMenu
+      title="Priority"
+      selected={value}
+      onClick={onPriorityChangeHide}
+      icon={getMIcon('ICON', Priority[value ?? 'noPriority'].icon)}
+      items={Object.values(Priority).map((priority) =>
+        getMenuItem(priority.title, undefined, false, getMIcon('ICON', priority.icon), undefined, priority.type)
+      )}
+    />
   )
 }
 

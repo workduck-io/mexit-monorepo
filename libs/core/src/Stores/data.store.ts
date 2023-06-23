@@ -3,10 +3,9 @@ import { produce } from 'immer'
 import { defaultCommands } from '../Data/defaultCommands'
 import { CachedILink, ILink, Tag } from '../Types/Editor'
 import { MIcon, SingleNamespace, StoreIdentifier } from '../Types/Store'
-import { Settify, typeInvert, withoutContinuousDelimiter } from '../Utils/helpers'
+import { typeInvert, withoutContinuousDelimiter } from '../Utils/helpers'
 import { generateNodeUID, SEPARATOR } from '../Utils/idGenerator'
 import { removeLink } from '../Utils/links'
-import { mog } from '../Utils/mog'
 import { getAllParentIds, getUniquePath } from '../Utils/path'
 import { createStore } from '../Utils/storeCreator'
 import { getNodeIcon } from '../Utils/treeUtils'
@@ -87,15 +86,16 @@ const dataStoreConfig = (set, get) => ({
     })
   },
 
-  addTag: (tag) => {
+  addTag: (tag: string) => {
     const currentTags = get().tags
-    mog('currentTags', { currentTags, tag })
 
-    const Tags = Settify([...currentTags.map((t) => t.value), tag])
+    if (currentTags.find((t) => t.value === tag)) return
 
-    set({
-      tags: Tags.map(generateTag)
-    })
+    set(
+      produce((draft: any) => {
+        draft.tags.push(generateTag(tag))
+      })
+    )
   },
 
   setTags: (tags) => {

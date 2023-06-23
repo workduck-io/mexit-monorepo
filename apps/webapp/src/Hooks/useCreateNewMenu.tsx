@@ -1,7 +1,6 @@
 import toast from 'react-hot-toast'
 
 import { TreeItem } from '@atlaskit/tree'
-import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import generateName from 'project-name-generator'
 
 import {
@@ -112,7 +111,7 @@ export const useCreateNewMenu = () => {
       title: snippetName,
       icon: DefaultMIcons.SNIPPET,
       template,
-      content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
+      content: defaultContent.content
     })
 
     loadSnippet(snippetId)

@@ -65,7 +65,7 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({
     return [...mLinks, ...sLinks]
   }
 
-  const noteLinks = items ?? getQuickLinks()
+  const noteLinks = items ? items : getQuickLinks()
 
   return (
     <Menu

@@ -11,11 +11,10 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TAG,
-  ELEMENT_TODO_LI,
   getMIcon,
   PromptRenderType,
   SEPARATOR,
-  TodoStatus,
+  SuperBlocks,
   useAuthStore,
   useDataStore,
   useEditorStore,
@@ -255,12 +254,16 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         command: 'ai'
       },
       task: {
-        slateElementType: ELEMENT_TODO_LI,
+        slateElementType: SuperBlocks.TASK,
         command: 'task',
         getData: () => ({
-          type: ELEMENT_TODO_LI,
+          type: SuperBlocks.TASK,
           children: [{ text: '' }],
-          status: TodoStatus.todo
+          metadata: {
+            properties: {
+              status: 'todo'
+            }
+          }
         })
       },
       table: {

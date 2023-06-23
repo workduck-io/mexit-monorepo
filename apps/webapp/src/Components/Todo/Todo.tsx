@@ -49,8 +49,6 @@ export const TodoBase = ({
   showDelete = true,
   showPriority = false
 }: TodoProps) => {
-  // mog('Todo', { parentNodeId, todoid, readOnly })
-
   const [animate, setAnimate] = useState(false)
   const { insertInEditor } = useUpdateBlock()
 

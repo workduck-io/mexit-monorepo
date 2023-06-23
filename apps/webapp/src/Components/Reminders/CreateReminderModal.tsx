@@ -31,7 +31,7 @@ import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
 import { ModalControls, ModalHeader } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
-import Todo from '../Todo'
+import TaskSuperBlock from '../Todo'
 
 interface ModalValue {
   associated?: ReminderAssociatedType
@@ -251,7 +251,7 @@ const CreateReminderModal = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Label htmlFor="Associated">For</Label>
         {modalValue.associated === 'todo' ? (
-          <Todo oid="Tasks_Modal" todoid={modalValue.todoid} readOnly parentNodeId={modalValue.nodeid}>
+          <TaskSuperBlock oid="Tasks_Modal" todoid={modalValue.todoid} readOnly parentNodeId={modalValue.nodeid}>
             {modalValue.blockContent ? (
               <EditorPreviewRenderer
                 noStyle
@@ -259,7 +259,7 @@ const CreateReminderModal = () => {
                 editorId={`NodeTodoPreview_CreateTodo_${modalValue.todoid}`}
               />
             ) : null}
-          </Todo>
+          </TaskSuperBlock>
         ) : modalValue.associated === 'node' ? (
           <WrappedNodeSelect
             placeholder="Reminder for Note"

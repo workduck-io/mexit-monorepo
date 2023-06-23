@@ -124,7 +124,6 @@ const Editor: React.FC<EditorProps> = ({
   return (
     <EditorWrapper withShadow={withShadow}>
       <MexEditor
-        debug
         comboboxConfig={comboboxConfig}
         components={components}
         meta={{

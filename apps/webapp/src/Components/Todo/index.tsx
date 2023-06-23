@@ -1,16 +1,17 @@
 import toast from 'react-hot-toast'
 
-import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId } from '@udecode/plate'
+import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId, Value } from '@udecode/plate'
 import { getRootProps } from '@udecode/plate-styled-components'
 import { useFocused, useReadOnly, useSelected } from 'slate-react'
 
 import { ModalsType, useModalStore } from '@mexit/core'
 
+import { SuperBlockProps } from '../../Editor/Components/SuperBlock/SuperBlock.types'
 import { getNodeIdFromEditor } from '../../Editor/Utils/helper'
 
 import { TodoBase } from './Todo'
 
-const Todo = (props: any) => {
+const TaskSuperBlock = <V extends Value>(props: SuperBlockProps<V>) => {
   const { attributes, children, element } = props
 
   const rootProps = getRootProps(props)
@@ -21,7 +22,7 @@ const Todo = (props: any) => {
 
   const readOnly = useReadOnly()
   const editorId = usePlateId()
-  // const nodeid = useEditorStore((store) => store.node.nodeid)
+
   const nodeid = getNodeIdFromEditor(editorId)
 
   const showDelete = !hideDelete && !readOnly
@@ -33,6 +34,7 @@ const Todo = (props: any) => {
       match: (node) => element.id === node.id,
       block: true
     })
+
     try {
       const [_, path] = Array.from(blockNode)[0]
       deleteText(editor, { at: [path[0]] })
@@ -64,4 +66,4 @@ const Todo = (props: any) => {
   )
 }
 
-export default Todo
+export default TaskSuperBlock

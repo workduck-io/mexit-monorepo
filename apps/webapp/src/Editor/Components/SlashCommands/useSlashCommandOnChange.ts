@@ -6,17 +6,11 @@ import {
   moveSelection,
   PlateEditor,
   select,
+  setElements,
   TElement
 } from '@udecode/plate'
 
-import {
-  camelCase,
-  ELEMENT_TODO_LI,
-  FloatingElementType,
-  isElder,
-  useComboboxStore,
-  useFloatingStore
-} from '@mexit/core'
+import { camelCase, FloatingElementType, isElder, SuperBlocks, useComboboxStore, useFloatingStore } from '@mexit/core'
 
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { IComboboxItem, SlashCommandConfig } from '../../Types/Combobox'
@@ -32,10 +26,14 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
     const commandConfig = keys[commandKey]
     if (targetRange) {
       try {
-        if (commandConfig.slateElementType === ELEMENT_TODO_LI) {
+        if (commandConfig.slateElementType === SuperBlocks.TASK) {
           const data = commandConfig.getData ? commandConfig.getData(item) : { type: commandConfig.slateElementType }
           select(editor, targetRange)
-          insertNodes(editor, data)
+          setElements(editor, data, {
+            at: targetRange,
+            hanging: false,
+            mode: 'highest'
+          })
         } else if (isElder(commandKey, 'snip')) {
           const content = getSnippetContent(commandConfig.command)
           if (content) {

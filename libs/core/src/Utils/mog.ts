@@ -20,3 +20,13 @@ export const mog = (
     console.groupEnd()
   }
 }
+
+export const et = (name: string, callback?: () => void) => {
+  // eslint-disable-next-line
+  if (IS_DEV) {
+    const start = performance.now()
+    if (callback) callback()
+    const end = performance.now()
+    console.info(`🕑 ${name}: ${end - start}ms`)
+  }
+}

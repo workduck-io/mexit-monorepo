@@ -20,6 +20,11 @@ export const useItemSwitcher = <T extends Item>(items: T[], onSwitchItem: Switch
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.altKey) {
+        if (event.metaKey || event.ctrlKey || event.shiftKey) {
+          clearTimeout(longPressTimeout)
+          return
+        }
+
         longPressTimeout = setTimeout(() => {
           setIsLongPress(true)
         }, 700)

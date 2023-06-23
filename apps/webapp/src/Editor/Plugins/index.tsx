@@ -65,6 +65,8 @@ import { createInlineBlockPlugin } from './createInlineBlockPlugin'
 import { createMentionPlugin } from './createMentionsPlugin'
 import { createSectionSeparatorPlugin } from './createSectionSeparatorPlugin'
 import { createSuperBlockPlugin } from './createSuperBlock'
+import { createContentSuperBlockPlugin } from './createSuperContentBlock'
+import { createTaskSuperBlockPlugin } from './createSuperTaskPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
@@ -105,6 +107,8 @@ export const generatePlugins = (options: PluginOptionType) => {
   const Plugins: PlatePlugin[] = [
     // Super blocks
     createSuperBlockPlugin(),
+    createContentSuperBlockPlugin(),
+    createTaskSuperBlockPlugin(),
 
     // elements
     createParagraphPlugin(), // paragraph element

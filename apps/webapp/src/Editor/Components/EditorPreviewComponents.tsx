@@ -20,12 +20,11 @@ import {
 import { CaptureElement, LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
 import TagWrapper from '../../Components/Editor/TagWrapper'
-import Todo from '../../Components/Todo'
+import TaskSuperBlock from '../../Components/Todo'
 
 import { MentionElement } from './Mentions/MentionElement'
 import { QuickLinkElement } from './QuickLink/QuickLinkElement'
 import ContentSuperBlock from './SuperBlock/ContentSuperBlock'
-import { withSuperBlock } from './SuperBlock/withSuperBlock'
 import InlineBlock from './InlineBlock'
 import SectionSeparator from './SectionSeparator'
 import TaskViewLink from './TaskViewLink'
@@ -42,7 +41,7 @@ export const editorPreviewComponents = createPlateUI({
       }
     }
   }),
-  [ELEMENT_TODO_LI]: withSuperBlock(Todo),
+  [ELEMENT_TODO_LI]: TaskSuperBlock,
   [ELEMENT_TAG]: TagWrapper as any,
   [ELEMENT_ILINK]: QuickLinkElement as any,
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any,

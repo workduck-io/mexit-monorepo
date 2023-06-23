@@ -39,10 +39,11 @@ interface AutoCompleteProps {
   disableMenu?: boolean
   defaultItems: Array<MenuListItemType>
   defaultValue?: string
+  placeholder?: string
 }
 
 export const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
-  const { defaultItems = [], disableMenu, defaultValue, onEnter, onCommandEnter, clearOnEnter } = props
+  const { defaultItems = [], disableMenu, defaultValue, onEnter, placeholder, onCommandEnter, clearOnEnter } = props
 
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -125,7 +126,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
           {...getReferenceProps({
             ref: refs.setReference,
             onChange,
-            placeholder: 'Ask me anything...',
+            placeholder: placeholder ?? 'Ask me anything...',
             'aria-autocomplete': 'list',
             onKeyDown(event) {
               if (event.key === 'Enter') {

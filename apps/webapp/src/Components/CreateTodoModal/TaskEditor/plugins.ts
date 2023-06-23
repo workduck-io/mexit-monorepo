@@ -45,7 +45,7 @@ import { createTagPlugin } from '../../../Editor/Plugins/createTagPlugin'
 import { createTodoPlugin } from '../../../Editor/Plugins/createTodoPlugin'
 import { optionsCreateNodeIdPlugin, optionsSelectOnBackspacePlugin } from '../../../Editor/Plugins/options'
 import { parseTwitterUrl } from '../../../Editor/Plugins/parseTwitterUrl'
-import Todo from '../../Todo'
+import TaskSuperBlock from '../../Todo'
 
 const generateTodoPlugins = (uploadImage: UploadImageFn, inline?: boolean) => {
   return [
@@ -122,7 +122,7 @@ export const getComponents = () =>
         }
       }
     }),
-    [ELEMENT_TODO_LI]: Todo as any,
+    [ELEMENT_TODO_LI]: TaskSuperBlock as any,
     [ELEMENT_TAG]: TagElement as any,
     [ELEMENT_MENTION]: MentionElement as any,
     [ELEMENT_ILINK]: QuickLinkElement as any,
