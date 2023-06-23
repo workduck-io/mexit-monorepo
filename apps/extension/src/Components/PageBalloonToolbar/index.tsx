@@ -12,7 +12,7 @@ import {
 } from '@mexit/shared'
 
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
-import { useLinkURLs } from '../../Hooks/useURLs'
+import { useLinkURLs, useURLsAPI } from '../../Hooks/useURLs'
 import { getElementById } from '../../Utils/cs-utils'
 import { getSelectionHTML } from '../../Utils/getSelectionHTML'
 import { sanitizeHTML } from '../../Utils/sanitizeHTML'
@@ -23,6 +23,8 @@ const PageBallonToolbar = () => {
   const { saveLink } = useLinkURLs()
   const { handleOpenAIPreview } = useAIOptions()
   const { saveHighlightEntity } = useSaveChanges()
+  const alllinks = useLinkStore((store) => store.links)
+  const { saveLink: saveLinkAPI, deleteLink: deleteLinkAPI } = useURLsAPI()
 
   const onAIPreviewClick = (event) => {
     event.preventDefault()
@@ -53,6 +55,17 @@ const PageBallonToolbar = () => {
       if (!links?.find((l) => l.url === window.location.href)) {
         const link = { url: window.location.href, title: document.title }
         saveLink(link)
+      } else {
+        const links = useLinkStore.getState().links
+        const newLinks = links.map((l) => {
+          if (l.url === window.location.href) {
+            return { ...l, updatedAt: Date.parse(new Date().toISOString()) }
+          }
+          return l
+        })
+
+        const newLink = newLinks.find((l) => l.url === window.location.href)
+        saveLinkAPI(newLink)
       }
 
       closePageToolbar(false)

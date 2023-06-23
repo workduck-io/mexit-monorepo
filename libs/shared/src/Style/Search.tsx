@@ -412,7 +412,12 @@ export const ResultMetaData = styled.div`
   }
 `
 
-export const Result = styled(animated.div)<{ selected?: boolean; view?: ViewType; noPointer?: boolean }>`
+export const Result = styled(animated.div)<{
+  selected?: boolean
+  view?: ViewType
+  noPointer?: boolean
+  recents?: boolean
+}>`
   background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
 
   ${({ noPointer }) =>
@@ -421,10 +426,22 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: ViewType
       cursor: pointer;
     `};
 
-  ${({ theme, selected, view }) => {
+  ${({ theme, selected, view, recents }) => {
     if (view === ViewType.Card) {
       return css`
         max-height: 400px;
+
+        ${recents &&
+        css`
+          width: 100%;
+          min-width: 210px;
+          max-width: 210px;
+
+          @media (min-width: ${size.small}) {
+            min-width: 474px;
+          }
+        `}
+
         overflow-y: auto;
         border: 1px solid transparent !important;
         display: flex;
@@ -492,7 +509,6 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: ViewType
 `
 
 export const Results = styled.div<{ view: ViewType }>`
-  ${SearchHeight}
   overflow-y: auto;
   ${({ theme, view }) => {
     if (view === ViewType.Card) {

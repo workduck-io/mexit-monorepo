@@ -80,7 +80,7 @@ export const NotesInfoBar = () => {
     if (search !== '') {
       onSearch(search)
     } else {
-      const defaultList = getRecentList(recentNotes)
+      const defaultList = getRecentList(recentNotes?.notes)
       setSearchedNodes(defaultList)
     }
   }, [search, recentNotes])

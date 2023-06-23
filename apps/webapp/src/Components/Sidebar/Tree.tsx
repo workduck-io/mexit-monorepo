@@ -16,7 +16,16 @@ import Tippy, { useSingleton } from '@tippyjs/react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNameFromPath, mog, SEPARATOR, useDataStore, useEditorStore, useTreeStore } from '@mexit/core'
+import {
+  getNameFromPath,
+  mog,
+  SEPARATOR,
+  useDataStore,
+  useEditorStore,
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useTreeStore
+} from '@mexit/core'
 import {
   isOnEditableElement,
   StyledTreeItemSwitcher,
@@ -26,6 +35,7 @@ import {
 } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
+import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -87,6 +97,8 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
   const [tree, setTreeState] = React.useState<TreeData>(initTree)
   const [contextOpenNodeId, setContextOpenNodeId] = useState<string>(null)
   const location = useLocation()
+  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
+  const { updateUserPreferences } = useUserService()
 
   useEffect(() => {
     setTreeState(initTree)
@@ -168,8 +180,13 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
     if (publicNamespaceMatch) {
       goTo(`${ROUTE_PATHS.namespaceShare}/${publicNamespaceMatch.params.namespaceid}/node`, NavigationType.push, nodeId)
     } else {
+      console.log('goToNodeId', { nodeId })
       push(nodeId)
       goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
+
+      const lastOpened = useRecentsStore.getState().lastOpened
+      setLastOpened(lastOpened)
+      updateUserPreferences()
     }
   }
 

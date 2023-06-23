@@ -92,7 +92,7 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
         </LinkShortenAndHighlightSection>
         <LinkTagSection>
           <TagsLabel tags={tags} onClick={addTagFilter} onDelete={(val: string) => onRemoveTag(val)} />
-          <AddTagMenu createTag={onAddCreateTag} tags={toAddTags} addTag={onAddNewTag} />
+          <AddTagMenu createTag={onAddCreateTag} tags={toAddTags} addTag={onAddNewTag} link={link} />
         </LinkTagSection>
       </LinkShortenAndTagsWrapper>
       <HighlightGroups open={highlightsOpen} setOpen={setHighlightsOpen} highlights={highlights} link={link} />

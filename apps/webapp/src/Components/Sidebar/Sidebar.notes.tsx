@@ -2,11 +2,21 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useSpringRef, useTransition } from '@react-spring/web'
 
-import { ContextMenuType, PollActions, RESERVED_NAMESPACES, SHARED_NAMESPACE, useApiStore, useDataStore , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+import {
+  ContextMenuType,
+  PollActions,
+  RESERVED_NAMESPACES,
+  SHARED_NAMESPACE,
+  useApiStore,
+  useDataStore,
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore
+} from '@mexit/core'
 import { getMIcon } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { usePolling } from '../../Hooks/API/usePolling'
+import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useTags } from '../../Hooks/useTags'
@@ -22,6 +32,18 @@ export const NoteSidebar = () => {
   const ilinks = useDataStore((store) => store.ilinks)
   const namespaces = useDataStore((store) => store.namespaces)
   const baseNodeId = useDataStore((store) => store.baseNodeId)
+  const lastOpened = useRecentsStore((store) => store.lastOpened)
+  const addRecent = useRecentsStore((store) => store.addRecent)
+  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
+  const { updateUserPreferences } = useUserService()
+
+  if (!lastOpened.notes.includes(baseNodeId)) {
+    addRecent(baseNodeId)
+
+    const lastOpened = useRecentsStore.getState().lastOpened
+    setLastOpened(lastOpened)
+    updateUserPreferences()
+  }
 
   const spaceId = useUserPreferenceStore((store) => store.activeNamespace)
   const changeSidebarSpace = useUserPreferenceStore((store) => store.setActiveNamespace)

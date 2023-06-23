@@ -30,6 +30,10 @@ export const sortByCreated = (a: Link, b: Link) => {
   return b.createdAt - a.createdAt
 }
 
+export const sortByUpdated = (a: Link, b: Link) => {
+  return b.updatedAt - a.updatedAt
+}
+
 export const getListItemFromLink = (link: Link, workspaceID: string) => {
   const actionItem: ListItemType = {
     icon: getMIcon('ICON', 'ri:link-m'),

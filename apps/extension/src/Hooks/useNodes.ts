@@ -2,7 +2,6 @@ import { BreadcrumbItem } from '@workduck-io/mex-components'
 
 import { getParentBreadcrumbs, ILink, mog, NodeType, SharedNode, useDataStore, useRecentsStore } from '@mexit/core'
 
-
 // Used to ensure no path clashes while adding ILink.
 // path functions to check wether clash is happening can be also used
 export const useNodes = () => {
@@ -60,7 +59,7 @@ export const useNodes = () => {
     const localBaseNode = nodeILinks.find((l) => l.path === baseNodePath)
 
     if (!localBaseNode) {
-      const lastOpenedNodeId = useRecentsStore.getState().lastOpened?.at(0)
+      const lastOpenedNodeId = useRecentsStore.getState().lastOpened?.notes.at(0)
       if (lastOpenedNodeId) {
         const node = getNode(lastOpenedNodeId)
 

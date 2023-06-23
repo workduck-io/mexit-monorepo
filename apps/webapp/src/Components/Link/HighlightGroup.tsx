@@ -14,7 +14,10 @@ import {
   Highlights,
   Link,
   useHighlightStore,
-  useMetadataStore
+  useLinkStore,
+  useMetadataStore,
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore
 } from '@mexit/core'
 import {
   DefaultMIcons,
@@ -31,9 +34,11 @@ import {
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useApi } from '../../Hooks/API/useNodeAPI'
+import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useHighlights } from '../../Hooks/useHighlights'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import useLoad from '../../Hooks/useLoad'
+import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 
 interface HighlightGroupProps {
@@ -59,7 +64,7 @@ export const HighlightGroupToggle = ({ highlights, open, setOpen }: HighlightGro
   ) : null
 }
 
-export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight }) => {
+export const SingleHighlightWithToggle = ({ highlight, link }: { highlight: Highlight; link: Link }) => {
   const { loadNode } = useLoad()
   const { goTo } = useRouting()
   const { getHighlightMap } = useHighlights()
@@ -68,9 +73,30 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
   const { appendToNode } = useApi()
   const highlightBlockMap = useHighlightStore((store) => store.highlightBlockMap)
   const updateHighlightBlockMap = useHighlightStore((store) => store.updateHighlightBlockMap)
+  const { push } = useNavigation()
+  const addRecent = useRecentsStore((store) => store.addRecent)
 
   const [open, setOpen] = React.useState(false)
   const highlightMap = getHighlightMap(highlight.entityId) ?? {}
+  const setLinks = useLinkStore((store) => store.setLinks)
+  const links = useLinkStore((store) => store.links)
+  const setInitializationTime = useRecentsStore((store) => store.setInitializationTime)
+  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
+  const { updateUserPreferences } = useUserService()
+
+  const handleAddtoRecents = async (link: Link) => {
+    setInitializationTime(Date.parse(new Date().toISOString()))
+    link.updatedAt = Date.parse(new Date().toISOString())
+    addRecent(undefined, link)
+
+    const lastOpened = useRecentsStore.getState().lastOpened
+    setLastOpened(lastOpened)
+
+    const newLinks = links.filter((l) => l.url !== link.url)
+    newLinks.push(link)
+    setLinks(newLinks)
+    updateUserPreferences()
+  }
 
   const handleAddToNote = async (noteId: string) => {
     const content = getHighlightContent(highlight)
@@ -81,6 +107,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
       updateHighlightBlockMap(highlight.entityId, highlightBlockMap)
       addBlockInContent(noteId, content)
       toast('Added To Note!')
+      handleAddtoRecents(link)
     } catch (err) {
       toast('Error adding highlight to note')
     }
@@ -121,6 +148,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
     const blockId = highlightMap[noteId][0]
     loadNode(noteId, { highlightBlockId: blockId })
     goTo(ROUTE_PATHS.node, NavigationType.push, noteId)
+    push(noteId)
   }
 
   return (
@@ -152,7 +180,7 @@ const HighlightGroups = ({ highlights, link, open, setOpen }: HighlightGroupProp
   return open && highlights ? (
     <HighlightGroupsWrapper>
       {highlights.map((highlight) => {
-        return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} />
+        return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} link={link} />
       })}
     </HighlightGroupsWrapper>
   ) : null

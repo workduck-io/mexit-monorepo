@@ -246,7 +246,7 @@ function NodeSelect({
 
   const lastOpened = useRecentsStore((store) => store.lastOpened)
 
-  const lastOpenedItems = Array.from(lastOpened)
+  const lastOpenedItems = Array.from(lastOpened.notes)
     .reverse()
     .map((nodeid) => {
       const path = getPathFromNodeid(nodeid)

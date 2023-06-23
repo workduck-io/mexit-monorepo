@@ -10,12 +10,15 @@ import {
 } from '../Types/UserPreference'
 import { createStore } from '../Utils/storeCreator'
 
+import { LastOpenedType } from './recents.store'
+
 export interface UserPreferenceStore extends UserPreferences {
   smartCaptureExcludedFields?: any
   space: SpacePreference
   addSpacePreference: (spaceId: string, spacePreferenceData: Partial<SpacePreferenceData>) => void
   clear: () => void
   setTheme: (themeId: string, mode?: 'light' | 'dark') => void
+  setLastOpened: (lastOpened: LastOpenedType) => void
   setLastOpenedNotes: (lastOpenedNotes: LastOpenedNotes) => void
   setLastUsedSnippets: (lastUsedSnippets: LastUsedSnippets) => void
   getUserPreferences: () => UserPreferences
@@ -28,6 +31,7 @@ export interface UserPreferenceStore extends UserPreferences {
 const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
   version: 'unset',
   theme: { themeId: 'xem', mode: 'dark' },
+  lastOpened: { notes: [], snippet: [], highlight: [] },
   lastOpenedNotes: {},
   lastUsedSnippets: {},
   space: {},
@@ -72,6 +76,7 @@ const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
   },
   getUserPreferences: () => {
     return {
+      lastOpened: get().lastOpened,
       lastOpenedNotes: get().lastOpenedNotes,
       smartCaptureExcludedFields: get().smartCaptureExcludedFields,
       version: get().version,
@@ -87,6 +92,9 @@ const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
   setTheme: (themeId, mode) => {
     const newPref = { themeId, mode: mode ?? get().theme.mode }
     set({ theme: newPref })
+  },
+  setLastOpened: (lastOpened) => {
+    set({ lastOpened: lastOpened })
   },
   setActiveNamespace: (namespace: string) => {
     set({ activeNamespace: namespace })
@@ -144,6 +152,7 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     version: local.version,
     // Overwrite all notes with the remote notes which exist
     // The local notes which do not exist in the remote notes will be left alone
+    lastOpened: remote.lastOpened ?? local.lastOpened,
     activeNamespace: remote.activeNamespace ?? local.activeNamespace,
     lastOpenedNotes: getLimitedEntries({ ...local.lastOpenedNotes, ...mergedLastOpenedNotes }),
     lastUsedSnippets: { ...local.lastUsedSnippets, ...mergedLastUsedSnippets },
