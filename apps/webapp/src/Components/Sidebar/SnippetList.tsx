@@ -21,13 +21,13 @@ const SnippetList: React.FC<SnippetListProps> = ({ type = 'snippet' }) => {
   const { push } = useNavigation()
   const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
   const { updateUserPreferences } = useUserService()
+  const addRecent = useRecentsStore((store) => store.addRecent)
 
   const onOpenSnippet = (id: string) => {
-    console.log('Opening snippet', id)
-    push(id)
     loadSnippet(id)
     const snippet = snippets[id]
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })
+    addRecent(id)
 
     const lastOpened = useRecentsStore.getState().lastOpened
     setLastOpened(lastOpened)

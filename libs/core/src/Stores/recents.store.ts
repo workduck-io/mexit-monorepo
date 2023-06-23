@@ -57,7 +57,6 @@ const recentsStoreConfig = (set, get): RecentsType => ({
     })
   },
   clear: () => {
-    console.log('clearing recents')
     set({
       lastOpened: {
         notes: [],
@@ -66,7 +65,6 @@ const recentsStoreConfig = (set, get): RecentsType => ({
       }
     })
     set({ initializationTime: Date.parse(new Date().toISOString()) })
-    console.log('recents cleared')
   },
   addRecent: (nodeid?: string, link?: Link) => {
     const oldLastOpened = get().lastOpened

@@ -85,7 +85,6 @@ export const SingleHighlightWithToggle = ({ highlight, link }: { highlight: High
   const { updateUserPreferences } = useUserService()
 
   const handleAddtoRecents = async (link: Link) => {
-    setInitializationTime(Date.parse(new Date().toISOString()))
     link.updatedAt = Date.parse(new Date().toISOString())
     addRecent(undefined, link)
 
@@ -148,7 +147,8 @@ export const SingleHighlightWithToggle = ({ highlight, link }: { highlight: High
     const blockId = highlightMap[noteId][0]
     loadNode(noteId, { highlightBlockId: blockId })
     goTo(ROUTE_PATHS.node, NavigationType.push, noteId)
-    push(noteId)
+    addRecent(noteId)
+    // push(noteId)
   }
 
   return (

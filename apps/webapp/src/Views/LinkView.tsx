@@ -1,20 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
 
-import {
-  fuzzySearchLinks,
-  GenericSearchResult,
-  Link,
-  mog,
-  sortByCreated,
-  useLinkStore,
-  useRecentsStore,
-  userPreferenceStore as useUserPreferenceStore,
-  ViewType
-} from '@mexit/core'
+import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated, useLinkStore, ViewType } from '@mexit/core'
 import { MainHeader, Result, SearchContainer, Title } from '@mexit/shared'
 
 import LinkComponent from '../Components/Link'
-import { useUserService } from '../Hooks/API/useUserAPI'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useURLFilters, useURLsAPI } from '../Hooks/useURLs'
 
@@ -52,14 +41,7 @@ const LinkView = () => {
     addTagFilter
   } = useURLFilters()
 
-  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
-  const { updateUserPreferences } = useUserService()
-
   const initialLinks = useMemo(() => {
-    const lastOpened = useRecentsStore.getState().lastOpened
-    setLastOpened(lastOpened)
-    updateUserPreferences()
-
     return links.sort(sortByCreated)
   }, [links])
 
