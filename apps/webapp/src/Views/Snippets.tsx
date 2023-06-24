@@ -158,7 +158,6 @@ const Snippets = () => {
   }
 
   const onOpenSnippet = (id: string) => {
-    console.log('OPEN SNIPPET', { id })
     addRecent(RecentType.snippet, id)
     loadSnippet(id)
     const snippet = snippets[id]
