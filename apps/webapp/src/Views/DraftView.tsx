@@ -8,11 +8,13 @@ import shallow from 'zustand/shallow'
 import {
   defaultContent,
   ILink,
+  RecentType,
   Snippet,
-  sortByUpdated,
+  sortByCreated,
   useContentStore,
   useDataStore,
   useDescriptionStore,
+  useHighlightStore,
   useLinkStore,
   useMetadataStore,
   useRecentsStore,
@@ -39,7 +41,6 @@ import Plateless from '../Components/Editor/Plateless'
 import LinkComponent from '../Components/Link'
 import NamespaceTag from '../Components/NamespaceTag'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
-import { useUserService } from '../Hooks/API/useUserAPI'
 import { useNamespaces } from '../Hooks/useNamespaces'
 import { useNavigation } from '../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
@@ -183,30 +184,38 @@ function DraftView() {
   const [activitySnippets, setActivitySnippets] = useState<Snippet[]>()
   const { addTagFilter } = useURLFilters()
   const addRecent = useRecentsStore((store) => store.addRecent)
-  const initializationTime = useRecentsStore((store) => store.initializationTime)
+  const getHighlightsOfUrl = useHighlightStore((store) => store.getHighlightsOfUrl)
 
-  const { updateUserPreferences } = useUserService()
-
+  const findLatestHighlightTime = (linkurl: string) => {
+    const highlightsforaLink = getHighlightsOfUrl(linkurl)
+    highlightsforaLink.sort((a, b) => {
+      return b.createdAt - a.createdAt
+    })
+    return highlightsforaLink[0]?.createdAt ?? 0
+  }
   const initialLinks = useMemo(() => {
-    return links.sort(sortByUpdated)
+    return links.sort(sortByCreated)
   }, [links])
 
   const highlightsUpdater = useMemo(() => {
-    const lastOpenedHighlightsUrls = lastOpened?.highlight.map((h) => h.url)
-    const lastOpenedHighlight = lastOpened?.highlight[0]?.updatedAt
+    let lastOpenedHighlightTime = 0
+    lastOpenedHighlightTime = lastOpened?.highlight?.length > 0 ? findLatestHighlightTime(lastOpened?.highlight[0]) : 0
 
-    initialLinks.forEach((highlight) => {
-      if (
-        (!lastOpenedHighlightsUrls.includes(highlight.url) && highlight.updatedAt > lastOpenedHighlight) ||
-        (lastOpened?.highlight.length === 0 && initializationTime !== 0 && highlight.updatedAt > initializationTime)
-      ) {
-        addRecent(undefined, highlight)
+    if (initialLinks.length > 0) {
+      initialLinks.forEach((link) => {
+        const highlightsfortheLink = getHighlightsOfUrl(link.url)
+        const latestHighlightsFirst = highlightsfortheLink.sort((a, b) => {
+          return b.createdAt - a.createdAt
+        })
 
-        const lastOpened = useRecentsStore.getState().lastOpened
-        setLastOpened(lastOpened)
-        updateUserPreferences()
-      }
-    })
+        const latestHighlightTime = latestHighlightsFirst[0]?.createdAt
+
+        if (latestHighlightTime > lastOpenedHighlightTime) {
+          addRecent(RecentType.highlight, link.url)
+          lastOpenedHighlightTime = latestHighlightTime
+        }
+      })
+    }
   }, [links])
 
   useEffect(() => {
@@ -270,11 +279,6 @@ function DraftView() {
     scrollToLeft: scrollToLeft3,
     scrollToRight: scrollToRight3
   } = useScrollButtons()
-
-  const resetStuff = () => {
-    setLastOpened({ notes: [], snippet: [], highlight: [] })
-    updateUserPreferences()
-  }
 
   return (
     <PageContainer>
@@ -407,12 +411,12 @@ function DraftView() {
 
             <CardsContainer view={ViewType.Card} ref={containerRef3}>
               {lastOpened?.highlight &&
-                lastOpened?.highlight.map((item) => {
-                  const link = links?.find((s) => s.url === item.url)
-                  if (!item || !link) {
+                lastOpened?.highlight.map((linkurl) => {
+                  const link = links?.find((s) => s.url === linkurl)
+                  if (!linkurl || !link) {
                     return null
                   }
-                  const id = `${item.url}_ResultFor_SearchLinks`
+                  const id = `${linkurl}_ResultFor_SearchLinks`
 
                   return (
                     <>

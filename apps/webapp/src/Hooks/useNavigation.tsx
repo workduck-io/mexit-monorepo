@@ -1,4 +1,4 @@
-import { useHistoryStore, useRecentsStore } from '@mexit/core'
+import { RecentType, useHistoryStore, useRecentsStore } from '@mexit/core'
 
 import useLoad, { LoadNodeOptions } from './useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from './useRouting'
@@ -16,12 +16,11 @@ export const useNavigation = () => {
   const push = (nodeid: string, options?: LoadNodeOptions) => {
     loadNode(nodeid, options)
     pushHs(nodeid)
-    addRecent(nodeid)
   }
 
   const replace = (nodeid: string) => {
     replaceHs(nodeid)
-    addRecent(nodeid)
+    addRecent(RecentType.notes, nodeid)
     loadNode(nodeid)
   }
 
@@ -31,7 +30,7 @@ export const useNavigation = () => {
     if (newId) {
       goTo(ROUTE_PATHS.node, NavigationType.push, newId)
       loadNode(newId)
-      addRecent(newId)
+      addRecent(RecentType.notes, newId)
     }
     return newId
   }

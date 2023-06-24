@@ -19,11 +19,11 @@ import { tinykeys } from '@workduck-io/tinykeys'
 import {
   getNameFromPath,
   mog,
+  RecentType,
   SEPARATOR,
   useDataStore,
   useEditorStore,
   useRecentsStore,
-  userPreferenceStore as useUserPreferenceStore,
   useTreeStore
 } from '@mexit/core'
 import {
@@ -35,7 +35,6 @@ import {
 } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
-import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -97,8 +96,7 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
   const [tree, setTreeState] = React.useState<TreeData>(initTree)
   const [contextOpenNodeId, setContextOpenNodeId] = useState<string>(null)
   const location = useLocation()
-  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
-  const { updateUserPreferences } = useUserService()
+  const addRecent = useRecentsStore((state) => state.addRecent)
 
   useEffect(() => {
     setTreeState(initTree)
@@ -183,10 +181,7 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
       console.log('goToNodeId', { nodeId })
       push(nodeId)
       goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
-
-      const lastOpened = useRecentsStore.getState().lastOpened
-      setLastOpened(lastOpened)
-      updateUserPreferences()
+      addRecent(RecentType.notes, nodeId)
     }
   }
 

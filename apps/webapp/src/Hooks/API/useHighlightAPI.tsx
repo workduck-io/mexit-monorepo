@@ -33,7 +33,9 @@ export const useHighlightAPI = () => {
 
           return {
             properties: item?.properties,
-            entityId: item?.entityRefID
+            entityId: item?.entityRefID,
+            createdAt: item?.createdAt,
+            updatedAt: item?.updatedAt
           } as Highlight
         })
         .filter((v: undefined | Highlight) => !!v)

@@ -46,8 +46,9 @@ const highlightStoreConfig = (set, get) => ({
   highlightBlockMap: {},
   setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => set({ highlightBlockMap }),
   addHighlightEntity: (highlight: Highlight) => {
+    const newHighlight = { ...highlight, createdAt: Date.now() }
     const existingHighlights = get().highlights
-    set({ highlights: [highlight, ...existingHighlights] })
+    set({ highlights: [newHighlight, ...existingHighlights] })
   },
 
   initHighlightBlockMap: (ilinks, contents) => {

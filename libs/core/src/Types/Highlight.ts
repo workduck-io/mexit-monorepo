@@ -52,6 +52,8 @@ export interface Highlight {
    * ID of the note where the content was added
    */
   nodeId?: string
+  createdAt?: number
+  updatedAt?: number
 }
 
 export type Highlights = Highlight[]

@@ -1,30 +1,28 @@
 import { MAX_RECENT_SIZE } from '../Types'
 import { StoreIdentifier } from '../Types/Store'
-import { NODE_ID_PREFIX, SNIPPET_PREFIX } from '../Utils'
+import { Settify } from '../Utils'
 import { remove } from '../Utils/lodashUtils'
 import { createStore } from '../Utils/storeCreator'
 
-import { Link } from './link.store'
+export type LastOpenedType = Record<keyof typeof RecentType, string[]>
 
-export interface LastOpenedType {
-  notes: string[]
-  snippet: string[]
-  highlight: Link[]
+export enum RecentType {
+  notes = 'notes',
+  snippet = 'snippet',
+  highlight = 'highlight'
 }
 
 export type RecentsType = {
   lastOpened: LastOpenedType
   recentResearchNodes: string[]
   setRecentResearchNodes: (nodes: Array<string>) => void
-  addRecent: (nodeid?: string, link?: Link) => void
+  addRecent: (key: RecentType, value: string) => void
   updateRecent: (lastOpened: LastOpenedType) => void
   update: (lastOpened: string[]) => void
   clear: () => void
   clearResearchNodes: () => void
   addInResearchNodes: (nodeid: string) => void
   initRecents: (recentList: Array<string>) => void
-  initializationTime: number
-  setInitializationTime: (time: number) => void
 }
 
 const recentsStoreConfig = (set, get): RecentsType => ({
@@ -32,11 +30,6 @@ const recentsStoreConfig = (set, get): RecentsType => ({
     notes: [],
     snippet: [],
     highlight: []
-  },
-
-  initializationTime: Date.parse(new Date().toISOString()),
-  setInitializationTime: (time: number) => {
-    set({ initializationTime: time })
   },
 
   recentResearchNodes: [],
@@ -66,58 +59,57 @@ const recentsStoreConfig = (set, get): RecentsType => ({
     })
     set({ initializationTime: Date.parse(new Date().toISOString()) })
   },
-  addRecent: (nodeid?: string, link?: Link) => {
+  addRecent: (key, value) => {
     const oldLastOpened = get().lastOpened
     const { notes, snippet, highlight } = oldLastOpened
 
-    const oldNotes = Array.from(new Set(notes))
-    const oldSnippet = Array.from(new Set(snippet))
-    const oldHighlight = Array.from(new Set(highlight))
+    const oldNotes = Settify(notes)
+    const oldSnippet = Settify(snippet)
+    const oldHighlight = Settify(highlight)
+    let updatedHighlight = []
 
-    if (nodeid && nodeid.startsWith(NODE_ID_PREFIX)) {
-      if (oldNotes.includes(nodeid)) {
-        remove(oldNotes, (item) => item === nodeid)
-      }
-      set({
-        lastOpened: {
-          notes: [...oldNotes.slice(-MAX_RECENT_SIZE + 1), nodeid],
-          snippet: oldSnippet,
-          highlight: oldHighlight
+    switch (key) {
+      case RecentType.notes:
+        if (oldNotes.includes(value)) {
+          remove(oldNotes, (item) => item === value)
         }
-      })
-    }
+        set({
+          lastOpened: {
+            notes: [...oldNotes.slice(-MAX_RECENT_SIZE + 1), value],
+            snippet: oldSnippet,
+            highlight: oldHighlight
+          }
+        })
+        break
 
-    if (nodeid && nodeid.startsWith(SNIPPET_PREFIX)) {
-      if (oldSnippet.includes(nodeid)) {
-        remove(oldSnippet, (item) => item === nodeid)
-      }
-      set({
-        lastOpened: {
-          notes: oldNotes,
-          snippet: [...oldSnippet.slice(-MAX_RECENT_SIZE + 1), nodeid],
-          highlight: oldHighlight
+      case RecentType.snippet:
+        if (oldSnippet.includes(value)) {
+          remove(oldSnippet, (item) => item === value)
         }
-      })
-      console.log(get().lastOpened)
+        set({
+          lastOpened: {
+            notes: oldNotes,
+            snippet: [...oldSnippet.slice(-MAX_RECENT_SIZE + 1), value],
+            highlight: oldHighlight
+          }
+        })
+        break
+
+      case RecentType.highlight:
+        updatedHighlight = oldHighlight.filter((item) => item !== value)
+
+        set({
+          lastOpened: {
+            notes: oldNotes,
+            snippet: oldSnippet,
+            highlight: [value, ...updatedHighlight].slice(0, MAX_RECENT_SIZE)
+          }
+        })
+        break
+
+      default:
+        break
     }
-
-    if (link) {
-      if (highlight.length !== 0 && highlight[0]?.updatedAt > link.updatedAt) return
-
-      const updatedHighlight = oldHighlight.filter((h: Link) => h.url !== link.url)
-      updatedHighlight.unshift(link)
-      updatedHighlight.splice(MAX_RECENT_SIZE)
-      set({
-        lastOpened: {
-          notes: oldNotes,
-          snippet: oldSnippet,
-          highlight: updatedHighlight
-        }
-      })
-    }
-
-    // const setLastOpened = useUserPreferenceStore.getState().setLastOpened
-    // setLastOpened(get().lastOpened)
   },
 
   updateRecent: (lastOpened: LastOpenedType) => {

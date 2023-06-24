@@ -5,6 +5,7 @@ import { useSpringRef, useTransition } from '@react-spring/web'
 import {
   ContextMenuType,
   PollActions,
+  RecentType,
   RESERVED_NAMESPACES,
   SHARED_NAMESPACE,
   useApiStore,
@@ -16,7 +17,6 @@ import { getMIcon } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { usePolling } from '../../Hooks/API/usePolling'
-import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useTags } from '../../Hooks/useTags'
@@ -34,15 +34,9 @@ export const NoteSidebar = () => {
   const baseNodeId = useDataStore((store) => store.baseNodeId)
   const lastOpened = useRecentsStore((store) => store.lastOpened)
   const addRecent = useRecentsStore((store) => store.addRecent)
-  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
-  const { updateUserPreferences } = useUserService()
 
   if (!lastOpened.notes.includes(baseNodeId)) {
-    addRecent(baseNodeId)
-
-    const lastOpened = useRecentsStore.getState().lastOpened
-    setLastOpened(lastOpened)
-    updateUserPreferences()
+    addRecent(RecentType.notes, baseNodeId)
   }
 
   const spaceId = useUserPreferenceStore((store) => store.activeNamespace)

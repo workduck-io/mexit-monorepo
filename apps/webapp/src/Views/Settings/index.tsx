@@ -9,8 +9,10 @@ import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
+import { useRecentsStore, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { SearchContainer, SettingsContent, SettingsOptions, SettingTitle, Title } from '@mexit/shared'
 
+import { useUserService } from '../../Hooks/API/useUserAPI'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useAuthentication } from '../../Stores/useAuth'
 
@@ -26,7 +28,14 @@ const Settings = () => {
   const { logout } = useAuthentication()
   const { goTo } = useRouting()
 
+  // temp changes to be removed before PR
+  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
+  const { updateUserPreferences } = useUserService()
+
   const onLogout = async (e: any) => {
+    const lastOpened = useRecentsStore.getState().lastOpened
+    setLastOpened(lastOpened)
+    updateUserPreferences()
     e.preventDefault()
     await logout()
     goTo(ROUTE_PATHS.login, NavigationType.push)

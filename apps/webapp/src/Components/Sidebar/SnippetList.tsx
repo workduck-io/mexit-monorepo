@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { useRecentsStore, userPreferenceStore as useUserPreferenceStore, useSnippetStore } from '@mexit/core'
+import { RecentType, useRecentsStore, useSnippetStore } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
-import { useUserService } from '../../Hooks/API/useUserAPI'
-import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 
 import SidebarList from './SidebarList'
@@ -18,20 +16,13 @@ const SnippetList: React.FC<SnippetListProps> = ({ type = 'snippet' }) => {
   const currentSnippet = useSnippetStore((store) => store.editor.snippet)
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { goTo } = useRouting()
-  const { push } = useNavigation()
-  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
-  const { updateUserPreferences } = useUserService()
   const addRecent = useRecentsStore((store) => store.addRecent)
 
   const onOpenSnippet = (id: string) => {
+    addRecent(RecentType.snippet, id)
     loadSnippet(id)
     const snippet = snippets[id]
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })
-    addRecent(id)
-
-    const lastOpened = useRecentsStore.getState().lastOpened
-    setLastOpened(lastOpened)
-    updateUserPreferences()
   }
 
   const heading = type === 'snippet' ? 'Snippets' : 'Templates'

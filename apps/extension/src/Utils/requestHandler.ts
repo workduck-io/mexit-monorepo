@@ -218,8 +218,8 @@ export const handleHighlightRequest = ({ subType, body, headers }) => {
       return client
         .post(apiURLs.highlights.saveHighlight, { json: body, headers: headers })
         .json()
-        .then((d: any) => {
-          return { message: d.data, error: null }
+        .then((highlightId: string) => {
+          return { message: highlightId, error: null }
         })
         .catch((error) => {
           return { message: null, error: error }

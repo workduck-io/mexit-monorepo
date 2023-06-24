@@ -18,6 +18,7 @@ import {
   DRAFT_NODE,
   generateSnippetId,
   mog,
+  RecentType,
   SNIPPET_PREFIX,
   useDescriptionStore,
   usePromptStore,
@@ -158,14 +159,10 @@ const Snippets = () => {
 
   const onOpenSnippet = (id: string) => {
     console.log('OPEN SNIPPET', { id })
+    addRecent(RecentType.snippet, id)
     loadSnippet(id)
     const snippet = snippets[id]
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })
-
-    addRecent(id)
-    const lastOpened = useRecentsStore.getState().lastOpened
-    setLastOpened(lastOpened)
-    updateUserPreferences()
   }
 
   const handleOpenPrompt = (id: string) => {
