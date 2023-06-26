@@ -11,8 +11,6 @@ export const DEPLOYMENT_STAGE: STAGE = (() => {
   const env = import.meta.env ?? process.env
   const { MEXIT_STAGE, MEXIT_FORCE_DEV, MODE } = env
 
-  return STAGE.staging
-
   if (MEXIT_FORCE_DEV) {
     return STAGE.local
   } else if (MEXIT_STAGE) {
@@ -23,7 +21,6 @@ export const DEPLOYMENT_STAGE: STAGE = (() => {
 })()
 
 export const IS_DEV = (() => {
-  return false
   return DEPLOYMENT_STAGE === STAGE.local || DEPLOYMENT_STAGE === STAGE.test
 })()
 
