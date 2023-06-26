@@ -28,7 +28,7 @@ export const useUserPreferences = () => {
         setUserPreferences(mergedUserPreferences)
 
         const updateRecent = useRecentsStore.getState().updateRecent
-        updateRecent(user.preference.lastOpened)
+        updateRecent(user?.preference.lastOpened)
       }
     }
   }
