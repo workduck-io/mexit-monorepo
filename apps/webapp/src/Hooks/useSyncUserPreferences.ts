@@ -1,6 +1,11 @@
 import { useEffect } from 'react'
 
-import { mergeUserPreferences, useAuthStore, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+import {
+  mergeUserPreferences,
+  useAuthStore,
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore
+} from '@mexit/core'
 
 import { useUserService } from './API/useUserAPI'
 
@@ -21,6 +26,9 @@ export const useUserPreferences = () => {
         const localUserPreferences = getUserPreferences()
         const mergedUserPreferences = mergeUserPreferences(localUserPreferences, userPreferences)
         setUserPreferences(mergedUserPreferences)
+
+        const updateRecent = useRecentsStore.getState().updateRecent
+        updateRecent(user?.preference.lastOpened)
       }
     }
   }

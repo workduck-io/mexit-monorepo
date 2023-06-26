@@ -1,5 +1,7 @@
 import { UserThemePreferences } from '@workduck-io/mex-themes'
 
+import { LastOpenedType } from '../Stores'
+
 export enum LastOpenedState {
   UNREAD = 'unread',
   OPENED = 'opened',
@@ -38,6 +40,7 @@ export interface LastUsedSnippets {
 }
 
 export interface UserPreferences {
+  lastOpened: LastOpenedType
   version: string
   lastOpenedNotes: LastOpenedNotes
   space: SpacePreference

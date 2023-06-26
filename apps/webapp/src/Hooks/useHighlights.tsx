@@ -39,7 +39,6 @@ export const useHighlightSync = () => {
     await highlightsAPI
       .getAllHighlights()
       .then((highlights) => {
-        console.log('highlights', highlights)
         if (highlights) {
           mog('SETTING HIGHLIGHTS', { highlights })
           setHighlights(highlights)

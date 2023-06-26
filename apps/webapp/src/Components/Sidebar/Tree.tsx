@@ -16,7 +16,16 @@ import Tippy, { useSingleton } from '@tippyjs/react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNameFromPath, mog, SEPARATOR, useDataStore, useEditorStore, useTreeStore } from '@mexit/core'
+import {
+  getNameFromPath,
+  mog,
+  RecentType,
+  SEPARATOR,
+  useDataStore,
+  useEditorStore,
+  useRecentsStore,
+  useTreeStore
+} from '@mexit/core'
 import {
   isOnEditableElement,
   StyledTreeItemSwitcher,
@@ -87,6 +96,7 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
   const [tree, setTreeState] = React.useState<TreeData>(initTree)
   const [contextOpenNodeId, setContextOpenNodeId] = useState<string>(null)
   const location = useLocation()
+  const addRecent = useRecentsStore((state) => state.addRecent)
 
   useEffect(() => {
     setTreeState(initTree)
@@ -168,8 +178,10 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
     if (publicNamespaceMatch) {
       goTo(`${ROUTE_PATHS.namespaceShare}/${publicNamespaceMatch.params.namespaceid}/node`, NavigationType.push, nodeId)
     } else {
+      console.log('goToNodeId', { nodeId })
       push(nodeId)
       goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
+      addRecent(RecentType.notes, nodeId)
     }
   }
 

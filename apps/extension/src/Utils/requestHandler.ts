@@ -218,8 +218,8 @@ export const handleHighlightRequest = ({ subType, body, headers }) => {
       return client
         .post(apiURLs.highlights.saveHighlight, { json: body, headers: headers })
         .json()
-        .then((d: any) => {
-          return { message: d.data, error: null }
+        .then((highlightId: string) => {
+          return { message: highlightId, error: null }
         })
         .catch((error) => {
           return { message: null, error: error }
@@ -230,7 +230,7 @@ export const handleHighlightRequest = ({ subType, body, headers }) => {
         .delete(apiURLs.highlights.byId(body?.highlightId), { headers: headers })
         .json()
         .then((d: any) => {
-          return { message: d.data, error: null }
+          return { message: d, error: null }
         })
         .catch((error) => {
           return { message: null, error: error }
@@ -248,7 +248,7 @@ export const handleShortenerRequest = ({ subType, body, headers }) => {
         })
         .json()
         .then((d: any) => {
-          return { message: d.data, error: null }
+          return { message: d, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
@@ -262,7 +262,7 @@ export const handleShortenerRequest = ({ subType, body, headers }) => {
         })
         .json()
         .then((d: any) => {
-          return { message: d.data, error: null }
+          return { message: d, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
@@ -347,7 +347,7 @@ export const handleAsyncCalendarRequest = async ({ subType, data }) => {
         .get(apiURLs.calendar.getGoogleCalendarNewToken)
         .json()
         .then((d: any) => {
-          return { message: d.data, error: null }
+          return { message: d, error: null }
         })
     }
   }

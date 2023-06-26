@@ -145,7 +145,7 @@ const Search = () => {
 
       if (!activeItem || isSearchWithinMex) {
         if (!search.value && (selection || isSearchWithinMex)) {
-          const notesOpened = lastOpenedNodes
+          const notesOpened = lastOpenedNodes?.notes
 
           const recents = getRecentList(notesOpened, actionType)
           const listWithNew = insertItemInArray(recents, [CREATE_NEW_ITEM, CREATE_NEW_SNIPPET], 1)

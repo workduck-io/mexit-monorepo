@@ -13,8 +13,10 @@ import {
   Highlight,
   Highlights,
   Link,
+  RecentType,
   useHighlightStore,
-  useMetadataStore
+  useMetadataStore,
+  useRecentsStore
 } from '@mexit/core'
 import {
   DefaultMIcons,
@@ -59,7 +61,7 @@ export const HighlightGroupToggle = ({ highlights, open, setOpen }: HighlightGro
   ) : null
 }
 
-export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight }) => {
+export const SingleHighlightWithToggle = ({ highlight, link }: { highlight: Highlight; link: Link }) => {
   const { loadNode } = useLoad()
   const { goTo } = useRouting()
   const { getHighlightMap } = useHighlights()
@@ -68,6 +70,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
   const { appendToNode } = useApi()
   const highlightBlockMap = useHighlightStore((store) => store.highlightBlockMap)
   const updateHighlightBlockMap = useHighlightStore((store) => store.updateHighlightBlockMap)
+  const addRecent = useRecentsStore((store) => store.addRecent)
 
   const [open, setOpen] = React.useState(false)
   const highlightMap = getHighlightMap(highlight.entityId) ?? {}
@@ -121,6 +124,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
     const blockId = highlightMap[noteId][0]
     loadNode(noteId, { highlightBlockId: blockId })
     goTo(ROUTE_PATHS.node, NavigationType.push, noteId)
+    addRecent(RecentType.notes, noteId)
   }
 
   return (
@@ -152,7 +156,7 @@ const HighlightGroups = ({ highlights, link, open, setOpen }: HighlightGroupProp
   return open && highlights ? (
     <HighlightGroupsWrapper>
       {highlights.map((highlight) => {
-        return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} />
+        return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} link={link} />
       })}
     </HighlightGroupsWrapper>
   ) : null

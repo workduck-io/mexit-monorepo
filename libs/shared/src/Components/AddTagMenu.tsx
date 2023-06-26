@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Tag } from '@mexit/core'
+import { Link, Tag, useRecentsStore } from '@mexit/core'
 
 import { StyledTag } from '../Style/Filter.style'
 
@@ -13,18 +13,23 @@ interface AddTagMenuProps {
   addTag: (tag: Tag) => void
   createTag: (tag: string) => void
   root?: HTMLElement | null
+  link?: Link
 }
 
 export const AddTagClassName = 'new-tag-menu'
 
-export const AddTagMenu = ({ tags, addTag, createTag, root }: AddTagMenuProps) => {
+export const AddTagMenu = ({ tags, addTag, createTag, root, link }: AddTagMenuProps) => {
   const onAddNewTag = (tag: Tag) => {
     addTag(tag)
+    // console.log(link)
+    // addRecent(undefined, link)
   }
 
   const onCreateNewTag = (tagStr: string) => {
     createTag(tagStr)
   }
+
+  const addRecent = useRecentsStore((store) => store.addRecent)
 
   return (
     <Menu

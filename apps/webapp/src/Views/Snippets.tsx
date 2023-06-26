@@ -18,9 +18,12 @@ import {
   DRAFT_NODE,
   generateSnippetId,
   mog,
+  RecentType,
   SNIPPET_PREFIX,
   useDescriptionStore,
   usePromptStore,
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore,
   useSnippetStore,
   ViewType
 } from '@mexit/core'
@@ -49,6 +52,7 @@ import {
 import Plateless from '../Components/Editor/Plateless'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useApi } from '../Hooks/API/useNodeAPI'
+import { useUserService } from '../Hooks/API/useUserAPI'
 import usePrompts from '../Hooks/usePrompts'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
@@ -67,12 +71,15 @@ const Snippets = () => {
   const { addSnippet, deleteSnippet, getSnippet, getSnippets, updateSnippet } = useSnippets()
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
+  const addRecent = useRecentsStore((store) => store.addRecent)
   const getPrompt = usePromptStore((s) => s.getPrompt)
   const { queryIndexWithRanking } = useSearch()
   const { generateSearchQuery } = useQuery()
   const { goTo } = useRouting()
   const { deleteAllVersionOfSnippet } = useApi()
   const { allPrompts } = usePrompts()
+  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
+  const { updateUserPreferences } = useUserService()
 
   const initialItems: Partial<SearchResult>[] = useMemo(
     () => [
@@ -151,6 +158,7 @@ const Snippets = () => {
   }
 
   const onOpenSnippet = (id: string) => {
+    addRecent(RecentType.snippet, id)
     loadSnippet(id)
     const snippet = snippets[id]
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })

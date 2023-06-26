@@ -10,6 +10,7 @@ import {
   getHighlightBlockMap,
   Highlight,
   NodeProperties,
+  RecentType,
   SaveableRange,
   SEPARATOR,
   SingleNamespace,
@@ -80,7 +81,7 @@ export function useSaveChanges() {
     const selection = useSputlitStore.getState().selection
     const nodeContent = useEditorStore.getState().nodeContent
 
-    addRecent(node.nodeid)
+    addRecent(RecentType.notes, node.nodeid)
 
     setContent(node.nodeid, nodeContent)
     setSelection(undefined)
@@ -154,7 +155,7 @@ export function useSaveChanges() {
         setContent(nodeId, nodeContent)
         updateMetadata('notes', nodeId, metadata)
         updateDocument({ id: nodeId, contents: nodeContent, title })
-        addRecentNote(nodeId)
+        addRecentNote(RecentType.notes, nodeId)
 
         return {
           nodeId: nodeId,
@@ -356,7 +357,7 @@ export function useSaveChanges() {
     }
 
     setSelection(undefined)
-    addRecent(node.nodeid)
+    // addRecent(node.nodeid)
     setActiveItem()
 
     const response = await chrome.runtime.sendMessage(request)

@@ -18,7 +18,7 @@ import { useForceLogout } from './Stores/useAuth'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 
-const FORCE_LOGOUT_VERSION = '0.21.0'
+const FORCE_LOGOUT_VERSION = '0.23.9'
 
 const AutoThemeSwitch = () => {
   const theme = useUserPreferenceStore((state) => state.theme)

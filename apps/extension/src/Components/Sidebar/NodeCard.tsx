@@ -8,6 +8,7 @@ import {
   convertContentToRawText,
   DefaultMIcons,
   mog,
+  RecentType,
   useAuthStore,
   useContentStore,
   useMetadataStore,
@@ -98,7 +99,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
         if (error) {
           mog('ErrorMakingNodePrivate', error)
         } else {
-          addInRecents(nodeId)
+          addInRecents(RecentType.notes, nodeId)
           updateMetadata('notes', nodeId, { publicAccess: false })
         }
       })
@@ -117,7 +118,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
         if (error) {
           mog('ErrorMakingNodePublic', error)
         } else {
-          addInRecents(nodeId)
+          addInRecents(RecentType.notes, nodeId)
           updateMetadata('notes', nodeId, { publicAccess: true })
         }
       })
