@@ -14,3 +14,5 @@ export type PersistAuth = {
   email: string
   expiresIn?: number
 }
+
+export type CalendarEventFilterType = 'Upcoming' | 'Past' | 'All'
