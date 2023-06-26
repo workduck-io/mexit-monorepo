@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { toast } from 'react-hot-toast'
 import { animated, useSpring, useTrail } from 'react-spring'
 
 import { useTheme } from 'styled-components'
@@ -52,7 +51,7 @@ const Workspaces = ({ setShow, active, show }) => {
 
   const handleWorkspaceClick = (id: string) => (event?) => {
     if (active?.id === id) {
-      toast('Active Workspace')
+      goTo(ROUTE_PATHS.home, NavigationType.push)
       setShow(false)
       return
     }

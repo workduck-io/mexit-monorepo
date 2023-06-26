@@ -25,14 +25,17 @@ export type RecentsType = {
   initRecents: (recentList: Array<string>) => void
 }
 
-const recentsStoreConfig = (set, get): RecentsType => ({
+const getRecentsInitState = () => ({
   lastOpened: {
     notes: [],
     snippet: [],
     highlight: []
   },
+  recentResearchNodes: []
+})
 
-  recentResearchNodes: [],
+const recentsStoreConfig = (set, get): RecentsType => ({
+  ...getRecentsInitState(),
   setRecentResearchNodes: (nodes: Array<string>) => {
     set({ recentResearchNodes: nodes })
   },
@@ -50,17 +53,12 @@ const recentsStoreConfig = (set, get): RecentsType => ({
     })
   },
   clear: () => {
-    set({
-      lastOpened: {
-        notes: [],
-        snippet: [],
-        highlight: []
-      }
-    })
-    set({ initializationTime: Date.parse(new Date().toISOString()) })
+    const initState = getRecentsInitState()
+    set(initState)
   },
   addRecent: (key, value) => {
     const oldLastOpened = get().lastOpened
+
     const { notes, snippet, highlight } = oldLastOpened
 
     const oldNotes = Settify(notes)
@@ -113,7 +111,11 @@ const recentsStoreConfig = (set, get): RecentsType => ({
   },
 
   updateRecent: (lastOpened: LastOpenedType) => {
-    set({ lastOpened: lastOpened })
+    if (!lastOpened) {
+      set({ lastOpened: getRecentsInitState().lastOpened })
+    } else {
+      set({ lastOpened: lastOpened })
+    }
   },
 
   update: (lastOpened: string[]) =>

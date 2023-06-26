@@ -5,6 +5,8 @@ import { nanoid } from 'nanoid'
 import styled from 'styled-components'
 import shallow from 'zustand/shallow'
 
+import { Button } from '@workduck-io/mex-components'
+
 import {
   defaultContent,
   ILink,
@@ -22,7 +24,9 @@ import {
   ViewType
 } from '@mexit/core'
 import {
+  centeredCss,
   DefaultMIcons,
+  getMIcon,
   Group,
   IconDisplay,
   MainHeader,
@@ -74,21 +78,19 @@ const Info = styled.span`
   margin-left: 2rem;
 `
 
-const CarouselButton = styled.button`
+const CarouselButton = styled(Button)`
   top: 50%;
-  height: 44px;
-  width: 44px;
-  color: #343f4f;
+  color: ${({ theme }) => theme.tokens.text.fade};
+
+  ${centeredCss}
+
   cursor: pointer;
-  font-size: 1.15rem;
   position: absolute;
   z-index: 1;
   text-align: center;
-  line-height: 44px;
-  background: #fff;
   border-radius: 50%;
-  transform: translateY(-50%);
-  transition: transform 0.1s linear;
+  /* transform: translateY(-50%);
+  transition: transform 0.1s linear; */
 `
 
 const LeftButton = styled(CarouselButton)`
@@ -168,6 +170,19 @@ function useScrollButtons() {
   return { containerRef, isLeftHidden, isRightHidden, scrollToLeft, scrollToRight }
 }
 
+const CarouselButtons = ({ onRightClick, onLeftClick, isLeftHidden, isRightHidden }) => {
+  return (
+    <>
+      <LeftButton onClick={onLeftClick} hidden={isLeftHidden}>
+        <IconDisplay icon={getMIcon('ICON', 'fe:arrow-left')} />
+      </LeftButton>
+      <RightButton onClick={onRightClick} hidden={isRightHidden}>
+        <IconDisplay icon={getMIcon('ICON', 'fe:arrow-right')} />
+      </RightButton>
+    </>
+  )
+}
+
 function DraftView() {
   const contents = useContentStore((s) => s.contents)
   const [ilinks, bookmarks] = useDataStore((store) => [store.ilinks, store.bookmarks], shallow)
@@ -222,6 +237,7 @@ function DraftView() {
       const uniqueNotes = uniq([...bookmarks, ...(lastOpened?.notes ?? [])])
       uniqueNotes.forEach((id) => {
         const ilink = ilinks.find((store) => store.nodeid === id)
+
         if (ilink) {
           validNotes.push(ilink)
         }
@@ -297,14 +313,12 @@ function DraftView() {
           <CardsContainerParent>
             {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes.length >= 3) ||
               (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes.length > 1)) && (
-              <>
-                <LeftButton onClick={scrollToLeft} hidden={isLeftHidden}>
-                  &lt;
-                </LeftButton>
-                <RightButton onClick={scrollToRight} hidden={isRightHidden}>
-                  &gt;
-                </RightButton>
-              </>
+              <CarouselButtons
+                onLeftClick={scrollToLeft}
+                onRightClick={scrollToRight}
+                isLeftHidden={isLeftHidden}
+                isRightHidden={isRightHidden}
+              />
             )}
 
             <CardsContainer view={ViewType.Card} ref={containerRef}>
@@ -350,14 +364,12 @@ function DraftView() {
           <CardsContainerParent>
             {((window.innerWidth > parseInt(size.tiny) && lastOpened?.snippet.length >= 3) ||
               (window.innerWidth <= parseInt(size.tiny) && lastOpened?.snippet.length > 1)) && (
-              <>
-                <LeftButton onClick={scrollToLeft2} hidden={isLeftHidden2}>
-                  &lt;
-                </LeftButton>
-                <RightButton onClick={scrollToRight2} hidden={isRightHidden2}>
-                  &gt;
-                </RightButton>
-              </>
+              <CarouselButtons
+                onLeftClick={scrollToLeft2}
+                onRightClick={scrollToRight2}
+                isLeftHidden={isLeftHidden2}
+                isRightHidden={isRightHidden2}
+              />
             )}
             <CardsContainer view={ViewType.Card} ref={containerRef2}>
               {activitySnippets &&
@@ -397,14 +409,12 @@ function DraftView() {
           <CardsContainerParent>
             {((window.innerWidth > parseInt(size.tiny) && lastOpened?.highlight.length >= 3) ||
               (window.innerWidth <= parseInt(size.tiny) && lastOpened?.highlight.length > 1)) && (
-              <>
-                <LeftButton onClick={scrollToLeft3} hidden={isLeftHidden3}>
-                  &lt;
-                </LeftButton>
-                <RightButton onClick={scrollToRight3} hidden={isRightHidden3}>
-                  &gt;
-                </RightButton>
-              </>
+              <CarouselButtons
+                onLeftClick={scrollToLeft3}
+                onRightClick={scrollToRight3}
+                isLeftHidden={isLeftHidden3}
+                isRightHidden={isRightHidden3}
+              />
             )}
 
             <CardsContainer view={ViewType.Card} ref={containerRef3}>
