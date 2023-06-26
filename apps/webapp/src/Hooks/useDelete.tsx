@@ -83,7 +83,7 @@ export const useDelete = () => {
       updateHistory(newHistory, newCurIndex)
 
       // Update Recents
-      const { newIds: newRecents } = applyDeleteToIds(lastOpened.notes, 0, newIlinks)
+      const { newIds: newRecents } = applyDeleteToIds(lastOpened?.notes, 0, newIlinks)
       updateLastOpened(newRecents)
 
       // Update BaseNodeId
