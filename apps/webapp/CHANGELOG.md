@@ -1,5 +1,15 @@
 # mexit-webapp
 
+## 0.23.9
+
+### Patch Changes
+
+- e4ad662e: Secretary proof of concept
+- 3c4f790f: Show recent Notes, Snippets and Captures on Home page
+- e3cce8e5: Store and fetch workspace backup on cloud
+- 6013df2b: Fixed draggable toggle on pages with dynamic height; removed floating button on public nodes/spaces
+- 2b588e99: Google Calendar integration
+
 ## 0.23.8
 
 ### Patch Changes

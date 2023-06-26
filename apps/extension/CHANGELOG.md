@@ -1,5 +1,16 @@
 # mexit
 
+## 0.19.27
+
+### Patch Changes
+
+- 4b35ae33: Add Filter in Events and Highlights in Context Sidebar of Extension
+- 3c4f790f: Show recent Notes, Snippets and Captures on Home page
+- 66829684: Moved url shortener away from sidebar to a floating button
+- e3cce8e5: Store and fetch workspace backup on cloud
+- 6013df2b: Fixed draggable toggle on pages with dynamic height; removed floating button on public nodes/spaces
+- 2b588e99: Google Calendar integration
+
 ## 0.19.26
 
 ### Patch Changes
