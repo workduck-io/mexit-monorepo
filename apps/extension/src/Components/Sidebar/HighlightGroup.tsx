@@ -10,6 +10,7 @@ import {
   getFavicon,
   Highlight,
   Highlights,
+  mog,
   useHighlightStore,
   useLayoutStore
 } from '@mexit/core'
@@ -153,13 +154,18 @@ export const HighlightGroups = ({ highlights, all }: { highlights: Highlights; a
     highlights.forEach((highlight) => {
       if (!highlight) return
 
-      const sourceUrl = new URL(highlight.properties?.sourceUrl)?.origin
+      try {
+        const sourceUrl = new URL(highlight.properties?.sourceUrl)?.origin
 
-      if (!groupedHighlights[sourceUrl]) {
-        groupedHighlights[sourceUrl] = []
+        if (!groupedHighlights[sourceUrl]) {
+          groupedHighlights[sourceUrl] = []
+        }
+
+        groupedHighlights[sourceUrl].push(highlight)
+      } catch (err) {
+        mog('Unable to group highlights', { highlight })
+        console.error('Unable to group highlights', err)
       }
-
-      groupedHighlights[sourceUrl].push(highlight)
     })
 
     return groupedHighlights

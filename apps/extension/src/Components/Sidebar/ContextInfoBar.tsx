@@ -2,7 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import { formatDistanceToNow } from 'date-fns'
 
-import { API_BASE_URLS, DrawerType, useCalendarStore, useHighlightStore, useLayoutStore } from '@mexit/core'
+import {
+  API_BASE_URLS,
+  CalendarEventFilterType,
+  DrawerType,
+  getMenuItem,
+  MenuListItemType,
+  useCalendarStore,
+  useHighlightStore,
+  useLayoutStore
+} from '@mexit/core'
 import {
   CenteredFlex,
   DefaultMIcons,
@@ -12,16 +21,17 @@ import {
   Group,
   IconDisplay,
   List,
+  Select,
   SidebarListFilter,
   SnippetCards,
   SpaceBetweenHorizontalFlex,
   StyledButton,
-  Toggle,
   useCalendar,
   useInterval
 } from '@mexit/shared'
 
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { getElementById } from '../../Utils/cs-utils'
 
 import { GenericCard } from './GenericCard'
 import { HighlightGroups } from './HighlightGroup'
@@ -78,7 +88,9 @@ const CalendarEvent = ({ event }) => {
   }
 
   const openMeetLink = (url?: string) => {
-    window.open(url ?? event.links.meet, '_blank')
+    const webLink = url ?? event.links.meet ?? event.links.event
+
+    window.open(webLink, '_blank')
   }
 
   return (
@@ -91,7 +103,7 @@ const CalendarEvent = ({ event }) => {
         <FadeContainer flex={false} fade>
           <Group>
             <IconDisplay icon={DefaultMIcons.NOTE} onClick={openMeetingNote} />
-            <IconDisplay icon={DefaultMIcons.WEB_LINK} onClick={openMeetLink} />
+            <IconDisplay icon={DefaultMIcons.WEB_LINK} onClick={() => openMeetLink()} />
           </Group>
         </FadeContainer>
       ) : (
@@ -107,6 +119,7 @@ const UpcomingEvents = () => {
   const [isFetching, setIsFetching] = useState(false)
 
   const { getUpcomingEvents, getCalenderEvents, getCalendarAuth } = useCalendar()
+  const [calendarEventFilter, setCalendarEventFilter] = useState<CalendarEventFilterType>('Upcoming')
   const calendarEvents = useCalendarStore((state) => state.events)
   const calendarToken = useCalendarStore((store) => store.tokens['GOOGLE_CAL'])
 
@@ -141,18 +154,34 @@ const UpcomingEvents = () => {
   useInterval(fetchEvents, 30 * 60 * 1000)
 
   const upcomingEvents = useMemo(() => {
-    return getUpcomingEvents()
-  }, [calendarEvents])
+    return getUpcomingEvents(calendarEventFilter)
+  }, [calendarEvents, calendarEventFilter])
 
   const hasUpcomingEvents = upcomingEvents?.length > 0
 
+  const onClick = (event: MenuListItemType) => {
+    setCalendarEventFilter(event.label as CalendarEventFilterType)
+  }
+
   return (
-    <SidebarSection label="Upcoming Events" isLoading={isFetching} icon={DefaultMIcons.NOTIFICATION}>
+    <SidebarSection
+      label="Events"
+      isLoading={isFetching}
+      icon={DefaultMIcons.NOTIFICATION}
+      rightComponent={
+        <Select
+          root={getElementById('ext-side-nav')}
+          items={[
+            getMenuItem('Upcoming', onClick, false),
+            getMenuItem('Past', onClick, false),
+            getMenuItem('All', onClick, false)
+          ]}
+        />
+      }
+    >
       {calendarToken && hasUpcomingEvents ? (
         <List $noMargin scrollable $maxHeight="140px">
           {upcomingEvents.map((event) => {
-            const desc = event.description ? `: ${event.description}` : ''
-
             return <CalendarEvent event={event} />
           })}
         </List>
@@ -198,7 +227,15 @@ const Highlights = () => {
       scrollable
       label="Captures"
       icon={DefaultMIcons.HIGHLIGHT}
-      rightComponent={<Toggle size="small" onChange={setShowAll} text="All" />}
+      rightComponent={
+        <Select
+          root={getElementById('ext-side-nav')}
+          items={[
+            getMenuItem('Page', () => setShowAll(false), false),
+            getMenuItem('All', () => setShowAll(true), false)
+          ]}
+        />
+      }
     >
       {pageHighlights?.length > 0 ? (
         <List $noMargin scrollable>

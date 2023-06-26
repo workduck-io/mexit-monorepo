@@ -2,6 +2,7 @@ import { add, format, sub } from 'date-fns'
 
 import {
   API_BASE_URLS,
+  CalendarEventFilterType,
   generateNodeId,
   getSlug,
   MEETING_PREFIX,
@@ -111,20 +112,30 @@ export const useCalendar = () => {
     await getEvents(request)
   }
 
-  const getUpcomingEvents = () => {
+  const getUpcomingEvents = (calendarEventFilter: CalendarEventFilterType) => {
     const now = new Date()
     const twoHoursFromNow = add(now, { hours: 2 })
     const events = useCalendarStore.getState().events
 
-    const todayEvents = events
-      .filter((event) => {
-        const start = new Date(event.times.start)
-        console.log('START', { start, event, twoHoursFromNow, isStart: start <= twoHoursFromNow })
-        return start <= twoHoursFromNow && start >= now
-      })
-      .sort((a, b) => b.times.start - a.times.start)
-
-    return todayEvents
+    switch (calendarEventFilter) {
+      case 'All':
+        return events.sort((a, b) => b.times.start - a.times.start)
+      case 'Past':
+        return events
+          .filter((event) => {
+            const start = new Date(event.times.start)
+            return start < now
+          })
+          .sort((a, b) => b.times.start - a.times.start)
+      case 'Upcoming':
+      default:
+        return events
+          .filter((event) => {
+            const start = new Date(event.times.start)
+            return start <= twoHoursFromNow && start >= now
+          })
+          .sort((a, b) => b.times.start - a.times.start)
+    }
   }
 
   const getCalendarAuth = async () => {
