@@ -3,38 +3,23 @@ import useWebSocket from 'react-use-websocket'
 
 import { useAuthStore as useDwindleStore } from '@workduck-io/dwindle'
 
-import { BannerType, config, mog, useAuthStore, useRouteStore } from '@mexit/core'
+import { config, mog, useAuthStore } from '@mexit/core'
 
 import { SocketActionType } from '../Types/Socket'
+
+import { useBroadcastHandler } from './useBroadcastHandler'
 
 const useSocket = () => {
   const userId = useAuthStore((s) => s.userDetails?.id)
   const idToken = useDwindleStore((s) => s.userCred?.token)
-
-  const addUser = useRouteStore((s) => s.addUserInRoute)
-  const removeUser = useRouteStore((s) => s.removeUserFromRoute)
-  const setActiveUsers = useRouteStore((s) => s.addRouteInfo)
+  const { updatesHandler } = useBroadcastHandler()
 
   const handleAction = (action: SocketActionType, data: any) => {
     switch (action) {
-      case SocketActionType.ROUTE_CHANGE:
+      case SocketActionType.CONTENT_UPDATE: {
+        updatesHandler(data)
         break
-      case SocketActionType.CONTENT_UPDATE:
-        break
-      case SocketActionType.USER_LIST_UPDATE:
-        if (data.joined) {
-          addUser(data.route, data.joined)
-        }
-
-        if (data.left) {
-          removeUser(data.route, data.left)
-        }
-
-        if (data.users) {
-          const filterUser = data.users?.filter((user: string) => !!user)
-          setActiveUsers(data.route, { users: filterUser, banners: filterUser.length > 0 ? [BannerType.editor] : [] })
-        }
-        break
+      }
       default:
         mog('No Handler for this action', { action, data })
     }
@@ -43,7 +28,7 @@ const useSocket = () => {
   const handleSocketMessage = (message) => {
     if (message) {
       const data = typeof message.data === 'object' ? message.data : JSON.parse(message.data)
-      handleAction(message.type, message.data)
+      handleAction(data.action, data.data)
     }
   }
 
