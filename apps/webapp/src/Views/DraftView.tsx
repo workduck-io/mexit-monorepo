@@ -41,6 +41,7 @@ import Plateless from '../Components/Editor/Plateless'
 import LinkComponent from '../Components/Link'
 import NamespaceTag from '../Components/NamespaceTag'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { useUserService } from '../Hooks/API/useUserAPI'
 import { useNamespaces } from '../Hooks/useNamespaces'
 import { useNavigation } from '../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
@@ -280,10 +281,30 @@ function DraftView() {
     scrollToRight: scrollToRight3
   } = useScrollButtons()
 
+  const clear = useRecentsStore((store) => store.clear)
+  const { updateUserPreferences } = useUserService()
+
+  const resetStuff = () => {
+    clear()
+    setLastOpened(lastOpened)
+    updateUserPreferences()
+  }
+
   return (
     <PageContainer>
       <MainHeader>
         <Title>Mex Activity!</Title>
+
+        <br />
+        <br />
+        <h1
+          onClick={() => {
+            console.log(lastOpened)
+            resetStuff()
+          }}
+        >
+          CLEAR
+        </h1>
       </MainHeader>
 
       {lastOpened?.notes.length === 0 && lastOpened?.snippet.length === 0 && lastOpened?.highlight.length === 0 && (
