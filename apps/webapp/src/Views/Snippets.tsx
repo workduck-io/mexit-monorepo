@@ -23,7 +23,6 @@ import {
   useDescriptionStore,
   usePromptStore,
   useRecentsStore,
-  userPreferenceStore as useUserPreferenceStore,
   useSnippetStore,
   ViewType
 } from '@mexit/core'
@@ -52,7 +51,6 @@ import {
 import Plateless from '../Components/Editor/Plateless'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useApi } from '../Hooks/API/useNodeAPI'
-import { useUserService } from '../Hooks/API/useUserAPI'
 import usePrompts from '../Hooks/usePrompts'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
@@ -78,8 +76,6 @@ const Snippets = () => {
   const { goTo } = useRouting()
   const { deleteAllVersionOfSnippet } = useApi()
   const { allPrompts } = usePrompts()
-  const setLastOpened = useUserPreferenceStore((state) => state.setLastOpened)
-  const { updateUserPreferences } = useUserService()
 
   const initialItems: Partial<SearchResult>[] = useMemo(
     () => [

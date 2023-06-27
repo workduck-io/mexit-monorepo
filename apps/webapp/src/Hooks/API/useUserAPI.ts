@@ -107,7 +107,7 @@ export const useUserService = () => {
 
   const updateUserPreferences = async (): Promise<boolean> => {
     const lastOpened = useRecentsStore.getState().lastOpened
-    setLastOpened(lastOpened)
+    if (lastOpened) setLastOpened(lastOpened)
 
     const id = useAuthStore.getState().userDetails.id
     const getUserPreferences = useUserPreferenceStore.getState().getUserPreferences
