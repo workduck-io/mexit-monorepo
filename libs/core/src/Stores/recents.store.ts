@@ -17,8 +17,7 @@ export type RecentsType = {
   recentResearchNodes: string[]
   setRecentResearchNodes: (nodes: Array<string>) => void
   addRecent: (key: RecentType, value: string) => void
-  updateRecent: (lastOpened: LastOpenedType) => void
-  update: (lastOpened: string[]) => void
+  update: (lastOpened: LastOpenedType) => void
   clear: () => void
   clearResearchNodes: () => void
   addInResearchNodes: (nodeid: string) => void
@@ -110,18 +109,13 @@ const recentsStoreConfig = (set, get): RecentsType => ({
     }
   },
 
-  updateRecent: (lastOpened: LastOpenedType) => {
+  update: (lastOpened: LastOpenedType) => {
     if (!lastOpened) {
       set({ lastOpened: getRecentsInitState().lastOpened })
     } else {
       set({ lastOpened: lastOpened })
     }
   },
-
-  update: (lastOpened: string[]) =>
-    set({
-      lastOpened
-    }),
   initRecents: (recentList) => set({ lastOpened: recentList })
 })
 
