@@ -201,20 +201,23 @@ function DraftView() {
 
   const findLatestHighlightTime = (linkurl: string) => {
     const highlightsforaLink = getHighlightsOfUrl(linkurl)
-    highlightsforaLink.sort((a, b) => {
-      return b.createdAt - a.createdAt
-    })
-    return highlightsforaLink[0]?.createdAt ?? 0
+
+    if (highlightsforaLink) {
+      highlightsforaLink.sort((a, b) => {
+        return b.createdAt - a.createdAt
+      })
+      return highlightsforaLink[0]?.createdAt ?? 0
+    }
   }
   const initialLinks = useMemo(() => {
-    return links.sort(sortByCreated)
+    return links?.sort(sortByCreated)
   }, [links])
 
   const highlightsUpdater = useMemo(() => {
     let lastOpenedHighlightTime = 0
     lastOpenedHighlightTime = lastOpened?.highlight?.length > 0 ? findLatestHighlightTime(lastOpened?.highlight[0]) : 0
 
-    if (initialLinks.length > 0) {
+    if (initialLinks?.length > 0) {
       initialLinks.forEach((link) => {
         const highlightsfortheLink = getHighlightsOfUrl(link.url)
         const latestHighlightsFirst = highlightsfortheLink.sort((a, b) => {
@@ -232,7 +235,7 @@ function DraftView() {
   }, [links])
 
   useEffect(() => {
-    if (ilinks && ilinks.length > 0) {
+    if (ilinks && ilinks?.length > 0) {
       const validNotes = []
       const uniqueNotes = uniq([...bookmarks, ...(lastOpened?.notes ?? [])])
       uniqueNotes.forEach((id) => {
