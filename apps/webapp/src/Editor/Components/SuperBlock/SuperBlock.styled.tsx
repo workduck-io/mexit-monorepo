@@ -4,7 +4,7 @@ import { BodyFont } from '@mexit/shared'
 
 export const Container = styled.div<{ $isActive?: boolean; $isSelected?: boolean }>`
   border-radius: ${({ theme }) => theme.spacing.medium};
-  margin: 0 0.25rem 0.25rem 0;
+  margin-bottom: 1rem;
   transition: opacity 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
   padding: ${({ theme }) => theme.spacing.medium};
   ${BodyFont}
@@ -14,13 +14,21 @@ export const Container = styled.div<{ $isActive?: boolean; $isSelected?: boolean
           opacity: 1;
           ${!$isActive &&
           css`
-            background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+            background: ${({ theme }) => `rgba(${theme.rgbTokens.surfaces.s[0]}, 0.4);`};
             box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
           `}
         `
       : css`
           opacity: 0.8;
         `}
+`
+
+export const Dot = styled.span`
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  opacity: 0.5;
+  background: ${({ theme }) => theme.tokens.text.fade};
 `
 
 export const SectionPlaceholder = styled.section`

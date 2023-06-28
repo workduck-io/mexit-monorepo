@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { shade } from 'polished'
 import styled from 'styled-components'
 
 import { getSplitDisplayShortcut } from '../Utils/shortcuts'
+
+import { centeredCss } from './Layouts'
 
 const ShortcutWrapper = styled.div`
   display: flex;
@@ -14,10 +15,12 @@ export const ShortcutMid = styled.div`
   opacity: 0.66;
 `
 const ShortcutBox = styled.div`
-  font-size: 10px;
-  padding: ${({ theme }) => `calc(${theme.spacing.tiny}/2) ${theme.spacing.tiny}`};
+  font-size: 12px;
+
+  padding: ${({ theme }) => `calc(${theme.spacing.tiny} / 2) ${theme.spacing.tiny}`};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  background-color: ${({ theme }) => theme.tokens.surfaces.modal};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+  background-color: ${({ theme }) => theme.tokens.surfaces.highlight};
   color: ${({ theme }) => theme.colors.primary};
 `
 
@@ -47,9 +50,9 @@ const TooltipShortcut = styled.span`
     gap: 1px;
   }
   ${ShortcutBox} {
-    font-size: 0.75rem;
-    background-color: ${({ theme }) => shade(0.1, theme.colors.primary)};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    font-weight: 600;
+    opacity: 0.8;
+    ${centeredCss}
   }
 `
 export interface TooltipTitleWithShortcutProps {

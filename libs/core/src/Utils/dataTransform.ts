@@ -1,3 +1,5 @@
+import { NodeEditorContent, SuperBlocks } from '../Types'
+
 import { generateTempId } from './idGenerator'
 
 export type getValuefn = (obj?: any) => string
@@ -251,3 +253,11 @@ export const addBaseVersionIfNeeded = (d: any): any => {
 //   if (compareFileDataVersion <= 0 && compareCurrentVersion > 0) return true
 //   return false
 // }
+
+export const createSuperBlockContent = (type: SuperBlocks, content: NodeEditorContent) => {
+  return {
+    id: generateTempId(),
+    children: content,
+    type
+  }
+}

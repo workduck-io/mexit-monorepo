@@ -11,6 +11,8 @@ interface PriorityMenuSelect {
   withLabel?: boolean
   readOnly?: boolean
   isVisible?: boolean
+  name?: string
+  shortcut?: string
 }
 
 const PriorityMenuButton = ({ color, value, selected, withLabel }) => {
@@ -28,11 +30,18 @@ const PriorityMenuButton = ({ color, value, selected, withLabel }) => {
   )
 }
 
-const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabel = false }: PriorityMenuSelect) => {
+const PrioritySelect = ({
+  readOnly,
+  isVisible,
+  name,
+  value,
+  shortcut,
+  onPriorityChange,
+  withLabel = false
+}: PriorityMenuSelect) => {
   const [selected, setSelected] = useState(false)
 
   const onPriorityChangeHide = (id: PriorityType) => {
-    console.log('ADDING ', { id })
     onPriorityChange({ type: id })
   }
 
@@ -46,6 +55,9 @@ const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabe
   return (
     <InsertMenu
       isMenu
+      allowSearch
+      placeholder="Set priority..."
+      shortcut={shortcut}
       title="Priority"
       selected={value}
       onClick={onPriorityChangeHide}

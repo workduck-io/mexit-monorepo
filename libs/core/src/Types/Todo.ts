@@ -79,24 +79,24 @@ export const getPrevStatus = (status: TodoStatus): TodoStatus => {
 // * Get priority data from PriorityType
 export const Priority: Record<keyof typeof PriorityType, PriorityDataType> = {
   noPriority: {
-    title: 'No Priority',
+    title: 'No priority',
     shortcut: {
       category: 'action',
       keystrokes: '$mod+4',
       title: 'No priority'
     },
-    icon: 'ph:cell-signal-none-fill',
+    icon: 'ep:semi-select',
     type: PriorityType.noPriority
   },
-  low: {
-    title: 'Low',
+  high: {
+    title: 'High',
     shortcut: {
       category: 'action',
-      keystrokes: '$mod+3',
-      title: 'Low priority'
+      keystrokes: '$mod+1',
+      title: 'Highest priority'
     },
-    icon: 'ph:cell-signal-low-fill',
-    type: PriorityType.low
+    icon: 'ph:cell-signal-full-fill',
+    type: PriorityType.high
   },
   medium: {
     title: 'Medium',
@@ -108,14 +108,14 @@ export const Priority: Record<keyof typeof PriorityType, PriorityDataType> = {
     icon: 'ph:cell-signal-medium-fill',
     type: PriorityType.medium
   },
-  high: {
-    title: 'High',
+  low: {
+    title: 'Low',
     shortcut: {
       category: 'action',
-      keystrokes: '$mod+1',
-      title: 'Highest priority'
+      keystrokes: '$mod+3',
+      title: 'Low priority'
     },
-    icon: 'ph:cell-signal-full-fill',
-    type: PriorityType.high
+    icon: 'ph:cell-signal-low-fill',
+    type: PriorityType.low
   }
 }

@@ -8,12 +8,15 @@ import SuperBlockHeader from './SuperBlockHeader'
 
 export const SuperBlock: React.FC<{
   className?: string
+  style?: React.CSSProperties
   as?: string | Element
   children?: ReactNode
   element?: any
   $isActive?: boolean
   $isSelected?: boolean
-}> = ({ className, as, element, children, ...props }) => {
+  FooterRightComponent?: any
+  LeftHeaderRenderer?: any
+}> = ({ className, as, LeftHeaderRenderer, FooterRightComponent, element, children, ...props }) => {
   const { updateMetadataProperties } = useUpdateBlock()
 
   const onChange = (properitesToUpdate: Record<string, unknown>) => {
@@ -22,9 +25,13 @@ export const SuperBlock: React.FC<{
 
   return (
     <Container className={className} {...props}>
-      <SuperBlockHeader element={element} />
+      <SuperBlockHeader LeftHeaderRenderer={LeftHeaderRenderer} element={element} />
       {children}
-      <SuperBlockFooter element={element} onChange={onChange} />
+      <SuperBlockFooter
+        FooterRightRenderer={FooterRightComponent}
+        value={element?.metadata?.properties ?? {}}
+        onChange={onChange}
+      />
     </Container>
   )
 }

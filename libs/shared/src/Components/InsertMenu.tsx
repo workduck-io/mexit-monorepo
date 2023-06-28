@@ -3,8 +3,10 @@ import React from 'react'
 import { getNameFromPath, MenuListItemType, MIcon, SHARED_NAMESPACE, useDataStore, useMetadataStore } from '@mexit/core'
 
 import { StyledButton } from '../Style/Buttons'
+import { Group } from '../Style/Layouts'
+import { TooltipTitleWithShortcut } from '../Style/Tooltip'
 
-import { Menu, MenuItem } from './FloatingElements'
+import { Menu, MenuItem, Tooltip } from './FloatingElements'
 import { IconDisplay } from './IconDisplay'
 import { DefaultMIcons } from './Icons'
 
@@ -19,6 +21,9 @@ interface InsertMenuProps {
   type?: 'default' | 'modal'
   initialFocus?: boolean
   selected?: string
+  name?: string
+  placeholder?: string
+  shortcut?: string
 }
 
 export const InsertMenu: React.FC<InsertMenuProps> = ({
@@ -31,7 +36,10 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({
   root,
   initialFocus,
   icon,
-  type
+  name,
+  type,
+  placeholder,
+  shortcut
 }) => {
   if (!isMenu) {
     return (
@@ -66,16 +74,15 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({
   }
 
   const noteLinks = items ? items : getQuickLinks()
-
   return (
     <Menu
       allowSearch={allowSearch}
       noBackground
       type={type}
       noPadding
-      searchPlaceholder="Search for a Note..."
+      searchPlaceholder={placeholder ?? 'Search for a Note...'}
       root={root}
-      values={<AnchorNode selected={selected} items={noteLinks} icon={icon} title={title} />}
+      values={<AnchorNode selected={selected} items={noteLinks} icon={icon} title={title} shortcut={shortcut} />}
     >
       {noteLinks.map((item) => {
         return (
@@ -84,7 +91,10 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({
             fontSize="small"
             icon={item.icon}
             key={item.id}
-            onClick={() => onClick(item.id)}
+            name={name ?? item.label}
+            onClick={(e: any) => {
+              onClick(item.id)
+            }}
           />
         )
       })}
@@ -92,16 +102,20 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({
   )
 }
 
-const AnchorNode = ({ selected, items, icon, title }) => {
+const AnchorNode = ({ selected, items, icon, title, shortcut }) => {
   const selectedItem = selected && items.find((i) => i.id === selected)
 
   const itemIcon = selectedItem?.icon ?? icon ?? DefaultMIcons.EMBED
   const label = selectedItem?.label ?? title
 
   return (
-    <StyledButton>
-      <IconDisplay icon={itemIcon} size={12} />
-      {label}
-    </StyledButton>
+    <Tooltip content={shortcut ? <TooltipTitleWithShortcut title={title} shortcut={shortcut} /> : title} delay={100}>
+      <StyledButton>
+        <Group>
+          <IconDisplay icon={itemIcon} size={14} />
+          <span>{label}</span>
+        </Group>
+      </StyledButton>
+    </Tooltip>
   )
 }

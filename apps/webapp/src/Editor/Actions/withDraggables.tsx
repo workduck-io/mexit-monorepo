@@ -29,9 +29,7 @@ import {
 import styled, { css } from 'styled-components'
 
 import { ELEMENT_CAPTURE, IS_DEV, useBlockStore, useEditorStore } from '@mexit/core'
-import { RelativeTime } from '@mexit/shared'
-
-import { ProfileImage } from '../../Components/User/ProfileImage'
+import { ProfileImage, RelativeTime } from '@mexit/shared'
 
 const StyledTip = styled.div`
   display: flex;
@@ -226,7 +224,7 @@ export const withStyledDraggables = (components: any) => {
         // ELEMENT_ILINK,
         ELEMENT_TABLE,
         ELEMENT_MEDIA_EMBED,
-        ELEMENT_CODE_BLOCK,
+        ELEMENT_CODE_BLOCK
         // ELEMENT_ACTION_BLOCK
       ],
       onRenderDragHandle: ({ className, styles, element }) => {

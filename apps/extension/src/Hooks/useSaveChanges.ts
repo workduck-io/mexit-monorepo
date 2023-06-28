@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import { createPlateEditor, createPlateUI } from '@udecode/plate'
 
 import {
+  createSuperBlockContent,
   DefaultMIcons,
   deleteQueryParams,
   ELEMENT_TAG,
@@ -14,6 +15,7 @@ import {
   SaveableRange,
   SEPARATOR,
   SingleNamespace,
+  SuperBlocks,
   useAuthStore,
   useContentStore,
   useDataStore,
@@ -99,7 +101,7 @@ export function useSaveChanges() {
 
     const res = await saveNode({
       notify: options.notification,
-      content: nodeContent,
+      content: [createSuperBlockContent(SuperBlocks.HIGHLIGHT, nodeContent)],
       node,
       reqData: highlight ? { highlightId: highlight.entityId } : {}
     })

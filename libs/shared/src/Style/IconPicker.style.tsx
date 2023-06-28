@@ -1,5 +1,7 @@
 import styled, { css, keyframes } from 'styled-components'
 
+import { MIcon } from '@mexit/core'
+
 export const IconSelector = styled.button`
   display: flex;
   border: none;
@@ -18,7 +20,13 @@ export const IconLoading = (theme: any) => keyframes`
   100% { color: ${theme.tokens.colors.yellow}; }
 `
 
-export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; color?: string; cursor?: boolean }>`
+export const IconWrapper = styled.div<{
+  type?: MIcon['type']
+  size?: number
+  isLoading?: boolean
+  color?: string
+  cursor?: boolean
+}>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,7 +40,7 @@ export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; colo
       }
     `}
 
-  ${({ size, theme }) => {
+  ${({ size, theme, type }) => {
     const calcSize = size ? `${size}px` : '1rem'
     return css`
       font-family: EmojiMart, 'Segoe UI Emoji', 'Segoe UI Symbol', 'Segoe UI', 'Apple Color Emoji', 'Twemoji Mozilla',
@@ -47,6 +55,15 @@ export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; colo
         max-width: ${calcSize};
         max-height: ${calcSize};
         border-radius: ${theme.borderRadius.small}};
+      }
+
+      ${
+        type === 'AVATAR' &&
+        css`
+          svg {
+            border-radius: ${theme.borderRadius.small}};
+          }
+        `
       }
     `
   }}

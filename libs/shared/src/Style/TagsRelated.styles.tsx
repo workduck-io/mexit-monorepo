@@ -10,6 +10,7 @@ export const TagFlex = styled.div`
   flex-direction: row;
   font-size: 14px;
   align-items: center;
+  flex-shrink: 0;
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.large};
@@ -30,6 +31,7 @@ export const TagFlex = styled.div`
 export const TagFlexText = styled.div`
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 `
 
 export const TagsFlex = styled.div`

@@ -1,30 +1,36 @@
+import { useFocused, useSelected } from 'slate-react'
 import { useTheme } from 'styled-components'
 
-import { DefaultMIcons, Description, FadeText, Group, IconDisplay, RelativeTime } from '@mexit/shared'
+import { FadeText, Group, RelativeTime } from '@mexit/shared'
 
-import { Section } from './SuperBlock.styled'
+import { BlockInfo } from '../../../Components/Editor/BlockInfo/BlockInfo.index'
 
-const SuperBlockHeader = ({ element }) => {
+import { Dot, Section } from './SuperBlock.styled'
+
+const SuperBlockHeader = ({ element, LeftHeaderRenderer }) => {
   const theme = useTheme()
 
   const updatedAt = element?.metadata?.updatedAt
+  const isSelected = useSelected()
+  const isFocused = useFocused()
+
+  const isActive = isSelected && isFocused
 
   return (
     <>
-      <Section margin={`0 0 ${theme.spacing.small}`} contentEditable={false}>
-        <FadeText>
-          <Group>
-            <IconDisplay icon={DefaultMIcons.TASK} size={14} />
-            <Description size="small">Task</Description>
-          </Group>
-        </FadeText>
-        {updatedAt && (
-          <Group>
-            <FadeText>
-              <RelativeTime dateNum={element?.metadata?.updatedAt} />
-            </FadeText>
-          </Group>
-        )}
+      <Section margin={`0 0 ${theme.spacing.medium}`} contentEditable={false}>
+        <Group>
+          <FadeText>{LeftHeaderRenderer && <LeftHeaderRenderer />}</FadeText>
+          <Dot />
+          {updatedAt && (
+            <Group>
+              <FadeText>
+                <RelativeTime dateNum={updatedAt} />
+              </FadeText>
+            </Group>
+          )}
+        </Group>
+        <BlockInfo element={element} />
       </Section>
     </>
   )

@@ -5,8 +5,6 @@ import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions,
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 
-import PrioritySelect from './PrioritySelect'
-
 export interface TodoControls {
   onDeleteClick?: (todoid: string) => void
   onChangeStatus?: (todoid: string, status: TodoStatus, element?: any) => void
@@ -124,14 +122,14 @@ export const TodoBase = ({
           />
         )}
 
-        {(showOptions || (todo.metadata.priority !== PriorityType.noPriority && showPriority)) && (
+        {/* {(showOptions || (todo.metadata.priority !== PriorityType.noPriority && showPriority)) && (
           <PrioritySelect
             readOnly={readOnly}
             isVisible={element || (todo.metadata.priority !== PriorityType.noPriority && showPriority)}
             value={todo.metadata.priority}
             onPriorityChange={onPriorityChange}
           />
-        )}
+        )} */}
       </TodoOptions>
     </TodoContainer>
   )

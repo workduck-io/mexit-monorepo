@@ -57,7 +57,6 @@ import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
 import { withBlockOptions } from '../Components/Blocks'
 import { PlateFloatingLink } from '../Components/FloatingLink'
 
-import { createBlockModifierPlugin } from './createBlockModifierPlugin'
 import { createBlurSelectionPlugin } from './createBlurSelection'
 import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { createILinkPlugin } from './createILinkPlugin'
@@ -66,6 +65,7 @@ import { createMentionPlugin } from './createMentionsPlugin'
 import { createSectionSeparatorPlugin } from './createSectionSeparatorPlugin'
 import { createSuperBlockPlugin } from './createSuperBlock'
 import { createContentSuperBlockPlugin } from './createSuperContentBlock'
+import { createHighlightSuperBlockPlugin } from './createSuperHighlightPlugins'
 import { createTaskSuperBlockPlugin } from './createSuperTaskPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
@@ -109,6 +109,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     createSuperBlockPlugin(),
     createContentSuperBlockPlugin(),
     createTaskSuperBlockPlugin(),
+    createHighlightSuperBlockPlugin(),
 
     // elements
     createParagraphPlugin(), // paragraph element
@@ -178,7 +179,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     createNodeIdPlugin(optionsCreateNodeIdPlugin),
 
     // Shows share link, comments and reactions attached to the block
-    options?.include?.blockModifier !== true ? undefined : createBlockModifierPlugin(),
+    // options?.include?.blockModifier !== true ? undefined : createBlockModifierPlugin(),
 
     // serialization / deseriailization
 

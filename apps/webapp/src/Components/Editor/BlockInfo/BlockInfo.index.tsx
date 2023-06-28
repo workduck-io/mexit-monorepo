@@ -2,15 +2,14 @@ import { useMemo, useState } from 'react'
 
 import message2Line from '@iconify/icons-ri/message-2-line'
 import { Icon } from '@iconify/react'
-import { findNodePath, isSelectionExpanded, isUrl } from '@udecode/plate'
+import { isSelectionExpanded, isUrl, usePlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import { useFocused, useSelected } from 'slate-react'
 
-import { generateCommentId, MIcon, useAuthStore, useEditorStore, UserReaction } from '@mexit/core'
+import { generateCommentId, MIcon, mog, useAuthStore, useEditorStore, UserReaction } from '@mexit/core'
 import { getIconType, Popover } from '@mexit/shared'
 
 import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
-import { useReactionAPI } from '../../../Hooks/API/useCommentAndReactionAPI'
 import { useComments } from '../../../Hooks/useComments'
 import { useHighlights } from '../../../Hooks/useHighlights'
 import { reactionsWithCount, useReactions } from '../../../Hooks/useReactions'
@@ -28,30 +27,23 @@ import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './Bloc
  * Reactions
  * Comment
  */
-export const BlockInfo = (props: any) => {
-  const { children, element, attributes, editor } = props
+export const BlockInfo = ({ element }) => {
   const selected = useSelected()
   const focused = useFocused()
+  const editor = usePlateEditorRef()
 
-  const path = useMemo(() => findNodePath(editor, element), [editor, element])
-  const isNested = useMemo(() => path && 0 !== path.length - 1, [path])
   const isUserEditing = useEditorStore((state) => state.isEditing)
 
   // Whether the element is inline
-  // TODO: Find a way to only show this for first level blocks only
-  const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
   const analysis = useAnalysisStore((state) => state.analysis)
   // const isTable = useMemo(() => attributes['data-slate-table'], [attributes])
   const { getCommentsOfBlock, addComment, deleteComment } = useComments()
   const { getReactionsOfBlock, getReactionDetails, addReaction, deleteReaction } = useReactions()
   const { getHighlight } = useHighlights()
-  const { getBlockReactionDetails } = useReactionAPI()
   const [instanceId, setInstanceId] = useState<string>(nanoid())
 
-  const selectionExpanded = props?.editor && isSelectionExpanded(props?.editor)
-  // const selectionAtStart = props?.editor && isSelectionAtBlockStart(props?.editor)
+  const selectionExpanded = editor && isSelectionExpanded(editor)
 
-  // TODO: Fix check of whether the selection is inside a single block
   // const inSingleBlock = props?.editor?.selection && isRangeInSameBlock(props?.editor?.selection)
 
   const mergedSelected = selectionExpanded ? false : selected
@@ -125,12 +117,12 @@ export const BlockInfo = (props: any) => {
 
   // Whether to show the blockinfo popup beside the block
   const showBlockInfo = useMemo(() => {
-    return (mergedSelected && focused) || interactive || hasComments || hasReactions || showSource
+    return mergedSelected || (interactive && focused) || hasComments || hasReactions || showSource
   }, [mergedSelected, hasComments, focused, hasReactions, showSource, interactive, instanceId])
 
   const onToggleReaction = async (reactionVal: MIcon) => {
     // mog('Toggling reaction', { reactionVal, props })
-    const nodeid = getNodeIdFromEditor(props?.editor?.id)
+    const nodeid = getNodeIdFromEditor(editor?.id)
     const blockId = element?.id
     const currentUserDetail = useAuthStore.getState().userDetails
     const existingUserReaction = reactions.find(
@@ -162,7 +154,7 @@ export const BlockInfo = (props: any) => {
     return addComment({
       entityId: generateCommentId(),
       blockId: element?.id,
-      nodeId: getNodeIdFromEditor(props?.editor?.id),
+      nodeId: getNodeIdFromEditor(editor?.id),
       content
     })
       .then(() => {
@@ -175,18 +167,14 @@ export const BlockInfo = (props: any) => {
 
   const getReactionDetailsForBlock = async () => {
     const blockId = element?.id
-    const nodeId = getNodeIdFromEditor(props?.editor?.id)
+    const nodeId = getNodeIdFromEditor(editor?.id)
     const userReactions = await getReactionDetails(blockId, nodeId)
     return userReactions as UserReaction[]
   }
 
-  // Do not wrap the blockinfo around the inline / nested elements
-  return isInline || isNested ? (
-    children
-  ) : (
-    <BlockInfoBlockWrapper {...attributes}>
-      {children}
-      {showBlockInfo && !isInline && (
+  return (
+    <BlockInfoBlockWrapper>
+      {showBlockInfo && (
         <BlockInfoWrapper
           animate={!isUserEditing}
           contentEditable={false}
@@ -195,7 +183,7 @@ export const BlockInfo = (props: any) => {
           onMouseLeave={() => setHover(false)}
         >
           {showSource && !icon?.mexIcon && <Source source={sourceURL} />}
-          {(hasReactions || (mergedSelected && focused) || interactive || (!interactive && hover)) && (
+          {(hasReactions || mergedSelected || interactive || (!interactive && hover)) && (
             <Popover
               onClose={() => setInteractive(false)}
               render={() => (
@@ -208,7 +196,13 @@ export const BlockInfo = (props: any) => {
               placement="bottom-end"
               transparent
             >
-              <BlockInfoButton onClick={() => setInteractive(true)}>
+              <BlockInfoButton
+                onClick={(e) => {
+                  e.stopPropagation()
+                  mog('HELLO THERE')
+                  setInteractive(true)
+                }}
+              >
                 <BlockReaction previewReactions={previewReactions} />
               </BlockInfoButton>
             </Popover>

@@ -7,14 +7,13 @@ import { CenteredColumn, DisplayShortcut, IconButton } from '@workduck-io/mex-co
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Comment as CommentType, defaultContent, getDefaultContent, NodeEditorContent, useAuthStore } from '@mexit/core'
-import { ComboboxShortcuts, RelativeTime, ShortcutText } from '@mexit/shared'
+import { ComboboxShortcuts, ProfileImage, RelativeTime, ShortcutText } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { areEqual } from '../../Utils/hash'
 import { CommentEditor } from '../CommentEditor'
 import { CommentEditorWrapper } from '../CommentEditor/styled'
 import Plateless from '../Editor/Plateless'
-import { ProfileImage } from '../User/ProfileImage'
 
 import {
   CommentActions,
