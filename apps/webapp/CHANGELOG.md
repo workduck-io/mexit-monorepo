@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.23.10
+
+### Patch Changes
+
+- ad5b0816: Fix lastOpened in recents
+
 ## 0.23.9
 
 ### Patch Changes

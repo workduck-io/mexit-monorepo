@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.28
+
+### Patch Changes
+
+- ad5b0816: Fix lastOpened in recents
+
 ## 0.19.27
 
 ### Patch Changes
