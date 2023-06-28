@@ -34,9 +34,13 @@ export const NoteSidebar = () => {
   const baseNodeId = useDataStore((store) => store.baseNodeId)
   const lastOpened = useRecentsStore((store) => store.lastOpened)
   const addRecent = useRecentsStore((store) => store.addRecent)
+  const setpreferenceModifiedAtAndLastOpened = useUserPreferenceStore(
+    (store) => store.setpreferenceModifiedAtAndLastOpened
+  )
 
   if (!lastOpened?.notes?.includes(baseNodeId)) {
     addRecent(RecentType.notes, baseNodeId)
+    setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
   }
 
   const spaceId = useUserPreferenceStore((store) => store.activeNamespace)

@@ -20,7 +20,8 @@ import {
   useFloatingStore,
   useHighlightStore,
   useMetadataStore,
-  useRecentsStore
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore
 } from '@mexit/core'
 import { getDeserializeSelectionToNodes } from '@mexit/shared'
 
@@ -69,7 +70,9 @@ export function useSaveChanges() {
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const { saveHighlight } = useHighlights()
-  const addRecentNote = useRecentsStore((s) => s.addRecent)
+  const setpreferenceModifiedAtAndLastOpened = useUserPreferenceStore(
+    (store) => store.setpreferenceModifiedAtAndLastOpened
+  )
 
   /**
    * Save
@@ -82,6 +85,7 @@ export function useSaveChanges() {
     const nodeContent = useEditorStore.getState().nodeContent
 
     addRecent(RecentType.notes, node.nodeid)
+    setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
 
     setContent(node.nodeid, nodeContent)
     setSelection(undefined)
@@ -155,7 +159,8 @@ export function useSaveChanges() {
         setContent(nodeId, nodeContent)
         updateMetadata('notes', nodeId, metadata)
         updateDocument({ id: nodeId, contents: nodeContent, title })
-        addRecentNote(RecentType.notes, nodeId)
+        addRecent(RecentType.notes, nodeId)
+        setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
 
         return {
           nodeId: nodeId,

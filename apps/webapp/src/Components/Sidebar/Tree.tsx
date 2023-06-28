@@ -24,6 +24,7 @@ import {
   useDataStore,
   useEditorStore,
   useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore,
   useTreeStore
 } from '@mexit/core'
 import {
@@ -97,6 +98,9 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
   const [contextOpenNodeId, setContextOpenNodeId] = useState<string>(null)
   const location = useLocation()
   const addRecent = useRecentsStore((state) => state.addRecent)
+  const setpreferenceModifiedAtAndLastOpened = useUserPreferenceStore(
+    (store) => store.setpreferenceModifiedAtAndLastOpened
+  )
 
   useEffect(() => {
     setTreeState(initTree)
@@ -182,6 +186,7 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
       push(nodeId)
       goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
       addRecent(RecentType.notes, nodeId)
+      setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
     }
   }
 

@@ -1,6 +1,11 @@
 import React from 'react'
 
-import { RecentType, useRecentsStore, useSnippetStore } from '@mexit/core'
+import {
+  RecentType,
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useSnippetStore
+} from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -17,9 +22,13 @@ const SnippetList: React.FC<SnippetListProps> = ({ type = 'snippet' }) => {
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { goTo } = useRouting()
   const addRecent = useRecentsStore((store) => store.addRecent)
+  const setpreferenceModifiedAtAndLastOpened = useUserPreferenceStore(
+    (store) => store.setpreferenceModifiedAtAndLastOpened
+  )
 
   const onOpenSnippet = (id: string) => {
     addRecent(RecentType.snippet, id)
+    setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
     loadSnippet(id)
     const snippet = snippets[id]
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })
