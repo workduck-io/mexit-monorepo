@@ -35,7 +35,7 @@ export const NoteSidebar = () => {
   const lastOpened = useRecentsStore((store) => store.lastOpened)
   const addRecent = useRecentsStore((store) => store.addRecent)
 
-  if (!lastOpened?.notes.includes(baseNodeId)) {
+  if (!lastOpened?.notes?.includes(baseNodeId)) {
     addRecent(RecentType.notes, baseNodeId)
   }
 

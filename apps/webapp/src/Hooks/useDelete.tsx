@@ -82,9 +82,12 @@ export const useDelete = () => {
       const { newIds: newHistory, currentIndex: newCurIndex } = applyDeleteToIds(historyStack, currentIndex, newIlinks)
       updateHistory(newHistory, newCurIndex)
 
-      // Update Recents
-      const { newIds: newRecents } = applyDeleteToIds(lastOpened?.notes, 0, newIlinks)
-      updateLastOpened(newRecents)
+      // updating the lastOpened by getting the archived's nodeid
+      // and removing it from the lastOpened.notes
+
+      const nodeidToDelete = currentNode.nodeid
+      const newNotes = lastOpened?.notes.filter((note) => note !== nodeidToDelete)
+      updateLastOpened({ ...lastOpened, notes: newNotes })
 
       // Update BaseNodeId
       const baseId = archivedNodes.map((item) => item.path).indexOf(useDataStore.getState().baseNodeId)
@@ -100,7 +103,7 @@ export const useDelete = () => {
         await updateDocument({ indexKey: Indexes.ARCHIVE, id: nodeid, contents: content.content, title: path })
       })
 
-      mog('Delete', { archivedNodes, newIlinks, newHistory, newRecents })
+      mog('Delete', { archivedNodes, newIlinks, newHistory })
       setILinks(newIlinks)
       addInArchive(archivedNodes)
 

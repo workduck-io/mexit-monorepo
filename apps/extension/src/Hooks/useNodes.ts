@@ -59,7 +59,7 @@ export const useNodes = () => {
     const localBaseNode = nodeILinks.find((l) => l.path === baseNodePath)
 
     if (!localBaseNode) {
-      const lastOpenedNodeId = useRecentsStore.getState().lastOpened?.notes.at(0)
+      const lastOpenedNodeId = useRecentsStore.getState().lastOpened?.notes?.at(0)
       if (lastOpenedNodeId) {
         const node = getNode(lastOpenedNodeId)
 

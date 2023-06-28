@@ -1,6 +1,15 @@
 import ky from 'ky'
 
-import { AIEvent, apiURLs, DEFAULT_NAMESPACE, defaultContent, ListItemType, mog } from '@mexit/core'
+import {
+  AIEvent,
+  apiURLs,
+  DEFAULT_NAMESPACE,
+  defaultContent,
+  getStoreName,
+  ListItemType,
+  mog,
+  StoreIdentifier
+} from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
 
@@ -283,11 +292,25 @@ export const handleShortenerRequest = ({ subType, body, headers }) => {
   }
 }
 
-const _refreshTokenHook = (state) => async (request, _, response) => {
+const _refreshTokenHook = (key: string, state) => async (request, _, response) => {
   if (response && response.status === 401) {
     try {
-      const res = await client.get(apiURLs.calendar.getGoogleCalendarNewToken).json()
-      setAuthStateChrome({ ...state, accessToken: res })
+      const res = (await client.get(apiURLs.calendar.getGoogleCalendarNewToken).json()) as any
+
+      if (res?.accessToken) {
+        const existingState = state ?? {}
+
+        setAuthStateChrome(
+          {
+            ...existingState,
+            tokens: {
+              ...(existingState.tokens ?? {}),
+              GOOGLE_CAL: res.accessToken
+            }
+          },
+          key
+        )
+      }
     } catch (error) {
       throw new Error(error)
     }
@@ -321,12 +344,16 @@ export const handleAsyncCalendarRequest = async ({ subType, data }) => {
         })
     case 'GET_EVENTS':
       // eslint-disable-next-line no-case-declarations
-      const state = await getAuthStateFromChrome('mexit-calendars-extension')
+      const storeKey = getStoreName(StoreIdentifier.CALENDARS, true)
+
+      // eslint-disable-next-line no-case-declarations
+      const state = await getAuthStateFromChrome(storeKey)
+
       return await ky
         .get(data.url, {
           hooks: {
             beforeRequest: [(request) => request.headers.set('authorization', `Bearer ${state.tokens['GOOGLE_CAL']}`)],
-            afterResponse: [_refreshTokenHook(state)]
+            afterResponse: [_refreshTokenHook(storeKey, state)]
           },
           timeout: 20000,
           retry: 0

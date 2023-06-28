@@ -201,20 +201,23 @@ function DraftView() {
 
   const findLatestHighlightTime = (linkurl: string) => {
     const highlightsforaLink = getHighlightsOfUrl(linkurl)
-    highlightsforaLink.sort((a, b) => {
-      return b.createdAt - a.createdAt
-    })
-    return highlightsforaLink[0]?.createdAt ?? 0
+
+    if (highlightsforaLink) {
+      highlightsforaLink.sort((a, b) => {
+        return b.createdAt - a.createdAt
+      })
+      return highlightsforaLink[0]?.createdAt ?? 0
+    }
   }
   const initialLinks = useMemo(() => {
-    return links.sort(sortByCreated)
+    return links?.sort(sortByCreated)
   }, [links])
 
   const highlightsUpdater = useMemo(() => {
     let lastOpenedHighlightTime = 0
     lastOpenedHighlightTime = lastOpened?.highlight?.length > 0 ? findLatestHighlightTime(lastOpened?.highlight[0]) : 0
 
-    if (initialLinks.length > 0) {
+    if (initialLinks?.length > 0) {
       initialLinks.forEach((link) => {
         const highlightsfortheLink = getHighlightsOfUrl(link.url)
         const latestHighlightsFirst = highlightsfortheLink.sort((a, b) => {
@@ -232,7 +235,7 @@ function DraftView() {
   }, [links])
 
   useEffect(() => {
-    if (ilinks && ilinks.length > 0) {
+    if (ilinks && ilinks?.length > 0) {
       const validNotes = []
       const uniqueNotes = uniq([...bookmarks, ...(lastOpened?.notes ?? [])])
       uniqueNotes.forEach((id) => {
@@ -246,7 +249,7 @@ function DraftView() {
       setActivityNotes(validNotes.reverse())
     }
 
-    if (lastOpened?.snippet && lastOpened?.snippet.length > 0) {
+    if (lastOpened?.snippet && lastOpened?.snippet?.length > 0) {
       const validSnippets = []
       const uniqueSnippets = uniq([...bookmarks, ...(lastOpened?.snippet ?? [])])
 
@@ -300,19 +303,19 @@ function DraftView() {
         <Title>Mex Activity!</Title>
       </MainHeader>
 
-      {lastOpened?.notes.length === 0 && lastOpened?.snippet.length === 0 && lastOpened?.highlight.length === 0 && (
+      {lastOpened?.notes?.length === 0 && lastOpened?.snippet?.length === 0 && lastOpened?.highlight?.length === 0 && (
         <Info>No Activity Found</Info>
       )}
 
-      {lastOpened?.notes && lastOpened?.notes.length > 0 && (
+      {lastOpened?.notes && lastOpened?.notes?.length > 0 && (
         <>
           <MainHeader>
             <ActivityTitle>Recent Notes</ActivityTitle>
           </MainHeader>
 
           <CardsContainerParent>
-            {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes.length >= 3) ||
-              (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes.length > 1)) && (
+            {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes?.length >= 3) ||
+              (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes?.length > 1)) && (
               <CarouselButtons
                 onLeftClick={scrollToLeft}
                 onRightClick={scrollToRight}
@@ -355,15 +358,15 @@ function DraftView() {
         </>
       )}
 
-      {lastOpened?.snippet && lastOpened?.snippet.length > 0 && (
+      {lastOpened?.snippet && lastOpened?.snippet?.length > 0 && (
         <>
           <MainHeader>
             <ActivityTitle>Recent Snippets</ActivityTitle>
           </MainHeader>
 
           <CardsContainerParent>
-            {((window.innerWidth > parseInt(size.tiny) && lastOpened?.snippet.length >= 3) ||
-              (window.innerWidth <= parseInt(size.tiny) && lastOpened?.snippet.length > 1)) && (
+            {((window.innerWidth > parseInt(size.tiny) && lastOpened?.snippet?.length >= 3) ||
+              (window.innerWidth <= parseInt(size.tiny) && lastOpened?.snippet?.length > 1)) && (
               <CarouselButtons
                 onLeftClick={scrollToLeft2}
                 onRightClick={scrollToRight2}
@@ -401,14 +404,14 @@ function DraftView() {
         </>
       )}
 
-      {lastOpened?.highlight && lastOpened?.highlight.length > 0 && (
+      {lastOpened?.highlight && lastOpened?.highlight?.length > 0 && (
         <>
           <MainHeader>
             <ActivityTitle>Recent Captures</ActivityTitle>
           </MainHeader>
           <CardsContainerParent>
-            {((window.innerWidth > parseInt(size.tiny) && lastOpened?.highlight.length >= 3) ||
-              (window.innerWidth <= parseInt(size.tiny) && lastOpened?.highlight.length > 1)) && (
+            {((window.innerWidth > parseInt(size.tiny) && lastOpened?.highlight?.length >= 3) ||
+              (window.innerWidth <= parseInt(size.tiny) && lastOpened?.highlight?.length > 1)) && (
               <CarouselButtons
                 onLeftClick={scrollToLeft3}
                 onRightClick={scrollToRight3}
@@ -419,7 +422,7 @@ function DraftView() {
 
             <CardsContainer view={ViewType.Card} ref={containerRef3}>
               {lastOpened?.highlight &&
-                lastOpened?.highlight.map((linkurl) => {
+                lastOpened?.highlight?.map((linkurl) => {
                   const link = links?.find((s) => s.url === linkurl)
                   if (!linkurl || !link) {
                     return null
