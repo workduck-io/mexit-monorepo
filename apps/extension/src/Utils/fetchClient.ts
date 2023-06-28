@@ -12,10 +12,10 @@ export const getAuthStateFromChrome = async (key: string = AWS_AUTH_KEY) => {
   return JSON.parse(authState ?? '{}')?.state
 }
 
-export const setAuthStateChrome = async (data) => {
+export const setAuthStateChrome = async (data, key: string = AWS_AUTH_KEY) => {
   const sData = JSON.stringify(data)
   return await chrome.storage.local.set({
-    [AWS_AUTH_KEY]: sData
+    [key]: sData
   })
 }
 
