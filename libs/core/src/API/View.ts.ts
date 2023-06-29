@@ -18,6 +18,10 @@ export class ViewAPI {
     return await this.client.post(apiURLs.view.saveView, data, { ...options, headers: this.versionHeaders })
   }
 
+  async get(id: string) {
+    return await this.client.get(apiURLs.view.getView(id))
+  }
+
   async getAll(cacheConfig?: CacheConfig, options?: Options) {
     return this.client.get(apiURLs.view.getAllViews, cacheConfig, {
       ...options,

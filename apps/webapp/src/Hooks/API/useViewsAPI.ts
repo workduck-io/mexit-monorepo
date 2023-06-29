@@ -14,6 +14,11 @@ export const useViewAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setViews = useViewStore((store) => store.setViews)
 
+  const getView = async (id: string) => {
+    const res = await API.view.get(id)
+    return res
+  }
+
   const saveView = async (view: View) => {
     const { id: entityId, filters, path, ...properties } = view
     const parent = getParentEntity(path)?.parent
@@ -99,6 +104,7 @@ export const useViewAPI = () => {
   }
 
   return {
+    getView,
     saveView,
     getAllViews,
     deleteView
