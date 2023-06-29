@@ -265,7 +265,7 @@ const initializeSnippetsExtension = async (localSnippets: Snippets) => {
 
 const initializeLinksExtension = async () => {
   return await client
-    .get(apiURLs.links.getLinks)
+    .get(apiURLs.links.getAllLinks)
     .then((d) => d.json())
     .catch((error) => {
       mog('InitLinksError', { error })

@@ -1,7 +1,5 @@
 import toast from 'react-hot-toast'
 
-import md5 from 'md5'
-
 import {
   deleteQueryParams,
   extractLinksFromData,
@@ -136,7 +134,6 @@ export const useLinkURLs = () => {
 
 export const useURLsAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const setLinks = useLinkStore((store) => store.setLinks)
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
@@ -196,11 +193,10 @@ export const useURLsAPI = () => {
   }
 
   const deleteLink = async (link: Link) => {
-    const workspaceId = getWorkspaceId()
     const request = {
       headers: workspaceHeaders(),
       body: {
-        hashedURL: md5(`${workspaceId}${link.url}`)
+        url: link.url
       }
     }
 

@@ -1,4 +1,3 @@
-import md5 from 'md5'
 import create from 'zustand'
 
 import {
@@ -14,7 +13,6 @@ import {
   Settify,
   sortByCreated,
   URL_DOMAIN_REG,
-  useAuthStore,
   useDataStore,
   useHighlightStore,
   useLinkStore
@@ -340,8 +338,13 @@ export const useURLFilters = () => {
 }
 
 export const useURLsAPI = () => {
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setLinks = useLinkStore((store) => store.setLinks)
+
+  const getLink = async (linkUrl: string) => {
+    const data = await API.link.get(undefined, { searchParams: `url=${linkUrl}` })
+
+    return data
+  }
 
   /**
    * Fetches all links of the workspace
@@ -376,13 +379,10 @@ export const useURLsAPI = () => {
   }
 
   const deleteLink = async (link: Link) => {
-    const workspaceId = getWorkspaceId()
-    // Need hashed url
-    const hashedURL = md5(`${workspaceId}${link.url}`)
-    const data = await API.link.delete(hashedURL)
+    const data = await API.link.delete({ searchParams: `url=${link.url}` })
     return data
     // OOK
   }
 
-  return { getAllLinks, saveLink, deleteLink }
+  return { getLink, getAllLinks, saveLink, deleteLink }
 }

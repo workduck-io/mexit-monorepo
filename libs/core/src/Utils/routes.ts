@@ -162,9 +162,11 @@ export const apiURLs = {
   },
 
   links: {
-    getLinks: `${API_BASE_URLS.link}`,
+    getLink: `${API_BASE_URLS.link}`,
+    getAllLinks: `${API_BASE_URLS.link}/all`,
     saveLink: `${API_BASE_URLS.link}/shorten`,
-    deleteLink: (linkId: string) => `${API_BASE_URLS.link}/${linkId}`,
+    deleteLink: `${API_BASE_URLS.link}`,
+    // ↓ shortened link url using alias
     shortendLink: (shortId: string, workspaceId: string) => `${API_BASE_URLS.url}/${workspaceId}/${shortId}`
   },
 

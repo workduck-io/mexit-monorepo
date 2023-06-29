@@ -252,7 +252,7 @@ export const handleShortenerRequest = ({ subType, body, headers }) => {
   switch (subType) {
     case 'GET_ALL_LINKS': {
       return client
-        .get(apiURLs.links.getLinks, {
+        .get(apiURLs.links.getAllLinks, {
           headers: headers
         })
         .json()
@@ -279,8 +279,11 @@ export const handleShortenerRequest = ({ subType, body, headers }) => {
     }
     case 'DELETE_LINK': {
       return client
-        .delete(apiURLs.links.deleteLink(body.hashedURL), {
-          headers: headers
+        .delete(apiURLs.links.deleteLink, {
+          headers: headers,
+          searchParams: {
+            url: body.url
+          }
         })
         .then((d: any) => {
           return { message: d, error: null }
