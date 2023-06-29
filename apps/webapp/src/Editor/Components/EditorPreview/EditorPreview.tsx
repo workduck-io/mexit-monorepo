@@ -10,7 +10,16 @@ import { useTheme } from 'styled-components'
 import { MexIcon, SecondaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { BannerType, getNameFromPath, NodeEditorContent, useContentStore, useDataStore, useMetadataStore,useMultipleEditors, useRouteStore  } from '@mexit/core'
+import {
+  BannerType,
+  getNameFromPath,
+  NodeEditorContent,
+  useContentStore,
+  useDataStore,
+  useMetadataStore,
+  useMultipleEditors,
+  useRouteStore
+} from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
@@ -29,9 +38,7 @@ import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
 import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import useSocket from '../../../Hooks/useSocket'
 import { useTags } from '../../../Hooks/useTags'
-import { SocketActionType } from '../../../Types/Socket'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 
 export interface EditorPreviewProps {
@@ -181,7 +188,7 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onC
   const changeEditorState = useMultipleEditors((store) => store.changeEditorState)
   const lastOpenedEditorId = useMultipleEditors((store) => store.lastOpenedEditor)
 
-  const fromSocket = useSocket()
+  // const fromSocket = useSocket()
   const location = useLocation()
   const { saveAndClearBuffer } = useEditorBuffer()
   const routePath = `${ROUTE_PATHS.node}/${nodeId}`
@@ -198,10 +205,10 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onC
       changeEditorState(nodeId, { editing: true })
 
       removePreviousRouteInfo()
-      fromSocket.sendJsonMessage({
-        action: SocketActionType.ROUTE_CHANGE,
-        data: { route: routePath }
-      })
+      // fromSocket.sendJsonMessage({
+      //   action: SocketActionType.ROUTE_CHANGE,
+      //   data: { route: routePath }
+      // })
     }
   }
 
@@ -212,7 +219,7 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onC
       saveAndClearBuffer(false)
       removeEditor(nodeId)
       removeRouteInfo(routePath)
-      fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
+      // fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
     }
   }, [])
 

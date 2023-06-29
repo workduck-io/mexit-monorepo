@@ -1,17 +1,12 @@
 import { useEffect } from 'react'
-import useWebSocket from 'react-use-websocket'
 
-import { useAuthStore as useDwindleStore } from '@workduck-io/dwindle'
-
-import { config, mog, useAuthStore } from '@mexit/core'
+import { mog } from '@mexit/core'
 
 import { SocketActionType } from '../Types/Socket'
 
 import { useBroadcastHandler } from './useBroadcastHandler'
 
 const useSocket = () => {
-  const userId = useAuthStore((s) => s.userDetails?.id)
-  const idToken = useDwindleStore((s) => s.userCred?.token)
   const { updatesHandler } = useBroadcastHandler()
 
   const handleAction = (action: SocketActionType, data: any) => {
@@ -40,22 +35,7 @@ const useSocket = () => {
     })
   }, [])
 
-  const utilFunctions = useWebSocket(
-    config.baseURLs.MEXIT_WEBSOCKET_URL,
-    {
-      onOpen: () => mog('CONNECTION OPENED'),
-      retryOnError: false,
-      onError: (event) => {
-        mog('Socket Error Occured', { event })
-      },
-      onMessage: handleSocketMessage,
-      queryParams: { userId, Authorizer: idToken },
-      share: true
-    },
-    false // !!(idToken && userId)
-  )
-
-  return utilFunctions
+  return
 }
 
 export default useSocket
