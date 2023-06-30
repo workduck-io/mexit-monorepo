@@ -51,19 +51,21 @@ export const useStore = () => {
     return false
   }
 
-  const restoreFromS3 = async (): Promise<boolean> => {
+  const restoreFromS3 = async (): Promise<string> => {
     const workspaceId = getWorkspaceIdFromStorage()
     const backup = await BackupStorage.fetchFromS3(workspaceId)
       .then((response) => response.transformToString())
       .then((string) => {
         return JSON.parse(string)
       })
+    const timestamp: string = backup.find((item) => item.key === 'timestamp')?.value
 
     // First putting all the values back into backup store, then copy it to keyval db
-    await BackupStorage.putBulkValue(workspaceId, backup)
+    // TODO: Removing the timestamp key before restoring right now, will need to only remove it from local store
+    await BackupStorage.putBulkValue(workspaceId, backup.slice(0, -1))
     await restore()
 
-    return true
+    return timestamp
   }
 
   return {

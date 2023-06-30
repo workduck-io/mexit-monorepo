@@ -12,6 +12,7 @@ const {
 
 export const API_BASE_URLS = {
   bookmarks: `${MEXIT_BACKEND_URL_BASE}/userStar`,
+  broadcast: `${MEXIT_BACKEND_URL_BASE}/broadcast`,
   calendar: `${MEXIT_BACKEND_URL_BASE}/calendar`,
   oauth2: `${MEXIT_BACKEND_URL_BASE}/oauth2`,
   archive: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
@@ -47,6 +48,10 @@ export const apiURLs = {
   bookmarks: {
     create: (nodeID: string) => `${API_BASE_URLS.bookmarks}/${nodeID}`,
     getAll: `${API_BASE_URLS.bookmarks}`
+  },
+
+  broadcast: {
+    getAll: `${API_BASE_URLS.broadcast}/event`
   },
 
   calendar: {

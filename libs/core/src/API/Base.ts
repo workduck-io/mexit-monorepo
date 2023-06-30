@@ -4,6 +4,7 @@ import { KYClient } from '@workduck-io/dwindle'
 
 import { AiAPI } from './AI'
 import { BookmarkAPI } from './Bookmarks'
+import { BroadcastAPI } from './Broadcast'
 import { CalendarAPI } from './Calendar'
 import { CommentAPI } from './Comment'
 import { HighlightAPI } from './Highlight'
@@ -29,6 +30,7 @@ class APIClass {
   public share: ShareAPI
   public snippet: SnippetAPI
   public bookmark: BookmarkAPI
+  public broadcast: BroadcastAPI
   public reaction: ReactionAPI
   public comment: CommentAPI
   public calendar: CalendarAPI
@@ -58,6 +60,7 @@ class APIClass {
     this.share = new ShareAPI(this.client)
     this.snippet = new SnippetAPI(this.client)
     this.bookmark = new BookmarkAPI(this.client)
+    this.broadcast = new BroadcastAPI(this.client)
     this.reaction = new ReactionAPI(this.client)
     this.comment = new CommentAPI(this.client)
     this.calendar = new CalendarAPI(this.client)
