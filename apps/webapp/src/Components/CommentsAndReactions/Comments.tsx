@@ -6,7 +6,14 @@ import { PlateProvider } from '@udecode/plate'
 import { CenteredColumn, DisplayShortcut, IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Comment as CommentType, defaultContent, getDefaultContent, NodeEditorContent, useAuthStore } from '@mexit/core'
+import {
+  Comment as CommentType,
+  defaultContent,
+  ELEMENT_PARAGRAPH,
+  getDefaultContent,
+  NodeEditorContent,
+  useAuthStore
+} from '@mexit/core'
 import { ComboboxShortcuts, ProfileImage, RelativeTime, ShortcutText } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
@@ -86,7 +93,7 @@ interface NewCommentProps {
 }
 
 export const NewComment = ({ onAddComment, byUser }: NewCommentProps) => {
-  const [content, setContent] = React.useState<NodeEditorContent>([getDefaultContent()])
+  const [content, setContent] = React.useState<NodeEditorContent>([getDefaultContent(ELEMENT_PARAGRAPH)])
   const [commentEditorId = '', setCommentEditorId] = React.useState(() => Math.random().toString(36).substring(7))
 
   const onChange = (content: NodeEditorContent) => {

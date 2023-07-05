@@ -10,6 +10,7 @@ interface SuperBlockTitleInfoProps {
   heading: string
   value: PropertiyFields
   icon: MIcon
+  onChange?: (properties: Partial<PropertiyFields>) => void
 }
 
 const SuperBlockTitle: React.FC<SuperBlockTitleInfoProps> = ({ icon, heading, name = 'title', value }) => {

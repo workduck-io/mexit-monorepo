@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import { useSelected } from 'slate-react'
 import { useTheme } from 'styled-components'
 
 import { IconButton } from '@workduck-io/mex-components'
@@ -12,6 +11,7 @@ import { Section } from './SuperBlock.styled'
 
 interface BlockTagsProps {
   name: string
+  isSelected?: boolean
   value: Record<string, any>
   onChange: (propertiesToUpdate: Record<string, any>) => void
 }
@@ -22,9 +22,7 @@ const TagMenu = ({ onCreate, onAdd }) => {
   return <AddTagMenu createTag={onCreate} tags={allTags} addTag={onAdd} />
 }
 
-const BlockTags = ({ name, value, onChange }: BlockTagsProps) => {
-  const allowAdd = useSelected()
-
+const BlockTags = ({ name, value, isSelected, onChange }: BlockTagsProps) => {
   const addTag = useDataStore((s) => s.addTag)
 
   const tags = value?.[name] ?? []
@@ -62,7 +60,7 @@ const BlockTags = ({ name, value, onChange }: BlockTagsProps) => {
   return (
     <Group contentEditable={false}>
       {tags.length > 0 && <TagsLabel tags={tags} onClick={addTagFilter} onDelete={(val: string) => onRemoveTag(val)} />}
-      {allowAdd && <TagMenu onCreate={onAddNewTag} onAdd={onAddNewTag} />}
+      {isSelected && <TagMenu onCreate={onAddNewTag} onAdd={onAddNewTag} />}
     </Group>
   )
 }
@@ -75,7 +73,7 @@ const RenderData = ({ value }) => {
   )
 }
 
-const SuperBlockFooter = ({ value, onChange, FooterRightRenderer, log = '' }) => {
+const SuperBlockFooter = ({ isSelected, value, onChange, FooterRightRenderer }) => {
   const theme = useTheme()
   const [show, setShow] = useState(false)
 
@@ -86,7 +84,7 @@ const SuperBlockFooter = ({ value, onChange, FooterRightRenderer, log = '' }) =>
         {false && (
           <IconButton title="Log" onClick={() => setShow((s) => !s)} icon={getMIcon('ICON', 'mdi:math-log').value} />
         )}
-        <BlockTags name="tags" value={value} onChange={onChange} />
+        <BlockTags isSelected={isSelected} name="tags" value={value} onChange={onChange} />
         {FooterRightRenderer && <FooterRightRenderer value={value} onChange={onChange} />}
       </Section>
     </>

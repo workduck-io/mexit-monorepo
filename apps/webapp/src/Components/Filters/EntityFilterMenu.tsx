@@ -26,6 +26,7 @@ const EntityFilterMenu = ({ onChange }) => {
   return (
     <SortSectionWrapper>
       <Menu
+        border
         noHover
         multiSelect
         key={`${JSON.stringify(entities)}-${viewId}`}

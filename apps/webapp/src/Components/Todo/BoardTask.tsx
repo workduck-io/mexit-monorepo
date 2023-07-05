@@ -82,14 +82,14 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
       []
     )
 
-    if (!todo) return null
+    // if (!todo) return null
 
     const priorityShown = todo?.metadata?.priority !== PriorityType.noPriority
 
     return (
       <TaskCard
-        id={`${todo.nodeid}_${todo.id}`}
-        key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
+        id={`${nodeid}_${todoid}`}
+        key={`TODO_PREVIEW_${nodeid}_${todoid}`}
         priorityShown={priorityShown}
         onMouseDown={(event) => {
           if (staticBoard) return
@@ -99,7 +99,16 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           }
         }}
       >
-        <TaskSuperBlock id={block.id} type={block.type} parent={block.parent} value={block.data.properties} metadata={block.data.metadata} isActive isSelected isReadOnly />
+        <TaskSuperBlock
+          id={block.id}
+          type={block.type}
+          parent={block.parent}
+          value={block.data.properties}
+          metadata={block.data.metadata}
+          isActive
+          isSelected
+          isReadOnly
+        />
         {/* <Todo
           showDelete={false}
           todoid={todo.id}

@@ -27,7 +27,7 @@ const SortMenu = ({ sortOrder, sortType, onSortOrderChange, onSortTypeChange }: 
   const sortOptions = useViewFilterStore((store) => store.sortOptions)
 
   return (
-    <SortSectionWrapper>
+    <SortSectionWrapper border>
       <Menu
         noHover
         values={

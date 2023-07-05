@@ -88,21 +88,31 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
   return (
     <ContentBlockContainer>
       {/* <BlockHeader isOpen={isOpen} onClick={handleToggleAccordion}> */}
-        <Group>
-          <VerticalStretch>
-            <MexIcon
-              color={theme.tokens.colors.primary.default}
-              width={20}
-              height={20}
-              icon={SearchBlockIcons[block?.entity]}
-            />
-          </VerticalStretch>
-          <ContentSuperBlock value={block.data.properties} metadata={block.data.metadata} isActive isSelected isReadOnly id={block.id} parent={block.parent} type={SuperBlocks.CONTENT}>
-            {/* <Plateless content={content} /> */}
-          </ContentSuperBlock>
-          {/* <BlockContent isOpen={isOpen}>{content}</BlockContent> */}
-        </Group>
-        {/* {canOpen && <Chevron isOpen={isOpen} $noHover height={20} width={20} cursor="pointer" icon={arrowLeftSLine} />} */}
+      <Group>
+        <VerticalStretch>
+          <MexIcon
+            color={theme.tokens.colors.primary.default}
+            width={20}
+            height={20}
+            icon={SearchBlockIcons[block?.entity]}
+          />
+        </VerticalStretch>
+        <ContentSuperBlock
+          value={block.data.properties}
+          metadata={block.data.metadata}
+          isActive
+          isSelected
+          isReadOnly
+          id={block.id}
+          parent={block.parent}
+          type={SuperBlocks.CONTENT}
+        >
+          <div style={{ lineHeight: 1.58 }}>{block.text}</div>
+          {/* <Plateless content={content} /> */}
+        </ContentSuperBlock>
+        {/* <BlockContent isOpen={isOpen}>{content}</BlockContent> */}
+      </Group>
+      {/* {canOpen && <Chevron isOpen={isOpen} $noHover height={20} width={20} cursor="pointer" icon={arrowLeftSLine} />} */}
       {/* </BlockHeader> */}
     </ContentBlockContainer>
   )

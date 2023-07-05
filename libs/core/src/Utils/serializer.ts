@@ -27,7 +27,8 @@ export const directPropertyKeys = [
   'status',
   'priority',
   'lang',
-  'metadata'
+  'metadata',
+  'properties'
 ]
 
 export const PropKeysArray = [...directPropertyKeys] as const

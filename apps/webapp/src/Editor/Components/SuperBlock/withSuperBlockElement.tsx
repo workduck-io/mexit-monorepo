@@ -1,9 +1,7 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 
 import { Value } from '@udecode/plate'
 import { useFocused, useReadOnly, useSelected } from 'slate-react'
-
-import { convertContentToRawText, getSlug } from '@mexit/core'
 
 import useUpdateBlock from '../../Hooks/useUpdateBlock'
 
@@ -24,12 +22,6 @@ export const withSuperBlockElement =
     const handleOnChange = (properties: Partial<PropertiyFields>) => {
       updateMetadataProperties(element, properties)
     }
-
-    useEffect(() => {
-      if (element.children) {
-        handleOnChange({ title: getSlug(convertContentToRawText(element.children)) })
-      }
-    }, [element.children])
 
     if (!element) return <></>
 
