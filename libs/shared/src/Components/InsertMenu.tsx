@@ -113,7 +113,7 @@ const AnchorNode = ({ selected, items, icon, title, shortcut }) => {
       <StyledButton>
         <Group>
           <IconDisplay icon={itemIcon} size={14} />
-          <span>{label}</span>
+          <span id="label">{label}</span>
         </Group>
       </StyledButton>
     </Tooltip>

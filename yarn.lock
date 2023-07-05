@@ -3999,10 +3999,10 @@
     polished "^4.1.4"
     react-spring "^9.5.2"
 
-"@workduck-io/mex-search@0.0.9":
-  version "0.0.9"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-search/0.0.9/e371c2492fb6997152d2ac96e1df4c169eb452ad#e371c2492fb6997152d2ac96e1df4c169eb452ad"
-  integrity sha512-L+TDKRhGnGLwxo+BzhKEjMhC9OjYCStyC3LfUlgB6/S2HaIuj1Cp4Fiz5QXlxbZxmEyk2IaKozjKbID9myNUig==
+"@workduck-io/mex-search@0.0.11":
+  version "0.0.11"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-search/0.0.11/9a99743585b9c12af15cd7f64868f9c8112a6838#9a99743585b9c12af15cd7f64868f9c8112a6838"
+  integrity sha512-1eESegsHj1xv6YgPo0OXj1OWaYIMDLfU748s8rb127fKgQMjGKWZX7PYSI+3wjbtell0aPc0lM0Azmjuh6qb6g==
   dependencies:
     "@workduck-io/flexsearch" "0.7.22"
     "@workduck-io/mex-utils" "^0.0.9"

@@ -21,6 +21,36 @@ export enum TodoStatus {
   completed = 'completed'
 }
 
+export enum TaskStatusType {
+  backlog = 'backlog',
+  todo = 'todo',
+  inProgress = 'in-progress',
+  completed = 'completed'
+}
+
+export const TaskStatus = {
+  [TaskStatusType.backlog]: {
+    id: TaskStatusType.backlog,
+    label: 'Backlog',
+    icon: 'fluent:border-none-24-filled'
+  },
+  [TaskStatusType.todo]: {
+    id: TaskStatusType.todo,
+    label: 'Todo',
+    icon: 'mex:task-todo'
+  },
+  [TaskStatusType.inProgress]: {
+    id: TaskStatusType.inProgress,
+    label: 'In progress',
+    icon: 'mex:task-progress'
+  },
+  [TaskStatusType.completed]: {
+    id: TaskStatusType.completed,
+    label: 'Completed',
+    icon: 'mex:task-complete'
+  }
+}
+
 export const TodoRanks: Record<PriorityType, number> = {
   noPriority: 0,
   low: 1,

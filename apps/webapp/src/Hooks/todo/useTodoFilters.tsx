@@ -2,9 +2,7 @@ import create from 'zustand'
 import createContext from 'zustand/context'
 import { devtools } from 'zustand/middleware'
 
-import { Entities } from '@workduck-io/mex-search'
-
-import { Filter, Filters, GlobalFilterJoin, mog, View, ViewType } from '@mexit/core'
+import { Filter, Filters, GlobalFilterJoin, mog, SuperBlocks, View, ViewType } from '@mexit/core'
 import { SearchEntityType } from '@mexit/shared'
 
 import { FilterStore } from '../useFilters'
@@ -22,7 +20,7 @@ export const createViewFilterStore = () =>
         sortType: 'status',
         sortOrder: 'ascending',
         entities: [],
-        setEntities: (entities: Array<Entities>) => set({ entities }),
+        setEntities: (entities: Array<SuperBlocks>) => set({ entities }),
         initializeState: (view: View) => {
           set({
             entities: view.entities ?? [],

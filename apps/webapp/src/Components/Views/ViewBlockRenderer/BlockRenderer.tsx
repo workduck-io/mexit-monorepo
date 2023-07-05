@@ -1,4 +1,4 @@
-import { Entities } from '@workduck-io/mex-search/src/utils'
+import { SuperBlocks } from '@mexit/core'
 
 import ContentBlock from './ContentBlock'
 import ImageRenderer from './ImageRenderer'
@@ -6,17 +6,17 @@ import TodoRenderer from './TodoRenderer'
 
 type BlockRendererProps = {
   block: any
-  type: Entities
+  type: SuperBlocks
   selectedBlockId: string
 }
 
 const BlockRenderer: React.FC<BlockRendererProps> = ({ type, ...rest }) => {
   switch (type) {
-    case Entities.IMAGE:
+    case SuperBlocks.MEDIA:
       return <ImageRenderer {...rest} />
-    case Entities.TASK:
+    case SuperBlocks.TASK:
       return <TodoRenderer {...rest} />
-    case Entities.CONTENT_BLOCK:
+    case SuperBlocks.CONTENT:
     default:
       return <ContentBlock {...rest} />
   }

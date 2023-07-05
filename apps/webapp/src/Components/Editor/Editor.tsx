@@ -21,6 +21,7 @@ const EditorWrapper = styled(EditorStyles)<{ withShadow?: boolean }>`
   max-width: min(calc(100vw - 4rem), 820px);
   margin: 0 auto;
   padding: 1rem;
+  width: 100%;
   min-height: 100%;
 
   transition: background 0.5s ease-in-out;

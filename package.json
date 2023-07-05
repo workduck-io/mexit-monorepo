@@ -20,7 +20,7 @@
     "*.{ts,tsx}": "eslint --cache --fix"
   },
   "dependencies": {
-    "@workduck-io/mex-search": "0.0.9",
+    "@workduck-io/mex-search": "0.0.11",
     "buffer": "^6.0.3",
     "idb": "^7.1.1",
     "react-dnd": "^16.0.1",

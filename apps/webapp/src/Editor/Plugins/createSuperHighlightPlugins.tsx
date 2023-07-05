@@ -3,6 +3,7 @@ import { PlatePlugin } from '@udecode/plate-core'
 import { SuperBlocks } from '@mexit/core'
 
 import HighlightSuperBlock from '../Components/SuperBlock/HighlightSuperBlock'
+import { withSuperBlockElement } from '../Components/SuperBlock/withSuperBlockElement'
 
 /**
  * Enables support for Super Block - HIGHLIGHT.
@@ -20,7 +21,7 @@ export const createHighlightSuperBlockPlugin = (): PlatePlugin => ({
       }
     }
   },
-  component: HighlightSuperBlock,
+  component: withSuperBlockElement(HighlightSuperBlock),
   isInline: false,
   isVoid: false
 })

@@ -5,3 +5,7 @@ export enum SuperBlocks {
   HIGHLIGHT = 'super-block-highlight',
   CAPTURE = 'super-block-capture'
 }
+
+export type SuperBlocksType<Str extends string> = `super-block-${Lowercase<Str>}`
+
+let blockType: SuperBlocksType<'content'>

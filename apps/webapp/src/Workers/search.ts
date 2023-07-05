@@ -6,6 +6,7 @@ import { exposeX } from './worker-utils'
 
 let searchX = new SearchX()
 
+
 let hasInitialized = false
 
 export interface InitializeSearchEntity {
@@ -27,9 +28,9 @@ const searchWorker = {
 
     try {
       searchX.initializeSearch({
-        ilinks: fileData.ilinks,
+        ilinks: fileData.ilinks as any,
         highlights: fileData.highlights as any,
-        links: fileData.links,
+        links: fileData.links ?? [],
         reminders: fileData.reminders,
         contents: { contents: fileData.contents } as any,
         snippets: {
@@ -59,6 +60,7 @@ const searchWorker = {
     })
   },
   updateDoc: (doc: IUpdateDoc) => {
+    console.log('Updating doc', { doc })
     searchX.addOrUpdateDocument({
       ...doc,
       contents: doc.contents?.map((item) => ({ ...item, metadata: item.metadata ?? {} }))
@@ -73,6 +75,9 @@ const searchWorker = {
   },
 
   searchIndex: (indexKey: Indexes, query: ISearchQuery) => {
+
+    console.log("N", searchX._graphX.findChildGraph("NODE_C68kY8GJ3EWi3UQTFKxEL"), searchX._graphX.getLink("NODE_C68kY8GJ3EWi3UQTFKxEL", "TEMP_EcYcC" ), searchX._indexMap['MAIN'].get("TEMP_EcYcC"))
+    console.log("NODES", searchX._graphX.getRelatedNodes("NODE_C68kY8GJ3EWi3UQTFKxEL"))
     try {
       const res = searchX.search({ options: query, indexKey })
       mog('SearchX Results:', { res, query })

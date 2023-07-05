@@ -42,6 +42,8 @@ export const BlockInfoBlockWrapper = styled.div`
 `
 
 export const BlockInfoButton = styled(Button)`
+  background: none;
+  box-shadow: none;
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};

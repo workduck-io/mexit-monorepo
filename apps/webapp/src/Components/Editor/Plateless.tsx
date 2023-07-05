@@ -276,19 +276,23 @@ const RenderPlateless = React.memo<RenderPlatelessProps>(
       content.map((node, i) => {
         if (Object.keys(typeMap).includes(node?.type)) {
           const RenderItem = typeMap[node?.type]
+
           return (
             <RenderItem key={`${node?.type}-${i}`} node={node}>
               <RenderPlateless typeMap={typeMap} content={node.children} multiline={multiline} />
             </RenderItem>
           )
         }
+
         if (node.type === undefined && node.text !== undefined) {
           return plainTextRenderer(node)
         }
+
         mog('Plateless Error: Cannot render node', { node })
         // Unrenderable elements are skipped
         return null
       })
+
     return <>{childrenRender}</>
   }
 )

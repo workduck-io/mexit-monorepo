@@ -62,8 +62,6 @@ const IconItem = ({ type, value }) => {
 export const IconDisplay = ({ icon, ...rest }: IconDisplayProps) => {
   if (!icon) return null
 
-  console.log('TYPE OF ICON', { icon })
-
   return (
     <IconWrapper {...rest} type={icon.type}>
       <IconItem {...icon} />

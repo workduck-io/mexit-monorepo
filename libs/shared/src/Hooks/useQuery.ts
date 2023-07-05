@@ -1,6 +1,6 @@
 import { Entities, ISearchQuery, ISimpleQueryUnit, QueryUnit, SimpleQueryType } from '@workduck-io/mex-search'
 
-import { Filter, FilterJoin, FilterType } from '@mexit/core'
+import { Filter, FilterJoin, FilterType, SuperBlocks } from '@mexit/core'
 
 export const useQuery = () => {
   const getJoinType = (joinType: FilterJoin) => {
@@ -47,7 +47,7 @@ export const useQuery = () => {
     return transformedQueries
   }
 
-  const generateFilterSetQuery = (filterSets: Array<Array<Filter>>, entities: Array<Entities>): any => {
+  const generateFilterSetQuery = (filterSets: Array<Array<Filter>>, entities: Array<SuperBlocks>): any => {
     const querySets = filterSets.reduce((prev, filters, currentIndex) => {
       const queryArray: ISearchQuery = []
 

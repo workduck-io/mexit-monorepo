@@ -1,7 +1,3 @@
-import { Value } from '@udecode/plate'
-import { useFocused, useSelected } from 'slate-react'
-import { useTheme } from 'styled-components'
-
 import { DefaultMIcons } from '@mexit/shared'
 
 import { SuperBlockProps } from '../SuperBlock.types'
@@ -10,25 +6,20 @@ import { SuperBlock } from '..'
 
 import { TaskSuperBlockFooter } from './TaskSuperBlockFooter'
 
-const TaskSuperBlock = <V extends Value>(props: SuperBlockProps<V>) => {
-  const theme = useTheme()
-  const isFocused = useFocused()
-  const isSelected = useSelected()
+const TaskSuperBlock: React.FC<SuperBlockProps> = (props) => {
+  const { children, ...restProps } = props
 
   return (
     <SuperBlock
-      element={props.element}
-      $isActive={isFocused}
-      $isSelected={isSelected}
-      LeftHeaderRenderer={() => <SuperBlockTitle icon={DefaultMIcons.TASK} title="Task" />}
+      {...(restProps as any)}
+      $isActive
+      $isSelected
+      LeftHeaderRenderer={() => (
+        <SuperBlockTitle onChange={restProps.onChange} icon={DefaultMIcons.TASK} heading="Task" value={props.value} />
+      )}
       FooterRightComponent={TaskSuperBlockFooter}
     >
-      {props.children}
-      {/* {true && (
-        <pre style={{ padding: '1rem' }} contentEditable={false}>
-          {JSON.stringify(props.element.metadata, null, 4)}
-        </pre>
-      )} */}
+      {children}
     </SuperBlock>
   )
 }

@@ -172,4 +172,5 @@ export const addIconsToIconify = () => {
   addIcon('mex:task-todo', TaskTodoIcon)
   addIcon('mex:task-progress', TaskProgressIcon)
   addIcon('mex:task-complete', TaskCompleteIcon)
+  addIcon('mex:task-backlog', TaskCompleteIcon)
 }

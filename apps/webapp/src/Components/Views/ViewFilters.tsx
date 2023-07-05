@@ -1,6 +1,4 @@
-import { Entities } from '@workduck-io/mex-search'
-
-import { ViewType } from '@mexit/core'
+import { SuperBlocks, ViewType } from '@mexit/core'
 
 import { useViewFilters } from '../../Hooks/todo/useTodoFilters'
 import SearchFilters from '../../Views/SearchFilters'
@@ -38,7 +36,7 @@ const ViewSearchFilters = () => {
         changeCurrentFilter={changeCurrentFilter}
         resetCurrentFilters={resetCurrentFilters}
         filters={filters}
-        onEntityFilterChange={(entity: Entities) => {
+        onEntityFilterChange={(entity: SuperBlocks) => {
           if (entities.includes(entity)) {
             onChangeEntities(entities.filter((e) => e !== entity))
           } else {

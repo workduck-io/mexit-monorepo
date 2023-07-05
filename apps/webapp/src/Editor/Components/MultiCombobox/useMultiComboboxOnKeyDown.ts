@@ -29,6 +29,7 @@ import {
 
 import { QuickLinkType } from '../../constants'
 import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
+import useUpdateBlock from '../../Hooks/useUpdateBlock'
 import { ComboboxKey, IComboboxItem, InsertableElement } from '../../Types/Combobox'
 import {
   ComboConfigData,
@@ -71,6 +72,7 @@ const getInternalItemType = (item, triggerType) => {
 
 export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?: any) => {
   const closeMenu = useComboboxStore((state) => state.closeMenu)
+  const { updateMetadataProperties } = useUpdateBlock()
 
   return (editor: PlateEditor, item: IComboboxItem, elementType?: string, tab?: boolean) => {
     try {
@@ -141,6 +143,15 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             url: item.key,
             children: [{ text: item.text }]
           }
+        } else if (itemType === QuickLinkType.tags) {
+          const node = getBlockAbove(editor, { block: true, mode: 'highest' })
+
+          if (node) {
+            const [element, path]: any = node
+
+            const tags = element.properties?.tags ?? []
+            updateMetadataProperties(element, { tags: [...tags.filter(t => t.value !== item.text), { value: item.text }] }, path)
+          }
         } else if (itemType === QuickLinkType.prompts) {
           const resultIndex = usePromptStore.getState().resultIndexes[item.key]
           const promptResult = usePromptStore.getState().results[item.key]?.at(resultIndex)?.at(0)
@@ -151,6 +162,14 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
           InsertedElement = {
             ...InsertedElement,
             value: item.key
+          }
+
+          const node = getBlockAbove(editor, { block: true, mode: 'highest' })
+          if (node) {
+            const [element, path]: any = node
+            const mentions = element.properties?.mentions ?? []
+
+            updateMetadataProperties(element, { mentions: [...mentions.filter(m => m.value !== item.key), { value: item.key }] }, path)
           }
           if (comboType.onItemInsert && tab !== true) comboType.onItemInsert(item.text)
         } else if (itemType === QuickLinkType.taskView) {
@@ -181,7 +200,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
           InsertedElement = { ...InsertedElement, ...item.additional }
         }
 
-        // mog('Inserting', { InsertedElement })
+        console.log('ITEM IS', { item })
 
         insertNodes<TElement>(editor, InsertedElement)
 

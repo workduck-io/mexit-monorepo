@@ -1,5 +1,6 @@
 import {
   createBoldPlugin,
+  createExitBreakPlugin,
   createImagePlugin,
   createItalicPlugin,
   createLinkPlugin,
@@ -10,6 +11,7 @@ import {
   createPlugins,
   createSelectOnBackspacePlugin,
   createSingleLinePlugin,
+  createSoftBreakPlugin,
   createStrikethroughPlugin,
   createUnderlinePlugin,
   ELEMENT_LINK,
@@ -41,6 +43,8 @@ import TagElement from '../../../Editor/Components/Tags/TagElement'
 import { createILinkPlugin } from '../../../Editor/Plugins/createILinkPlugin'
 import { createInlineBlockPlugin } from '../../../Editor/Plugins/createInlineBlockPlugin'
 import { createMentionPlugin } from '../../../Editor/Plugins/createMentionsPlugin'
+import { createSuperBlockPlugin } from '../../../Editor/Plugins/createSuperBlock'
+import { createTaskSuperBlockPlugin } from '../../../Editor/Plugins/createSuperTaskPlugin'
 import { createTagPlugin } from '../../../Editor/Plugins/createTagPlugin'
 import { createTodoPlugin } from '../../../Editor/Plugins/createTodoPlugin'
 import { optionsCreateNodeIdPlugin, optionsSelectOnBackspacePlugin } from '../../../Editor/Plugins/options'
@@ -51,6 +55,10 @@ const generateTodoPlugins = (uploadImage: UploadImageFn, inline?: boolean) => {
   return [
     // elements
     createParagraphPlugin(), // paragraph element
+    createSuperBlockPlugin(),
+    createTaskSuperBlockPlugin(),
+    createSoftBreakPlugin(),
+    createExitBreakPlugin(),
 
     createSelectOnBackspacePlugin(),
     createImagePlugin({

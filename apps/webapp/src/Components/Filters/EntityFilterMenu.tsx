@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom'
 
-import { Entities } from '@workduck-io/mex-search'
-
+import { SuperBlocks, SuperBlocksType } from '@mexit/core'
 import {
   DefaultMIcons,
   EntitiesInfo,
@@ -20,7 +19,7 @@ const EntityFilterMenu = ({ onChange }) => {
   const viewId = useParams().viewid
   const entities = useViewFilterStore((store) => store.entities)
 
-  const isSelected = (entity: Entities) => {
+  const isSelected = (entity: SuperBlocks) => {
     return entities?.includes(entity)
   }
 
@@ -43,7 +42,7 @@ const EntityFilterMenu = ({ onChange }) => {
 
           return (
             <MenuItem
-              selected={isSelected(key as Entities)}
+              selected={isSelected(key as SuperBlocksType<any>)}
               icon={entity.icon}
               multiSelect
               key={`${viewId}-${entity.id}`}

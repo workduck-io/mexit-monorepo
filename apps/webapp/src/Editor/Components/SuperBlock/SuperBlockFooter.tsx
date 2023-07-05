@@ -1,7 +1,11 @@
+import { useState } from 'react'
+
 import { useSelected } from 'slate-react'
 import { useTheme } from 'styled-components'
 
-import { et, generateTag, Tag, useDataStore } from '@mexit/core'
+import { IconButton } from '@workduck-io/mex-components'
+
+import { et, generateTag, getMIcon, Tag, useDataStore } from '@mexit/core'
 import { AddTagMenu, Group, TagsLabel } from '@mexit/shared'
 
 import { Section } from './SuperBlock.styled'
@@ -63,12 +67,25 @@ const BlockTags = ({ name, value, onChange }: BlockTagsProps) => {
   )
 }
 
-const SuperBlockFooter = ({ value, onChange, FooterRightRenderer }) => {
+const RenderData = ({ value }) => {
+  return (
+    <pre style={{ padding: '1rem' }} contentEditable={false}>
+      {JSON.stringify(value, null, 4)}
+    </pre>
+  )
+}
+
+const SuperBlockFooter = ({ value, onChange, FooterRightRenderer, log = '' }) => {
   const theme = useTheme()
+  const [show, setShow] = useState(false)
 
   return (
     <>
+      {show && <RenderData value={value} />}
       <Section margin={`${theme.spacing.large} 0 0`} contentEditable={false}>
+        {false && (
+          <IconButton title="Log" onClick={() => setShow((s) => !s)} icon={getMIcon('ICON', 'mdi:math-log').value} />
+        )}
         <BlockTags name="tags" value={value} onChange={onChange} />
         {FooterRightRenderer && <FooterRightRenderer value={value} onChange={onChange} />}
       </Section>

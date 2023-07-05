@@ -6,6 +6,7 @@ import {
   mog,
   NodeEditorContent,
   SEPARATOR,
+  SuperBlocks,
   useAuthStore,
   useContentStore,
   useHighlightStore,
@@ -241,10 +242,7 @@ export const useHighlightAPI = () => {
 
 const filterHighlightBlocks = (content: NodeEditorContent, highlightId: string) => {
   return content.filter((block) => {
-    if (
-      block?.metadata?.elementMetadata?.type === 'highlightV1' &&
-      block?.metadata?.elementMetadata?.id === highlightId
-    ) {
+    if (block.type === SuperBlocks.HIGHLIGHT && block?.metadata?.entityId === highlightId) {
       return false
     }
     return true

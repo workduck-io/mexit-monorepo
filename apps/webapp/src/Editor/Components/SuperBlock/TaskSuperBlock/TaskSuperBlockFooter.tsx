@@ -3,10 +3,11 @@ import { useMemo } from 'react'
 import { getPlateEditorRef, removeBlocksAndFocus } from '@udecode/plate'
 import { useFocused, useSelected } from 'slate-react'
 
-import { getMenuItem, PriorityDataType, useUserCacheStore } from '@mexit/core'
+import { getMenuItem, PriorityDataType, TaskStatusType, useUserCacheStore } from '@mexit/core'
 import { DefaultMIcons, getMIcon, Group, InsertMenu } from '@mexit/shared'
 
 import PrioritySelect from '../../../../Components/Todo/PrioritySelect'
+import { StatusSelect } from '../../../../Components/Todo/StatusSelect'
 
 export const TaskSuperBlockFooter = ({ value, onChange }) => {
   const usersCache = useUserCacheStore((store) => store.cache)
@@ -43,6 +44,10 @@ export const TaskSuperBlockFooter = ({ value, onChange }) => {
     })
   }
 
+  const onStatusChange = (status) => {
+    onChange(status)
+  }
+
   return (
     <Group>
       <InsertMenu
@@ -56,6 +61,13 @@ export const TaskSuperBlockFooter = ({ value, onChange }) => {
         onClick={onInsert}
         title="Assignee"
         items={users}
+      />
+
+      <StatusSelect
+        name="status"
+        value={value?.['status'] ?? TaskStatusType.todo}
+        onChange={onStatusChange}
+        shortcut="KeyS"
       />
 
       <PrioritySelect

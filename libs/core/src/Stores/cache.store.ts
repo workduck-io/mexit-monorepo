@@ -19,7 +19,12 @@ const userCacheStoreConfig = (set, get) => ({
     set({ cache: users })
   },
   addUser: (user: CacheUser) => {
-    set({ cache: [...get().cache, user] })
+    if (!user) return
+
+    const userCache = get().cache
+    if (userCache.find((u) => u.id === user?.id)) return
+
+    set({ cache: [...userCache, user] })
   },
   getUser: (find: { email?: string; id?: string }): CacheUser | undefined => {
     const cache = get().cache

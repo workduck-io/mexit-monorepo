@@ -3,6 +3,7 @@ import { PlatePlugin } from '@udecode/plate-core'
 import { SuperBlocks } from '@mexit/core'
 
 import TaskSuperBlock from '../Components/SuperBlock/TaskSuperBlock'
+import { withSuperBlockElement } from '../Components/SuperBlock/withSuperBlockElement'
 
 /**
  * Enables support for Super Block - Task.
@@ -20,7 +21,7 @@ export const createTaskSuperBlockPlugin = (): PlatePlugin => ({
       }
     }
   },
-  component: TaskSuperBlock,
+  component: withSuperBlockElement(TaskSuperBlock),
   isInline: false,
   isVoid: false
 })

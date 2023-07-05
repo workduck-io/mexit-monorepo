@@ -15,7 +15,7 @@ const useUpdateBlock = () => {
   const { updateFromContent } = useUpdater()
 
   /*
-    Update block's data in an Editor using element. 
+    Update block's data in an Editor using element.
 
     This is used when component isn't a part of Editor
   */
@@ -28,16 +28,16 @@ const useUpdateBlock = () => {
     }
   }
 
-  const updateMetadataProperties = (element: any, blockData: BlockDataType) => {
+  const updateMetadataProperties = (element: any, blockData: BlockDataType, nodePath?: any) => {
     const editor = getPlateEditorRef()
     const updatedBy = useAuthStore.getState().userDetails?.id
 
     if (editor) {
-      const path = findNodePath(editor, element)?.slice(0, 1)
+      const path = nodePath ?? findNodePath(editor, element)?.slice(0, 1)
 
       if (path) {
         const metadata = element.metadata || {}
-        const properties = metadata.properties || {}
+        const properties = element.properties || {}
 
         setNodes(
           editor,
@@ -45,11 +45,11 @@ const useUpdateBlock = () => {
             metadata: {
               ...metadata,
               updatedBy,
-              updatedAt: Date.now(),
-              properties: {
-                ...properties,
-                ...blockData
-              }
+              updatedAt: Date.now()
+            },
+            properties: {
+              ...properties,
+              ...blockData
             }
           },
           { at: path, mode: 'highest' }
@@ -66,7 +66,7 @@ const useUpdateBlock = () => {
   }
 
   /*
-    Update block's data inside a Note. 
+    Update block's data inside a Note.
 
     Use this if you can't access editor directly. For eg, in Tasks view to update status of a task.
   */

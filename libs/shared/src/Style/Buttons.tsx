@@ -2,8 +2,16 @@ import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
+import { size } from './Responsive'
+
 export const StyledButton = styled(Button)`
   font-size: 14px !important;
+
+  @media (max-width: ${size.small}) {
+    #label {
+      display: none;
+    }
+  }
 `
 
 // export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {

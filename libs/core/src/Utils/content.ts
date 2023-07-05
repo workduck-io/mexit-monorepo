@@ -1,12 +1,12 @@
 import { uniq } from 'lodash'
 
-import { Highlight } from '../Types'
+import { Highlight, SuperBlocks } from '../Types'
 import { NodeEditorContent, NodeMetadata } from '../Types/Editor'
 import { MIcon } from '../Types/Store'
 
-import { updateIds } from './dataTransform'
+import { createSuperBlockContent, updateIds } from './dataTransform'
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_LINK, ELEMENT_MENTION, ELEMENT_UL } from './editorElements'
-import { generateTempId } from './idGenerator'
+import { generateHighlightId, generateTempId } from './idGenerator'
 
 const ELEMENT_TODO_LI = 'action_item'
 const ELEMENT_PARAGRAPH = 'p'
@@ -129,28 +129,38 @@ export const insertItemInArray = <T>(array: T[], items: Array<T>, index: number)
 
 export const getHighlightContent = (highlight: Highlight) => {
   const blockContent = highlight.properties.content
-  if (blockContent)
-    return blockContent.map((block) => ({
-      ...updateIds(block),
-      metadata: {
-        elementMetadata: {
-          id: highlight.entityId,
-          type: 'highlightV1'
+
+  const metadata = {
+    properties: {
+      entity: {
+        active: SuperBlocks.HIGHLIGHT,
+        values: {
+          [SuperBlocks.HIGHLIGHT]: {
+            id: generateHighlightId(),
+            parent: highlight.entityId
+          }
         }
       }
+    }
+  }
+
+  if (blockContent) {
+    const content = blockContent.map((block) => ({
+      ...updateIds(block)
     }))
+
+    return [
+      {
+        ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, content),
+        metadata
+      }
+    ]
+  }
 
   return [
     {
-      type: ELEMENT_PARAGRAPH,
-      id: generateTempId(),
-      metadata: {
-        elementMetadata: {
-          id: highlight.entityId,
-          type: 'highlightV1'
-        }
-      },
-      children: [{ text: highlight.properties?.saveableRange?.text ?? '' }]
+      ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, [{ text: highlight.properties?.saveableRange?.text ?? '' }]),
+      metadata
     }
   ]
 }

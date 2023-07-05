@@ -1,17 +1,22 @@
-import { Value } from '@udecode/plate'
+import { DefaultMIcons } from '@mexit/shared'
 
 import { SuperBlockProps } from '../SuperBlock.types'
+import SuperBlockTitle from '../SuperBlockTitle'
 import { SuperBlock } from '..'
 
-const HighlightSuperBlock = <V extends Value>(props: SuperBlockProps<V>) => {
+const HighlightSuperBlock: React.FC<SuperBlockProps> = (props) => {
+  const { children, ...restProps } = props
+
   return (
-    <SuperBlock element={props.element} $isActive={false} $isSelected>
-      {props.children}
-      {/* {true && (
-        <pre style={{ padding: '1rem' }} contentEditable={false}>
-          {JSON.stringify(props.element.metadata, null, 4)}
-        </pre>
-      )} */}
+    <SuperBlock
+      {...restProps}
+      $isActive={false}
+      $isSelected
+      LeftHeaderRenderer={() => {
+        return <SuperBlockTitle heading="Capture" value={props.value} icon={DefaultMIcons.HIGHLIGHT} />
+      }}
+    >
+      {children}
     </SuperBlock>
   )
 }

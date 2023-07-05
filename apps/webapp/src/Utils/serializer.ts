@@ -9,7 +9,6 @@ import {
   useAuthStore
 } from '@mexit/core'
 
-
 // From content to api
 export const serializeContent = (content: any[], nodeid: string, elementMetadata?: ElementHighlightMetadata) => {
   return content.map((el) => {
@@ -28,7 +27,7 @@ export const serializeContent = (content: any[], nodeid: string, elementMetadata
     if (elementMetadata) {
       nl.elementMetadata = elementMetadata
       if (el?.highlight) delete el['highlight']
-    } else if (el?.metadata) {
+    } else if (el?.metadata && !el?.type?.startsWith('super-')) {
       Object.keys(el.metadata).forEach((k) => {
         nl[k] = el.metadata[k]
       })

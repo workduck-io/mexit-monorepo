@@ -3,12 +3,13 @@ import ky from 'ky'
 import {
   AIEvent,
   apiURLs,
+  createSuperBlockContent,
   DEFAULT_NAMESPACE,
   defaultContent,
   getStoreName,
   ListItemType,
-  mog,
-  StoreIdentifier
+  StoreIdentifier,
+  SuperBlocks
 } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
@@ -17,19 +18,27 @@ import client, { getAuthStateFromChrome, setAuthStateChrome } from './fetchClien
 import { deserializeContent, serializeContent } from './serializer'
 
 export const handleCaptureRequest = ({ subType, data }) => {
-  const elementMetadata = data?.highlightId
-    ? {
-        type: 'highlightV1' as const,
-        id: data.highlightId
-      }
-    : undefined
+  const content = data.content ?? defaultContent.content
+  const contentWithSuperBlocks = data?.highlightId
+    ? [
+        {
+          ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, content),
+          metadata: {
+            properties: {
+              entityId: data.highlightId
+            }
+          }
+        }
+      ]
+    : content
+
   switch (subType) {
     case 'SAVE_NODE': {
       // We need the highlightid to add to the highlighted elementMetadata
       const reqData = {
         id: data.id,
         title: data.title,
-        data: serializeContent(data.content ?? defaultContent.content, data.id, elementMetadata),
+        data: serializeContent(contentWithSuperBlocks, data.id),
         referenceID: data.referenceID,
         namespaceID: data.namespaceID
       }
@@ -58,7 +67,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
           namespaceID: data.namespaceID
         },
         title: data.title,
-        data: serializeContent(data?.content ?? defaultContent, data.id, elementMetadata),
+        data: serializeContent(contentWithSuperBlocks, data.id),
         // TODO: replace this with DEFAULT_NAMESPACE constant (added in another PR)
         namespaceID: data.namespaceID,
         tags: []
@@ -148,19 +157,11 @@ export const handleNodeContentRequest = ({ subType, body, headers }) => {
         })
     }
     case 'APPEND_NODE': {
-      const elementMetadata = body?.highlightId
-        ? {
-            type: 'highlightV1' as const,
-            id: body.highlightId
-          }
-        : undefined
       const reqData = {
         type: 'ElementRequest',
         workspaceID: body.workspaceID,
-        elements: serializeContent(body.content ?? defaultContent.content, body.id, elementMetadata)
+        elements: serializeContent(body.content ?? defaultContent.content, body.id)
       }
-
-      mog('SAVE REQUEST', { reqData, elementMetadata })
 
       return client
         .patch(apiURLs.node.append(body.id), {

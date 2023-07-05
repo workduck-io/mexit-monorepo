@@ -3,10 +3,9 @@ import React, { useEffect, useMemo } from 'react'
 import { ModalsType, PriorityType, useContentStore, useModalStore, useTodoStore, ViewType } from '@mexit/core'
 import { TaskCard } from '@mexit/shared'
 
+import TaskSuperBlock from '../../Editor/Components/SuperBlock/TaskSuperBlock'
 import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
-import Plateless from '../Editor/Plateless'
-import { TodoBase as Todo } from '../Todo/Todo'
 
 interface RenderTaskProps {
   id: string
@@ -17,6 +16,8 @@ interface RenderTaskProps {
   nodeid: string
 
   selectedCardId?: string | null
+
+  block?: any
 
   /** whether the task is in a static kanban board, for example in read only view embeds */
   staticBoard?: boolean
@@ -34,7 +35,7 @@ interface RenderTaskProps {
 }
 
 export const RenderBoardTask = React.memo<RenderTaskProps>(
-  ({ id, todoid, nodeid, staticBoard, refreshCallback, selectedCardId }: RenderTaskProps) => {
+  ({ id, todoid, block, nodeid, staticBoard, refreshCallback, selectedCardId }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
     const documentUpdated = useContentStore((s) => s.docUpdated)
     const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
@@ -98,7 +99,8 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           }
         }}
       >
-        <Todo
+        <TaskSuperBlock id={block.id} type={block.type} parent={block.parent} value={block.data.properties} metadata={block.data.metadata} isActive isSelected isReadOnly />
+        {/* <Todo
           showDelete={false}
           todoid={todo.id}
           readOnly={readOnly}
@@ -108,7 +110,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           parentNodeId={todo.nodeid}
         >
           <Plateless content={pC} />
-        </Todo>
+        </Todo> */}
       </TaskCard>
     )
   }

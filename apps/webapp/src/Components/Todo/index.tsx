@@ -11,7 +11,7 @@ import { getNodeIdFromEditor } from '../../Editor/Utils/helper'
 
 import { TodoBase } from './Todo'
 
-const TaskSuperBlock = <V extends Value>(props: SuperBlockProps<V>) => {
+const Todo = <V extends Value>(props: SuperBlockProps<V>) => {
   const { attributes, children, element } = props
 
   const rootProps = getRootProps(props)
@@ -66,4 +66,4 @@ const TaskSuperBlock = <V extends Value>(props: SuperBlockProps<V>) => {
   )
 }
 
-export default TaskSuperBlock
+export default Todo
