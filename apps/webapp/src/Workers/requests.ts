@@ -16,6 +16,7 @@ import {
   Snippets
 } from '@mexit/core'
 
+import { SocketMessage } from '../Types/Socket'
 import { deserializeContent } from '../Utils/serializer'
 import { WorkerRequestType } from '../Utils/worker'
 
@@ -28,7 +29,76 @@ const generateRequestID = () => `REQUEST_${nanoid()}`
 let client: KyInstance
 let wsClient: ReconnectingWebSocket
 
+const lookup: Record<string, (message: SocketMessage) => Promise<SocketMessage> | SocketMessage> = {
+  'HIGHLIGHT-CREATE': async (message) => {
+    const res = await client.get(apiURLs.highlights.byId(message.data.entityId)).then((d) => d.json())
+
+    return { ...message, data: { ...message.data, payload: res } }
+  },
+  'HIGHLIGHT-DELETE': (message) => {
+    return message
+  },
+  'SNIPPET-CREATE': async (message) => {
+    const res = await client.get(apiURLs.snippet.getById(message.data.entityId)).then((d) => d.json())
+
+    return { ...message, data: { ...message.data, payload: res } }
+  },
+  'SNIPPET-UPDATE': async (message) => {
+    const res = await client.get(apiURLs.snippet.getById(message.data.entityId)).then((d) => d.json())
+
+    return { ...message, data: { ...message.data, payload: res } }
+  },
+  'SNIPPET-DELETE': (message) => {
+    return message
+  },
+  'NOTE-CREATE': async (message) => {
+    const res = await client.get(apiURLs.node.get(message.data.entityId)).then((d) => d.json())
+
+    return { ...message, data: { ...message.data, payload: res } }
+  },
+  'NOTE-UPDATE': async (message) => {
+    const res = await client.get(apiURLs.node.get(message.data.entityId)).then((d) => d.json())
+
+    return { ...message, data: { ...message.data, payload: res } }
+  },
+  'NOTE-DELETE': (message) => {
+    return message
+  },
+  'NAMESPACE-CREATE': async (message) => {
+    const res = await client.get(apiURLs.namespaces.get(message.data.entityId)).then((d) => d.json())
+
+    return { ...message, data: { ...message.data, payload: res } }
+  },
+  'NAMESPACE-UPDATE': (message) => {
+    return message
+  },
+  'NAMESPACE-DELETE': (message) => {
+    return message
+  },
+  'VIEW-CREATE': async (message) => {
+    const res = await client.get(apiURLs.view.getView(message.data.entityId)).then((d) => d.json())
+
+    return { ...message, data: { ...message.data, payload: res } }
+  },
+  'VIEW-UPDATE': async (message) => {
+    const res = await client.get(apiURLs.view.getView(message.data.entityId)).then((d) => d.json())
+
+    return { ...message, data: { ...message.data, payload: res } }
+  },
+  'VIEW-DELETE': (message) => {
+    return message
+  }
+}
+
+const messageHandler = async (message: SocketMessage) => {
+  console.log('data', message)
+  const res = await lookup[`${message.data.entityType}-${message.data.operationType}`](message)
+
+  return res
+}
+
 const initializeClient = (authToken: string, workspaceID: string) => {
+  // wsClient.close()
   wsClient = new ReconnectingWebSocket(
     `wss://5bjjcc3nq3.execute-api.us-east-1.amazonaws.com/test?workspaceId=${workspaceID}&Authorizer=${authToken}`
   )
@@ -45,11 +115,12 @@ const initializeClient = (authToken: string, workspaceID: string) => {
       }
     })
   }
+
   wsClient.onclose = () =>
     broadcastChannel.postMessage({
       type: 'WSState',
       data: {
-        state: wsClient.close
+        state: wsClient.readyState
       }
     })
 
@@ -58,12 +129,17 @@ const initializeClient = (authToken: string, workspaceID: string) => {
     console.log(data)
     // Construct object to be passed to handlers
     const parsedData = { data: JSON.parse(data), type: 'message' }
+
     if (!parsedData.data.from) {
       // Broadcast to all contexts(tabs). This is because
       // no particular id was set on the from field here.
       // We're using this field to identify which tab sent
       // the message
-      broadcastChannel.postMessage(parsedData)
+
+      messageHandler(parsedData.data).then((transformedMessage) => {
+        console.log('transformed message', transformedMessage)
+        broadcastChannel.postMessage(transformedMessage)
+      })
     } else {
       // Get the port to post to using the uuid, ie send to
       // expected tab only.
@@ -88,6 +164,7 @@ const initializeClient = (authToken: string, workspaceID: string) => {
 
 const reset = () => {
   client = null
+  wsClient.close()
 }
 
 const getMultipleNodeAPI = async (nodeids: string[], namespaceID?: string) => {

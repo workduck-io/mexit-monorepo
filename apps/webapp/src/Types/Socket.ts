@@ -6,3 +6,28 @@ export enum SocketActionType {
   USER_LIST_UPDATE = 'USER_LIST_UPDATE',
   PROPERTY_UPDATE = 'PROPERTY_UPDATE'
 }
+
+export type EntityType =
+  | 'HIGHLIGHT'
+  | 'NOTE'
+  | 'CAPTURE'
+  | 'NAMESPACE'
+  | 'PROMPT'
+  | 'SNIPPET'
+  | 'LINK'
+  | 'USER'
+  | 'VIEW'
+  | 'WORKSPACE'
+
+export interface UpdateData {
+  operationType: 'CREATE' | 'UPDATE' | 'DELETE'
+  entityType: EntityType
+  entityId: string
+
+  payload?: any
+}
+
+export interface SocketMessage {
+  action: SocketActionType
+  data: UpdateData
+}

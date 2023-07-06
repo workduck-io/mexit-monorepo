@@ -1,58 +1,28 @@
-import { Highlight, mog, useDataStore, useHighlightStore, useLinkStore, useViewStore } from '@mexit/core'
+import { mog, useDataStore, useHighlightStore, useLinkStore, useViewStore } from '@mexit/core'
 
-import { useHighlightAPI } from './API/useHighlightAPI'
-import { useNamespaceApi } from './API/useNamespaceAPI'
-import { useApi } from './API/useNodeAPI'
+import { UpdateData } from '../Types/Socket'
+
 import { useUserService } from './API/useUserAPI'
-import { useViewAPI } from './API/useViewsAPI'
 import { RefactorResponse, useRefactor } from './useRefactor'
 import { useSnippets } from './useSnippets'
-import { useURLsAPI } from './useURLs'
-
-export type EntityType =
-  | 'HIGHLIGHT'
-  | 'NOTE'
-  | 'CAPTURE'
-  | 'NAMESPACE'
-  | 'PROMPT'
-  | 'SNIPPET'
-  | 'LINK'
-  | 'USER'
-  | 'VIEW'
-  | 'WORKSPACE'
-
-interface UpdateData {
-  operationType: 'CREATE' | 'UPDATE' | 'DELETE'
-  entityType: EntityType
-  entityId: string
-
-  payload?: any
-}
 
 const useBroadcastHandler = () => {
-  const { getById: getSnippetById, getDataAPI: getNodeData } = useApi()
   const { deleteSnippet, addSnippet, updateSnippet } = useSnippets()
-  const { getView } = useViewAPI()
   const addViewStore = useViewStore((store) => store.addView)
   const removeViewStore = useViewStore((store) => store.removeView)
   const { getUserDetailsUserId } = useUserService()
-  const { getHighlight } = useHighlightAPI()
   const removeHighlightFromStore = useHighlightStore((store) => store.removeHighlight)
   const addHighlightInStore = useHighlightStore((store) => store.addHighlightEntity)
   const { setLinks } = useLinkStore()
-  const { getLink } = useURLsAPI()
   const addNamespace = useDataStore((store) => store.addNamespace)
   const addSpace = useDataStore((store) => store.addSpace)
   const deleteNamespace = useDataStore((store) => store.deleteNamespace)
-  const { getNamespace } = useNamespaceApi()
   const { execRefactorFromResponse } = useRefactor()
 
   const highlightUpdatesHandler = (data: UpdateData) => {
     switch (data.operationType) {
       case 'CREATE': {
-        getHighlight(data.entityId).then((response: Highlight) => {
-          addHighlightInStore({ entityId: data.entityId, properties: response.properties })
-        })
+        addHighlightInStore({ entityId: data.entityId, properties: data.payload.properties })
         break
       }
       case 'UPDATE': {
@@ -68,15 +38,12 @@ const useBroadcastHandler = () => {
 
   const snippetUpdatesHandler = (data: UpdateData) => {
     switch (data.operationType) {
-      case 'CREATE':
+      case 'CREATE': {
+        addSnippet(data.payload)
+        break
+      }
       case 'UPDATE': {
-        getSnippetById(data.entityId).then((response) => {
-          if (data.operationType === 'CREATE') {
-            addSnippet(response)
-          } else {
-            updateSnippet(response)
-          }
-        })
+        updateSnippet(data.payload)
 
         break
       }
@@ -91,7 +58,7 @@ const useBroadcastHandler = () => {
     switch (data.operationType) {
       case 'CREATE':
       case 'UPDATE': {
-        getNodeData(data.entityId)
+        // getNodeData(data.entityId)
         break
       }
       // TODO: No delete updates
@@ -104,11 +71,9 @@ const useBroadcastHandler = () => {
   const namespaceUpdatesHandler = (data: UpdateData) => {
     switch (data.operationType) {
       case 'CREATE': {
-        getNamespace(data.entityId).then((response) => {
-          // TODO: this is suffering from the same issue as views, multiple requests for the same thing
-          // addNamespace(response)
-          // addSpace(response)
-        })
+        // TODO: this is suffering from the same issue as views, multiple requests for the same thing
+        addNamespace(data.payload)
+        addSpace(data.payload)
         break
       }
       case 'UPDATE': {
@@ -133,7 +98,7 @@ const useBroadcastHandler = () => {
   const linkUpdatesHandler = (data: UpdateData) => {
     switch (data.operationType) {
       case 'CREATE': {
-        getLink(data.entityId)
+        // getLink(data.entityId)
         break
       }
       case 'DELETE': {
@@ -149,9 +114,7 @@ const useBroadcastHandler = () => {
     switch (data.operationType) {
       case 'CREATE':
       case 'UPDATE': {
-        getView(data.entityId).then((response) => {
-          addViewStore(response)
-        })
+        addViewStore(data.payload)
 
         break
       }
