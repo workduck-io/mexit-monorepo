@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { mog } from '@mexit/core'
 
-import { SocketActionType } from '../Types/Socket'
+import { SocketActionType, SocketMessage } from '../Types/Socket'
 
 import { useBroadcastHandler } from './useBroadcastHandler'
 
@@ -20,11 +20,8 @@ const useSocket = () => {
     }
   }
 
-  const handleSocketMessage = (message) => {
-    if (message) {
-      const data = typeof message.data === 'object' ? message.data : JSON.parse(message.data)
-      handleAction(data.action, data.data)
-    }
+  const handleSocketMessage = (message: SocketMessage) => {
+    handleAction(message.action, message.data)
   }
 
   useEffect(() => {
