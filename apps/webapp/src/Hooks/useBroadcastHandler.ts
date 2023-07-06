@@ -1,6 +1,6 @@
 import { mog, useDataStore, useHighlightStore, useLinkStore, useViewStore } from '@mexit/core'
 
-import { UpdateData } from '../Types/Socket'
+import { UpdateData, UpdateKey } from '../Types/Socket'
 
 import { useUserService } from './API/useUserAPI'
 import { RefactorResponse, useRefactor } from './useRefactor'
@@ -19,20 +19,28 @@ const useBroadcastHandler = () => {
   const deleteNamespace = useDataStore((store) => store.deleteNamespace)
   const { execRefactorFromResponse } = useRefactor()
 
-  const lookup: Record<string, (data: UpdateData) => void> = {
+  const lookup: Partial<Record<UpdateKey, (data: UpdateData) => void>> = {
     'HIGHLIGHT-CREATE': (data) => addHighlightInStore({ entityId: data.entityId, properties: data.payload.properties }),
     'HIGHLIGHT-DELETE': (data) => removeHighlightFromStore(data.entityId),
     'SNIPPET-CREATE': (data) => addSnippet(data.payload),
     'SNIPPET-UPDATE': (data) => updateSnippet(data.payload),
     'SNIPPET-DELETE': (data) => deleteSnippet(data.entityId),
-    // 'NOTE-CREATE': (data) =>
+    'NOTE-CREATE': (data) => {
+      // TODO: add note to store
+    },
+    'NOTE-UPDATE': (data) => {
+      // TODO: update node content
+    },
+    'NOTE-DELETE': (data) => {
+      // TODO: archive any node and it's children
+    },
     'NAMESPACE-CREATE': (data) => {
       addNamespace(data.payload)
       addSpace(data.payload)
     },
     'NAMESPACE-UPDATE': (data) => {
       if (data?.payload?.body) {
-        const res = execRefactorFromResponse(data.payload.body as RefactorResponse)
+        execRefactorFromResponse(data.payload.body as RefactorResponse)
       } else if (data?.payload?.data) {
         const ns = data.payload.data
         mog('ns', { ns })
@@ -41,13 +49,18 @@ const useBroadcastHandler = () => {
       }
     },
     'NAMESPACE-DELETE': (data) => deleteNamespace(data.entityId),
-    // 'LINK-CREATE': (data) =>
+    'LINK-CREATE': (data) => {
+      // TODO: add link to store
+    },
     'LINK-DELETE': (data) => {
       const newLinks = useLinkStore.getState().links.filter((l) => l.url !== data.entityId)
       setLinks(newLinks)
     },
-    'VIEW-CREATE': (data) => addViewStore(data.payload),
-    'VIEW-DELETE': (data) => removeViewStore(data.entityId)
+    'VIEW-UPDATE': (data) => addViewStore(data.payload),
+    'VIEW-DELETE': (data) => removeViewStore(data.entityId),
+    'USER-UPDATE': (data) => {
+      // TODO: update user details I don't know where
+    }
   }
 
   const updatesHandler = (data: UpdateData) => {

@@ -27,6 +27,8 @@ export interface UpdateData {
   payload?: any
 }
 
+export type UpdateKey = `${EntityType}-${UpdateData['operationType']}`
+
 export interface SocketMessage {
   action: SocketActionType
   data: UpdateData

@@ -16,7 +16,7 @@ import {
   Snippets
 } from '@mexit/core'
 
-import { SocketMessage } from '../Types/Socket'
+import { SocketMessage, UpdateKey } from '../Types/Socket'
 import { deserializeContent } from '../Utils/serializer'
 import { WorkerRequestType } from '../Utils/worker'
 
@@ -29,12 +29,13 @@ const generateRequestID = () => `REQUEST_${nanoid()}`
 let client: KyInstance
 let wsClient: ReconnectingWebSocket
 
-const lookup: Record<string, (message: SocketMessage) => Promise<SocketMessage> | SocketMessage> = {
+const lookup: Partial<Record<UpdateKey, (message: SocketMessage) => Promise<SocketMessage> | SocketMessage>> = {
   'HIGHLIGHT-CREATE': async (message) => {
     const res = await client.get(apiURLs.highlights.byId(message.data.entityId)).then((d) => d.json())
 
     return { ...message, data: { ...message.data, payload: res } }
   },
+  // HIGHLIGHT-UPDATE call is never received as we just append to note
   'HIGHLIGHT-DELETE': (message) => {
     return message
   },
@@ -75,11 +76,14 @@ const lookup: Record<string, (message: SocketMessage) => Promise<SocketMessage> 
   'NAMESPACE-DELETE': (message) => {
     return message
   },
-  'VIEW-CREATE': async (message) => {
-    const res = await client.get(apiURLs.view.getView(message.data.entityId)).then((d) => d.json())
+  'LINK-CREATE': async (message) => {
+    const res = await client
+      .get(apiURLs.links.getLink, { searchParams: `url=${message.data.entityId}` })
+      .then((d) => d.json())
 
     return { ...message, data: { ...message.data, payload: res } }
   },
+  // VIEW-CREATE call doesn't exist
   'VIEW-UPDATE': async (message) => {
     const res = await client.get(apiURLs.view.getView(message.data.entityId)).then((d) => d.json())
 
@@ -87,11 +91,21 @@ const lookup: Record<string, (message: SocketMessage) => Promise<SocketMessage> 
   },
   'VIEW-DELETE': (message) => {
     return message
+  },
+  'USER-UPDATE': async (message) => {
+    const res = await client.get(apiURLs.user.getFromUserId(message.data.entityId)).then((d) => d.json())
+
+    return { ...message, data: { ...message.data, payload: res } }
   }
+
+  // TODO: check if the post request for getWorkspaceByIds is the one needed to be done here
+  // 'WORKSPACE-UPDATE': async (message) => {
+  //   const res = await client.get(apiURLs.workspace.ids, )
+  // }
+  // TODO: where do smart captures even go, plus no request to fetch single smart capture
 }
 
 const messageHandler = async (message: SocketMessage) => {
-  console.log('data', message)
   const res = await lookup[`${message.data.entityType}-${message.data.operationType}`](message)
 
   return res
