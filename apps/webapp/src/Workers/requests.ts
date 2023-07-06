@@ -1,6 +1,7 @@
 import ky from 'ky'
 import { type KyInstance } from 'ky/distribution/types/ky'
 import { customAlphabet } from 'nanoid'
+import PQueue from 'p-queue'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
 import {
@@ -28,6 +29,7 @@ const generateRequestID = () => `REQUEST_${nanoid()}`
 
 let client: KyInstance
 let wsClient: ReconnectingWebSocket
+let broadcastChannel: BroadcastChannel
 
 const lookup: Partial<Record<UpdateKey, (message: SocketMessage) => Promise<SocketMessage> | SocketMessage>> = {
   'HIGHLIGHT-CREATE': async (message) => {
@@ -105,10 +107,28 @@ const lookup: Partial<Record<UpdateKey, (message: SocketMessage) => Promise<Sock
   // TODO: where do smart captures even go, plus no request to fetch single smart capture
 }
 
-const messageHandler = async (message: SocketMessage) => {
+const messageTransformer = async (message: SocketMessage) => {
   const res = await lookup[`${message.data.entityType}-${message.data.operationType}`](message)
 
   return res
+}
+
+const batchMessageTransformer = async (messages: SocketMessage[]) => {
+  // TODO: rigorous testing needed
+  const queue = new PQueue()
+
+  try {
+    messages.forEach((item) =>
+      queue.add(async () => {
+        const response = await messageTransformer(item)
+        console.log('pushing transformed message', response)
+
+        broadcastChannel.postMessage(response)
+      })
+    )
+  } catch (error) {
+    console.log('Error while processing message queue', error)
+  }
 }
 
 const initializeClient = (authToken: string, workspaceID: string) => {
@@ -118,7 +138,7 @@ const initializeClient = (authToken: string, workspaceID: string) => {
   )
 
   const idToPortMap = {}
-  const broadcastChannel = new BroadcastChannel('WebSocketChannel')
+  broadcastChannel = new BroadcastChannel('WebSocketChannel')
 
   // Let all connected contexts(tabs) know about state changes
   wsClient.onopen = () => {
@@ -150,7 +170,7 @@ const initializeClient = (authToken: string, workspaceID: string) => {
       // We're using this field to identify which tab sent
       // the message
 
-      messageHandler(parsedData.data).then((transformedMessage) => {
+      messageTransformer(parsedData.data).then((transformedMessage) => {
         console.log('transformed message', transformedMessage)
         broadcastChannel.postMessage(transformedMessage)
       })
@@ -406,6 +426,7 @@ const functions = {
   initializeClient,
   reset,
   runBatchWorker,
+  batchMessageTransformer,
   initializeNamespacesExtension,
   initializeSnippetsExtension,
   initializeHighlightsExtension,

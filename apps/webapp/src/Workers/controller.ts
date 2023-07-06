@@ -15,6 +15,7 @@ import {
   withTimeout
 } from '@mexit/core'
 
+import { SocketMessage } from '../Types/Socket'
 import { WorkerRequestType } from '../Utils/worker'
 
 import { type AnalysisWorkerInterface } from './analysis'
@@ -72,8 +73,8 @@ export const initRequestClient = (token: string, workspaceId: string) => {
   }
 }
 
-export const terminateRequestWorker = async () => {
-  // if (requestsWorker) requestsWorker = await Thread.terminate(requestsWorker)
+export const runBatchMessageTransformer = async (messages: SocketMessage[]) => {
+  await requestsWorker.batchMessageTransformer(messages)
 }
 
 export const updateILink = async (ilink: ILink) => {

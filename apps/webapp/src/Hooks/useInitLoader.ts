@@ -26,6 +26,7 @@ import {
   getSearchIndexInitState,
   initSearchIndex,
   restoreSearchIndex,
+  runBatchMessageTransformer,
   startRequestsWorkerService
 } from '../Workers/controller'
 
@@ -160,9 +161,11 @@ export const useInitLoader = () => {
       await Promise.allSettled(promises)
     }
 
+    // TODO: I don't understand this particularly well
     if (
       initalizeApp !== AppInitStatus.START &&
       initalizeApp !== AppInitStatus.SWITCH &&
+      initalizeApp !== AppInitStatus.COMPLETE &&
       userPrefHydrated &&
       snippetHydrated &&
       dataStoreHydrated &&
@@ -179,7 +182,9 @@ export const useInitLoader = () => {
             restoreFromS3()
               .then((res) => {
                 if (res) {
-                  getAllPastEvents(res)
+                  getAllPastEvents(res).then((response) => {
+                    runBatchMessageTransformer(response)
+                  })
                 }
 
                 // TODO: can and should be done by a worker
