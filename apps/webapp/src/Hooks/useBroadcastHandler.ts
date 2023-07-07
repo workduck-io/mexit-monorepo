@@ -1,23 +1,31 @@
-import { mog, useDataStore, useHighlightStore, useLinkStore, useViewStore } from '@mexit/core'
+import { mog, SEPARATOR, useDataStore, useHighlightStore, useLinkStore, userPreferenceStore as useUserPreferenceStore,useViewStore  } from '@mexit/core'
 
 import { UpdateData, UpdateKey } from '../Types/Socket'
+import { deserializeContent } from '../Utils/serializer'
 
-import { useUserService } from './API/useUserAPI'
+import { useLinks } from './useLinks'
+import { useNamespaces } from './useNamespaces'
 import { RefactorResponse, useRefactor } from './useRefactor'
 import { useSnippets } from './useSnippets'
+import { useUpdater } from './useUpdater'
 
 const useBroadcastHandler = () => {
   const { deleteSnippet, addSnippet, updateSnippet } = useSnippets()
   const addViewStore = useViewStore((store) => store.addView)
   const removeViewStore = useViewStore((store) => store.removeView)
-  const { getUserDetailsUserId } = useUserService()
   const removeHighlightFromStore = useHighlightStore((store) => store.removeHighlight)
   const addHighlightInStore = useHighlightStore((store) => store.addHighlightEntity)
-  const { setLinks } = useLinkStore()
+  const setLinks = useLinkStore((store) => store.setLinks)
   const addNamespace = useDataStore((store) => store.addNamespace)
+  const updateNamespace = useDataStore((store) => store.updateNamespace)
   const addSpace = useDataStore((store) => store.addSpace)
   const deleteNamespace = useDataStore((store) => store.deleteNamespace)
   const { execRefactorFromResponse } = useRefactor()
+  const addILink = useDataStore((store) => store.addILink)
+  const { updateFromContent } = useUpdater()
+  const { getPathFromNodeid } = useLinks()
+  const { getDefaultNamespaceId } = useNamespaces()
+  const updateActiveNamespace = useUserPreferenceStore((s) => s.setActiveNamespace)
 
   const lookup: Partial<Record<UpdateKey, (data: UpdateData) => void>> = {
     'HIGHLIGHT-CREATE': (data) => addHighlightInStore({ entityId: data.entityId, properties: data.payload.properties }),
@@ -26,13 +34,23 @@ const useBroadcastHandler = () => {
     'SNIPPET-UPDATE': (data) => updateSnippet(data.payload),
     'SNIPPET-DELETE': (data) => deleteSnippet(data.entityId),
     'NOTE-CREATE': (data) => {
-      // TODO: add note to store
+      // TODO: this results in multiple node creation due to lack of leader election in broadcast channel
+      const parentPath = data.payload?.referenceID ? getPathFromNodeid(data.payload.referenceID) + SEPARATOR : ''
+      const path = parentPath + data.payload.title
+
+      addILink({
+        ilink: path,
+        namespace: data.payload.namespaceID,
+        nodeid: data.entityId
+      })
+      updateFromContent(data.entityId, deserializeContent(data.payload.data))
     },
     'NOTE-UPDATE': (data) => {
-      // TODO: update node content
+      updateFromContent(data.entityId, deserializeContent(data.payload.data))
     },
     'NOTE-DELETE': (data) => {
       // TODO: archive any node and it's children
+      console.log('NOTE-DELETE', data)
     },
     'NAMESPACE-CREATE': (data) => {
       addNamespace(data.payload)
@@ -42,24 +60,33 @@ const useBroadcastHandler = () => {
       if (data?.payload?.body) {
         execRefactorFromResponse(data.payload.body as RefactorResponse)
       } else if (data?.payload?.data) {
-        const ns = data.payload.data
-        mog('ns', { ns })
-        addNamespace(ns)
-        addSpace(ns)
+        const d = data.payload.data
+        // TODO: merge already available data with incoming updates
+        const ns = { id: d?.id, name: d?.name, icon: d?.metadata?.icon ?? undefined }
+        updateNamespace(ns)
       }
     },
-    'NAMESPACE-DELETE': (data) => deleteNamespace(data.entityId),
+    'NAMESPACE-DELETE': (data) => {
+      deleteNamespace(data.entityId)
+      updateActiveNamespace(getDefaultNamespaceId())
+    },
     'LINK-CREATE': (data) => {
-      // TODO: add link to store
+      const filteredLinks = useLinkStore.getState().links.filter((l) => l.url !== data.entityId)
+      setLinks([...filteredLinks, { ...data.payload, title: data.payload.properties.title }])
     },
     'LINK-DELETE': (data) => {
       const newLinks = useLinkStore.getState().links.filter((l) => l.url !== data.entityId)
       setLinks(newLinks)
     },
-    'VIEW-UPDATE': (data) => addViewStore(data.payload),
+    'VIEW-UPDATE': (data) => {
+      addViewStore({ id: data.entityId, ...data.payload.properties, ...data.payload })
+    },
     'VIEW-DELETE': (data) => removeViewStore(data.entityId),
     'USER-UPDATE': (data) => {
       // TODO: update user details I don't know where
+    },
+    'WORKSPACE-UPDATE': (data) => {
+      console.log('WORKSPACE-UPDATE', { data })
     }
   }
 

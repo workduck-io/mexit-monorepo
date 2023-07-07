@@ -55,9 +55,9 @@ const lookup: Partial<Record<UpdateKey, (message: SocketMessage) => Promise<Sock
     return message
   },
   'NOTE-CREATE': async (message) => {
-    const res = await client.get(apiURLs.node.get(message.data.entityId)).then((d) => d.json())
+    const res: any = await client.get(apiURLs.node.get(message.data.entityId)).then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return { ...message, data: { ...message.data, payload: { ...message.data.payload, ...res } } }
   },
   'NOTE-UPDATE': async (message) => {
     const res = await client.get(apiURLs.node.get(message.data.entityId)).then((d) => d.json())
@@ -79,11 +79,14 @@ const lookup: Partial<Record<UpdateKey, (message: SocketMessage) => Promise<Sock
     return message
   },
   'LINK-CREATE': async (message) => {
-    const res = await client
+    const res: any = await client
       .get(apiURLs.links.getLink, { searchParams: `url=${message.data.entityId}` })
       .then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return { ...message, data: { ...message.data, payload: res.URL } }
+  },
+  'LINK-DELETE': (message) => {
+    return message
   },
   // VIEW-CREATE call doesn't exist
   'VIEW-UPDATE': async (message) => {
@@ -98,12 +101,13 @@ const lookup: Partial<Record<UpdateKey, (message: SocketMessage) => Promise<Sock
     const res = await client.get(apiURLs.user.getFromUserId(message.data.entityId)).then((d) => d.json())
 
     return { ...message, data: { ...message.data, payload: res } }
-  }
+  },
+  // TODO: not getting entityId right now, test late
+  'WORKSPACE-UPDATE': async (message) => {
+    const res = await client.post(apiURLs.workspace.ids, { json: { ids: [message.data.entityId] } })
 
-  // TODO: check if the post request for getWorkspaceByIds is the one needed to be done here
-  // 'WORKSPACE-UPDATE': async (message) => {
-  //   const res = await client.get(apiURLs.workspace.ids, )
-  // }
+    return { ...message, data: { ...message.data, payload: res } }
+  }
   // TODO: where do smart captures even go, plus no request to fetch single smart capture
 }
 

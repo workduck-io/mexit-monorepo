@@ -23,6 +23,6 @@ export class LinkAPI {
   }
 
   async delete(options?: Options) {
-    return await this.client.delete(apiURLs.links.deleteLink, options)
+    return await this.client.delete(apiURLs.links.deleteLink, undefined, options)
   }
 }
