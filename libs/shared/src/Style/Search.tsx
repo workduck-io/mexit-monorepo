@@ -62,15 +62,26 @@ export const SearchInput = styled(Input)`
   max-width: 20rem;
   transition: all 0.25s ease-in-out;
 `
+export const HomepageSearchInput = styled(Input)`
+  width: 100%;
+  transition: all 0.25s ease-in-out;
+`
 
-export const SearchHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing.medium};
-  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  padding: ${({ theme }) => theme.spacing.medium};
+export const SearchHeader = styled.div<{ isHomepage?: boolean }>`
+  ${({ isHomepage }) => {
+    if (!isHomepage) {
+      return css`
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${({ theme }) => theme.spacing.medium};
+        background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+        border-radius: ${({ theme }) => theme.borderRadius.small};
+        padding: ${({ theme }) => theme.spacing.medium};
+      `
+    } else return ``
+  }}
+
   ${InputWrapper} {
     display: flex;
     align-items: center;
@@ -89,6 +100,52 @@ export const SearchHeader = styled.div`
       color: ${({ theme }) => theme.tokens.text.default};
 
       width: 20rem;
+      transition: all 0.2s ease-in-out;
+      &:active,
+      &:focus {
+        width: 30rem;
+      }
+    }
+
+    &:hover {
+      background: ${({ theme }) => theme.generic.form.input.hover.surface};
+      box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+    }
+
+    &:focus-within {
+      border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+      box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+`
+export const HomepageSearchHeader = styled.div`
+  display: flex;
+  align-items: center;
+  max-width: 87vw;
+  gap: 1rem;
+  
+  ${InputWrapper} {
+    display: flex;
+    align-items: center;
+    padding: 0 ${({ theme }) => theme.spacing.small};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    border: 1px solid transparent;
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+
+    ${Input} {
+      flex-grow: 1;
+      background: transparent;
+      border: none !important;
+      color: ${({ theme }) => theme.tokens.text.default};
+      height: 3rem;
+      width: 100%;
       transition: all 0.2s ease-in-out;
       &:active,
       &:focus {
@@ -284,6 +341,10 @@ export const SearchContainer = styled.div`
   margin: ${({ theme: { spacing } }) => `calc(2 * ${spacing.large}) ${spacing.large} 0`};
   position: relative;
   min-height: 60vh;
+`
+export const HomepageSearchContainer = styled.div`
+  position: relative;
+  flex-grow: 1;
 `
 
 export const NoSearchResults = styled.div`

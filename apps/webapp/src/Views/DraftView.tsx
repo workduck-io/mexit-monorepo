@@ -1,8 +1,10 @@
+import './Draft.css'
+
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { uniq } from 'lodash'
 import { nanoid } from 'nanoid'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import shallow from 'zustand/shallow'
 
 import { Button } from '@workduck-io/mex-components'
@@ -20,6 +22,7 @@ import {
   useLinkStore,
   useMetadataStore,
   useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore,
   useSnippetStore,
   ViewType
 } from '@mexit/core'
@@ -41,6 +44,7 @@ import {
 } from '@mexit/shared'
 
 import Plateless from '../Components/Editor/Plateless'
+import HomepageSearchbar from '../Components/HomepageSearchbar/HomepageSearchbar'
 import LinkComponent from '../Components/Link'
 import NamespaceTag from '../Components/NamespaceTag'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
@@ -49,6 +53,12 @@ import { useNavigation } from '../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSnippets } from '../Hooks/useSnippets'
 import { useURLFilters } from '../Hooks/useURLs'
+
+interface SearchViewState<Item> {
+  selected: number
+  searchTerm: string
+  result: Item[]
+}
 
 const CardsContainerParent = styled.div`
   display: flex;
@@ -63,7 +73,12 @@ const CardsContainerParent = styled.div`
   }
 `
 
-const CardsContainer = styled(Results)`
+const CardsContainer = styled(Results)<{ SearchContainer?: boolean }>`
+  ${({ SearchContainer }) =>
+    SearchContainer &&
+    css`
+      flex-wrap: wrap;
+    `};
   margin: ${({ theme }) => theme.spacing.large} 0 0;
   display: flex;
   overflow-x: hidden;
@@ -183,7 +198,7 @@ const CarouselButtons = ({ onRightClick, onLeftClick, isLeftHidden, isRightHidde
   )
 }
 
-function DraftView() {
+function DraftView<Item>() {
   const contents = useContentStore((s) => s.contents)
   const [ilinks, bookmarks] = useDataStore((store) => [store.ilinks, store.bookmarks], shallow)
   const lastOpened = useRecentsStore((store) => store.lastOpened)
@@ -195,9 +210,26 @@ function DraftView() {
   const links = useLinkStore((store) => store.links)
   const [activityNotes, setActivityNotes] = useState<ILink[]>()
   const [activitySnippets, setActivitySnippets] = useState<Snippet[]>()
+  const [searchresultCards, setSearchresultCards] = useState([])
   const { addTagFilter } = useURLFilters()
   const addRecent = useRecentsStore((store) => store.addRecent)
   const getHighlightsOfUrl = useHighlightStore((store) => store.getHighlightsOfUrl)
+  const setpreferenceModifiedAtAndLastOpened = useUserPreferenceStore(
+    (store) => store.setpreferenceModifiedAtAndLastOpened
+  )
+  const allSnippets = useSnippetStore((store) => store.snippets)
+
+  // for search
+  const [showrecents, setShowrecents] = useState(true)
+  const [showFilters, setShowFilters] = useState(false)
+
+  const [searchState, setSS] = useState<SearchViewState<Item>>({
+    selected: -1,
+    searchTerm: '',
+    result: []
+  })
+
+  const { result, searchTerm, selected } = searchState
 
   const findLatestHighlightTime = (linkurl: string) => {
     const highlightsforaLink = getHighlightsOfUrl(linkurl)
@@ -228,6 +260,7 @@ function DraftView() {
 
         if (latestHighlightTime > lastOpenedHighlightTime) {
           addRecent(RecentType.highlight, link.url)
+          setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
           lastOpenedHighlightTime = latestHighlightTime
         }
       })
@@ -235,11 +268,15 @@ function DraftView() {
   }, [links])
 
   useEffect(() => {
+    console.log('The weird effect')
+
     if (ilinks && ilinks?.length > 0) {
       const validNotes = []
       const uniqueNotes = uniq([...bookmarks, ...(lastOpened?.notes ?? [])])
+
       uniqueNotes.forEach((id) => {
         const ilink = ilinks.find((store) => store.nodeid === id)
+        console.log(ilink)
 
         if (ilink) {
           validNotes.push(ilink)
@@ -252,7 +289,6 @@ function DraftView() {
     if (lastOpened?.snippet && lastOpened?.snippet?.length > 0) {
       const validSnippets = []
       const uniqueSnippets = uniq([...bookmarks, ...(lastOpened?.snippet ?? [])])
-
       if (_hasSnippetsHydrated) {
         uniqueSnippets.forEach((id) => {
           const snippet = getSnippet(id)
@@ -260,13 +296,35 @@ function DraftView() {
             validSnippets.push(snippet)
           }
         })
+
         setActivitySnippets(validSnippets.reverse())
       }
     }
-  }, [ilinks, bookmarks, lastOpened, _hasSnippetsHydrated])
+  }, [ilinks, bookmarks, lastOpened, _hasSnippetsHydrated, allSnippets, showrecents])
+
+  useEffect(() => {
+    if (result && result?.length > 0) {
+      const validSearchCards = []
+
+      result.forEach((element: any) => {
+        const id = element?.parent
+        if (id.startsWith('NODE')) {
+          const ilink = ilinks.find((store) => store.nodeid === id)
+
+          if (ilink) {
+            validSearchCards.push(ilink)
+          }
+        }
+      })
+
+      setSearchresultCards(validSearchCards)
+    }
+  }, [result])
 
   const onOpen = (id: string) => {
     push(id)
+    addRecent(RecentType.notes, id)
+    setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
     goTo(ROUTE_PATHS.editor, NavigationType.push, id)
   }
 
@@ -274,7 +332,8 @@ function DraftView() {
   const randId = useMemo(() => nanoid(), [])
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const onOpenSnippet = (s: Snippet) => {
-    push(s?.id)
+    addRecent(RecentType.snippet, s?.id)
+    setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
     loadSnippet(s?.id)
     goTo(ROUTE_PATHS.snippet, NavigationType.push, s?.id, { title: s?.title })
   }
@@ -300,14 +359,61 @@ function DraftView() {
   return (
     <PageContainer>
       <MainHeader>
-        <Title>Mex Activity!</Title>
+        <Title>Welcome to Mexit !</Title>
       </MainHeader>
+      <MainHeader>
+        <p>All your latest activities will be shown here.</p>
+      </MainHeader>
+
+      <HomepageSearchbar
+        showFilters={showFilters}
+        setShowFilters={setShowFilters}
+        setShowrecents={setShowrecents}
+        isHomepage={true}
+        searchState={searchState}
+        setSS={setSS}
+      />
 
       {lastOpened?.notes?.length === 0 && lastOpened?.snippet?.length === 0 && lastOpened?.highlight?.length === 0 && (
         <Info>No Activity Found</Info>
       )}
 
-      {lastOpened?.notes && lastOpened?.notes?.length > 0 && (
+      {!showrecents && (
+        <CardsContainerParent>
+          <CardsContainer view={ViewType.Card} ref={containerRef} SearchContainer={true}>
+            {searchresultCards &&
+              searchresultCards.map((s) => {
+                const icon = useMetadataStore.getState().metadata.notes?.[s.nodeid]?.icon
+                const namespace = getNamespaceOfNodeid(s.nodeid)
+
+                return (
+                  <Result
+                    onClick={() => onOpen(s.nodeid)}
+                    view={ViewType.Card}
+                    recents={true}
+                    key={`tag_res_prev_${s.nodeid}`}
+                  >
+                    <ResultHeader>
+                      <Group>
+                        <IconDisplay icon={icon} size={20} />
+                        <ResultTitle>{s?.path}</ResultTitle>
+                      </Group>
+                      <NamespaceTag namespace={namespace} />
+                    </ResultHeader>
+                    <SearchPreviewWrapper>
+                      <EditorPreviewRenderer
+                        content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
+                        editorId={`editor_preview_${s.nodeid}`}
+                      />
+                    </SearchPreviewWrapper>
+                  </Result>
+                )
+              })}
+          </CardsContainer>
+        </CardsContainerParent>
+      )}
+
+      {showrecents && lastOpened?.notes && lastOpened?.notes?.length > 0 && (
         <>
           <MainHeader>
             <ActivityTitle>Recent Notes</ActivityTitle>
@@ -358,7 +464,7 @@ function DraftView() {
         </>
       )}
 
-      {lastOpened?.snippet && lastOpened?.snippet?.length > 0 && (
+      {showrecents && lastOpened?.snippet && lastOpened?.snippet?.length > 0 && (
         <>
           <MainHeader>
             <ActivityTitle>Recent Snippets</ActivityTitle>
@@ -376,8 +482,10 @@ function DraftView() {
             )}
             <CardsContainer view={ViewType.Card} ref={containerRef2}>
               {activitySnippets &&
+                activitySnippets.length > 0 &&
                 activitySnippets.map((s) => {
                   const id = `${s?.id}_ResultFor_SearchSnippet_${randId}`
+
                   return (
                     <Result
                       view={ViewType.Card}
@@ -404,7 +512,7 @@ function DraftView() {
         </>
       )}
 
-      {lastOpened?.highlight && lastOpened?.highlight?.length > 0 && (
+      {showrecents && lastOpened?.highlight && lastOpened?.highlight?.length > 0 && (
         <>
           <MainHeader>
             <ActivityTitle>Recent Captures</ActivityTitle>

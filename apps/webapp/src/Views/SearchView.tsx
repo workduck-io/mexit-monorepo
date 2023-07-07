@@ -80,6 +80,9 @@ interface SearchOptions {
 }
 
 interface SearchViewProps<Item> {
+  setShowrecents?: (show: boolean) => void
+  showrecents?: boolean
+  isHomepage?: boolean
   /**
    * The ID for the view
    */
@@ -187,6 +190,9 @@ const SearchView = <Item,>({
   RenderPreview,
   RenderNotFound,
   RenderFilters,
+  showrecents,
+  setShowrecents,
+  isHomepage,
   options = { view: ViewType.List },
   filterActions
 }: SearchViewProps<Item>) => {
@@ -252,7 +258,7 @@ const SearchView = <Item,>({
       const curIndexGroup = findCurrentIndex()
       const initItems = Array.isArray(initialItems) ? initialItems : initialItems[curIndexGroup]
       // mog('ExecuteSearch - Initial', { newSearchTerm, currentFilters, filtered, initialItems, curIndexGroup })
-      if (initItems?.length > 0 || currentFilters.length > 0) {
+      if (initItems?.length >= 0 || currentFilters.length > 0) {
         setResult(initItems, newSearchTerm)
       }
     } else {
@@ -432,11 +438,11 @@ const SearchView = <Item,>({
   // mog('SearchContainer', { options, result, initialItems, id, selected, view })
   return (
     <SearchViewContainer key={id} id={id}>
-      <SearchHeader>
+      <SearchHeader isHomepage={isHomepage}>
         <InputWrapper>
           <Icon icon={searchLine} />
           <SearchInput
-            autoFocus
+            // autoFocus
             id={`search_nodes_${id}`}
             name="search_nodes"
             tabIndex={-1}
@@ -490,9 +496,7 @@ const SearchView = <Item,>({
         ) : RenderNotFound ? (
           <RenderNotFound />
         ) : (
-          <NoSearchResults>
-            {options?.noResults ?? 'No results found. Try refining the query or search for a different one.'}
-          </NoSearchResults>
+          <NoSearchResults>{options?.noResults ?? ''}</NoSearchResults>
         )}
       </ResultsWrapper>
     </SearchViewContainer>
