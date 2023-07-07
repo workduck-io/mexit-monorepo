@@ -52,7 +52,7 @@ import { useViewFilters } from '../Hooks/useViewFilters'
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
 
-const Search = ({ showrecents, setShowrecents, isHomepage }) => {
+const Search = () => {
   const { loadNode } = useLoad()
   const { queryIndexWithRanking } = useSearch()
   const { getFilters } = useViewFilters()
@@ -256,9 +256,6 @@ const Search = ({ showrecents, setShowrecents, isHomepage }) => {
           resetCurrentFilters,
           globalJoin
         }}
-        showrecents={showrecents}
-        setShowrecents={setShowrecents}
-        isHomepage={isHomepage}
       />
     </SearchContainer>
   )

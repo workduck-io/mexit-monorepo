@@ -11,6 +11,7 @@ import { Button } from '@workduck-io/mex-components'
 
 import {
   defaultContent,
+  getInitialNode,
   ILink,
   RecentType,
   Snippet,
@@ -35,6 +36,7 @@ import {
   MainHeader,
   PageContainer,
   Result,
+  ResultCardFooter,
   ResultHeader,
   Results,
   ResultTitle,
@@ -44,6 +46,7 @@ import {
 } from '@mexit/shared'
 
 import Plateless from '../Components/Editor/Plateless'
+import { TagsRelatedTiny } from '../Components/Editor/TagsRelated'
 import HomepageSearchbar from '../Components/HomepageSearchbar/HomepageSearchbar'
 import LinkComponent from '../Components/Link'
 import NamespaceTag from '../Components/NamespaceTag'
@@ -52,6 +55,7 @@ import { useNamespaces } from '../Hooks/useNamespaces'
 import { useNavigation } from '../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSnippets } from '../Hooks/useSnippets'
+import { useTags } from '../Hooks/useTags'
 import { useURLFilters } from '../Hooks/useURLs'
 
 interface SearchViewState<Item> {
@@ -199,15 +203,16 @@ const CarouselButtons = ({ onRightClick, onLeftClick, isLeftHidden, isRightHidde
 }
 
 function DraftView<Item>() {
-  const contents = useContentStore((s) => s.contents)
   const [ilinks, bookmarks] = useDataStore((store) => [store.ilinks, store.bookmarks], shallow)
   const lastOpened = useRecentsStore((store) => store.lastOpened)
+  const { hasTags } = useTags()
   const { goTo } = useRouting()
   const { push } = useNavigation()
   const { getNamespaceOfNodeid } = useNamespaces()
   const { getSnippet } = useSnippets()
   const _hasSnippetsHydrated = useSnippetStore((store) => store._hasHydrated)
   const links = useLinkStore((store) => store.links)
+  const contents = useContentStore((store) => store.contents)
   const [activityNotes, setActivityNotes] = useState<ILink[]>()
   const [activitySnippets, setActivitySnippets] = useState<Snippet[]>()
   const [searchresultCards, setSearchresultCards] = useState([])
@@ -382,30 +387,41 @@ function DraftView<Item>() {
         <CardsContainerParent>
           <CardsContainer view={ViewType.Card} ref={containerRef} SearchContainer={true}>
             {searchresultCards &&
-              searchresultCards.map((s) => {
-                const icon = useMetadataStore.getState().metadata.notes?.[s.nodeid]?.icon
-                const namespace = getNamespaceOfNodeid(s.nodeid)
+              searchresultCards.map((node) => {
+                const icon = useMetadataStore.getState().metadata.notes?.[node.nodeid]?.icon
+                const namespace = getNamespaceOfNodeid(node.nodeid)
+
+                const edNode = node ? { ...node, title: node.path, id: node.nodeid } : getInitialNode()
+                const isTagged = hasTags(edNode.nodeid)
+
+                const con = contents[node.nodeid]
+                const content = con ? con.content : defaultContent.content
 
                 return (
                   <Result
-                    onClick={() => onOpen(s.nodeid)}
+                    onClick={() => onOpen(node.nodeid)}
                     view={ViewType.Card}
                     recents={true}
-                    key={`tag_res_prev_${s.nodeid}`}
+                    key={`tag_res_prev_${node.nodeid}`}
+                    id={node.nodeid}
                   >
-                    <ResultHeader>
+                    <ResultHeader active>
                       <Group>
                         <IconDisplay icon={icon} size={20} />
-                        <ResultTitle>{s?.path}</ResultTitle>
+                        <ResultTitle>{node?.path}</ResultTitle>
                       </Group>
+
+                      {/* TODO: The namespace will be removed */}
                       <NamespaceTag namespace={namespace} />
                     </ResultHeader>
                     <SearchPreviewWrapper>
-                      <EditorPreviewRenderer
-                        content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
-                        editorId={`editor_preview_${s.nodeid}`}
-                      />
+                      <EditorPreviewRenderer content={content} editorId={`editor_${node?.nodeid}`} />
                     </SearchPreviewWrapper>
+                    {isTagged && (
+                      <ResultCardFooter>
+                        <TagsRelatedTiny nodeid={edNode.nodeid} />
+                      </ResultCardFooter>
+                    )}
                   </Result>
                 )
               })}

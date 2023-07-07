@@ -2,51 +2,17 @@ import React, { useEffect, useMemo } from 'react'
 
 import { Indexes, SearchResult } from '@workduck-io/mex-search'
 
-import {
-  convertContentToRawText,
-  defaultContent,
-  DefaultMIcons,
-  getInitialNode,
-  NodeType,
-  useContentStore,
-  useDataStore,
-  useEditorStore,
-  useMetadataStore,
-  useRecentsStore,
-  ViewType
-} from '@mexit/core'
-import {
-  EditorHeader,
-  Group,
-  HomepageSearchContainer,
-  IconDisplay,
-  NodeInfo,
-  Result,
-  ResultCardFooter,
-  ResultDesc,
-  ResultHeader,
-  ResultMain,
-  ResultRow,
-  ResultTitle,
-  SearchPreviewWrapper,
-  SplitSearchPreviewWrapper,
-  Title,
-  useQuery
-} from '@mexit/shared'
+import { NodeType, useContentStore, useDataStore, useEditorStore, useRecentsStore } from '@mexit/core'
+import { HomepageSearchContainer, useQuery } from '@mexit/shared'
 
-import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import { useFilters } from '../../Hooks/useFilters'
 import useLoad from '../../Hooks/useLoad'
 import { useNodes } from '../../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSearch } from '../../Hooks/useSearch'
-import { useTags } from '../../Hooks/useTags'
 import { useViewFilters } from '../../Hooks/useViewFilters'
 import SearchFilters from '../../Views/SearchFilters'
-import { RenderFilterProps, RenderItemProps, RenderPreviewProps } from '../../Views/SearchView'
-import Backlinks from '../Editor/Backlinks'
-import TagsRelated, { TagsRelatedTiny } from '../Editor/TagsRelated'
-import Metadata from '../EditorInfobar/Metadata'
+import { RenderFilterProps } from '../../Views/SearchView'
 
 import HomepageSearchView from './HomepageSearchView'
 
@@ -72,7 +38,6 @@ const HomepageSearchbar = ({ showFilters, setShowFilters, setShowrecents, isHome
 
   const { getNode, getNodeType } = useNodes()
   const { goTo } = useRouting()
-  const { hasTags } = useTags()
   const {
     addCurrentFilter,
     removeCurrentFilter,
@@ -116,67 +81,6 @@ const HomepageSearchbar = ({ showFilters, setShowFilters, setShowrecents, isHome
     goTo(ROUTE_PATHS.editor, NavigationType.push, nodeid)
   }
 
-  const onDoubleClick = (e: React.MouseEvent<HTMLElement>, item: SearchResult) => {
-    e.preventDefault()
-    const nodeid = item.parent
-    if (e.detail === 2) {
-      loadNode(nodeid, { highlightBlockId: item.id })
-      goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
-    }
-  }
-
-  const BaseItem = (
-    { item, splitOptions, ...props }: RenderItemProps<Partial<SearchResult>>,
-    ref: React.Ref<HTMLDivElement>
-  ) => {
-    const node = getNode(item.parent, true)
-    if (!item || !node) {
-      // eslint-disable-next-line
-      // @ts-ignore
-      return <Result {...props} ref={ref}></Result>
-    }
-
-    const nodeType = getNodeType(node.nodeid)
-    const con = contents[item.parent]
-    const content = con ? con.content : defaultContent.content
-    const storedNoteIcon = useMetadataStore((s) => s.metadata.notes[item.parent]?.icon)
-    const icon = storedNoteIcon ?? (nodeType === NodeType.SHARED ? DefaultMIcons.SHARED_NOTE : DefaultMIcons.NOTE)
-    const edNode = node ? { ...node, title: node.path, id: node.nodeid } : getInitialNode()
-    const isTagged = hasTags(edNode.nodeid)
-    const id = `${item.id}_ResultFor_Search`
-    if (props.view === ViewType.Card) {
-      return (
-        <Result {...props} key={id} ref={ref}>
-          <ResultHeader active>
-            <IconDisplay icon={icon} />
-            <ResultTitle>{node.path}</ResultTitle>
-          </ResultHeader>
-          <SearchPreviewWrapper>
-            <EditorPreviewRenderer content={content} editorId={`editor_${item.parent}`} />
-          </SearchPreviewWrapper>
-          {isTagged && (
-            <ResultCardFooter>
-              <TagsRelatedTiny nodeid={edNode.nodeid} />
-            </ResultCardFooter>
-          )}
-        </Result>
-      )
-    } else if (props.view === ViewType.List) {
-      return (
-        <Result {...props} key={id} ref={ref}>
-          <ResultRow selected={props.selected}>
-            <IconDisplay icon={icon} />
-            <ResultMain>
-              <ResultTitle>{node.path}</ResultTitle>
-              <ResultDesc>{item.text ?? convertContentToRawText(content, ' ')}</ResultDesc>
-            </ResultMain>
-          </ResultRow>
-        </Result>
-      )
-    }
-  }
-  const RenderItem = React.forwardRef(BaseItem)
-
   const RenderFilters = (props: RenderFilterProps<SearchResult>) => {
     return (
       <SearchFilters
@@ -191,46 +95,6 @@ const HomepageSearchbar = ({ showFilters, setShowFilters, setShowrecents, isHome
     )
   }
 
-  const RenderPreview = ({ item }: RenderPreviewProps<SearchResult>) => {
-    if (item) {
-      const con = contents[item.parent]
-      const content = con ? con.content : defaultContent.content
-      const node = getNode(item.parent, true)
-      const icon = useMetadataStore.getState().metadata.notes[item.id]?.icon
-
-      if (!node) return null
-
-      const edNode = { ...node, title: node.path, id: node.nodeid }
-      return (
-        <SplitSearchPreviewWrapper id={`splitSearchPreview_for_${item.parent}`}>
-          <EditorHeader>
-            <NodeInfo>
-              <Group>
-                <IconDisplay icon={icon} size={24} />
-                <Title onMouseUp={(e) => onDoubleClick(e, item)}>{node.path}</Title>
-              </Group>
-            </NodeInfo>
-            <Metadata namespaceId={node.namespace} fadeOnHover={false} nodeId={edNode.nodeid} />
-          </EditorHeader>
-          <EditorPreviewRenderer
-            content={content}
-            blockId={item.id}
-            onDoubleClick={(e) => onDoubleClick(e, item)}
-            editorId={`SearchPreview_editor_${item.parent}`}
-          />
-          <Backlinks nodeid={node.nodeid} />
-          <TagsRelated nodeid={node.nodeid} />
-        </SplitSearchPreviewWrapper>
-      )
-    } else
-      return (
-        <SplitSearchPreviewWrapper>
-          <Title></Title>
-          <EditorPreviewRenderer content={defaultContent.content} editorId={`SearchPreview_editor_EMPTY`} />
-        </SplitSearchPreviewWrapper>
-      )
-  }
-
   return (
     <HomepageSearchContainer>
       <HomepageSearchView
@@ -242,8 +106,6 @@ const HomepageSearchbar = ({ showFilters, setShowFilters, setShowrecents, isHome
         onEscapeExit={onEscapeExit}
         onSearch={onSearch}
         RenderFilters={RenderFilters}
-        RenderItem={RenderItem}
-        RenderPreview={RenderPreview}
         filterActions={{
           filters,
           currentFilters,

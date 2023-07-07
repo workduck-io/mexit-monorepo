@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
+import React, { RefObject, useEffect, useMemo, useRef } from 'react'
 
 import { Icon } from '@iconify/react'
 import filter2Line from '@iconify-icons/ri/filter-2-line'
@@ -9,11 +9,11 @@ import { PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Filter, Filters, GlobalFilterJoin, idxKey, mog, ViewType } from '@mexit/core'
-import { HomepageSearchHeader, HomepageSearchInput, InputWrapper, Results, SearchViewContainer } from '@mexit/shared'
+import { HomepageSearchHeader, HomepageSearchInput, InputWrapper, SearchViewContainer } from '@mexit/shared'
 
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
 import { useFilterStore } from '../../Hooks/useFilters'
-import { RenderSplitProps, SplitOptions, SplitType } from '../../Views/SplitView'
+import { RenderSplitProps, SplitOptions } from '../../Views/SplitView'
 import SearchIndexInput from '../Search/IndexInput'
 
 interface SearchViewState<Item> {
@@ -135,7 +135,7 @@ interface SearchViewProps<Item> {
    * Render a single item
    * @param item - Item to render
    */
-  RenderItem: (props: RenderItemProps<Item>) => JSX.Element
+  RenderItem?: (props: RenderItemProps<Item>) => JSX.Element
 
   /**
    * Render Preview of the selected item in list view
@@ -181,10 +181,6 @@ const HomepageSearchView = <Item,>({
   onSearch,
   onSelect,
   onDelete,
-  getItemKey,
-  RenderItem,
-  RenderPreview,
-  RenderNotFound,
   RenderFilters,
   showFilters,
   setShowFilters,
@@ -206,7 +202,6 @@ const HomepageSearchView = <Item,>({
 
   // For filters
   const idxKeys = useFilterStore((store) => store.indexes) as idxKey[]
-  const [view, setView] = useState<ViewType>(options?.view)
   const setIndexes = useFilterStore((store) => store.setIndexes)
   const setSelected = (selected: number) => setSS((s) => ({ ...s, selected }))
   const { enableShortcutHandler } = useEnableShortcutHandler()
@@ -393,44 +388,11 @@ const HomepageSearchView = <Item,>({
     }
   }, [result, currentFilters, selected, initialItems])
 
-  const splitOptions = options?.splitOptions ?? {
-    type: selected > -1 ? SplitType.SIDE : SplitType.NONE,
-    percent: 50
-  }
-
-  const ResultsView = (
-    <Results key={`ResultForSearch_${id}`} view={view}>
-      {/* {view === View.Card && RenderStartCard && <RenderStartCard />} */}
-      {result?.map((c, i) => {
-        // mog('item from result', { c, i })
-        return (
-          <RenderItem
-            view={view}
-            item={c}
-            onMouseEnter={(e) => {
-              e.preventDefault()
-              if (selected !== i) setSelected(i)
-            }}
-            onClick={(e) => {
-              onSelect(c, e)
-            }}
-            splitOptions={splitOptions}
-            selected={i === selected}
-            ref={i === selected ? selectedRef : null}
-            id={`ResultForSearch_${getItemKey(c)}_${i}`}
-            key={`ResultForSearch_${getItemKey(c)}_${i}`}
-          />
-        )
-      })}
-    </Results>
-  )
-
-  // mog('SearchContainer', { options, result, initialItems, id, selected, view })
   return (
     <SearchViewContainer key={id} id={id}>
       <HomepageSearchHeader>
         <InputWrapper>
-          <Icon icon={searchLine} style={{ width: '20px', height: 'auto', marginRight: '10px', marginLeft: '10px' }} />
+          <Icon icon={searchLine} fontSize={20} style={{ marginLeft: '10px' }} />
           <HomepageSearchInput
             id={`search_nodes_${id}`}
             name="search_nodes"
@@ -462,34 +424,12 @@ const HomepageSearchView = <Item,>({
             setShowFilters?.(!showFilters)
           }}
         >
-          <Icon icon={filter2Line} style={{ width: '20px', height: '20px' }} />
+          <Icon icon={filter2Line} fontSize={20} />
           Filters
         </PrimaryButton>
       </HomepageSearchHeader>
 
       {showFilters && RenderFilters && filters?.length > 0 ? <RenderFilters result={result} /> : null}
-
-      {/* <ResultsWrapper>
-        {result?.length > 0 ? (
-          view === ViewType.List && RenderPreview && options?.splitOptions?.type !== SplitType.NONE ? (
-            <SplitView
-              id={`SplitViewForSearch_${id}`}
-              RenderSplitPreview={(props) => (
-                <RenderPreview {...props} item={selected > -1 ? result?.[selected] : undefined} />
-              )}
-              splitOptions={splitOptions}
-            >
-              {ResultsView}
-            </SplitView>
-          ) : (
-            ResultsView
-          )
-        ) : RenderNotFound ? (
-          <RenderNotFound />
-        ) : (
-          <NoSearchResults>{options?.noResults ?? ''}</NoSearchResults>
-        )}
-      </ResultsWrapper> */}
     </SearchViewContainer>
   )
 }

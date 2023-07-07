@@ -125,9 +125,9 @@ export const SearchHeader = styled.div<{ isHomepage?: boolean }>`
 export const HomepageSearchHeader = styled.div`
   display: flex;
   align-items: center;
-  max-width: 87vw;
+  max-width: 86vw;
   gap: 1rem;
-  
+
   ${InputWrapper} {
     display: flex;
     align-items: center;

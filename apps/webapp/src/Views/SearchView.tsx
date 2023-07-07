@@ -80,9 +80,6 @@ interface SearchOptions {
 }
 
 interface SearchViewProps<Item> {
-  setShowrecents?: (show: boolean) => void
-  showrecents?: boolean
-  isHomepage?: boolean
   /**
    * The ID for the view
    */
@@ -190,9 +187,6 @@ const SearchView = <Item,>({
   RenderPreview,
   RenderNotFound,
   RenderFilters,
-  showrecents,
-  setShowrecents,
-  isHomepage,
   options = { view: ViewType.List },
   filterActions
 }: SearchViewProps<Item>) => {
@@ -438,7 +432,7 @@ const SearchView = <Item,>({
   // mog('SearchContainer', { options, result, initialItems, id, selected, view })
   return (
     <SearchViewContainer key={id} id={id}>
-      <SearchHeader isHomepage={isHomepage}>
+      <SearchHeader>
         <InputWrapper>
           <Icon icon={searchLine} />
           <SearchInput
