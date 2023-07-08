@@ -273,8 +273,6 @@ function DraftView<Item>() {
   }, [links])
 
   useEffect(() => {
-    console.log('The weird effect')
-
     if (ilinks && ilinks?.length > 0) {
       const validNotes = []
       const uniqueNotes = uniq([...bookmarks, ...(lastOpened?.notes ?? [])])
@@ -366,7 +364,7 @@ function DraftView<Item>() {
       <MainHeader>
         <Title>Welcome to Mexit !</Title>
       </MainHeader>
-      <MainHeader>
+      <MainHeader style={{ marginTop: '0' }}>
         <p>All your latest activities will be shown here.</p>
       </MainHeader>
 
@@ -386,45 +384,61 @@ function DraftView<Item>() {
       {!showrecents && (
         <CardsContainerParent>
           <CardsContainer view={ViewType.Card} ref={containerRef} SearchContainer={true}>
-            {searchresultCards &&
-              searchresultCards.map((node) => {
-                const icon = useMetadataStore.getState().metadata.notes?.[node.nodeid]?.icon
-                const namespace = getNamespaceOfNodeid(node.nodeid)
+            {searchresultCards?.map((element: any) => {
+              const nodeid = element?.nodeid
+              const title = nodeid ? element?.path : element?.title
+              const id = element?.nodeid
 
-                const edNode = node ? { ...node, title: node.path, id: node.nodeid } : getInitialNode()
-                const isTagged = hasTags(edNode.nodeid)
+              const icon = nodeid ? useMetadataStore.getState().metadata.notes?.[nodeid]?.icon : DefaultMIcons.SNIPPET
+              const namespace = nodeid ? getNamespaceOfNodeid(nodeid) : null
 
-                const con = contents[node.nodeid]
-                const content = con ? con.content : defaultContent.content
+              const edNode = nodeid ? { ...element, title: title, id: nodeid } : getInitialNode()
+              const isTagged = nodeid ? hasTags(edNode.nodeid) : false
 
-                return (
-                  <Result
-                    onClick={() => onOpen(node.nodeid)}
-                    view={ViewType.Card}
-                    recents={true}
-                    key={`tag_res_prev_${node.nodeid}`}
-                    id={node.nodeid}
-                  >
-                    <ResultHeader active>
-                      <Group>
-                        <IconDisplay icon={icon} size={20} />
-                        <ResultTitle>{node?.path}</ResultTitle>
-                      </Group>
+              const con = nodeid ? contents[nodeid] : null
+              const content = con ? con.content : defaultContent.content
 
-                      {/* TODO: The namespace will be removed */}
-                      <NamespaceTag namespace={namespace} />
-                    </ResultHeader>
+              const resultKey = nodeid ? `tag_res_prev_${nodeid}` : `tag_res_prev_${id}`
+
+              return (
+                <Result
+                  onClick={() => {
+                    if (nodeid) {
+                      onOpen(element?.nodeid)
+                    } else {
+                      onOpenSnippet(element)
+                    }
+                  }}
+                  view={ViewType.Card}
+                  recents={true}
+                  key={resultKey}
+                  id={nodeid}
+                >
+                  <ResultHeader active>
+                    <Group>
+                      {icon && <IconDisplay icon={icon} size={20} />}
+                      <ResultTitle>{title}</ResultTitle>
+                    </Group>
+                    {namespace && <NamespaceTag namespace={namespace} />}
+                  </ResultHeader>
+
+                  {nodeid ? (
                     <SearchPreviewWrapper>
-                      <EditorPreviewRenderer content={content} editorId={`editor_${node?.nodeid}`} />
+                      <EditorPreviewRenderer content={content} editorId={`editor_${nodeid}`} />
                     </SearchPreviewWrapper>
-                    {isTagged && (
-                      <ResultCardFooter>
-                        <TagsRelatedTiny nodeid={edNode.nodeid} />
-                      </ResultCardFooter>
-                    )}
-                  </Result>
-                )
-              })}
+                  ) : (
+                    <SearchPreviewWrapper padding>
+                      <Plateless content={descriptions?.[element?.id]?.truncatedContent} multiline />
+                    </SearchPreviewWrapper>
+                  )}
+                  {isTagged && (
+                    <ResultCardFooter>
+                      <TagsRelatedTiny nodeid={edNode.nodeid} />
+                    </ResultCardFooter>
+                  )}
+                </Result>
+              )
+            })}
           </CardsContainer>
         </CardsContainerParent>
       )}
