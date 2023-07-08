@@ -425,7 +425,7 @@ const HomepageSearchView = <Item,>({
           }}
         >
           <Icon icon={filter2Line} fontSize={20} />
-          Filters
+          {showFilters ? 'Hide Filters' : 'Show Filters'}
         </PrimaryButton>
       </HomepageSearchHeader>
 

@@ -67,20 +67,14 @@ export const HomepageSearchInput = styled(Input)`
   transition: all 0.25s ease-in-out;
 `
 
-export const SearchHeader = styled.div<{ isHomepage?: boolean }>`
-  ${({ isHomepage }) => {
-    if (!isHomepage) {
-      return css`
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: ${({ theme }) => theme.spacing.medium};
-        background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
-        border-radius: ${({ theme }) => theme.borderRadius.small};
-        padding: ${({ theme }) => theme.spacing.medium};
-      `
-    } else return ``
-  }}
+export const SearchHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.medium};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  padding: ${({ theme }) => theme.spacing.medium};
 
   ${InputWrapper} {
     display: flex;
@@ -345,6 +339,7 @@ export const SearchContainer = styled.div`
 export const HomepageSearchContainer = styled.div`
   position: relative;
   flex-grow: 1;
+  margin-bottom: 4rem;
 `
 
 export const NoSearchResults = styled.div`
