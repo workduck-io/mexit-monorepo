@@ -12,9 +12,7 @@ import { Filter, Filters, GlobalFilterJoin, idxKey, mog, ViewType } from '@mexit
 import { HomepageSearchHeader, HomepageSearchInput, InputWrapper, SearchViewContainer } from '@mexit/shared'
 
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
-import { useFilterStore } from '../../Hooks/useFilters'
 import { RenderSplitProps, SplitOptions } from '../../Views/SplitView'
-import SearchIndexInput from '../Search/IndexInput'
 
 interface SearchViewState<Item> {
   selected: number
@@ -91,7 +89,7 @@ interface SearchViewProps<Item> {
    * @param index Index of the item
    * @param view View to render
    */
-  onSearch: (searchTerm: string, idxKeys?: idxKey[]) => Promise<Item[]>
+  onSearch: (searchTerm: string) => Promise<Item[]>
 
   /**
    * Handle select item
@@ -200,9 +198,6 @@ const HomepageSearchView = <Item,>({
     [filterActions]
   )
 
-  // For filters
-  const idxKeys = useFilterStore((store) => store.indexes) as idxKey[]
-  const setIndexes = useFilterStore((store) => store.setIndexes)
   const setSelected = (selected: number) => setSS((s) => ({ ...s, selected }))
   const { enableShortcutHandler } = useEnableShortcutHandler()
 
@@ -210,15 +205,8 @@ const HomepageSearchView = <Item,>({
     setSS((s) => ({ ...s, result, searchTerm, selected: -1 }))
   }
 
-  const onToggleIndexGroup = (indexGroup: string) => {
-    const indexesOfGroup = indexes?.indexes[indexGroup]
-    setIndexes(indexesOfGroup)
-  }
-
   const clearSearch = () => {
     setSS((s) => ({ ...s, result: [], searchTerm: '', selected: -1 }))
-    const defaultIndexes = indexes?.indexes[indexes?.default]
-    setIndexes(defaultIndexes ?? [])
   }
   const { selected, searchTerm, result } = searchState
 
@@ -229,24 +217,17 @@ const HomepageSearchView = <Item,>({
     clearSearch()
   }, [id])
 
-  const findCurrentIndex = () => {
-    const indexGroup = Object.keys(indexes?.indexes ?? {})?.find(
-      (indexGroup) => JSON.stringify(indexes?.indexes[indexGroup]) === JSON.stringify(idxKeys)
-    )
-    return indexGroup
-  }
-
   const executeSearch = async (newSearchTerm: string) => {
     if (newSearchTerm === '' && currentFilters?.length === 0) {
-      const curIndexGroup = findCurrentIndex()
-      const initItems = Array.isArray(initialItems) ? initialItems : initialItems[curIndexGroup]
+      // const curIndexGroup = findCurrentIndex()
+      const initItems = []
 
       if (initItems?.length >= 0 || currentFilters.length > 0) {
         setResult([], newSearchTerm)
         setShowrecents(true)
       }
     } else {
-      const res = await onSearch(newSearchTerm, idxKeys)
+      const res = await onSearch(newSearchTerm)
       mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, res })
       setResult(res, newSearchTerm)
       setShowrecents(false)
@@ -257,12 +238,12 @@ const HomepageSearchView = <Item,>({
     () => () => {
       executeSearch(searchTerm)
     },
-    [currentFilters, result, initialItems, idxKeys]
+    [currentFilters, result, initialItems]
   )
 
   useEffect(() => {
     updateResults()
-  }, [currentFilters, idxKeys, initialItems])
+  }, [currentFilters, initialItems])
 
   useEffect(() => {
     executeSearch(searchTerm)
@@ -322,11 +303,6 @@ const HomepageSearchView = <Item,>({
                 setSelected(-1)
               }
             }
-            // else {
-            //   if (currentFilters.length === 0) {
-            //     onEscapeExit()
-            //   }
-            // }
           }
         })
       },
@@ -407,14 +383,6 @@ const HomepageSearchView = <Item,>({
             }}
             ref={inpRef}
           />
-          {indexes !== undefined && (
-            <SearchIndexInput
-              indexGroups={Object.keys(indexes.indexes)}
-              onChange={(i) => {
-                onToggleIndexGroup(i)
-              }}
-            />
-          )}
         </InputWrapper>
 
         <PrimaryButton

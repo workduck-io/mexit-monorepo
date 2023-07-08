@@ -310,13 +310,12 @@ function DraftView<Item>() {
       const validSearchCards = []
 
       result.forEach((element: any) => {
-        const id = element?.parent
-        if (id.startsWith('NODE')) {
-          const ilink = ilinks.find((store) => store.nodeid === id)
-
-          if (ilink) {
-            validSearchCards.push(ilink)
-          }
+        if (element?.parent.startsWith('NODE')) {
+          const ilink = ilinks.find((store) => store.nodeid === element?.parent)
+          if (ilink) validSearchCards.push(ilink)
+        } else {
+          const snippet = getSnippet(element?.parent)
+          if (snippet) validSearchCards.push(snippet)
         }
       })
 

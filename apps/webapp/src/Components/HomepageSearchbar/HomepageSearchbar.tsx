@@ -55,14 +55,15 @@ const HomepageSearchbar = ({ showFilters, setShowFilters, setShowrecents, isHome
 
   const onSearch = async (newSearchTerm: string) => {
     const query = generateSearchQuery(newSearchTerm, currentFilters)
-    const res = await queryIndexWithRanking(Indexes.MAIN, query)
+    const noteResult = await queryIndexWithRanking(Indexes.MAIN, query)
+    const snippetResult = await queryIndexWithRanking(Indexes.SNIPPET, query)
 
-    const filRes = res.filter((r) => {
+    const filRes = noteResult.filter((r) => {
       const nodeType = getNodeType(r.parent)
       return nodeType !== NodeType.MISSING && nodeType !== NodeType.ARCHIVED
     })
 
-    return filRes
+    return [...filRes, ...snippetResult]
   }
 
   const lastOpened = useRecentsStore((store) => store.lastOpened)
