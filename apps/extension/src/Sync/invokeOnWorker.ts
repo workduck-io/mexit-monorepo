@@ -6,7 +6,7 @@ import { childIframe } from './iframeConnector'
 
 export const wSearchIndex = async (key: Indexes, query: ISearchQuery, tags?: Array<string>) => {
   if (childIframe) {
-    return childIframe.searchIndex(key, query, tags)
+    return await childIframe.searchIndex(key, query, tags)
   }
 }
 
@@ -18,7 +18,7 @@ export const wSearchIndexByNodeId = async (key: Indexes, nodeID: string, query: 
 
 export const wSearchIndexWithRanking = async (key: Indexes, query: ISearchQuery) => {
   if (childIframe) {
-    return childIframe.searchIndexWithRanking(key, query)
+    return await childIframe.searchIndexWithRanking(key, query)
   }
 }
 

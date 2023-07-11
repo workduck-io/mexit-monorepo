@@ -10,7 +10,7 @@ const isDev = process.env.MODE === 'development' ? true : false
 // https://vitejs.dev/config/
 export default defineConfig({
   optimizeDeps: {
-    include: ['react/jsx-runtime', '@workduck-io/flexsearch', '@workduck-io/mex-threads.js/worker', 'buffer'],
+    include: ['react/jsx-runtime', '@workduck-io/mex-threads.js/worker', 'buffer'],
     esbuildOptions: {
       define: {
         global: 'globalThis'

@@ -8,6 +8,7 @@ import {
   defaultContent,
   DefaultMIcons,
   getInitialNode,
+  mog,
   NodeType,
   useContentStore,
   useDataStore,
@@ -92,6 +93,7 @@ const Search = () => {
 
   const onSearch = async (newSearchTerm: string) => {
     const query = generateSearchQuery(newSearchTerm, currentFilters)
+    mog('Index Ranking', { query })
     const res = await queryIndexWithRanking(Indexes.MAIN, query)
 
     const filRes = res.filter((r) => {

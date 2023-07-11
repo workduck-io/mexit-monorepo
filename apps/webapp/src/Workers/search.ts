@@ -2,6 +2,8 @@ import { Indexes, ISearchQuery, IUpdateDoc, SearchResult, SearchX } from '@workd
 
 import { Highlight, ILink, Link, mog, MoveBlocksType, PersistentData, Reminder } from '@mexit/core'
 
+import horaWasm from '../wasms/horajs_bg.wasm?url'
+
 import { exposeX } from './worker-utils'
 
 let searchX = new SearchX()
@@ -22,10 +24,11 @@ const searchWorker = {
   setInitState: (value: boolean) => {
     hasInitialized = value
   },
-  init: (fileData: Partial<PersistentData>) => {
+  init: async (fileData: Partial<PersistentData>) => {
     if (hasInitialized) return
 
     try {
+      await searchX.init(horaWasm)
       searchX.initializeSearch({
         ilinks: fileData.ilinks,
         highlights: fileData.highlights as any,
@@ -72,9 +75,12 @@ const searchWorker = {
     searchX.deleteEntity(id, indexKey)
   },
 
-  searchIndex: (indexKey: Indexes, query: ISearchQuery) => {
+  searchIndex: async (indexKey: Indexes, query: ISearchQuery) => {
     try {
+      mog('inside search')
       const res = searchX.search({ options: query, indexKey })
+      const items = await searchX.semanticSearch('dev')
+      mog('Semantic search', { items })
       mog('SearchX Results:', { res, query })
       return res
     } catch (e) {
@@ -114,9 +120,14 @@ const searchWorker = {
     return searchX[updateType](data as any)
   },
 
-  searchIndexWithRanking: (indexKey: Indexes, query: ISearchQuery, tags?: Array<string>) => {
+  searchIndexWithRanking: async (indexKey: Indexes, query: ISearchQuery, tags?: Array<string>) => {
     try {
       const searchResults = searchX.search({ options: query, indexKey })
+      //@ts-ignore
+      mog('query', { query: JSON.stringify(query), value: query[0].query[0].value })
+      //@ts-ignore
+      const items = await searchX.semanticSearch(query[0].query[0].value)
+      mog('Semantic search', { items })
       mog('SearchX Results:', { searchResults, query })
       const matchedNotes = new Set<string>()
 

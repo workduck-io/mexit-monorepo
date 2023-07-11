@@ -88,7 +88,7 @@ export interface SearchRepExtra {
 export type idxKey = keyof SearchIndex
 
 export interface SearchWorker {
-  init: (fileData: PersistentData, indexData: Record<idxKey, any>) => void
+  init: (fileData: PersistentData, indexData: Record<idxKey, any>) => Promise<void>
   addDoc: (
     key: idxKey,
     nodeId: string,
@@ -106,9 +106,13 @@ export interface SearchWorker {
     extra?: SearchRepExtra
   ) => void
   removeDoc: (key: idxKey, id: string) => void
-  searchIndex: (key: idxKey | idxKey[], query: string, tags: Array<string>) => GenericSearchResult[]
+  searchIndex: (key: idxKey | idxKey[], query: string, tags: Array<string>) => Promise<GenericSearchResult[]>
   searchIndexByNodeId: (key: idxKey | idxKey[], nodeId: string, query: string) => GenericSearchResult[]
   // dumpIndexDisk: (location: string) => Promise<void>
-  searchIndexWithRanking: (key: idxKey | idxKey[], query: string, tags?: Array<string>) => GenericSearchResult[]
+  searchIndexWithRanking: (
+    key: idxKey | idxKey[],
+    query: string,
+    tags?: Array<string>
+  ) => Promise<GenericSearchResult[]>
   getInitState: () => boolean
 }
