@@ -7,7 +7,8 @@ const {
   MEX_API_GATEWAY_URL_BASE,
   MEXIT_FRONTEND_URL_BASE,
   GOOGLE_CAL_BASE,
-  MEXIT_LINK_SHORTENER_URL_BASE
+  MEXIT_LINK_SHORTENER_URL_BASE,
+  MEXIT_WEBSOCKET_URL
 } = config.baseURLs
 
 export const API_BASE_URLS = {
@@ -41,7 +42,8 @@ export const API_BASE_URLS = {
   public: `${MEXIT_BACKEND_URL_BASE}/public`,
   googleCalendar: `${GOOGLE_CAL_BASE}/primary/events`,
   shareFrontend: `${MEXIT_FRONTEND_URL_BASE}/share`,
-  frontend: MEXIT_FRONTEND_URL_BASE
+  frontend: MEXIT_FRONTEND_URL_BASE,
+  websocket: MEXIT_WEBSOCKET_URL
 }
 
 export const apiURLs = {

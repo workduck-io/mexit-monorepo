@@ -7,6 +7,7 @@ import PQueue from 'p-queue'
 import ReconnectingWebSocket from '@workduck-io/reconnecting-websocket'
 
 import {
+  API_BASE_URLS,
   apiURLs,
   batchArray,
   batchArrayWithNamespaces,
@@ -32,7 +33,7 @@ const generateRequestID = () => `REQUEST_${nanoid()}`
 let client: KyInstance
 let wsClient: ReconnectingWebSocket
 let broadcastChannel: BroadcastChannel
-const tokenCache = []
+let tokenCache: string
 
 const lookup: Partial<Record<UpdateKey, (message: SocketMessage) => Promise<SocketMessage> | SocketMessage>> = {
   'HIGHLIGHT-CREATE': async (message) => {
@@ -139,11 +140,16 @@ const batchMessageTransformer = async (messages: SocketMessage[]) => {
 }
 
 const initializeClient = (authToken: string, workspaceID: string) => {
-  if (!tokenCache.includes(`${workspaceID}-${authToken}`)) {
+  if (tokenCache !== `${workspaceID}-${authToken}`) {
+    if (tokenCache && wsClient) {
+      // Closing connection before making a newone but not on the first init
+      wsClient.close()
+    }
+
     wsClient = new ReconnectingWebSocket(
-      `wss://5bjjcc3nq3.execute-api.us-east-1.amazonaws.com/test?workspaceId=${workspaceID}&Authorizer=${authToken}`
+      `${API_BASE_URLS.websocket}?workspaceId=${workspaceID}&Authorizer=${authToken}`
     )
-    tokenCache.push(`${workspaceID}-${authToken}`)
+    tokenCache = `${workspaceID}-${authToken}`
   }
 
   const idToPortMap = {}

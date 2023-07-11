@@ -70,7 +70,7 @@ type BaseURLs =
 
 const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
   [STAGE.prod]: {
-    MEXIT_WEBSOCKET_URL: 'wss://ws.workduck.io/route',
+    MEXIT_WEBSOCKET_URL: 'wss://ws.workduck.io',
     MEXIT_FRONTEND_URL_BASE: 'https://mexit.workduck.io',
     MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-staging.workduck.io/api/v1',
     MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io',
@@ -79,7 +79,7 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
   },
   [STAGE.staging]: {
-    MEXIT_WEBSOCKET_URL: 'wss://ws.workduck.io/route',
+    MEXIT_WEBSOCKET_URL: 'wss://ws.workduck.io',
     MEXIT_FRONTEND_URL_BASE: 'https://mexit.workduck.io',
     MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-staging.workduck.io/api/v1',
     MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io',
@@ -88,7 +88,7 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
   },
   [STAGE.test]: {
-    MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io/route',
+    MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io',
     MEXIT_FRONTEND_URL_BASE: 'https://test-mexit.workduck.io',
     MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-test.workduck.io/api/v1',
     MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io',
@@ -97,7 +97,7 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
   },
   [STAGE.local]: {
-    MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io/route',
+    MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io',
     MEXIT_FRONTEND_URL_BASE: 'http://localhost:3333',
     MEXIT_BACKEND_URL_BASE: 'http://localhost:5002/api/v1',
     MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io',
