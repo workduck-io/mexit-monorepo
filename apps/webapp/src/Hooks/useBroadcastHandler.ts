@@ -1,4 +1,12 @@
-import { mog, SEPARATOR, useDataStore, useHighlightStore, useLinkStore, userPreferenceStore as useUserPreferenceStore,useViewStore  } from '@mexit/core'
+import {
+  mog,
+  SEPARATOR,
+  useDataStore,
+  useHighlightStore,
+  useLinkStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useViewStore
+} from '@mexit/core'
 
 import { UpdateData, UpdateKey } from '../Types/Socket'
 import { deserializeContent } from '../Utils/serializer'
@@ -18,6 +26,7 @@ const useBroadcastHandler = () => {
   const setLinks = useLinkStore((store) => store.setLinks)
   const addNamespace = useDataStore((store) => store.addNamespace)
   const updateNamespace = useDataStore((store) => store.updateNamespace)
+  const { getNamespace } = useNamespaces()
   const addSpace = useDataStore((store) => store.addSpace)
   const deleteNamespace = useDataStore((store) => store.deleteNamespace)
   const { execRefactorFromResponse } = useRefactor()
@@ -34,7 +43,6 @@ const useBroadcastHandler = () => {
     'SNIPPET-UPDATE': (data) => updateSnippet(data.payload),
     'SNIPPET-DELETE': (data) => deleteSnippet(data.entityId),
     'NOTE-CREATE': (data) => {
-      // TODO: this results in multiple node creation due to lack of leader election in broadcast channel
       const parentPath = data.payload?.referenceID ? getPathFromNodeid(data.payload.referenceID) + SEPARATOR : ''
       const path = parentPath + data.payload.title
 
@@ -61,9 +69,9 @@ const useBroadcastHandler = () => {
         execRefactorFromResponse(data.payload.body as RefactorResponse)
       } else if (data?.payload?.data) {
         const d = data.payload.data
-        // TODO: merge already available data with incoming updates
-        const ns = { id: d?.id, name: d?.name, icon: d?.metadata?.icon ?? undefined }
-        updateNamespace(ns)
+        const ns = { id: d?.id, name: d?.name, ...(d?.metadata && { icon: d?.metadata?.icon }) }
+        const localNamespace = getNamespace(ns.id)
+        updateNamespace({ ...localNamespace, ...ns })
       }
     },
     'NAMESPACE-DELETE': (data) => {
