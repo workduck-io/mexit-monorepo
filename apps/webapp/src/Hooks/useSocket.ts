@@ -31,8 +31,7 @@ const useSocket = () => {
     const elector = createLeaderElection(broadcastChannel)
 
     elector.awaitLeadership().then(() => {
-      document.title = 'Leader'
-      console.log('this tab is the leader')
+      mog('this tab is the leader')
     })
 
     elector.broadcastChannel.addEventListener('message', handleSocketMessage)
