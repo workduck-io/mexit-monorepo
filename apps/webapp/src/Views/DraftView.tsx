@@ -389,249 +389,257 @@ function DraftView<Item>() {
 
       {/* Notes Section (results/recents) */}
       <>
-        <MainHeader>
-          <ActivityTitle>{showrecents ? 'Recent' : 'Result'} Notes</ActivityTitle>
-        </MainHeader>
+        {(showrecents && lastOpened?.notes?.length > 0) || searchresultCards?.notes?.length > 0 ? (
+          <MainHeader>
+            <ActivityTitle>{showrecents ? 'Recent' : 'Result'} Notes</ActivityTitle>
+          </MainHeader>
+        ) : null}
 
-        {showrecents ? (
-          lastOpened &&
-          activityNotes &&
-          lastOpened?.notes?.length > 0 && (
-            <CardsContainerParent>
-              {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes?.length >= 3) ||
-                (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes?.length > 1)) && (
-                <CarouselButtons
-                  onLeftClick={scrollToLeft}
-                  onRightClick={scrollToRight}
-                  isLeftHidden={isLeftHidden}
-                  isRightHidden={isRightHidden}
-                />
-              )}
+        {showrecents
+          ? lastOpened &&
+            activityNotes &&
+            lastOpened?.notes?.length > 0 && (
+              <CardsContainerParent>
+                {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes?.length >= 3) ||
+                  (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes?.length > 1)) && (
+                  <CarouselButtons
+                    onLeftClick={scrollToLeft}
+                    onRightClick={scrollToRight}
+                    isLeftHidden={isLeftHidden}
+                    isRightHidden={isRightHidden}
+                  />
+                )}
 
-              <CardsContainer view={ViewType.Card} ref={containerRef}>
-                {activityNotes.map((s) => {
-                  const icon = useMetadataStore.getState().metadata.notes?.[s.nodeid]?.icon
-                  const namespace = getNamespaceOfNodeid(s.nodeid)
+                <CardsContainer view={ViewType.Card} ref={containerRef}>
+                  {activityNotes.map((s) => {
+                    const icon = useMetadataStore.getState().metadata.notes?.[s.nodeid]?.icon
+                    const namespace = getNamespaceOfNodeid(s.nodeid)
 
-                  return (
-                    <Result
-                      onClick={() => onOpen(s.nodeid)}
-                      view={ViewType.Card}
-                      recents={true}
-                      key={`tag_res_prev_${s.nodeid}`}
-                    >
-                      <ResultHeader>
-                        <Group>
-                          <IconDisplay icon={icon} size={20} />
-                          <ResultTitle>{s?.path}</ResultTitle>
-                        </Group>
-                        <NamespaceTag namespace={namespace} />
-                      </ResultHeader>
-                      <SearchPreviewWrapper>
-                        <EditorPreviewRenderer
-                          content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
-                          editorId={`editor_preview_${s.nodeid}`}
-                        />
-                      </SearchPreviewWrapper>
-                    </Result>
-                  )
-                })}
-              </CardsContainer>
-            </CardsContainerParent>
-          )
-        ) : (
-          <CardsContainerParent>
-            {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes?.length >= 3) ||
-              (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes?.length > 1)) && (
-              <CarouselButtons
-                onLeftClick={scrollToLeft}
-                onRightClick={scrollToRight}
-                isLeftHidden={isLeftHidden}
-                isRightHidden={isRightHidden}
-              />
+                    return (
+                      <Result
+                        onClick={() => onOpen(s.nodeid)}
+                        view={ViewType.Card}
+                        recents={true}
+                        key={`tag_res_prev_${s.nodeid}`}
+                      >
+                        <ResultHeader>
+                          <Group>
+                            <IconDisplay icon={icon} size={20} />
+                            <ResultTitle>{s?.path}</ResultTitle>
+                          </Group>
+                          <NamespaceTag namespace={namespace} />
+                        </ResultHeader>
+                        <SearchPreviewWrapper>
+                          <EditorPreviewRenderer
+                            content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
+                            editorId={`editor_preview_${s.nodeid}`}
+                          />
+                        </SearchPreviewWrapper>
+                      </Result>
+                    )
+                  })}
+                </CardsContainer>
+              </CardsContainerParent>
+            )
+          : searchresultCards?.notes?.length > 0 && (
+              <CardsContainerParent>
+                {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes?.length >= 3) ||
+                  (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes?.length > 1)) && (
+                  <CarouselButtons
+                    onLeftClick={scrollToLeft}
+                    onRightClick={scrollToRight}
+                    isLeftHidden={isLeftHidden}
+                    isRightHidden={isRightHidden}
+                  />
+                )}
+
+                <CardsContainer view={ViewType.Card} ref={containerRef}>
+                  {searchresultCards.notes?.map((element: any) => {
+                    const nodeid = element?.nodeid
+                    const title = nodeid ? element?.path : element?.title
+                    const id = element?.nodeid
+
+                    const icon = nodeid
+                      ? useMetadataStore.getState().metadata.notes?.[nodeid]?.icon
+                      : DefaultMIcons.SNIPPET
+                    const namespace = nodeid ? getNamespaceOfNodeid(nodeid) : null
+
+                    const edNode = nodeid ? { ...element, title: title, id: nodeid } : getInitialNode()
+                    const isTagged = nodeid ? hasTags(edNode.nodeid) : false
+
+                    const con = nodeid ? contents[nodeid] : null
+                    const content = con ? con.content : defaultContent.content
+
+                    const resultKey = nodeid ? `tag_res_prev_${nodeid}` : `tag_res_prev_${id}`
+
+                    return (
+                      <Result
+                        onClick={() => {
+                          if (nodeid) {
+                            onOpen(element?.nodeid)
+                          } else {
+                            onOpenSnippet(element)
+                          }
+                        }}
+                        view={ViewType.Card}
+                        recents={true}
+                        key={resultKey}
+                        id={nodeid}
+                      >
+                        <ResultHeader active>
+                          <Group>
+                            {icon && <IconDisplay icon={icon} size={20} />}
+                            <ResultTitle>{title}</ResultTitle>
+                          </Group>
+                          {namespace && <NamespaceTag namespace={namespace} />}
+                        </ResultHeader>
+
+                        {nodeid ? (
+                          <SearchPreviewWrapper>
+                            <EditorPreviewRenderer content={content} editorId={`editor_${nodeid}`} />
+                          </SearchPreviewWrapper>
+                        ) : (
+                          <SearchPreviewWrapper padding>
+                            <Plateless content={descriptions?.[element?.id]?.truncatedContent} multiline />
+                          </SearchPreviewWrapper>
+                        )}
+                        {isTagged && (
+                          <ResultCardFooter>
+                            <TagsRelatedTiny nodeid={edNode.nodeid} />
+                          </ResultCardFooter>
+                        )}
+                      </Result>
+                    )
+                  })}
+                </CardsContainer>
+              </CardsContainerParent>
             )}
-
-            <CardsContainer view={ViewType.Card} ref={containerRef}>
-              {searchresultCards.notes?.map((element: any) => {
-                const nodeid = element?.nodeid
-                const title = nodeid ? element?.path : element?.title
-                const id = element?.nodeid
-
-                const icon = nodeid ? useMetadataStore.getState().metadata.notes?.[nodeid]?.icon : DefaultMIcons.SNIPPET
-                const namespace = nodeid ? getNamespaceOfNodeid(nodeid) : null
-
-                const edNode = nodeid ? { ...element, title: title, id: nodeid } : getInitialNode()
-                const isTagged = nodeid ? hasTags(edNode.nodeid) : false
-
-                const con = nodeid ? contents[nodeid] : null
-                const content = con ? con.content : defaultContent.content
-
-                const resultKey = nodeid ? `tag_res_prev_${nodeid}` : `tag_res_prev_${id}`
-
-                return (
-                  <Result
-                    onClick={() => {
-                      if (nodeid) {
-                        onOpen(element?.nodeid)
-                      } else {
-                        onOpenSnippet(element)
-                      }
-                    }}
-                    view={ViewType.Card}
-                    recents={true}
-                    key={resultKey}
-                    id={nodeid}
-                  >
-                    <ResultHeader active>
-                      <Group>
-                        {icon && <IconDisplay icon={icon} size={20} />}
-                        <ResultTitle>{title}</ResultTitle>
-                      </Group>
-                      {namespace && <NamespaceTag namespace={namespace} />}
-                    </ResultHeader>
-
-                    {nodeid ? (
-                      <SearchPreviewWrapper>
-                        <EditorPreviewRenderer content={content} editorId={`editor_${nodeid}`} />
-                      </SearchPreviewWrapper>
-                    ) : (
-                      <SearchPreviewWrapper padding>
-                        <Plateless content={descriptions?.[element?.id]?.truncatedContent} multiline />
-                      </SearchPreviewWrapper>
-                    )}
-                    {isTagged && (
-                      <ResultCardFooter>
-                        <TagsRelatedTiny nodeid={edNode.nodeid} />
-                      </ResultCardFooter>
-                    )}
-                  </Result>
-                )
-              })}
-            </CardsContainer>
-          </CardsContainerParent>
-        )}
       </>
 
       {/* //* Snippets Section (results/recents) */}
 
       <>
-        <MainHeader>
-          <ActivityTitle>{showrecents ? 'Recent' : 'Result'} Snippets</ActivityTitle>
-        </MainHeader>
+        {(showrecents && lastOpened?.snippet?.length > 0) || searchresultCards?.snippets?.length > 0 ? (
+          <MainHeader>
+            <ActivityTitle>{showrecents ? 'Recent' : 'Result'} Snippets</ActivityTitle>
+          </MainHeader>
+        ) : null}
 
-        {showrecents ? (
-          lastOpened &&
-          activitySnippets &&
-          lastOpened?.snippet?.length > 0 && (
-            <CardsContainerParent>
-              {((window.innerWidth > parseInt(size.tiny) && lastOpened?.snippet?.length >= 3) ||
-                (window.innerWidth <= parseInt(size.tiny) && lastOpened?.snippet?.length > 1)) && (
-                <CarouselButtons
-                  onLeftClick={scrollToLeft2}
-                  onRightClick={scrollToRight2}
-                  isLeftHidden={isLeftHidden2}
-                  isRightHidden={isRightHidden2}
-                />
-              )}
-              <CardsContainer view={ViewType.Card} ref={containerRef2}>
-                {activitySnippets.map((s) => {
-                  const id = `${s?.id}_ResultFor_SearchSnippet_${randId}`
+        {showrecents
+          ? lastOpened &&
+            activitySnippets &&
+            lastOpened?.snippet?.length > 0 && (
+              <CardsContainerParent>
+                {((window.innerWidth > parseInt(size.tiny) && lastOpened?.snippet?.length >= 3) ||
+                  (window.innerWidth <= parseInt(size.tiny) && lastOpened?.snippet?.length > 1)) && (
+                  <CarouselButtons
+                    onLeftClick={scrollToLeft2}
+                    onRightClick={scrollToRight2}
+                    isLeftHidden={isLeftHidden2}
+                    isRightHidden={isRightHidden2}
+                  />
+                )}
+                <CardsContainer view={ViewType.Card} ref={containerRef2}>
+                  {activitySnippets.map((s) => {
+                    const id = `${s?.id}_ResultFor_SearchSnippet_${randId}`
 
-                  return (
-                    <Result
-                      view={ViewType.Card}
-                      key={id}
-                      onClick={() => {
-                        onOpenSnippet(s)
-                      }}
-                      recents={true}
-                    >
-                      <ResultHeader $paddingSize="small">
-                        <Group>
-                          <IconDisplay icon={DefaultMIcons.SNIPPET} size={20} />
-                          <ResultTitle>{s?.title}</ResultTitle>
-                        </Group>
-                      </ResultHeader>
-                      <SearchPreviewWrapper padding>
-                        <Plateless content={descriptions?.[s?.id]?.truncatedContent} multiline />
-                      </SearchPreviewWrapper>
-                    </Result>
-                  )
-                })}
-              </CardsContainer>
-            </CardsContainerParent>
-          )
-        ) : (
-          <CardsContainerParent>
-            {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes?.length >= 3) ||
-              (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes?.length > 1)) && (
-              <CarouselButtons
-                onLeftClick={scrollToLeft2}
-                onRightClick={scrollToRight2}
-                isLeftHidden={isLeftHidden2}
-                isRightHidden={isRightHidden2}
-              />
+                    return (
+                      <Result
+                        view={ViewType.Card}
+                        key={id}
+                        onClick={() => {
+                          onOpenSnippet(s)
+                        }}
+                        recents={true}
+                      >
+                        <ResultHeader $paddingSize="small">
+                          <Group>
+                            <IconDisplay icon={DefaultMIcons.SNIPPET} size={20} />
+                            <ResultTitle>{s?.title}</ResultTitle>
+                          </Group>
+                        </ResultHeader>
+                        <SearchPreviewWrapper padding>
+                          <Plateless content={descriptions?.[s?.id]?.truncatedContent} multiline />
+                        </SearchPreviewWrapper>
+                      </Result>
+                    )
+                  })}
+                </CardsContainer>
+              </CardsContainerParent>
+            )
+          : searchresultCards?.snippets?.length > 0 && (
+              <CardsContainerParent>
+                {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes?.length >= 3) ||
+                  (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes?.length > 1)) && (
+                  <CarouselButtons
+                    onLeftClick={scrollToLeft2}
+                    onRightClick={scrollToRight2}
+                    isLeftHidden={isLeftHidden2}
+                    isRightHidden={isRightHidden2}
+                  />
+                )}
+
+                <CardsContainer view={ViewType.Card} ref={containerRef2}>
+                  {searchresultCards.snippets?.map((element: any) => {
+                    const nodeid = element?.nodeid
+                    const title = nodeid ? element?.path : element?.title
+                    const id = element?.nodeid
+
+                    const icon = nodeid
+                      ? useMetadataStore.getState().metadata.notes?.[nodeid]?.icon
+                      : DefaultMIcons.SNIPPET
+                    const namespace = nodeid ? getNamespaceOfNodeid(nodeid) : null
+
+                    const edNode = nodeid ? { ...element, title: title, id: nodeid } : getInitialNode()
+                    const isTagged = nodeid ? hasTags(edNode.nodeid) : false
+
+                    const con = nodeid ? contents[nodeid] : null
+                    const content = con ? con.content : defaultContent.content
+
+                    const resultKey = nodeid ? `tag_res_prev_${nodeid}` : `tag_res_prev_${id}`
+
+                    return (
+                      <Result
+                        onClick={() => {
+                          if (nodeid) {
+                            onOpen(element?.nodeid)
+                          } else {
+                            onOpenSnippet(element)
+                          }
+                        }}
+                        view={ViewType.Card}
+                        recents={true}
+                        key={resultKey}
+                        id={nodeid}
+                      >
+                        <ResultHeader active>
+                          <Group>
+                            {icon && <IconDisplay icon={icon} size={20} />}
+                            <ResultTitle>{title}</ResultTitle>
+                          </Group>
+                          {namespace && <NamespaceTag namespace={namespace} />}
+                        </ResultHeader>
+
+                        {nodeid ? (
+                          <SearchPreviewWrapper>
+                            <EditorPreviewRenderer content={content} editorId={`editor_${nodeid}`} />
+                          </SearchPreviewWrapper>
+                        ) : (
+                          <SearchPreviewWrapper padding>
+                            <Plateless content={descriptions?.[element?.id]?.truncatedContent} multiline />
+                          </SearchPreviewWrapper>
+                        )}
+                        {isTagged && (
+                          <ResultCardFooter>
+                            <TagsRelatedTiny nodeid={edNode.nodeid} />
+                          </ResultCardFooter>
+                        )}
+                      </Result>
+                    )
+                  })}
+                </CardsContainer>
+              </CardsContainerParent>
             )}
-
-            <CardsContainer view={ViewType.Card} ref={containerRef2}>
-              {searchresultCards.snippets?.map((element: any) => {
-                const nodeid = element?.nodeid
-                const title = nodeid ? element?.path : element?.title
-                const id = element?.nodeid
-
-                const icon = nodeid ? useMetadataStore.getState().metadata.notes?.[nodeid]?.icon : DefaultMIcons.SNIPPET
-                const namespace = nodeid ? getNamespaceOfNodeid(nodeid) : null
-
-                const edNode = nodeid ? { ...element, title: title, id: nodeid } : getInitialNode()
-                const isTagged = nodeid ? hasTags(edNode.nodeid) : false
-
-                const con = nodeid ? contents[nodeid] : null
-                const content = con ? con.content : defaultContent.content
-
-                const resultKey = nodeid ? `tag_res_prev_${nodeid}` : `tag_res_prev_${id}`
-
-                return (
-                  <Result
-                    onClick={() => {
-                      if (nodeid) {
-                        onOpen(element?.nodeid)
-                      } else {
-                        onOpenSnippet(element)
-                      }
-                    }}
-                    view={ViewType.Card}
-                    recents={true}
-                    key={resultKey}
-                    id={nodeid}
-                  >
-                    <ResultHeader active>
-                      <Group>
-                        {icon && <IconDisplay icon={icon} size={20} />}
-                        <ResultTitle>{title}</ResultTitle>
-                      </Group>
-                      {namespace && <NamespaceTag namespace={namespace} />}
-                    </ResultHeader>
-
-                    {nodeid ? (
-                      <SearchPreviewWrapper>
-                        <EditorPreviewRenderer content={content} editorId={`editor_${nodeid}`} />
-                      </SearchPreviewWrapper>
-                    ) : (
-                      <SearchPreviewWrapper padding>
-                        <Plateless content={descriptions?.[element?.id]?.truncatedContent} multiline />
-                      </SearchPreviewWrapper>
-                    )}
-                    {isTagged && (
-                      <ResultCardFooter>
-                        <TagsRelatedTiny nodeid={edNode.nodeid} />
-                      </ResultCardFooter>
-                    )}
-                  </Result>
-                )
-              })}
-            </CardsContainer>
-          </CardsContainerParent>
-        )}
       </>
 
       {showrecents && lastOpened?.highlight && lastOpened?.highlight?.length > 0 && (

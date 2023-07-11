@@ -60,7 +60,8 @@ const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
       space: {},
       lastOpenedNotes: {},
       lastUsedSnippets: {},
-      smartCaptureExcludedFields: {}
+      smartCaptureExcludedFields: {},
+      preferenceModifiedAt: get().preferenceModifiedAt
     })
   },
 
@@ -160,12 +161,16 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
   const mergedSpacePreferences = merge(local.space, remote.space ?? {})
   const theme = remote.theme ?? local.theme
 
+  if (local?.preferenceModifiedAt < remote?.preferenceModifiedAt) {
+    console.log('Yes smaller')
+  } else console.log('Not smaller')
+
   // mog('mergedLastOpenedNotes', { localLastOpenedNotes, mergedLastOpenedNotes, local, remote })
   return {
     version: local.version,
     // Overwrite all notes with the remote notes which exist
     // The local notes which do not exist in the remote notes will be left alone
-    lastOpened: local?.preferenceModifiedAt > remote?.preferenceModifiedAt ? local?.lastOpened : remote?.lastOpened,
+    lastOpened: local?.preferenceModifiedAt < remote?.preferenceModifiedAt ? remote?.lastOpened : local?.lastOpened,
     activeNamespace: remote.activeNamespace ?? local.activeNamespace,
     lastOpenedNotes: getLimitedEntries({ ...local.lastOpenedNotes, ...mergedLastOpenedNotes }),
     lastUsedSnippets: { ...local.lastUsedSnippets, ...mergedLastUsedSnippets },
