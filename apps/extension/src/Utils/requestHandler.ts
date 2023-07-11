@@ -6,8 +6,10 @@ import {
   createSuperBlockContent,
   DEFAULT_NAMESPACE,
   defaultContent,
+  deserializeContent,
   getStoreName,
   ListItemType,
+  serializeContent,
   StoreIdentifier,
   SuperBlocks
 } from '@mexit/core'
@@ -15,7 +17,6 @@ import {
 import { Tab } from '../Types/Tabs'
 
 import client, { getAuthStateFromChrome, setAuthStateChrome } from './fetchClient'
-import { deserializeContent, serializeContent } from './serializer'
 
 export const handleCaptureRequest = ({ subType, data }) => {
   const content = data.content ?? defaultContent.content
@@ -23,9 +24,15 @@ export const handleCaptureRequest = ({ subType, data }) => {
     ? [
         {
           ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, content),
-          metadata: {
-            properties: {
-              entityId: data.highlightId
+          properties: {
+            entity: {
+              active: SuperBlocks.HIGHLIGHT,
+              values: {
+                [SuperBlocks.HIGHLIGHT]: {
+                  id: data.highlightId,
+                  parent: data.highlightId
+                }
+              }
             }
           }
         }

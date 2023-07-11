@@ -8,27 +8,27 @@ export interface SearchEntityType {
   icon: MIcon
 }
 
-export const SearchableEntities = [SuperBlocks.TASK, SuperBlocks.CONTENT]
+export const SearchableEntities = [SuperBlocks.TASK, SuperBlocks.CONTENT, SuperBlocks.CAPTURE]
 
 export const EntitiesInfo: Partial<Record<string, SearchEntityType>> = {
   [SuperBlocks.TASK]: {
     id: 'tasks',
-    label: 'Tasks',
+    label: 'Task',
     icon: DefaultMIcons.TASK
   },
-  // [SuperBlocks.REMINDER]: {
-  //   id: 'reminders',
-  //   label: 'Reminders',
-  //   icon: DefaultMIcons.REMINDER
-  // },
-  // [SuperBlocks.IMAGE]: {
-  //   id: 'images',
-  //   label: 'Images',
-  //   icon: DefaultMIcons.IMAGE
-  // },
+  [SuperBlocks.HIGHLIGHT]: {
+    id: 'captures',
+    label: 'Capture',
+    icon: getMIcon('ICON', 'ri:highlighter-line')
+  },
+  [SuperBlocks.CAPTURE]: {
+    id: 'smartCaptures',
+    label: 'Public Info',
+    icon: getMIcon('ICON', 'grommet-icons:contact-info')
+  },
   [SuperBlocks.CONTENT]: {
     id: 'contents',
-    label: 'Contents',
+    label: 'Content',
     icon: getMIcon('ICON', 'ri:text')
   },
   Ungrouped: {

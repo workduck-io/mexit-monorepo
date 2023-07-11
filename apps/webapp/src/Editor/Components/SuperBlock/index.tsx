@@ -1,3 +1,5 @@
+import { ReactElement } from 'react'
+
 import { Container } from './SuperBlock.styled'
 import { MetadataFields, PropertiyFields } from './SuperBlock.types'
 import SuperBlockFooter from './SuperBlockFooter'
@@ -21,8 +23,8 @@ export const SuperBlock: React.FC<{
   onChange?: (properties: Partial<PropertiyFields>) => void
 
   // * Required Components To Render Header And Footer of SuperBlocks
-  FooterRightComponent?: any
-  LeftHeaderRenderer: any
+  FooterRightComponent?: ReactElement
+  LeftHeaderRenderer: ReactElement
 }> = (props) => {
   const {
     LeftHeaderRenderer,
@@ -52,7 +54,12 @@ export const SuperBlock: React.FC<{
         LeftHeaderRenderer={LeftHeaderRenderer}
       />
       {children}
-      <SuperBlockFooter FooterRightRenderer={FooterRightComponent} value={value} onChange={handleOnChange} />
+      <SuperBlockFooter
+        isSelected={props.$isSelected}
+        FooterRightRenderer={FooterRightComponent}
+        value={value}
+        onChange={handleOnChange}
+      />
     </Container>
   )
 }

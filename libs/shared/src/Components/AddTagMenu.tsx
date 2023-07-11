@@ -44,7 +44,7 @@ export const AddTagMenu = ({ tags, addTag, createTag, root, link }: AddTagMenuPr
       searchPlaceholder={`Search for a tag`}
       root={root}
     >
-      {tags.map((t) => (
+      {tags?.map((t) => (
         <MenuItem
           key={`NewTagMenu-${t.value}`}
           icon={{ type: 'ICON', value: 'ri:hashtag' }}

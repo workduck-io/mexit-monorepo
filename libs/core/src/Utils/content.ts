@@ -1,6 +1,7 @@
 import { uniq } from 'lodash'
 
-import { Highlight, SuperBlocks } from '../Types'
+import { Link } from '../Stores'
+import { Highlight, SUPER_BLOCK_PREFIX, SuperBlocks } from '../Types'
 import { NodeEditorContent, NodeMetadata } from '../Types/Editor'
 import { MIcon } from '../Types/Store'
 
@@ -19,6 +20,12 @@ export const getTagsFromContent = (content: any[]): string[] => {
     if (n.type === 'tag' || n.type === ELEMENT_TAG) {
       tags.push(n.value)
     }
+
+    if (n.type?.startsWith(SUPER_BLOCK_PREFIX) && n.properties?.tags) {
+      const superBlockTags = n.properties.tags.map((t) => t.value)
+      tags.push(...superBlockTags)
+    }
+
     if (n.children && n.children.length > 0) {
       tags = tags.concat(getTagsFromContent(n.children))
     }
@@ -127,20 +134,20 @@ export const insertItemInArray = <T>(array: T[], items: Array<T>, index: number)
   ...array.slice(index)
 ]
 
-export const getHighlightContent = (highlight: Highlight) => {
+export const getHighlightContent = (highlight: Highlight, link?: Link) => {
   const blockContent = highlight.properties.content
 
-  const metadata = {
-    properties: {
-      entity: {
-        active: SuperBlocks.HIGHLIGHT,
-        values: {
-          [SuperBlocks.HIGHLIGHT]: {
-            id: generateHighlightId(),
-            parent: highlight.entityId
-          }
+  const properties = {
+    entity: {
+      active: SuperBlocks.HIGHLIGHT,
+      values: {
+        [SuperBlocks.HIGHLIGHT]: {
+          id: generateHighlightId(),
+          parent: highlight.entityId
         }
-      }
+      },
+      title: link?.title,
+      url: highlight?.properties?.sourceUrl
     }
   }
 
@@ -152,7 +159,7 @@ export const getHighlightContent = (highlight: Highlight) => {
     return [
       {
         ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, content),
-        metadata
+        properties
       }
     ]
   }
@@ -160,7 +167,7 @@ export const getHighlightContent = (highlight: Highlight) => {
   return [
     {
       ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, [{ text: highlight.properties?.saveableRange?.text ?? '' }]),
-      metadata
+      properties
     }
   ]
 }

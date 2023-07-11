@@ -14,9 +14,15 @@ const TaskSuperBlock: React.FC<SuperBlockProps> = (props) => {
       {...(restProps as any)}
       $isActive
       $isSelected
-      LeftHeaderRenderer={() => (
-        <SuperBlockTitle onChange={restProps.onChange} icon={DefaultMIcons.TASK} heading="Task" value={props.value} />
-      )}
+      LeftHeaderRenderer={
+        <SuperBlockTitle
+          onChange={restProps.onChange}
+          type={restProps.type}
+          icon={DefaultMIcons.TASK}
+          heading="Task"
+          value={props.value}
+        />
+      }
       FooterRightComponent={TaskSuperBlockFooter}
     >
       {children}

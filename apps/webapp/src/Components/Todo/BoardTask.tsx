@@ -1,11 +1,14 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { ModalsType, PriorityType, useContentStore, useModalStore, useTodoStore, ViewType } from '@mexit/core'
-import { TaskCard } from '@mexit/shared'
+import { ModalsType, mog, PriorityType, useContentStore, useModalStore, useTodoStore, ViewType } from '@mexit/core'
+import { TaskCard, Text } from '@mexit/shared'
 
+import { PropertiyFields } from '../../Editor/Components/SuperBlock/SuperBlock.types'
 import TaskSuperBlock from '../../Editor/Components/SuperBlock/TaskSuperBlock'
+import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
-import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
+import { usePermissions } from '../../Hooks/usePermissions'
+import { useSearch } from '../../Hooks/useSearch'
 
 interface RenderTaskProps {
   id: string
@@ -42,9 +45,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
     const ref = React.useRef<HTMLDivElement>(null)
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid, documentUpdated])
-    const pC = useMemo(() => getPureContent(todo), [id, todo])
     const { accessWhenShared } = usePermissions()
-    const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
     const toggleModal = useModalStore((store) => store.toggleOpen)
 
     useEffect(() => {
@@ -82,9 +83,29 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
       []
     )
 
+    const { setInfoOfBlockInContent } = useUpdateBlock()
+    const { updateBlocks } = useSearch()
+
+    const handleOnChange = (properties: Partial<PropertiyFields>) => {
+      const noteId = block.parent
+
+      const updatedBlock = setInfoOfBlockInContent(block.parent, {
+        blockId: block.id,
+        properties,
+        useBuffer: true
+      })
+
+      mog('UPDATED BLOCK', { updatedBlock, properties })
+
+      updateBlocks({
+        id: noteId,
+        contents: [updatedBlock]
+      })
+    }
+
     // if (!todo) return null
 
-    const priorityShown = todo?.metadata?.priority !== PriorityType.noPriority
+    const priorityShown = todo?.properties?.priority !== PriorityType.noPriority
 
     return (
       <TaskCard
@@ -105,10 +126,13 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           parent={block.parent}
           value={block.data.properties}
           metadata={block.data.metadata}
+          onChange={handleOnChange}
           isActive
           isSelected
           isReadOnly
-        />
+        >
+          <Text>{block.text}</Text>
+        </TaskSuperBlock>
         {/* <Todo
           showDelete={false}
           todoid={todo.id}

@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 
-import { createPlateEditor, deserializeMd, focusEditor,getPlateEditorRef, insertNodes } from '@udecode/plate'
+import { createPlateEditor, deserializeMd, focusEditor, getPlateEditorRef, insertNodes } from '@udecode/plate'
 
-import { AIEvent , generateTempId,useEditorStore  } from '@mexit/core'
+import { AIEvent, generateTempId, useEditorStore } from '@mexit/core'
 import { InsertMenu } from '@mexit/shared'
 
 import components from '../../Editor/Components/EditorPreviewComponents'

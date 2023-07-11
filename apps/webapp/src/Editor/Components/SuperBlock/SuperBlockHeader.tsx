@@ -27,23 +27,21 @@ const SuperBlockHeader: React.FC<ISuperBlockHeaderProps> = (props) => {
   const theme = useTheme()
 
   return (
-    <>
-      <Section margin={`0 0 ${theme.spacing.medium}`} contentEditable={false}>
-        <Group>
-          <FadeText>{LeftHeaderRenderer && <LeftHeaderRenderer />}</FadeText>
+    <Section margin={`0 0 ${theme.spacing.medium}`} contentEditable={false}>
+      <Group>
+        <FadeText>{LeftHeaderRenderer && LeftHeaderRenderer}</FadeText>
 
-          {updatedAt && (
-            <>
-              <Dot />
-              <FadeText>
-                <RelativeTime dateNum={updatedAt} />
-              </FadeText>
-            </>
-          )}
-        </Group>
-        {blockInfo.id && blockInfo.parent && <BlockInfo {...blockInfo} />}
-      </Section>
-    </>
+        {updatedAt && (
+          <>
+            <Dot />
+            <FadeText>
+              <RelativeTime dateNum={updatedAt} />
+            </FadeText>
+          </>
+        )}
+      </Group>
+      {blockInfo.id && blockInfo.parent && <BlockInfo {...blockInfo} />}
+    </Section>
   )
 }
 

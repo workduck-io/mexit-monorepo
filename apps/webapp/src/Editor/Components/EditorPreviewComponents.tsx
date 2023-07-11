@@ -14,7 +14,7 @@ import {
   ELEMENT_TAG,
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
-  ELEMENT_TODO_LI,
+  ELEMENT_TODO_LI
 } from '@mexit/core'
 import { CaptureElement, LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
@@ -53,7 +53,7 @@ export const editorPreviewComponents = createPlateUI({
 const components = createPlateUI({
   ...editorPreviewComponents,
   [ELEMENT_INLINE_BLOCK]: InlineBlock as any,
-  [ELEMENT_TASK_VIEW_BLOCK]: ViewBlock as any,
+  [ELEMENT_TASK_VIEW_BLOCK]: ViewBlock as any
 })
 
 export default components

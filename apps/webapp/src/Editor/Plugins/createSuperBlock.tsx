@@ -14,7 +14,7 @@ import {
 } from '@udecode/plate'
 import { debounce } from 'lodash'
 
-import { createSuperBlockContent, generateContentId, mog, SuperBlocks } from '@mexit/core'
+import { createSuperBlockContent, mog, SuperBlocks } from '@mexit/core'
 
 import { getNodeIdFromEditor } from '../Utils/helper'
 
@@ -165,23 +165,9 @@ const withSuperBlockOverride: WithOverride = (editor, { type, options }) => {
 
   editor.normalizeNode = ([node, path]: TNodeEntry) => {
     if (path.length === 1 && !Object.values(SuperBlocks).includes(node.type as unknown as SuperBlocks)) {
-      wrapNodes(editor, {
-        ...createSuperBlockContent(SuperBlocks.CONTENT, node.children as any),
-        metadata: {
-          properties: {
-            entity: {
-              active: SuperBlocks.CONTENT,
-              values: {
-                [SuperBlocks.CONTENT]: {
-                  id: generateContentId()
-                }
-              }
-            }
-          }
-        }
-      })
+      wrapNodes(editor, createSuperBlockContent(SuperBlocks.CONTENT, node.children as any) as any)
 
-      return true
+      return
     }
 
     normalizeNode([node, path])

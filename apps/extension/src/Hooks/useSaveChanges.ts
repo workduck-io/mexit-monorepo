@@ -9,10 +9,12 @@ import {
   extractMetadata,
   getHighlightBlockMap,
   Highlight,
+  mog,
   NodeProperties,
   RecentType,
   SaveableRange,
   SEPARATOR,
+  serializeContent,
   SingleNamespace,
   useAuthStore,
   useContentStore,
@@ -28,7 +30,6 @@ import { getDeserializeSelectionToNodes } from '@mexit/shared'
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../Editor/plugins'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { serializeContent } from '../Utils/serializer'
 
 import { useEditorStore } from './useEditorStore'
 import { useHighlights } from './useHighlights'
@@ -207,16 +208,13 @@ export function useSaveChanges() {
       }
     }
 
-    const highlightId = await saveHighlight(
-      {
-        ...highlight,
-        properties: {
-          ...highlight?.properties,
-          content: serializeContent(content, '')
-        }
-      },
-      document.title
-    )
+    const highlightId = await saveHighlight({
+      ...highlight,
+      properties: {
+        ...highlight?.properties,
+        content: serializeContent(content, '')
+      }
+    })
 
     if (highlightId) {
       addHighlightInStore({
@@ -249,26 +247,13 @@ export function useSaveChanges() {
 
     if (highlight) {
       // Save highlight
-      const sourceTitle = document.title
-      const highlightId = await saveHighlight(highlight, sourceTitle)
+      const highlightId = await saveHighlight(highlight)
 
       if (highlightId) {
-        const updateContent = content?.map((block) => {
-          return {
-            ...block,
-            metadata: {
-              elementMetadata: {
-                id: highlightId,
-                type: 'highlightV1'
-              }
-            }
-          }
-        })
-
         highlight.entityId = highlightId
 
         // Extract the blockids for which we have captured highlights
-        const blockHighlightMap = getHighlightBlockMap(nodeid, updateContent)
+        const blockHighlightMap = getHighlightBlockMap(nodeid, content)
 
         // Add highlight in local store and nodeblockmap
         addHighlight(highlight, blockHighlightMap)
@@ -350,11 +335,7 @@ export function useSaveChanges() {
 
     if (highlight) {
       const selection = useSputlitStore.getState().selection
-      const { highlight, blockHighlightMap } = await createHighlightEntityFromSelection(
-        selection,
-        node.nodeid,
-        toAppendContent
-      )
+      const { highlight } = await createHighlightEntityFromSelection(selection, node.nodeid, toAppendContent)
 
       if (highlight) {
         request.body.highlightId = highlight.entityId
@@ -374,6 +355,7 @@ export function useSaveChanges() {
     } else {
       const title = message?.title ?? message?.node?.title
       const content = message?.content ?? request?.body?.content
+      mog('CONTENT IS', { content })
 
       appendContent(node.nodeid, content)
 

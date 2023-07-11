@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import EmbedContainer from 'react-oembed-container'
 
 import { findNodePath, Media } from '@udecode/plate'
-import { setNodes,useEditorRef } from '@udecode/plate-core'
+import { setNodes, useEditorRef } from '@udecode/plate-core'
 import { debounce } from 'lodash'
 
 import { getEmbedData } from './getEmbedUrl'

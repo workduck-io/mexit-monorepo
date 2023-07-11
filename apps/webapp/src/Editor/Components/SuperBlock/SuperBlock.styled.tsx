@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { BodyFont } from '@mexit/shared'
+import { BodyFont, Input } from '@mexit/shared'
 
 export const Container = styled.div<{ $isActive?: boolean; $isReadOnly?: boolean; $isSelected?: boolean }>`
   width: 100%;
@@ -9,22 +9,48 @@ export const Container = styled.div<{ $isActive?: boolean; $isReadOnly?: boolean
   transition: opacity 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
   padding: ${({ theme }) => theme.spacing.medium};
   ${BodyFont}
+  overflow: hidden;
 
-  ${({ $isReadOnly, $isSelected, $isActive }) =>
-    !$isReadOnly
-      ? $isSelected && $isActive
+  ${({ $isReadOnly, $isSelected, $isActive }) => {
+    if (!$isReadOnly) {
+      return $isSelected
         ? css`
             opacity: 1;
-            background: ${({ theme }) => `rgba(${theme.rgbTokens.surfaces.s[0]}, 0.4);`};
-            box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+            ${$isActive &&
+            css`
+              background: ${({ theme }) => `rgba(${theme.rgbTokens.surfaces.s[0]}, 0.4);`};
+              box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+            `}
           `
         : css`
             opacity: 0.8;
           `
-      : css`
-          opacity: 1;
-          pointer-events: none;
-        `}
+    }
+
+    return css`
+      opacity: 1;
+      pointer-events: none;
+    `
+  }}
+`
+
+export const RenameInput = styled(Input)`
+  padding: ${({ theme }) => theme.spacing.tiny};
+  border: none !important;
+  background: none !important;
+  margin: 0;
+  width: fit-content !important;
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]} !important;
+  }
+
+  &:focus {
+    color: ${({ theme }) => theme.tokens.text.default} !important;
+    opacity: 1 !important;
+  }
 `
 
 export const Dot = styled.span`
@@ -42,6 +68,13 @@ export const SectionPlaceholder = styled.section`
   border-radius: 0.5rem;
   border: 1px dotted ${({ theme }) => theme.tokens.surfaces.s[3]};
   margin: 0.25rem 0;
+`
+
+export const GroupDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.small};
 `
 
 export const Section = styled.section<{ padding?: string; margin?: string }>`

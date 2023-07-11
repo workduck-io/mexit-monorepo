@@ -307,6 +307,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
         once: true,
         capture: true
       })
+
       window.addEventListener('keydown', onKeyDown, true)
       return () => {
         window.removeEventListener('pointermove', onPointerMove, {

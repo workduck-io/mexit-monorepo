@@ -28,6 +28,7 @@ export interface PropertiyFields {
     value: string
     count: number
   }
+
   assignee: {
     value: string
     count: number
@@ -43,6 +44,13 @@ export interface PropertiyFields {
   template: Record<string, any>
 
   [key: string]: any
+}
+
+export interface ISuperBlock extends TElement {
+  id: string
+  type: SuperBlocks
+  metadata?: MetadataFields
+  properties?: PropertiyFields
 }
 
 export interface SuperBlockProps {
@@ -63,13 +71,6 @@ export interface SuperBlockProps {
   isReadOnly?: boolean
 
   onChange?: (propertiesToUpdate: Partial<PropertiyFields>) => void
-}
-
-export interface ISuperBlock extends TElement {
-  id: string
-  type: SuperBlocks
-  metadata?: MetadataFields
-  properties?: PropertiyFields
 }
 
 export type SuperBlockElementProps<V extends Value> = Partial<StyledElementProps<V, ISuperBlock>>

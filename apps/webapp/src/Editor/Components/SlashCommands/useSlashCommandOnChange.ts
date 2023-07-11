@@ -6,7 +6,6 @@ import {
   moveSelection,
   PlateEditor,
   select,
-  setElements,
   TElement
 } from '@udecode/plate'
 
@@ -29,13 +28,21 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
         if (commandConfig.slateElementType === SuperBlocks.TASK) {
           const data = commandConfig.getData ? commandConfig.getData(item) : { type: commandConfig.slateElementType }
           select(editor, targetRange)
-          setElements(editor, data, {
-            at: targetRange,
-            hanging: false,
-            mode: 'highest'
+          deleteText(editor)
+
+          insertNodes(editor, data, {
+            mode: 'highest',
+            select: true
           })
+
+          // setElements(editor, data, {
+          //   at: targetRange,
+          //   hanging: false,
+          //   mode: 'highest'
+          // })
         } else if (isElder(commandKey, 'snip')) {
           const content = getSnippetContent(commandConfig.command)
+
           if (content) {
             select(editor, targetRange)
             insertNodes<TElement>(editor, content)

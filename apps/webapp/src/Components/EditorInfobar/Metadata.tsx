@@ -75,7 +75,7 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
     metadata.createdAt === undefined &&
     metadata.createdBy === undefined &&
     metadata.updatedAt === undefined &&
-    metadata.lastEditedBy === undefined
+    metadata.updatedBy === undefined
 
   useEffect(() => {
     if (noteMetadata === undefined) return
@@ -111,11 +111,11 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
     <MetadataWrapper $isVisible={!isUserEditing}>
       <FlexBetween>
         <DataGroup>
-          {metadata.lastEditedBy !== undefined && (
+          {metadata.updatedBy !== undefined && (
             <DataWrapper interactive={metadata.updatedAt !== undefined}>
-              {metadata.lastEditedBy !== undefined ? (
-                <ProfileIcon data-title={metadata.lastEditedBy}>
-                  <ProfileImageWithToolTip props={{ userid: metadata.lastEditedBy, size: 16 }} placement="bottom" />
+              {metadata.updatedBy !== undefined ? (
+                <ProfileIcon data-title={metadata.updatedBy}>
+                  <ProfileImageWithToolTip props={{ userid: metadata.updatedBy, size: 16 }} placement="bottom" />
                 </ProfileIcon>
               ) : (
                 <MexIcon noHover height={20} width={20} icon={timeLine}></MexIcon>

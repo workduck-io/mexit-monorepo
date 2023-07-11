@@ -7,10 +7,8 @@ import useUpdateBlock from '../../Hooks/useUpdateBlock'
 
 import { MetadataFields, PropertiyFields, SuperBlockElementProps, SuperBlockProps } from './SuperBlock.types'
 
-export const withSuperBlockElement =
-  (Component: FC<SuperBlockProps>) =>
-  // eslint-disable-next-line react/display-name
-  <V extends Value>(props: SuperBlockElementProps<V>) => {
+export const withSuperBlockElement = (Component: FC<SuperBlockProps>) => {
+  const SuperBlockElement = <V extends Value>(props: SuperBlockElementProps<V>) => {
     const { children, element, ...blockProps } = props
 
     const isReadOnly = useReadOnly()
@@ -42,3 +40,10 @@ export const withSuperBlockElement =
       </Component>
     )
   }
+
+  const compnentDisplayName = Component.displayName || Component.name || 'Component'
+
+  SuperBlockElement.displayName = `withSuperBlockElement(${compnentDisplayName})`
+
+  return SuperBlockElement
+}

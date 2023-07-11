@@ -11,14 +11,18 @@ export const ViewBlockContainer = styled.div<{
   viewType?: ViewType
 }>`
   box-sizing: border-box;
-  padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
+  /* padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`}; */
 
   ${BodyFont}
 
   ${({ sidebarExpanded, theme, viewType }) =>
     viewType !== ViewType.Kanban
-      ? css`width: 100%;`
-      : css`width: calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`}
+      ? css`
+          width: 100%;
+        `
+      : css`
+          width: calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'});
+        `}
 
   margin: ${({ theme }) => theme.spacing.tiny} 0;
   border: 1px solid transparent;
@@ -31,7 +35,6 @@ export const ViewBlockContainer = styled.div<{
       background: ${theme.tokens.surfaces.s[4]};
       box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
     `};
-
 
   ${({ selected, theme }) =>
     selected &&

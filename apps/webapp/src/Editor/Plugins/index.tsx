@@ -54,7 +54,6 @@ import { MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
-import { withBlockOptions } from '../Components/Blocks'
 import { PlateFloatingLink } from '../Components/FloatingLink'
 
 import { createBlurSelectionPlugin } from './createBlurSelection'
@@ -63,6 +62,7 @@ import { createILinkPlugin } from './createILinkPlugin'
 import { createInlineBlockPlugin } from './createInlineBlockPlugin'
 import { createMentionPlugin } from './createMentionsPlugin'
 import { createSectionSeparatorPlugin } from './createSectionSeparatorPlugin'
+import { createSmartCaptureSuperBlockPlugin } from './createSmartCaptureSuperBlockPlugin'
 import { createSuperBlockPlugin } from './createSuperBlock'
 import { createContentSuperBlockPlugin } from './createSuperContentBlock'
 import { createHighlightSuperBlockPlugin } from './createSuperHighlightPlugins'
@@ -110,6 +110,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     createContentSuperBlockPlugin(),
     createTaskSuperBlockPlugin(),
     createHighlightSuperBlockPlugin(),
+    createSmartCaptureSuperBlockPlugin(),
 
     // elements
     createParagraphPlugin(), // paragraph element
@@ -234,7 +235,7 @@ export const generatePlugins = (options: PluginOptionType) => {
 export const generateEditorPluginsWithComponents = (components: Record<string, any>, options?: PluginOptionType) => {
   const wrappedComponents = options?.exclude?.dnd
     ? components
-    : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
+    : withStyledDraggables(withStyledPlaceHolders(components))
 
   const plugins = createPlugins(generatePlugins(options), {
     components: wrappedComponents
@@ -249,7 +250,7 @@ export const useEditorPlugins = (components: Record<string, any>, options?: Plug
 
   const wrappedComponents = options?.exclude?.dnd
     ? components
-    : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
+    : withStyledDraggables(withStyledPlaceHolders(components))
 
   const plugins = createPlugins(
     generatePlugins({

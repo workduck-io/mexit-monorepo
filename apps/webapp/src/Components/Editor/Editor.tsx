@@ -68,7 +68,7 @@ const Editor: React.FC<EditorProps> = ({
   readOnly,
   onChange,
   focusBlockId,
-  autoFocus = true,
+  autoFocus = false,
   includeBlockInfo = false,
   onAutoSave,
   onFocusClick,
@@ -92,10 +92,6 @@ const Editor: React.FC<EditorProps> = ({
       spellCheck: false,
       readOnly,
       autoFocus
-    },
-    focusOptions: options?.focusOptions ?? {
-      edge: 'start',
-      focus: true
     },
     withDraggable: false,
     withBalloonToolbar: true
@@ -141,7 +137,7 @@ const Editor: React.FC<EditorProps> = ({
           }
         }}
       />
-      {!readOnly && onFocusClick && <div onClick={onFocusClick} style={{ flexShrink: 1, flexGrow: 1 }} />}
+      {/* {!readOnly && onFocusClick && <div onClick={onFocusClick} style={{ flexShrink: 1, flexGrow: 1 }} />} */}
     </EditorWrapper>
   )
 }

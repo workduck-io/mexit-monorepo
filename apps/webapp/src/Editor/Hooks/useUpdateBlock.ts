@@ -7,6 +7,7 @@ import { parseToMarkdown } from '@mexit/shared'
 
 import { useBufferStore } from '../../Hooks/useEditorBuffer'
 import { useUpdater } from '../../Hooks/useUpdater'
+import { PropertiyFields } from '../Components/SuperBlock/SuperBlock.types'
 
 type BlockDataType = Record<string, any>
 
@@ -25,6 +26,41 @@ const useUpdateBlock = () => {
     if (editor) {
       const path = findNodePath(editor, blockElement)
       setNodes(editor, blockData, { at: path })
+    }
+  }
+
+  const changeSuperBlockType = (element, type: string) => {
+    const editor = getPlateEditorRef()
+    const updatedBy = useAuthStore.getState().userDetails?.id
+
+    if (editor) {
+      const path = findNodePath(editor, element)?.slice(0, 1)
+
+      if (path) {
+        const metadata = element.metadata || {}
+        const properties = element.properties || {}
+        const entity = properties.entity || {}
+
+        setNodes(
+          editor,
+          {
+            metadata: {
+              ...metadata,
+              updatedBy,
+              updatedAt: Date.now()
+            },
+            type,
+            properties: {
+              ...properties,
+              entity: {
+                ...entity,
+                active: type
+              }
+            }
+          },
+          { at: path, mode: 'highest' }
+        )
+      }
     }
   }
 
@@ -74,8 +110,9 @@ const useUpdateBlock = () => {
     noteId: string,
     options: {
       blockId: string
-      blockData: BlockDataType
-      useBuffer: boolean
+      blockData?: any
+      properties?: Partial<PropertiyFields>
+      useBuffer?: boolean
     }
   ) => {
     const content = getNoteContent(noteId)
@@ -89,7 +126,11 @@ const useUpdateBlock = () => {
         if (block.id === options.blockId) {
           updatedBlock = {
             ...block,
-            ...options.blockData
+            ...(options.blockData ?? {}),
+            properties: {
+              ...(block.properties || {}),
+              ...(options.properties || {})
+            }
           }
 
           return updatedBlock
@@ -163,6 +204,7 @@ const useUpdateBlock = () => {
     getSelectionInMarkdown,
     moveBlockFromNode,
     insertInNote,
+    changeSuperBlockType,
     updateMetadataProperties
   }
 }

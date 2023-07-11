@@ -5,7 +5,8 @@ import {
   Highlight,
   useDataStore,
   useHighlightStore,
-  useLayoutStore
+  useLayoutStore,
+  useLinkStore
 } from '@mexit/core'
 import { DrawerHeader, NotePicker } from '@mexit/shared'
 
@@ -24,6 +25,8 @@ const AddToNotes = () => {
 
   const onSelect = (nodeId: string) => {
     const highlight = useLayoutStore.getState().drawer?.data as Highlight
+    const link = useLinkStore.getState().links.find((link) => link.url === highlight?.properties?.sourceUrl)
+
     setDrawerState({
       type: DrawerType.LOADING,
       data: {
@@ -32,7 +35,7 @@ const AddToNotes = () => {
       }
     })
 
-    const content = getHighlightContent(highlight)
+    const content = getHighlightContent(highlight, link)
 
     appendAndSave({
       content,

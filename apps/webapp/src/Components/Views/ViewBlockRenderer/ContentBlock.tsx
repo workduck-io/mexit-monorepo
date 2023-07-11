@@ -4,11 +4,15 @@ import styled, { css, useTheme } from 'styled-components'
 
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { ModalsType, SuperBlocks, useModalStore } from '@mexit/core'
+import { ModalsType, mog, SuperBlocks, useModalStore } from '@mexit/core'
 import { Group, MexIcon } from '@mexit/shared'
 
 import { SearchBlockIcons } from '../../../Editor/Components/Blocks/BlockIcons'
 import ContentSuperBlock from '../../../Editor/Components/SuperBlock/ContentSuperBlock'
+import SmartCaptureSuperBlock from '../../../Editor/Components/SuperBlock/SmartCaptureSuperBlock'
+import { PropertiyFields } from '../../../Editor/Components/SuperBlock/SuperBlock.types'
+import useUpdateBlock from '../../../Editor/Hooks/useUpdateBlock'
+import { useSearch } from '../../../Hooks/useSearch'
 import { getBlock } from '../../../Utils/parseData'
 
 import { SlideDownKeyFrames, SlideUpKeyFrames } from './BlockContainer/styled'
@@ -61,8 +65,42 @@ type BlockProps = {
   block: SearchResult
 }
 
+export const CaptureBlock = ({ block }: BlockProps) => {
+  const theme = useTheme()
+
+  return (
+    <ContentBlockContainer>
+      <Group>
+        <VerticalStretch>
+          <MexIcon
+            color={theme.tokens.colors.primary.default}
+            width={20}
+            height={20}
+            icon={SearchBlockIcons[block?.entity]}
+          />
+        </VerticalStretch>
+        <SmartCaptureSuperBlock
+          value={block.data.properties}
+          metadata={block.data.metadata}
+          isActive
+          isSelected
+          isReadOnly
+          id={block.id}
+          parent={block.parent}
+          type={SuperBlocks.CONTENT}
+        >
+          <div style={{ lineHeight: 1.58 }}>{block.text}</div>
+        </SmartCaptureSuperBlock>
+      </Group>
+    </ContentBlockContainer>
+  )
+}
+
 const ContentBlock: React.FC<BlockProps> = ({ block }) => {
   const theme = useTheme()
+  const { setInfoOfBlockInContent } = useUpdateBlock()
+  const { updateBlocks } = useSearch()
+
   const [isOpen, setIsOpen] = useState(false)
   const toggleModal = useModalStore((store) => store.toggleOpen)
 
@@ -81,9 +119,24 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
     }
   }
 
-  // Write a function to check double click
+  const handleOnChange = (properties: Partial<PropertiyFields>) => {
+    const noteId = block.parent
 
-  const canOpen = block?.text?.length > 100
+    const updatedBlock = setInfoOfBlockInContent(block.parent, {
+      blockId: block.id,
+      properties,
+      useBuffer: true
+    })
+
+    mog('UPDATED BLOCK', { updatedBlock, properties })
+
+    updateBlocks({
+      id: noteId,
+      contents: [updatedBlock]
+    })
+  }
+
+  const canOpen = block?.text?.length > 200
 
   return (
     <ContentBlockContainer>
@@ -103,11 +156,14 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
           isActive
           isSelected
           isReadOnly
+          onChange={handleOnChange}
           id={block.id}
           parent={block.parent}
           type={SuperBlocks.CONTENT}
         >
-          <div style={{ lineHeight: 1.58 }}>{block.text}</div>
+          <div style={{ lineHeight: 1.58, wordWrap: 'break-word' }}>
+            {block.text?.substring(0, 200) + (canOpen ? '...' : '')}
+          </div>
           {/* <Plateless content={content} /> */}
         </ContentSuperBlock>
         {/* <BlockContent isOpen={isOpen}>{content}</BlockContent> */}

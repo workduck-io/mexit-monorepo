@@ -70,7 +70,7 @@ export type TodoType = {
   id: string
   nodeid: string
   content: NodeEditorContent
-  metadata: {
+  properties: {
     status: TodoStatus
     priority: PriorityType
   }

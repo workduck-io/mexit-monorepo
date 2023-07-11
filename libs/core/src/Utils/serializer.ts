@@ -25,7 +25,6 @@ export const directPropertyKeys = [
   'actionContext',
   'blockMeta',
   'status',
-  'priority',
   'lang',
   'metadata',
   'properties'

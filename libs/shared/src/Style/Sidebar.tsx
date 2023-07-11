@@ -97,7 +97,7 @@ export const StyledTreeItemSwitcher = styled(StyledTreeSwitcher)`
   }
 `
 
-export const ItemTitleText = styled.div`
+export const ItemTitleText = styled.span`
   width: 100%;
   white-space: nowrap;
   overflow: hidden;

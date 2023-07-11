@@ -91,9 +91,9 @@ export const useViewFilters = () => {
     }
 
     const options = Object.keys(keyFrequencyMap)
-
       .map((key) => {
         const keyToCheck = key.split(SEPARATOR).at(-1)
+
         return {
           id: key,
           label: labelsToReplace[key] || keyToCheck,

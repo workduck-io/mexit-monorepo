@@ -5,7 +5,6 @@ import Modal from 'react-modal'
 import create from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
-import { Entities } from '@workduck-io/mex-search'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
@@ -16,6 +15,7 @@ import {
   GlobalFilterJoin,
   SortOrder,
   SortType,
+  SuperBlocks,
   useTreeStore,
   View,
   ViewType
@@ -36,7 +36,7 @@ interface ViewProperties {
 
   // * View v2 properties
   sortType?: SortType
-  entities?: Array<Entities>
+  entities?: Array<SuperBlocks>
   groupBy?: string
 }
 

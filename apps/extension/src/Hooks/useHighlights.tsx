@@ -131,7 +131,7 @@ export const useHighlights = () => {
    * Doesn't add to the store.
    *   That will need the block map.
    */
-  const saveHighlight = async (highlight: Highlight, sourceTitle: string) => {
+  const saveHighlight = async (highlight: Highlight) => {
     // const link = getLink(highlight.properties.sourceUrl)
     // if (!link) {
     //   await saveLink({ url: highlight.properties.sourceUrl, title: sourceTitle })

@@ -19,7 +19,7 @@ interface BlockTagsProps {
 const TagMenu = ({ onCreate, onAdd }) => {
   const allTags = useDataStore((store) => store.tags)
 
-  return <AddTagMenu createTag={onCreate} tags={allTags} addTag={onAdd} />
+  return <AddTagMenu key={allTags?.length} createTag={onCreate} tags={allTags} addTag={onAdd} />
 }
 
 const BlockTags = ({ name, value, isSelected, onChange }: BlockTagsProps) => {

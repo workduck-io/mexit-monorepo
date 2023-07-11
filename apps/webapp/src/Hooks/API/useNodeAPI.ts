@@ -3,6 +3,7 @@ import {
   batchArray,
   DEFAULT_NAMESPACE,
   defaultContent,
+  deserializeContent,
   extractMetadata,
   GET_REQUEST_MINIMUM_GAP_IN_MS,
   getDefaultContent,
@@ -11,6 +12,7 @@ import {
   mog,
   NodeEditorContent,
   removeNulls,
+  serializeContent,
   useAuthStore,
   useContentStore,
   useMetadataStore,
@@ -18,7 +20,6 @@ import {
 } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
-import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
 import { useInternalLinks } from '../useInternalLinks'

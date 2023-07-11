@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import {
   apiURLs,
   ComboboxType,
+  ELEMENT_EXCALIDRAW,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
@@ -11,6 +12,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TAG,
+  getDefaultContent,
   getMIcon,
   PromptRenderType,
   SEPARATOR,
@@ -253,16 +255,17 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         slateElementType: AI_RENDER_TYPE,
         command: 'ai'
       },
+      canvas: {
+        slateElementType: ELEMENT_EXCALIDRAW,
+        command: 'canvas'
+      },
       task: {
         slateElementType: SuperBlocks.TASK,
         command: 'task',
         getData: () => ({
-          type: SuperBlocks.TASK,
-          children: [{ text: '' }],
-          metadata: {
-            properties: {
-              status: 'todo'
-            }
+          ...getDefaultContent(SuperBlocks.TASK),
+          properties: {
+            status: 'todo'
           }
         })
       },

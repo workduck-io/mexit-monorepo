@@ -1,14 +1,10 @@
-import { useTheme } from 'styled-components'
-
 import { getMenuItem, getMIcon, TaskStatus } from '@mexit/core'
 import { InsertMenu } from '@mexit/shared'
 
 export const StatusSelect = ({ name, value, shortcut, onChange }) => {
   const handleOnClick = (status) => {
-    onChange({ status })
+    onChange({ status: status })
   }
-
-  const theme = useTheme()
 
   return (
     <InsertMenu

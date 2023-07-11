@@ -1,6 +1,4 @@
-import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, Highlight, mog } from '@mexit/core'
-
-import { deserializeContent } from '../../Utils/serializer'
+import { API, deserializeContent, GET_REQUEST_MINIMUM_GAP_IN_MS, Highlight, mog } from '@mexit/core'
 
 export const useHighlightAPI = () => {
   const getHighlight = async (id: string) => {

@@ -51,7 +51,7 @@ import {
   ELEMENT_SYNC_BLOCK,
   ELEMENT_TASK_VIEW_BLOCK,
   generateTempId,
-  getDefaultContent,
+  getBasicContent,
   SECTION_SEPARATOR,
   TodoStatus
 } from '@mexit/core'
@@ -104,7 +104,7 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     triggerAtBlockStart: true,
     query: formatQuery,
     format: (editor: PlateEditor<Value>) => {
-      const content = [getDefaultContent(ELEMENT_SECTION_SEPARATOR), getDefaultContent()]
+      const content = [getBasicContent(ELEMENT_SECTION_SEPARATOR), getBasicContent()]
       insertNodes(editor, content)
     }
   },

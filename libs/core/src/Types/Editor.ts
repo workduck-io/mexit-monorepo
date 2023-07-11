@@ -149,7 +149,7 @@ export interface BlockIndexData {
   text: string
 }
 
-export type NodeEditorContent = any[]
+export type NodeEditorContent = BlockType[]
 
 export interface NodeContent {
   type: string
@@ -259,9 +259,9 @@ export type BlockMetaDataType = {
 export type BlocksType = Record<string, BlockType>
 
 export type BlockType = {
-  id: string
-  children: BlockType[]
-  type: string
+  id?: string
+  children?: any[]
+  type?: string
   text?: string
   blockMeta?: BlockMetaDataType
 }

@@ -16,8 +16,8 @@ import {
   useAuthStore,
   useContentStore,
   useLinkStore,
-useMetadataStore,  useSnippetStore
- } from '@mexit/core'
+  useMetadataStore, useSnippetStore
+} from '@mexit/core'
 import {
   ActionTitle,
   CenteredIcon,

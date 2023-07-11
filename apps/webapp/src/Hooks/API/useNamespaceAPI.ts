@@ -4,6 +4,7 @@ import {
   AccessLevel,
   API,
   batchArrayWithNamespaces,
+  deserializeContent,
   extractMetadata,
   generateNamespaceId,
   iLinksToUpdate,
@@ -15,7 +16,6 @@ import {
 } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
-import { deserializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { getEntitiyInitializer, runBatchWorker } from '../../Workers/controller'
 import { useUpdater } from '../useUpdater'
