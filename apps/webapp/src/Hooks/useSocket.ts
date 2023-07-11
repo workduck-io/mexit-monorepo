@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+import { BroadcastChannel, createLeaderElection } from 'broadcast-channel'
+
 import { mog } from '@mexit/core'
 
 import { SocketActionType, SocketMessage } from '../Types/Socket'
@@ -26,10 +28,18 @@ const useSocket = () => {
 
   useEffect(() => {
     const broadcastChannel = new BroadcastChannel('WebSocketChannel')
+    const elector = createLeaderElection(broadcastChannel)
 
-    broadcastChannel.addEventListener('message', (event) => {
-      handleSocketMessage(event.data)
+    elector.awaitLeadership().then(() => {
+      document.title = 'Leader'
+      console.log('this tab is the leader')
     })
+
+    elector.broadcastChannel.addEventListener('message', handleSocketMessage)
+
+    return () => {
+      elector.broadcastChannel.removeEventListener('message', handleSocketMessage)
+    }
   }, [])
 
   return

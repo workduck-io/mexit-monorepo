@@ -1,8 +1,10 @@
+import { BroadcastChannel, createLeaderElection } from 'broadcast-channel'
 import ky from 'ky'
 import { type KyInstance } from 'ky/distribution/types/ky'
 import { customAlphabet } from 'nanoid'
 import PQueue from 'p-queue'
-import ReconnectingWebSocket from 'reconnecting-websocket'
+
+import ReconnectingWebSocket from '@workduck-io/reconnecting-websocket'
 
 import {
   apiURLs,
@@ -30,6 +32,7 @@ const generateRequestID = () => `REQUEST_${nanoid()}`
 let client: KyInstance
 let wsClient: ReconnectingWebSocket
 let broadcastChannel: BroadcastChannel
+const tokenCache = []
 
 const lookup: Partial<Record<UpdateKey, (message: SocketMessage) => Promise<SocketMessage> | SocketMessage>> = {
   'HIGHLIGHT-CREATE': async (message) => {
@@ -136,13 +139,20 @@ const batchMessageTransformer = async (messages: SocketMessage[]) => {
 }
 
 const initializeClient = (authToken: string, workspaceID: string) => {
-  // wsClient.close()
-  wsClient = new ReconnectingWebSocket(
-    `wss://5bjjcc3nq3.execute-api.us-east-1.amazonaws.com/test?workspaceId=${workspaceID}&Authorizer=${authToken}`
-  )
+  if (!tokenCache.includes(`${workspaceID}-${authToken}`)) {
+    wsClient = new ReconnectingWebSocket(
+      `wss://5bjjcc3nq3.execute-api.us-east-1.amazonaws.com/test?workspaceId=${workspaceID}&Authorizer=${authToken}`
+    )
+    tokenCache.push(`${workspaceID}-${authToken}`)
+  }
 
   const idToPortMap = {}
+
   broadcastChannel = new BroadcastChannel('WebSocketChannel')
+  const elector = createLeaderElection(broadcastChannel)
+  elector.awaitLeadership().then(() => {
+    console.log('leader election done')
+  })
 
   // Let all connected contexts(tabs) know about state changes
   wsClient.onopen = () => {

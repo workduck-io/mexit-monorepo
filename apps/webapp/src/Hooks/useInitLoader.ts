@@ -165,7 +165,6 @@ export const useInitLoader = () => {
     if (
       initalizeApp !== AppInitStatus.START &&
       initalizeApp !== AppInitStatus.SWITCH &&
-      initalizeApp !== AppInitStatus.COMPLETE &&
       userPrefHydrated &&
       snippetHydrated &&
       dataStoreHydrated &&
