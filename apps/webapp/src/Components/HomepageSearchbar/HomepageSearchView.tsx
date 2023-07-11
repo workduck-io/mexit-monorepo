@@ -5,7 +5,7 @@ import filter2Line from '@iconify-icons/ri/filter-2-line'
 import searchLine from '@iconify-icons/ri/search-line'
 import { debounce } from 'lodash'
 
-import { PrimaryButton } from '@workduck-io/mex-components'
+import { Button, PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Filter, Filters, GlobalFilterJoin, idxKey, mog, ViewType } from '@mexit/core'
@@ -385,15 +385,27 @@ const HomepageSearchView = <Item,>({
           />
         </InputWrapper>
 
-        <PrimaryButton
-          large
-          onClick={() => {
-            setShowFilters?.(!showFilters)
-          }}
-        >
-          <Icon icon={filter2Line} fontSize={20} />
-          {showFilters ? 'Hide Filters' : 'Show Filters'}
-        </PrimaryButton>
+        {showFilters ? (
+          <Button
+            large
+            onClick={() => {
+              setShowFilters?.(!showFilters)
+            }}
+          >
+            <Icon icon={filter2Line} fontSize={20} />
+            Show Filters
+          </Button>
+        ) : (
+          <PrimaryButton
+            large
+            onClick={() => {
+              setShowFilters?.(!showFilters)
+            }}
+          >
+            <Icon icon={filter2Line} fontSize={20} />
+            Hide Filters
+          </PrimaryButton>
+        )}
       </HomepageSearchHeader>
 
       {showFilters && RenderFilters && filters?.length > 0 ? <RenderFilters result={result} /> : null}

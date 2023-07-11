@@ -2,7 +2,7 @@ import { animated } from 'react-spring'
 
 import styled, { css } from 'styled-components'
 
-import { PrimaryButton } from '@workduck-io/mex-components'
+import { Button, PrimaryButton } from '@workduck-io/mex-components'
 
 import { ViewType } from '@mexit/core'
 
@@ -124,6 +124,11 @@ export const HomepageSearchHeader = styled.div`
   gap: 1rem;
 
   ${PrimaryButton} {
+    height: 3rem;
+    ${MainFont}
+  }
+
+  ${Button} {
     height: 3rem;
     ${MainFont}
   }
