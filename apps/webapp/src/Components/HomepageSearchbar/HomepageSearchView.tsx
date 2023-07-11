@@ -387,7 +387,6 @@ const HomepageSearchView = <Item,>({
 
         <PrimaryButton
           large
-          style={{ width: '10rem', height: '3rem' }}
           onClick={() => {
             setShowFilters?.(!showFilters)
           }}

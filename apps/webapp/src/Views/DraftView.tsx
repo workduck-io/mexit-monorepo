@@ -66,10 +66,9 @@ interface SearchViewState<Item> {
 
 const CardsContainerParent = styled.div`
   display: flex;
-  max-width: 85vw;
+  max-width: calc(100vw - 14rem);
   position: relative;
-  margin: 0 2rem;
-  margin-bottom: 2rem;
+  margin: 0 2rem 2rem;
 
   @media (max-width: ${size.tiny}) {
     margin: 0 1rem;

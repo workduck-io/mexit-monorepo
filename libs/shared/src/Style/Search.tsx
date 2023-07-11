@@ -2,6 +2,8 @@ import { animated } from 'react-spring'
 
 import styled, { css } from 'styled-components'
 
+import { PrimaryButton } from '@workduck-io/mex-components'
+
 import { ViewType } from '@mexit/core'
 
 import { EditorHeader, EditorStyles } from './Editor'
@@ -119,8 +121,12 @@ export const SearchHeader = styled.div`
 export const HomepageSearchHeader = styled.div`
   display: flex;
   align-items: center;
-  max-width: 86vw;
   gap: 1rem;
+
+  ${PrimaryButton} {
+    height: 3rem;
+    ${MainFont}
+  }
 
   ${InputWrapper} {
     display: flex;
@@ -141,10 +147,6 @@ export const HomepageSearchHeader = styled.div`
       height: 3rem;
       width: 100%;
       transition: all 0.2s ease-in-out;
-      &:active,
-      &:focus {
-        width: 30rem;
-      }
     }
 
     &:hover {
