@@ -161,10 +161,6 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
   const mergedSpacePreferences = merge(local.space, remote.space ?? {})
   const theme = remote.theme ?? local.theme
 
-  if (local?.preferenceModifiedAt < remote?.preferenceModifiedAt) {
-    console.log('Yes smaller')
-  } else console.log('Not smaller')
-
   // mog('mergedLastOpenedNotes', { localLastOpenedNotes, mergedLastOpenedNotes, local, remote })
   return {
     version: local.version,
