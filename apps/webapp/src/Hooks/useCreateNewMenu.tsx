@@ -121,8 +121,8 @@ export const useCreateNewMenu = () => {
   }
 
   const handleApplyTemplateOnNote = (item: TreeItem) => {
-    if (item.data.path !== DRAFT_NODE) {
-      toggleModal(ModalsType.template, item.data)
+    if (item?.data.path !== DRAFT_NODE) {
+      toggleModal(ModalsType.template, item?.data)
     } else {
       toast.error('Template cannot be set for Drafts hierarchy')
     }
@@ -130,19 +130,19 @@ export const useCreateNewMenu = () => {
 
   const handleCreateChild = (item: TreeItem) => {
     const node = createNewNote({
-      parent: { path: item.data.path, namespace: item.data.namespace }
+      parent: { path: item?.data.path, namespace: item?.data.namespace }
     })
     goTo(ROUTE_PATHS.node, NavigationType.push, node?.nodeid)
   }
 
   const handleShare = (item: TreeItem) => {
-    openShareModal('permission', 'note', item.data.nodeid)
+    openShareModal('permission', 'note', item?.data.nodeid)
   }
 
   const handleHideSpace = () => {
     const item = useLayoutStore.getState().contextMenu?.item
-    addSpacePreference(item.id, { hidden: true })
-    deleteNamespace(item.id, false)
+    addSpacePreference(item?.id, { hidden: true })
+    deleteNamespace(item?.id, false)
     changeSpace(getDefaultNamespaceId())
   }
 
@@ -153,23 +153,23 @@ export const useCreateNewMenu = () => {
 
   const getMoveToNamespaceItems = () => {
     const item = useLayoutStore.getState().contextMenu?.item
-    const namespace = useDataStore.getState().namespaces?.filter((i) => !i.granterID && i.id !== item.data?.namespace)
+    const namespace = useDataStore.getState().namespaces?.filter((i) => !i.granterID && i.id !== item?.data?.namespace)
 
     return namespace.map((ns) => getMenuItem(ns.name, () => handleMoveNamespaces(item, ns.id), false, ns.icon))
   }
 
   const handleArchive = (item: TreeItem) => {
-    openDeleteModal({ path: item.data.path, namespaceID: item.data.namespace })
+    openDeleteModal({ path: item?.data.path, namespaceID: item?.data.namespace })
   }
 
   const handleMoveNamespaces = async (item: TreeItem, newNamespaceID: string) => {
     const refactored = await execRefactorAsync(
-      { path: item.data?.path, namespaceID: item.data?.namespace },
-      { path: item.data?.path, namespaceID: newNamespaceID }
+      { path: item?.data?.path, namespaceID: item?.data?.namespace },
+      { path: item?.data?.path, namespaceID: newNamespaceID }
     )
 
-    if (doesLinkRemain(item.data?.nodeid, refactored)) {
-      push(item.data?.nodeid, { savePrev: false })
+    if (doesLinkRemain(item?.data?.nodeid, refactored)) {
+      push(item?.data?.nodeid, { savePrev: false })
     }
   }
 
@@ -228,12 +228,12 @@ export const useCreateNewMenu = () => {
 
   const getTreeMenuItems = (): Array<MenuListItemType> => {
     const item = useLayoutStore.getState().contextMenu?.item
-    const namespace = useDataStore.getState().namespaces?.find((i) => i.id === item.data?.namespace)
+    const namespace = useDataStore.getState().namespaces?.find((i) => i.id === item?.data?.namespace)
     const disabled = namespace?.granterID !== undefined && namespace.access === 'READ'
     const noteMetadata = useMetadataStore.getState().metadata.notes?.[item?.data?.nodeid]
 
     const snippets = useSnippetStore.getState().snippets ?? {}
-    const templates = Object.values(snippets).filter((item) => item?.template && item.id === noteMetadata?.templateID)
+    const templates = Object.values(snippets).filter((item) => item?.template && item?.id === noteMetadata?.templateID)
 
     const hasTemplate = templates.length !== 0
 
