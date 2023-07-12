@@ -503,6 +503,14 @@ export const Result = styled(animated.div)<{
           @media (min-width: ${size.small}) {
             min-width: 474px;
           }
+          position: relative;
+
+          ${ResultCardFooter} {
+            position: absolute;
+            bottom: 0px;
+            width: 470px;
+            border-radius: ${theme.borderRadius.small};
+          }
         `}
 
         overflow-y: auto;
