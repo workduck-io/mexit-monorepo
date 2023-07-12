@@ -40,7 +40,6 @@
     "@workduck-io/reconnecting-websocket": "^4.4.1",
     "@workduck-io/tinykeys": "^1.5.0",
     "boring-avatars": "^1.6.3",
-    "broadcast-channel": "^5.1.0",
     "chrono-node": "^2.3.8",
     "color-scheme": "^1.0.1",
     "compress.js": "^1.2.2",
