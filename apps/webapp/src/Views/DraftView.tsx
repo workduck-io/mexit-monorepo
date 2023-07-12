@@ -382,9 +382,10 @@ function DraftView<Item>() {
         setSS={setSS}
       />
 
-      {lastOpened?.notes?.length === 0 && lastOpened?.snippet?.length === 0 && lastOpened?.highlight?.length === 0 && (
-        <Info>No Activity Found</Info>
-      )}
+      {showrecents &&
+        lastOpened?.notes?.length === 0 &&
+        lastOpened?.snippet?.length === 0 &&
+        lastOpened?.highlight?.length === 0 && <Info>No Activity Found</Info>}
 
       {/* Notes Section (results/recents) */}
       <>
