@@ -11,7 +11,6 @@ import { Button } from '@workduck-io/mex-components'
 
 import {
   defaultContent,
-  getInitialNode,
   ILink,
   RecentType,
   Snippet,
@@ -389,11 +388,11 @@ function DraftView<Item>() {
 
       {/* Notes Section (results/recents) */}
       <>
-        {(showrecents && lastOpened?.notes?.length > 0) || searchresultCards?.notes?.length > 0 ? (
+        {((showrecents && lastOpened?.notes?.length > 0) || (!showrecents && searchresultCards?.notes?.length > 0)) && (
           <MainHeader>
             <ActivityTitle>{showrecents ? 'Recent' : 'Result'} Notes</ActivityTitle>
           </MainHeader>
-        ) : null}
+        )}
 
         {showrecents
           ? lastOpened &&
@@ -433,6 +432,7 @@ function DraftView<Item>() {
                           <EditorPreviewRenderer
                             content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
                             editorId={`editor_preview_${s.nodeid}`}
+                            noMouseEvents
                           />
                         </SearchPreviewWrapper>
                       </Result>
@@ -441,10 +441,11 @@ function DraftView<Item>() {
                 </CardsContainer>
               </CardsContainerParent>
             )
-          : searchresultCards?.notes?.length > 0 && (
+          : searchresultCards &&
+            searchresultCards?.notes?.length > 0 && (
               <CardsContainerParent>
-                {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes?.length >= 3) ||
-                  (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes?.length > 1)) && (
+                {((window.innerWidth > parseInt(size.tiny) && searchresultCards?.notes?.length >= 3) ||
+                  (window.innerWidth <= parseInt(size.tiny) && searchresultCards?.notes?.length > 1)) && (
                   <CarouselButtons
                     onLeftClick={scrollToLeft}
                     onRightClick={scrollToRight}
@@ -456,30 +457,24 @@ function DraftView<Item>() {
                 <CardsContainer view={ViewType.Card} ref={containerRef}>
                   {searchresultCards.notes?.map((element: any) => {
                     const nodeid = element?.nodeid
-                    const title = nodeid ? element?.path : element?.title
+                    const title = element?.path
                     const id = element?.nodeid
 
-                    const icon = nodeid
-                      ? useMetadataStore.getState().metadata.notes?.[nodeid]?.icon
-                      : DefaultMIcons.SNIPPET
-                    const namespace = nodeid ? getNamespaceOfNodeid(nodeid) : null
+                    const icon = useMetadataStore.getState().metadata.notes?.[nodeid]?.icon
+                    const namespace = getNamespaceOfNodeid(nodeid)
 
-                    const edNode = nodeid ? { ...element, title: title, id: nodeid } : getInitialNode()
-                    const isTagged = nodeid ? hasTags(edNode.nodeid) : false
+                    const edNode = { ...element, title: title, id: nodeid }
+                    const isTagged = hasTags(edNode?.nodeid)
 
-                    const con = nodeid ? contents[nodeid] : null
+                    const con = contents[nodeid]
                     const content = con ? con.content : defaultContent.content
 
-                    const resultKey = nodeid ? `tag_res_prev_${nodeid}` : `tag_res_prev_${id}`
+                    const resultKey = `tag_res_prev_${nodeid}`
 
                     return (
                       <Result
                         onClick={() => {
-                          if (nodeid) {
-                            onOpen(element?.nodeid)
-                          } else {
-                            onOpenSnippet(element)
-                          }
+                          onOpen(element?.nodeid)
                         }}
                         view={ViewType.Card}
                         recents={true}
@@ -494,15 +489,10 @@ function DraftView<Item>() {
                           {namespace && <NamespaceTag namespace={namespace} />}
                         </ResultHeader>
 
-                        {nodeid ? (
-                          <SearchPreviewWrapper>
-                            <EditorPreviewRenderer content={content} editorId={`editor_${nodeid}`} />
-                          </SearchPreviewWrapper>
-                        ) : (
-                          <SearchPreviewWrapper padding>
-                            <Plateless content={descriptions?.[element?.id]?.truncatedContent} multiline />
-                          </SearchPreviewWrapper>
-                        )}
+                        <SearchPreviewWrapper>
+                          <EditorPreviewRenderer content={content} editorId={`editor_${nodeid}`} noMouseEvents />
+                        </SearchPreviewWrapper>
+
                         {isTagged && (
                           <ResultCardFooter>
                             <TagsRelatedTiny nodeid={edNode.nodeid} />
@@ -519,11 +509,12 @@ function DraftView<Item>() {
       {/* //* Snippets Section (results/recents) */}
 
       <>
-        {(showrecents && lastOpened?.snippet?.length > 0) || searchresultCards?.snippets?.length > 0 ? (
+        {((showrecents && lastOpened?.snippet?.length > 0) ||
+          (!showrecents && searchresultCards?.snippets?.length > 0)) && (
           <MainHeader>
             <ActivityTitle>{showrecents ? 'Recent' : 'Result'} Snippets</ActivityTitle>
           </MainHeader>
-        ) : null}
+        )}
 
         {showrecents
           ? lastOpened &&
@@ -539,6 +530,7 @@ function DraftView<Item>() {
                     isRightHidden={isRightHidden2}
                   />
                 )}
+
                 <CardsContainer view={ViewType.Card} ref={containerRef2}>
                   {activitySnippets.map((s) => {
                     const id = `${s?.id}_ResultFor_SearchSnippet_${randId}`
@@ -567,10 +559,11 @@ function DraftView<Item>() {
                 </CardsContainer>
               </CardsContainerParent>
             )
-          : searchresultCards?.snippets?.length > 0 && (
+          : searchresultCards &&
+            searchresultCards?.snippets?.length > 0 && (
               <CardsContainerParent>
-                {((window.innerWidth > parseInt(size.tiny) && lastOpened?.notes?.length >= 3) ||
-                  (window.innerWidth <= parseInt(size.tiny) && lastOpened?.notes?.length > 1)) && (
+                {((window.innerWidth > parseInt(size.tiny) && searchresultCards?.snippets?.length >= 3) ||
+                  (window.innerWidth <= parseInt(size.tiny) && searchresultCards?.snippets?.length > 1)) && (
                   <CarouselButtons
                     onLeftClick={scrollToLeft2}
                     onRightClick={scrollToRight2}
@@ -580,60 +573,27 @@ function DraftView<Item>() {
                 )}
 
                 <CardsContainer view={ViewType.Card} ref={containerRef2}>
-                  {searchresultCards.snippets?.map((element: any) => {
-                    const nodeid = element?.nodeid
-                    const title = nodeid ? element?.path : element?.title
-                    const id = element?.nodeid
-
-                    const icon = nodeid
-                      ? useMetadataStore.getState().metadata.notes?.[nodeid]?.icon
-                      : DefaultMIcons.SNIPPET
-                    const namespace = nodeid ? getNamespaceOfNodeid(nodeid) : null
-
-                    const edNode = nodeid ? { ...element, title: title, id: nodeid } : getInitialNode()
-                    const isTagged = nodeid ? hasTags(edNode.nodeid) : false
-
-                    const con = nodeid ? contents[nodeid] : null
-                    const content = con ? con.content : defaultContent.content
-
-                    const resultKey = nodeid ? `tag_res_prev_${nodeid}` : `tag_res_prev_${id}`
+                  {searchresultCards?.snippets?.map((s) => {
+                    const id = `${s?.id}_ResultFor_SearchSnippet_${randId}`
 
                     return (
                       <Result
-                        onClick={() => {
-                          if (nodeid) {
-                            onOpen(element?.nodeid)
-                          } else {
-                            onOpenSnippet(element)
-                          }
-                        }}
                         view={ViewType.Card}
+                        key={id}
+                        onClick={() => {
+                          onOpenSnippet(s)
+                        }}
                         recents={true}
-                        key={resultKey}
-                        id={nodeid}
                       >
-                        <ResultHeader active>
+                        <ResultHeader $paddingSize="small" active>
                           <Group>
-                            {icon && <IconDisplay icon={icon} size={20} />}
-                            <ResultTitle>{title}</ResultTitle>
+                            <IconDisplay icon={DefaultMIcons.SNIPPET} size={20} />
+                            <ResultTitle>{s?.title}</ResultTitle>
                           </Group>
-                          {namespace && <NamespaceTag namespace={namespace} />}
                         </ResultHeader>
-
-                        {nodeid ? (
-                          <SearchPreviewWrapper>
-                            <EditorPreviewRenderer content={content} editorId={`editor_${nodeid}`} />
-                          </SearchPreviewWrapper>
-                        ) : (
-                          <SearchPreviewWrapper padding>
-                            <Plateless content={descriptions?.[element?.id]?.truncatedContent} multiline />
-                          </SearchPreviewWrapper>
-                        )}
-                        {isTagged && (
-                          <ResultCardFooter>
-                            <TagsRelatedTiny nodeid={edNode.nodeid} />
-                          </ResultCardFooter>
-                        )}
+                        <SearchPreviewWrapper padding>
+                          <Plateless content={descriptions?.[s?.id]?.truncatedContent} multiline />
+                        </SearchPreviewWrapper>
                       </Result>
                     )
                   })}
