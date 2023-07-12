@@ -11,11 +11,10 @@ import {
   PersistentData,
   SearchRepExtra,
   Snippets,
+  SocketMessage,
   useAuthStore,
-  withTimeout
-} from '@mexit/core'
+  withTimeout} from '@mexit/core'
 
-import { SocketMessage } from '../Types/Socket'
 import { WorkerRequestType } from '../Utils/worker'
 
 import { type AnalysisWorkerInterface } from './analysis'

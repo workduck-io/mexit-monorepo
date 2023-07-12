@@ -17,10 +17,11 @@ import {
   iLinksToUpdate,
   mog,
   runBatch,
-  Snippets
+  Snippets,
+  SocketMessage,
+  UpdateKey
 } from '@mexit/core'
 
-import { SocketMessage, UpdateKey } from '../Types/Socket'
 import { deserializeContent } from '../Utils/serializer'
 import { WorkerRequestType } from '../Utils/worker'
 

@@ -12,6 +12,7 @@ import { addIconsToIconify, getScrollbarWidth, isInputField } from '@mexit/share
 import { useEditorStore } from '../Hooks/useEditorStore'
 import { useInitLoader } from '../Hooks/useInitLoader'
 import { useReminderActionHandler } from '../Hooks/useReminderActionHandler'
+import useSocket from '../Hooks/useSocket'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import messagePassing from '../Sync'
@@ -27,6 +28,7 @@ export function InternalEvents() {
     messagePassing()
   }, [])
 
+  useSocket()
   useToggleHandler()
   initAnalytics()
   handleHighlighter()

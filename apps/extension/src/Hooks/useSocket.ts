@@ -21,6 +21,7 @@ const useSocket = () => {
   }
 
   const handleSocketMessage = (message: SocketMessage) => {
+    console.log('poop message', { message })
     handleAction(message.action, message.data)
   }
 
@@ -32,8 +33,12 @@ const useSocket = () => {
       mog('this tab is the leader')
     })
 
-    elector.broadcastChannel.addEventListener('message', handleSocketMessage)
+    console.log('here1 poop')
 
+    elector.broadcastChannel.addEventListener('message', handleSocketMessage)
+    // elector.broadcastChannel.onmessage(handleSocketMessage)
+
+    console.log('here poop')
     return () => {
       elector.broadcastChannel.removeEventListener('message', handleSocketMessage)
     }

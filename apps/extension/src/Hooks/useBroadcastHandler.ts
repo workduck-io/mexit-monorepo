@@ -99,7 +99,7 @@ const useBroadcastHandler = () => {
   }
 
   const updatesHandler = (data: UpdateData) => {
-    mog('broadcast update data', { data })
+    mog('poop', { data })
 
     lookup[`${data.entityType}-${data.operationType}`](data)
   }
