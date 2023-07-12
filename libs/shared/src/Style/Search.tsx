@@ -125,11 +125,13 @@ export const HomepageSearchHeader = styled.div`
 
   ${PrimaryButton} {
     height: 3rem;
+    position: relative;
     ${MainFont}
   }
 
   ${Button} {
     height: 3rem;
+    position: relative;
     ${MainFont}
   }
 
@@ -168,6 +170,21 @@ export const HomepageSearchHeader = styled.div`
       flex-shrink: 0;
     }
   }
+`
+
+export const FilterNumber = styled.div`
+  background-color: #e15047;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${MainFont}
+  color: white;
+  position: absolute;
+  top: -12px;
+  right: -9px;
 `
 
 export const SearchFilterWrapper = styled(SearchHeader)`

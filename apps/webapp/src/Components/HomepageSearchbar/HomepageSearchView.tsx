@@ -9,7 +9,13 @@ import { Button, PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Filter, Filters, GlobalFilterJoin, idxKey, mog, ViewType } from '@mexit/core'
-import { HomepageSearchHeader, HomepageSearchInput, InputWrapper, SearchViewContainer } from '@mexit/shared'
+import {
+  FilterNumber,
+  HomepageSearchHeader,
+  HomepageSearchInput,
+  InputWrapper,
+  SearchViewContainer
+} from '@mexit/shared'
 
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
 import { RenderSplitProps, SplitOptions } from '../../Views/SplitView'
@@ -222,10 +228,10 @@ const HomepageSearchView = <Item,>({
       // const curIndexGroup = findCurrentIndex()
       const initItems = []
 
-      if (initItems?.length >= 0 || currentFilters.length > 0) {
+      if (initItems?.length > 0 || currentFilters.length > 0) {
         setResult([], newSearchTerm)
-        setShowrecents(true)
-      }
+        setShowrecents(false)
+      } else setShowrecents(true)
     } else {
       const res = await onSearch(newSearchTerm)
       mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, res })
@@ -393,7 +399,8 @@ const HomepageSearchView = <Item,>({
             }}
           >
             <Icon icon={filter2Line} fontSize={20} />
-            Show Filters
+            Hide Filters
+            {currentFilters?.length > 0 && <FilterNumber> {currentFilters.length}</FilterNumber>}
           </Button>
         ) : (
           <PrimaryButton
@@ -403,7 +410,8 @@ const HomepageSearchView = <Item,>({
             }}
           >
             <Icon icon={filter2Line} fontSize={20} />
-            Hide Filters
+            Show Filters
+            {currentFilters?.length > 0 && <FilterNumber> {currentFilters.length}</FilterNumber>}
           </PrimaryButton>
         )}
       </HomepageSearchHeader>
