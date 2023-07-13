@@ -1,5 +1,3 @@
-import './Draft.css'
-
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { uniq } from 'lodash'
@@ -369,7 +367,7 @@ function DraftView<Item>() {
       <MainHeader>
         <Title>Welcome to Mexit !</Title>
       </MainHeader>
-      <MainHeader style={{ marginTop: '0' }}>
+      <MainHeader>
         <p>All your latest activities will be shown here.</p>
       </MainHeader>
 
