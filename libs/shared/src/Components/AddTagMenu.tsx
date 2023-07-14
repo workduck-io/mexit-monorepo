@@ -21,8 +21,6 @@ export const AddTagClassName = 'new-tag-menu'
 export const AddTagMenu = ({ tags, addTag, createTag, root, link }: AddTagMenuProps) => {
   const onAddNewTag = (tag: Tag) => {
     addTag(tag)
-    // console.log(link)
-    // addRecent(undefined, link)
   }
 
   const onCreateNewTag = (tagStr: string) => {

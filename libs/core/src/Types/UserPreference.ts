@@ -49,4 +49,6 @@ export interface UserPreferences {
   theme?: UserThemePreferences
   activeNamespace?: string // * Namespace Id
   smartCaptureExcludedFields?: any
+  preferenceModifiedAt?: number
+  setpreferenceModifiedAt?: (preferenceModifiedAt: number) => void
 }

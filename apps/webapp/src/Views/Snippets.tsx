@@ -23,6 +23,7 @@ import {
   useDescriptionStore,
   usePromptStore,
   useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore,
   useSnippetStore,
   ViewType
 } from '@mexit/core'
@@ -70,6 +71,9 @@ const Snippets = () => {
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const addRecent = useRecentsStore((store) => store.addRecent)
+  const setpreferenceModifiedAtAndLastOpened = useUserPreferenceStore(
+    (store) => store.setpreferenceModifiedAtAndLastOpened
+  )
   const getPrompt = usePromptStore((s) => s.getPrompt)
   const { queryIndexWithRanking } = useSearch()
   const { generateSearchQuery } = useQuery()
@@ -136,6 +140,8 @@ const Snippets = () => {
     })
 
     loadSnippet(snippetId)
+    addRecent(RecentType.snippet, snippetId)
+    setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
 
     goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
   }
@@ -155,6 +161,7 @@ const Snippets = () => {
 
   const onOpenSnippet = (id: string) => {
     addRecent(RecentType.snippet, id)
+    setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
     loadSnippet(id)
     const snippet = snippets[id]
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })

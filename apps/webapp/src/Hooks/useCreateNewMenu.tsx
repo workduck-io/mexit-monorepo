@@ -174,7 +174,7 @@ export const useCreateNewMenu = () => {
   }
 
   const handleViewDelete = async () => {
-    const view = useLayoutStore.getState().contextMenu?.item?.data
+    const view = useLayoutStore.getState().contextMenu?.item.data
     const currentView = useViewStore.getState().currentView
     await deleteView(view.id)
 
@@ -184,7 +184,7 @@ export const useCreateNewMenu = () => {
   }
 
   const handleViewClone = () => {
-    const view = useLayoutStore.getState().contextMenu?.item?.data
+    const view = useLayoutStore.getState().contextMenu?.item.data
 
     if (view)
       openTaskViewModal({
@@ -200,7 +200,7 @@ export const useCreateNewMenu = () => {
   }
 
   const handleCreateChildView = () => {
-    const view = useLayoutStore.getState().contextMenu?.item?.data
+    const view = useLayoutStore.getState().contextMenu?.item.data
 
     if (view) {
       openTaskViewModal({
@@ -230,10 +230,10 @@ export const useCreateNewMenu = () => {
     const item = useLayoutStore.getState().contextMenu?.item
     const namespace = useDataStore.getState().namespaces?.find((i) => i.id === item.data?.namespace)
     const disabled = namespace?.granterID !== undefined && namespace.access === 'READ'
-    const noteMetadata = useMetadataStore.getState().metadata.notes?.[item?.data?.nodeid]
+    const noteMetadata = useMetadataStore.getState().metadata.notes?.[item.data?.nodeid]
 
     const snippets = useSnippetStore.getState().snippets ?? {}
-    const templates = Object.values(snippets).filter((item) => item?.template && item.id === noteMetadata?.templateID)
+    const templates = Object.values(snippets).filter((item) => item.template && item.id === noteMetadata?.templateID)
 
     const hasTemplate = templates.length !== 0
 
@@ -292,7 +292,7 @@ export const useCreateNewMenu = () => {
   }
 
   const getSpaceMenuItems = (): MenuListItemType[] => {
-    const spaceData = useLayoutStore.getState().contextMenu?.item?.data
+    const spaceData = useLayoutStore.getState().contextMenu?.item.data
     const disabled = spaceData?.access !== 'OWNER' || isReservedNamespace(spaceData?.name)
 
     return [
