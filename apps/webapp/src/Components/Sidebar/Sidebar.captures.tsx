@@ -8,19 +8,19 @@ import { CAPTURES_VIEW_NAMESPACES, RESERVED_CAPTURES_SPACES, RESERVED_SNIPPET_SP
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
 
+import CaptureList from './CaptureList'
 import PromptList from './PromptList'
 import { SidebarSpaceSwitcher } from './Sidebar.spaceSwitcher'
 import { SpaceContentWrapper, SpaceWrapper } from './Sidebar.style'
 import { SidebarSpace } from './Sidebar.types'
-import SnippetList from './SnippetList'
 import { SidebarSpaceComponent } from './Space'
 
 const getRenderItem = (itemName: string) => {
   switch (itemName) {
-    case 'Snippets':
-      return () => <SnippetList type={'snippet'} />
+    case 'Captures':
+      return () => <CaptureList type={'snippet'} />
     case 'Templates':
-      return () => <SnippetList type={'template'} />
+      return () => <CaptureList type={'template'} />
     default:
       return () => <PromptList />
   }
@@ -105,7 +105,7 @@ export const CapturesSidebar = () => {
 
   const isCreateDisabled = true
 
-  const toolTipMessage = isCreateDisabled ? 'Smart Captures (Coming Soon)' : 'Create a capture'
+  const toolTipMessage = isCreateDisabled ? 'Create a Smart Capture (Coming Soon)' : 'Create a capture'
 
   return (
     <SpaceWrapper>
