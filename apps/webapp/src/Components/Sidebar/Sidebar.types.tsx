@@ -1,7 +1,6 @@
 import { ILink, LastOpenedState, MIcon, PollActions, SingleNamespace, Tag } from '@mexit/core'
 import { DesignItem } from '@mexit/shared'
 
-
 /**
  * A generic item to be shown in sidebar
  */
