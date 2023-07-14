@@ -248,6 +248,9 @@ export const Switch = ({ children }) => {
       } else if (location.pathname.startsWith(ROUTE_PATHS.namespaceShare)) {
         showSidebar()
         hideRHSidebar()
+      } else if (location.pathname.startsWith(ROUTE_PATHS.links)) {
+        showSidebar()
+        hideRHSidebar()
       } else {
         // mog('Hiding all Sidebar', { location })
         hideAllSidebars()

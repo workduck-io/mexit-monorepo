@@ -5,6 +5,7 @@ import { useLayoutStore } from '@mexit/core'
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
 
 import { PublicNoteSidebar } from './PublicSidebar.notes'
+import { CapturesSidebar } from './Sidebar.captures'
 import { NoteSidebar } from './Sidebar.notes'
 import { SnippetSidebar } from './Sidebar.snippets'
 import TagList from './TagList'
@@ -21,6 +22,7 @@ const SidebarTabs = () => {
   const isReminder = useMatch(ROUTE_PATHS.reminders)
   const isTasksView = useMatch(`${ROUTE_PATHS.view}/:viewid`)
   const isPublicNamespaceView = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/*`)
+  const isCaptures = useMatch(ROUTE_PATHS.links)
 
   // mog('IS SIDEBAR', { show: sidebar.show })
 
@@ -31,6 +33,8 @@ const SidebarTabs = () => {
   if (isEditor) return <NoteSidebar />
 
   if (isSnippet || isSnippetNote || isPromptRoute) return <SnippetSidebar />
+
+  if (isCaptures) return <CapturesSidebar />
 
   // if (isArchive || isArchiveEditor) return <ArchiveSidebar />
 
