@@ -33,6 +33,11 @@ export enum RESERVED_SNIPPET_SPACES {
   prompts = 'prompts'
 }
 
+export enum RESERVED_CAPTURES_SPACES {
+  captures = 'captures',
+  links = 'links'
+}
+
 export const SNIPPET_VIEW_NAMESPACES: Array<SingleNamespace> = [
   {
     id: RESERVED_SNIPPET_SPACES.snippets,
@@ -60,6 +65,25 @@ export const SNIPPET_VIEW_NAMESPACES: Array<SingleNamespace> = [
     // THIS SHOULD NOT BE USED
     access: 'OWNER',
     icon: DefaultMIcons.PROMPT
+  }
+]
+
+export const CAPTURES_VIEW_NAMESPACES: Array<SingleNamespace> = [
+  {
+    id: RESERVED_CAPTURES_SPACES.captures,
+    name: 'Captures',
+    createdAt: 0,
+    updatedAt: 0,
+    access: 'OWNER',
+    icon: DefaultMIcons.CAPTURES
+  },
+  {
+    id: RESERVED_CAPTURES_SPACES.links,
+    name: 'Links',
+    createdAt: 0,
+    updatedAt: 0,
+    access: 'OWNER',
+    icon: DefaultMIcons.HIGHLIGHT
   }
 ]
 
