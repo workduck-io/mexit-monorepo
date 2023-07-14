@@ -21,11 +21,14 @@ export const getSuperBlockFields = (item: any) => {
     case SuperBlocks.TASK:
       return item
     default:
+      // eslint-disable-next-line no-case-declarations
+      const properties = item.data.properties ?? {}
+
       return {
         ...item,
         data: {
           ...item.data,
-          properties: Object.entries(item.data.properties).reduce((acc, [key, value]) => {
+          properties: Object.entries(properties).reduce((acc, [key, value]) => {
             if (
               !Object.keys(SuperBlockFields)
                 .filter((field) => field !== item.entity)
@@ -38,7 +41,7 @@ export const getSuperBlockFields = (item: any) => {
             }
 
             return acc
-          })
+          }, {})
         }
       }
   }

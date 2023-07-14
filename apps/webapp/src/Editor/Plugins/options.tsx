@@ -47,12 +47,9 @@ import {
 
 import {
   ELEMENT_INLINE_BLOCK,
-  ELEMENT_SECTION_SEPARATOR,
   ELEMENT_SYNC_BLOCK,
   ELEMENT_TASK_VIEW_BLOCK,
   generateTempId,
-  getBasicContent,
-  SECTION_SEPARATOR,
   TodoStatus
 } from '@mexit/core'
 
@@ -96,17 +93,6 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     match: ['h3', 'H3'],
     query: formatQuery,
     preFormat
-  },
-  {
-    mode: 'block',
-    type: ELEMENT_SECTION_SEPARATOR,
-    match: [SECTION_SEPARATOR],
-    triggerAtBlockStart: true,
-    query: formatQuery,
-    format: (editor: PlateEditor<Value>) => {
-      const content = [getBasicContent(ELEMENT_SECTION_SEPARATOR), getBasicContent()]
-      insertNodes(editor, content)
-    }
   },
   {
     mode: 'block',

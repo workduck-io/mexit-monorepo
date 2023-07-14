@@ -76,8 +76,8 @@ const searchWorker = {
 
   searchIndex: (indexKey: Indexes, query: ISearchQuery) => {
 
-    console.log("N", searchX._graphX.findChildGraph("NODE_C68kY8GJ3EWi3UQTFKxEL"), searchX._graphX.getLink("NODE_C68kY8GJ3EWi3UQTFKxEL", "TEMP_EcYcC" ), searchX._indexMap['MAIN'].get("TEMP_EcYcC"))
     console.log("NODES", searchX._graphX.getRelatedNodes("NODE_C68kY8GJ3EWi3UQTFKxEL"))
+
     try {
       const res = searchX.search({ options: query, indexKey })
       mog('SearchX Results:', { res, query })

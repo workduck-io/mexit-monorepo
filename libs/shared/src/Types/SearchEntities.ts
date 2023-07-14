@@ -19,7 +19,7 @@ export const EntitiesInfo: Partial<Record<string, SearchEntityType>> = {
   [SuperBlocks.HIGHLIGHT]: {
     id: 'captures',
     label: 'Capture',
-    icon: getMIcon('ICON', 'ri:highlighter-line')
+    icon: DefaultMIcons.HIGHLIGHT
   },
   [SuperBlocks.CAPTURE]: {
     id: 'smartCaptures',

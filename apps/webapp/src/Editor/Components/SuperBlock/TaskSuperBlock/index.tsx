@@ -16,6 +16,8 @@ const TaskSuperBlock: React.FC<SuperBlockProps> = (props) => {
       $isSelected
       LeftHeaderRenderer={
         <SuperBlockTitle
+          id={restProps.id}
+          parent={restProps.parent}
           onChange={restProps.onChange}
           type={restProps.type}
           icon={DefaultMIcons.TASK}

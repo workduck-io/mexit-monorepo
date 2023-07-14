@@ -9,7 +9,6 @@ import {
   extractMetadata,
   getHighlightBlockMap,
   Highlight,
-  mog,
   NodeProperties,
   RecentType,
   SaveableRange,
@@ -212,7 +211,7 @@ export function useSaveChanges() {
       ...highlight,
       properties: {
         ...highlight?.properties,
-        content: serializeContent(content, '')
+        content: serializeContent(content)
       }
     })
 
@@ -241,7 +240,7 @@ export function useSaveChanges() {
       properties: {
         sourceUrl: selection?.range && deleteQueryParams(window.location.href),
         saveableRange: selection?.range,
-        content: serializeContent(content, '')
+        content: serializeContent(content)
       }
     }
 
@@ -355,7 +354,6 @@ export function useSaveChanges() {
     } else {
       const title = message?.title ?? message?.node?.title
       const content = message?.content ?? request?.body?.content
-      mog('CONTENT IS', { content })
 
       appendContent(node.nodeid, content)
 

@@ -34,7 +34,7 @@ export const serializeContent = (content: any[]) => {
 
     const serializedBlock: SerializedBlock = {
       id: el.id,
-      elementType: el.type,
+      type: el.type,
       children: undefined
     }
 
@@ -129,14 +129,9 @@ export const deserializeContent = (sanatizedContent: any[]) => {
       const dEl = deserializeSpecial[el.elementType](el)
       return dEl
     }
-    const nl: any = {}
-
-    if (el.elementType !== 'paragraph' && el.elementType !== undefined) {
-      nl.type = el.elementType
-    }
-
-    if (el.id !== undefined) {
-      nl.id = el.id
+    const nl: any = {
+      type: el.type,
+      id: el.id
     }
 
     // Properties

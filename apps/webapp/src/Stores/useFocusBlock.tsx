@@ -1,8 +1,6 @@
-
 import { findNode, focusEditor, getPlateEditorRef, getStartPoint, select } from '@udecode/plate'
 
 import { mog } from '@mexit/core'
-
 
 export const useFocusBlock = () => {
   const selectBlock = (blockid: string, editorId?: string) => {
@@ -46,7 +44,7 @@ export const useFocusBlock = () => {
           },
           mode: 'all'
         })
-        mog('mog', { headingNode })
+
         if (!headingNode) return
         const headingNodePath = headingNode[1]
 
@@ -55,6 +53,7 @@ export const useFocusBlock = () => {
 
         // setHighlightedBlockIds([blockid], key)
         select(editor, getStartPoint(editor, headingNodePath))
+
         setTimeout(() => {
           const highlightEl = document.getElementsByClassName('slate-highlight')[0]
           if (highlightEl) {

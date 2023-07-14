@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { BodyFont, Input } from '@mexit/shared'
+import { Input } from '@mexit/shared'
 
 export const Container = styled.div<{ $isActive?: boolean; $isReadOnly?: boolean; $isSelected?: boolean }>`
   width: 100%;
@@ -8,8 +8,10 @@ export const Container = styled.div<{ $isActive?: boolean; $isReadOnly?: boolean
   margin-bottom: 1rem;
   transition: opacity 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
   padding: ${({ theme }) => theme.spacing.medium};
-  ${BodyFont}
   overflow: hidden;
+
+  container-type: inline-size;
+  min-width: 0;
 
   ${({ $isReadOnly, $isSelected, $isActive }) => {
     if (!$isReadOnly) {
@@ -34,12 +36,15 @@ export const Container = styled.div<{ $isActive?: boolean; $isReadOnly?: boolean
   }}
 `
 
-export const RenameInput = styled(Input)`
+export const RenameInput = styled(Input)<{ length?: number }>`
   padding: ${({ theme }) => theme.spacing.tiny};
   border: none !important;
   background: none !important;
   margin: 0;
-  width: fit-content !important;
+  min-width: 10ch;
+  width: ${({ length }) => `${length}ch`};
+  max-width: 40ch;
+  text-overflow: ellipsis;
 
   &:hover {
     cursor: pointer;

@@ -1,6 +1,6 @@
 import { toast } from 'react-hot-toast'
 
-import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
+import { findNode, findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
 import { ELEMENT_PARAGRAPH, useAuthStore, useContentStore } from '@mexit/core'
 import { parseToMarkdown } from '@mexit/shared'
@@ -8,6 +8,7 @@ import { parseToMarkdown } from '@mexit/shared'
 import { useBufferStore } from '../../Hooks/useEditorBuffer'
 import { useUpdater } from '../../Hooks/useUpdater'
 import { PropertiyFields } from '../Components/SuperBlock/SuperBlock.types'
+import { getNodeIdFromEditor } from '../Utils/helper'
 
 type BlockDataType = Record<string, any>
 
@@ -29,14 +30,17 @@ const useUpdateBlock = () => {
     }
   }
 
-  const changeSuperBlockType = (element, type: string) => {
+  const changeSuperBlockType = (parentId: string, blockId: string, type: string) => {
     const editor = getPlateEditorRef()
     const updatedBy = useAuthStore.getState().userDetails?.id
 
     if (editor) {
-      const path = findNodePath(editor, element)?.slice(0, 1)
+      const noteId = getNodeIdFromEditor(parentId)
+      const nodeEntry = findNode(editor, { block: true, mode: 'highest', match: { id: blockId } })
 
-      if (path) {
+      if (nodeEntry) {
+        const [element, path] = nodeEntry as any
+
         const metadata = element.metadata || {}
         const properties = element.properties || {}
         const entity = properties.entity || {}

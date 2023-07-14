@@ -15,6 +15,8 @@ const ContentSuperBlock: React.FC<SuperBlockProps> = (props) => {
       $isSelected={props.isSelected}
       LeftHeaderRenderer={
         <SuperBlockTitle
+          id={restProps.id}
+          parent={restProps.parent}
           type={restProps.type}
           onChange={restProps.onChange}
           icon={DefaultMIcons.NOTE}

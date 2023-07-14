@@ -115,6 +115,7 @@ export const DefaultMIcons = {
   SPACE: getMIcon('ICON', 'heroicons-outline:view-grid'),
   ARCHIVE: getMIcon('ICON', 'ri:archive-line'),
   COPY: getMIcon('ICON', 'ri:file-copy-line'),
+  SAVE: getMIcon("ICON", 'ri:save-line'),
   DELETE: getMIcon('ICON', 'ri:delete-bin-5-line'),
   MOVE: getMIcon('ICON', 'ri:anticlockwise-2-fill'),
   SEND: getMIcon('ICON', 'ph:arrow-bend-up-right-bold'),
@@ -133,7 +134,8 @@ export const DefaultMIcons = {
   WORKSPACE: getMIcon('ICON', 'icon-park-solid:app-switch'),
   PEOPLE: getMIcon('ICON', 'bi:people'),
   NOTIFICATION: getMIcon('ICON', 'bx:notification'),
-  CALENDAR: getMIcon('ICON', 'mdi:calendar')
+  CALENDAR: getMIcon('ICON', 'mdi:calendar'),
+  MENU: getMIcon('ICON', 'solar:menu-dots-bold')
 }
 
 export const ForwardlinkIcon = {

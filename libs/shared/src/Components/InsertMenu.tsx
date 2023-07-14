@@ -28,7 +28,7 @@ interface InsertMenuProps {
 
 export const InsertMenu: React.FC<InsertMenuProps> = ({
   onClick,
-  title = 'Insert',
+  title,
   items,
   allowSearch = true,
   selected,
@@ -90,10 +90,12 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({
             label={item.label}
             fontSize="small"
             icon={item.icon}
+            disabled={item.disabled}
             key={item.id}
             name={name ?? item.label}
             onClick={(e: any) => {
-              onClick(item.id)
+              if (onClick) onClick(item.id)
+              if (item.onSelect) item.onSelect()
             }}
           />
         )
@@ -113,7 +115,7 @@ const AnchorNode = ({ selected, items, icon, title, shortcut }) => {
       <StyledButton>
         <Group>
           <IconDisplay icon={itemIcon} size={14} />
-          <span id="label">{label}</span>
+          {label && <span id="label">{label}</span>}
         </Group>
       </StyledButton>
     </Tooltip>

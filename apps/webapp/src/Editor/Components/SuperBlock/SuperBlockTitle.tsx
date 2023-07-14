@@ -1,17 +1,21 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
-import { useDebouncedCallback } from 'use-debounce'
+import { useDebounce } from 'use-debounce'
 
 import { getMenuItem, MIcon, SuperBlocks } from '@mexit/core'
-import { EntitiesInfo, Group, IconDisplay, Select } from '@mexit/shared'
+import { EntitiesInfo, Group, IconDisplay, Select, Tooltip } from '@mexit/shared'
 
 import { Source } from '../../../Components/SourceInfo'
+import { useFocusBlock } from '../../../Stores/useFocusBlock'
+import { KEYBOARD_KEYS } from '../../constants'
 import useUpdateBlock from '../../Hooks/useUpdateBlock'
 
 import { RenameInput } from './SuperBlock.styled'
 import { PropertiyFields } from './SuperBlock.types'
 
 interface SuperBlockTitleInfoProps {
+  id?: string
+  parent?: string
   name?: string
   type: SuperBlocks
   heading: string
@@ -22,34 +26,58 @@ interface SuperBlockTitleInfoProps {
 
 const NonConvertibles = new Set([SuperBlocks.MEDIA, SuperBlocks.CAPTURE, SuperBlocks.HIGHLIGHT])
 
-const BlockTitleRename = (props) => {
-  const [isEditable, setIsEditable] = useState(false)
+export const BlockTitleRename = (props) => {
+  const [title, setTitle] = useState(props.title ?? 'Untitled')
 
-  const handleOnChange = useDebouncedCallback((e: any) => {
-    const title = e.target.value
+  const [defferedValue] = useDebounce(title, 800)
 
-    props.onChange({ title: title?.trim() ?? 'Untitled' })
-  }, 500)
+  useEffect(() => {
+    if (defferedValue !== props.title) {
+      props.onChange({ title: defferedValue })
+    }
+  }, [defferedValue])
 
-  const handleOnClick = () => {
-    setIsEditable((s) => !s)
+  const handleOnChange = (e: any) => {
+    const val = e.target.value
+
+    setTitle(val)
+  }
+
+  const handleKeyDown = (e) => {
+    e.stopPropagation()
+
+    if (e.key === KEYBOARD_KEYS.Enter) {
+      if (props.onEnter) props.onEnter()
+    }
   }
 
   return (
-    <RenameInput transparent name="title" defaultValue={props.title?.trim() ?? 'Untitled'} onChange={handleOnChange} />
+    <Tooltip content={defferedValue?.length ? defferedValue : 'Untitled'}>
+      <RenameInput
+        name="title"
+        length={defferedValue !== title ? title.length + 4 : title.length - 2}
+        defaultValue={title}
+        onKeyDown={handleKeyDown}
+        onChange={handleOnChange}
+        placeholder="What's this about?"
+      />
+    </Tooltip>
   )
 }
 
-const BlockTitleInfo = ({ title, type, onChange }) => {
-  const { changeSuperBlockType } = useUpdateBlock()
-
+const BlockTitleInfo = ({ title, type, value, onFocusBlock, onChange, onSwitchType }) => {
   const convertableItems = useMemo(() => {
     return Object.keys(EntitiesInfo)
-      .filter((item: any) => !NonConvertibles.has(item) && item !== 'Ungrouped' && item !== type)
-      .map((superBlockType) => {
-        const superBlock = EntitiesInfo[superBlockType as SuperBlocks]
+      .filter(
+        (item: any) =>
+          (Object.keys(value?.entity?.values ?? {}).includes(item) ||
+            (!NonConvertibles.has(item) && item !== 'Ungrouped')) &&
+          item !== type
+      )
+      .map((superBlockType: SuperBlocks) => {
+        const superBlock = EntitiesInfo[superBlockType]
 
-        return getMenuItem(superBlock.label, () => changeSuperBlockType, false, superBlock.icon)
+        return getMenuItem(superBlock.label, () => onSwitchType(superBlockType), false, superBlock.icon)
       })
   }, [type])
 
@@ -57,15 +85,16 @@ const BlockTitleInfo = ({ title, type, onChange }) => {
     <Group>
       <Select items={convertableItems} defaultValue={EntitiesInfo[type] as any} />
       <span>|</span>
-      <BlockTitleRename title={title} />
+      <BlockTitleRename onChange={onChange} onEnter={onFocusBlock} title={title} />
     </Group>
   )
 }
 
 const SuperBlockTitle: React.FC<SuperBlockTitleInfoProps> = ({
+  id,
+  parent,
   icon,
   type,
-  heading,
   name = 'title',
   value,
   onChange
@@ -73,10 +102,28 @@ const SuperBlockTitle: React.FC<SuperBlockTitleInfoProps> = ({
   const title = value?.[name]
   const blockSourceUrl = value?.url
 
+  const { changeSuperBlockType } = useUpdateBlock()
+  const { focusBlock } = useFocusBlock()
+
+  const handleOnTypeSwitch = (type: SuperBlocks) => {
+    changeSuperBlockType(parent, id, type)
+  }
+
+  const handleFocusBlock = () => {
+    focusBlock(id, parent)
+  }
+
   return (
     <Group>
       {blockSourceUrl ? <Source source={blockSourceUrl} /> : <IconDisplay icon={icon} size={14} />}
-      <BlockTitleInfo title={title} type={type} onChange={onChange} />
+      <BlockTitleInfo
+        onFocusBlock={handleFocusBlock}
+        onSwitchType={handleOnTypeSwitch}
+        title={title}
+        value={value}
+        type={type}
+        onChange={onChange}
+      />
     </Group>
   )
 }

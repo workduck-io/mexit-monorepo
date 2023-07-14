@@ -97,8 +97,8 @@ const KanbanView: React.FC<any> = (props) => {
             blockField === 'entity'
               ? {}
               : {
-                  [blockField]: move.toColumnId
-                }
+                [blockField]: move.toColumnId
+              }
           )
 
           insertInNote(block.parent, block.id, content)

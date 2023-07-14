@@ -17,6 +17,7 @@ export const defaultContent: NodeContent = {
   type: 'init',
   content: [
     {
+      id: generateTempId(),
       type: SuperBlocks.CONTENT,
       children: [{ type: ELEMENT_PARAGRAPH, id: generateTempId(), children: [{ text: '' }] }]
     }

@@ -61,7 +61,6 @@ import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { createILinkPlugin } from './createILinkPlugin'
 import { createInlineBlockPlugin } from './createInlineBlockPlugin'
 import { createMentionPlugin } from './createMentionsPlugin'
-import { createSectionSeparatorPlugin } from './createSectionSeparatorPlugin'
 import { createSmartCaptureSuperBlockPlugin } from './createSmartCaptureSuperBlockPlugin'
 import { createSuperBlockPlugin } from './createSuperBlock'
 import { createContentSuperBlockPlugin } from './createSuperContentBlock'
@@ -117,7 +116,6 @@ export const generatePlugins = (options: PluginOptionType) => {
     createBlockquotePlugin(), // blockquote element
     createCodeBlockPlugin(), // code block element
     createHeadingPlugin(), // heading elements
-    createSectionSeparatorPlugin(),
 
     // Marks
     createBoldPlugin(), // bold mark

@@ -25,7 +25,7 @@ export const ContentBlockContainer = styled.div`
   gap: ${({ theme }) => theme.spacing.medium};
 `
 
-export const BlockHeader = styled(GroupHeader)<{ isOpen?: boolean }>`
+export const BlockHeader = styled(GroupHeader) <{ isOpen?: boolean }>`
   transition: all 0.3s ease-in-out;
   animation: ${(props) => (props.isOpen ? SlideDownKeyFrames : SlideUpKeyFrames)} 0.3s ease-out;
   display: flex;
@@ -141,33 +141,31 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
   return (
     <ContentBlockContainer>
       {/* <BlockHeader isOpen={isOpen} onClick={handleToggleAccordion}> */}
-      <Group>
-        <VerticalStretch>
-          <MexIcon
-            color={theme.tokens.colors.primary.default}
-            width={20}
-            height={20}
-            icon={SearchBlockIcons[block?.entity]}
-          />
-        </VerticalStretch>
-        <ContentSuperBlock
-          value={block.data.properties}
-          metadata={block.data.metadata}
-          isActive
-          isSelected
-          isReadOnly
-          onChange={handleOnChange}
-          id={block.id}
-          parent={block.parent}
-          type={SuperBlocks.CONTENT}
-        >
-          <div style={{ lineHeight: 1.58, wordWrap: 'break-word' }}>
-            {block.text?.substring(0, 200) + (canOpen ? '...' : '')}
-          </div>
-          {/* <Plateless content={content} /> */}
-        </ContentSuperBlock>
-        {/* <BlockContent isOpen={isOpen}>{content}</BlockContent> */}
-      </Group>
+      {/* <VerticalStretch> */}
+      {/*   <MexIcon */}
+      {/*     color={theme.tokens.colors.primary.default} */}
+      {/*     width={20} */}
+      {/*     height={20} */}
+      {/*     icon={SearchBlockIcons[block?.entity]} */}
+      {/*   /> */}
+      {/* </VerticalStretch> */}
+      <ContentSuperBlock
+        value={block.data.properties}
+        metadata={block.data.metadata}
+        isActive
+        isSelected
+        isReadOnly
+        onChange={handleOnChange}
+        id={block.id}
+        parent={block.parent}
+        type={SuperBlocks.CONTENT}
+      >
+        <div style={{ lineHeight: 1.58, wordWrap: 'break-word' }}>
+          {block.text?.substring(0, 200) + (canOpen ? '...' : '')}
+        </div>
+        {/* <Plateless content={content} /> */}
+      </ContentSuperBlock>
+      {/* <BlockContent isOpen={isOpen}>{content}</BlockContent> */}
       {/* {canOpen && <Chevron isOpen={isOpen} $noHover height={20} width={20} cursor="pointer" icon={arrowLeftSLine} />} */}
       {/* </BlockHeader> */}
     </ContentBlockContainer>

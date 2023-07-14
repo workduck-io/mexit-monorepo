@@ -621,9 +621,11 @@ function DraftView<Item>() {
               {lastOpened?.highlight &&
                 lastOpened?.highlight?.map((linkurl) => {
                   const link = links?.find((s) => s.url === linkurl)
+
                   if (!linkurl || !link) {
                     return null
                   }
+
                   const id = `${linkurl}_ResultFor_SearchLinks`
 
                   return (

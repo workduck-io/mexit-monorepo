@@ -30,7 +30,7 @@ interface IBlockInfo {
  * Comment
  */
 export const BlockInfo: React.FC<IBlockInfo> = ({ id, parent, isSelected, isFocused }) => {
-   // Whether to show all elements when hovering over the fixed blockinfo
+  // Whether to show all elements when hovering over the fixed blockinfo
   // For example: when only source is present
   const [hover, setHover] = useState(false)
   const [instanceId, setInstanceId] = useState<string>(nanoid())

@@ -22,21 +22,21 @@ export const handleCaptureRequest = ({ subType, data }) => {
   const content = data.content ?? defaultContent.content
   const contentWithSuperBlocks = data?.highlightId
     ? [
-        {
-          ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, content),
-          properties: {
-            entity: {
-              active: SuperBlocks.HIGHLIGHT,
-              values: {
-                [SuperBlocks.HIGHLIGHT]: {
-                  id: data.highlightId,
-                  parent: data.highlightId
-                }
+      {
+        ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, content),
+        properties: {
+          entity: {
+            active: SuperBlocks.HIGHLIGHT,
+            values: {
+              [SuperBlocks.HIGHLIGHT]: {
+                id: data.highlightId,
+                parent: data.highlightId
               }
             }
-          }
+          },
         }
-      ]
+      }
+    ]
     : content
 
   switch (subType) {
@@ -45,7 +45,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
       const reqData = {
         id: data.id,
         title: data.title,
-        data: serializeContent(contentWithSuperBlocks, data.id),
+        data: serializeContent(contentWithSuperBlocks),
         referenceID: data.referenceID,
         namespaceID: data.namespaceID
       }
@@ -74,7 +74,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
           namespaceID: data.namespaceID
         },
         title: data.title,
-        data: serializeContent(contentWithSuperBlocks, data.id),
+        data: serializeContent(contentWithSuperBlocks),
         // TODO: replace this with DEFAULT_NAMESPACE constant (added in another PR)
         namespaceID: data.namespaceID,
         tags: []
@@ -121,7 +121,7 @@ export const handleSnippetRequest = ({ data }) => {
     type: 'SnippetRequest',
     title: data.title,
     namespaceIdentifier: DEFAULT_NAMESPACE,
-    data: serializeContent(data.content ?? defaultContent.content, data.snippetId),
+    data: serializeContent(data.content ?? defaultContent.content),
     template: data.template
   }
 
@@ -167,7 +167,7 @@ export const handleNodeContentRequest = ({ subType, body, headers }) => {
       const reqData = {
         type: 'ElementRequest',
         workspaceID: body.workspaceID,
-        elements: serializeContent(body.content ?? defaultContent.content, body.id)
+        elements: serializeContent(body.content ?? defaultContent.content)
       }
 
       return client
