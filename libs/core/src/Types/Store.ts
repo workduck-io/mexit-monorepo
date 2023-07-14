@@ -92,7 +92,8 @@ export const DefaultMIcons = {
   DELETE: getMIcon('ICON', 'ri:delete-bin-5-line'),
   PROMPT: getMIcon('ICON', 'material-symbols:charger-outline'),
   HIGHLIGHT: getMIcon('ICON', 'ri:mark-pen-line'),
-  WORKSPACE: getMIcon('ICON', 'icon-park-solid:app-switch')
+  WORKSPACE: getMIcon('ICON', 'icon-park-solid:app-switch'),
+  CAPTURES: getMIcon('ICON', 'ri:link-m')
 }
 
 export interface SingleNamespace {

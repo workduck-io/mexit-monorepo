@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useSpringRef, useTransition } from '@react-spring/web'
 
-import { RESERVED_SNIPPET_SPACES, SNIPPET_VIEW_NAMESPACES } from '@mexit/core'
+import { CAPTURES_VIEW_NAMESPACES, RESERVED_CAPTURES_SPACES, RESERVED_SNIPPET_SPACES } from '@mexit/core'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
@@ -32,7 +32,7 @@ export const CapturesSidebar = () => {
   const { handleCreateSnippet } = useCreateNewMenu()
 
   const spaces: Array<SidebarSpace> = useMemo(() => {
-    return SNIPPET_VIEW_NAMESPACES.map((ns) => {
+    return CAPTURES_VIEW_NAMESPACES.map((ns) => {
       return {
         id: ns.id,
         label: ns.name,
@@ -103,9 +103,9 @@ export const CapturesSidebar = () => {
     transRef.start()
   }, [index])
 
-  const isCreateDisabled = currentSpace?.id === RESERVED_SNIPPET_SPACES.prompts
+  const isCreateDisabled = true
 
-  const toolTipMessage = isCreateDisabled ? 'Create Prompts (Coming Soon)' : 'Create Snippet'
+  const toolTipMessage = isCreateDisabled ? 'Smart Captures (Coming Soon)' : 'Create a capture'
 
   return (
     <SpaceWrapper>
@@ -116,7 +116,7 @@ export const CapturesSidebar = () => {
       </SpaceContentWrapper>
       <SidebarSpaceSwitcher
         isCreateDisabled={isCreateDisabled}
-        toolTip={currentSpace?.id === RESERVED_SNIPPET_SPACES.templates ? 'Create Template' : toolTipMessage}
+        toolTip={currentSpace?.id === RESERVED_CAPTURES_SPACES.links ? 'Smart Captures (Coming Soon)' : toolTipMessage}
         onCreateNew={() => handleCreateSnippet(currentSpace?.id === RESERVED_SNIPPET_SPACES.templates)}
         currentSpace={currentSpace?.id}
         spaces={spaces}
