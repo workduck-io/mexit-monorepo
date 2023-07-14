@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
-import { animated, useSpring, useTrail } from 'react-spring'
+import { useTrail } from 'react-spring'
 
 import { useTheme } from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 
@@ -23,7 +24,7 @@ import {
 const Workspaces = ({ setShow, active, show }) => {
   const setActiveWorkspace = useAuthStore((store) => store.setActiveWorkspace)
   const setAppInitStatus = useAuthStore((store) => store.setAppInitStatus)
-  const workspaces = useAuthStore((store) => store.workspaces)
+  const workspaces = useAuthStore((store) => store.workspaces?.filter((w) => w.id !== active?.id))
 
   const { backup } = useStore()
   const { goTo } = useRouting()
@@ -50,22 +51,15 @@ const Workspaces = ({ setShow, active, show }) => {
   }
 
   const handleWorkspaceClick = (id: string) => (event?) => {
-    if (active?.id === id) {
-      goTo(ROUTE_PATHS.home, NavigationType.push)
-      setShow(false)
-      return
-    }
-
     event?.preventDefault()
     event?.stopPropagation()
-
-    setShow(false)
 
     backup().then(() => {
       resetSearchIndex()
       setAppInitStatus(AppInitStatus.SWITCH)
     })
 
+    setShow(false)
     setActiveWorkspace(id)
 
     API.user
@@ -149,49 +143,38 @@ const WorkspaceSwitcher = () => {
   const [show, setShow] = React.useState(false)
   const active = useAuthStore((store) => store.workspaceDetails)
 
+  const { goTo } = useRouting()
   const theme = useTheme()
 
-  const spring = useSpring({
-    from: {
-      opacity: show ? 0 : 1,
-      transform: show ? 'rotateZ(-45deg)' : 'rotateZ(0deg)'
-    },
-    to: {
-      opacity: show ? 1 : 0,
-      transform: show ? 'rotateZ(0deg)' : 'rotateZ(-45deg)'
-    }
-  })
-
-  const handleOnShow = (event) => {
+  const onActiveWorkspaceClick = (event) => {
     event.stopPropagation()
     event.preventDefault()
 
-    setShow((s) => !s)
+    goTo(ROUTE_PATHS.home, NavigationType.push)
+    setShow(false)
   }
 
+  const debouncedHandler = useDebouncedCallback((flag: boolean) => {
+    setShow(flag)
+  }, 1000)
+
   return (
-    <StyledSpaceSwitcher>
+    <StyledSpaceSwitcher onMouseLeave={() => debouncedHandler(false)}>
       <ActiveWorkspaceWrapper>
         <IconContainer>
-          {show ? (
-            <animated.span style={spring} onClick={handleOnShow}>
-              <IconDisplay icon={DefaultMIcons.CLEAR} size={48} />
-            </animated.span>
-          ) : (
-            <NavTooltip delay={400} content={<TitleWithShortcut title="Switch Workspace" />}>
-              <NavLogoWrapper onClick={handleOnShow}>
-                <IconDisplay
-                  color={theme.tokens.colors.primary.default}
-                  icon={active?.icon ?? DefaultMIcons.WORKSPACE}
-                  size={32}
-                />
-              </NavLogoWrapper>
-            </NavTooltip>
-          )}
+          <NavTooltip delay={400} content={<TitleWithShortcut title="Switch Workspace" />}>
+            <NavLogoWrapper onMouseEnter={() => debouncedHandler(true)} onClick={onActiveWorkspaceClick}>
+              <IconDisplay
+                color={theme.tokens.colors.primary.default}
+                icon={active?.icon ?? DefaultMIcons.WORKSPACE}
+                size={32}
+              />
+            </NavLogoWrapper>
+          </NavTooltip>
         </IconContainer>
       </ActiveWorkspaceWrapper>
 
-      {<Workspaces active={active} show={show} setShow={setShow} />}
+      <Workspaces active={active} show={show} setShow={setShow} />
     </StyledSpaceSwitcher>
   )
 }
