@@ -18,9 +18,9 @@ import { SidebarSpaceComponent } from './Space'
 const getRenderItem = (itemName: string) => {
   switch (itemName) {
     case 'Captures':
-      return () => <CaptureList type={'snippet'} />
-    case 'Templates':
-      return () => <CaptureList type={'template'} />
+      return () => <CaptureList type={'capture'} />
+    case 'Links':
+      return () => <CaptureList type={'link'} />
     default:
       return () => <PromptList />
   }

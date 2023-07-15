@@ -7,7 +7,7 @@ import { Entity } from 'rc-tree/lib/interface'
 
 import { ItemContent, ItemCount, ItemTitle } from '@workduck-io/mex-components'
 
-import { LastOpenedState , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+import { LastOpenedState, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { IconDisplay, ItemTitleText, StyledTreeItem, UnreadIndicator } from '@mexit/shared'
 
 import { useLastOpened } from '../../Hooks/useLastOpened'
