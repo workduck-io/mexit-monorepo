@@ -12,6 +12,7 @@ import {
   batchArray,
   batchArrayWithNamespaces,
   DefaultMIcons,
+  generateMessageId,
   Highlight,
   ILink,
   iLinksToUpdate,
@@ -36,82 +37,92 @@ let wsClient: ReconnectingWebSocket
 let broadcastChannel: BroadcastChannel
 let tokenCache: string
 
+const generateMessage = (message: SocketMessage, payload?: any) => {
+  const response = { ...message, id: generateMessageId() }
+
+  if (!payload) {
+    return response
+  } else {
+    return { ...response, data: { ...response.data, payload } }
+  }
+}
+
 const lookup: Partial<Record<UpdateKey, (message: SocketMessage) => Promise<SocketMessage> | SocketMessage>> = {
   'HIGHLIGHT-CREATE': async (message) => {
     const res = await client.get(apiURLs.highlights.byId(message.data.entityId)).then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return generateMessage(message, res)
   },
   // HIGHLIGHT-UPDATE call is never received as we just append to note
   'HIGHLIGHT-DELETE': (message) => {
-    return message
+    return generateMessage(message)
   },
   'SNIPPET-CREATE': async (message) => {
     const res = await client.get(apiURLs.snippet.getById(message.data.entityId)).then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return generateMessage(message, res)
   },
   'SNIPPET-UPDATE': async (message) => {
     const res = await client.get(apiURLs.snippet.getById(message.data.entityId)).then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return generateMessage(message, res)
   },
   'SNIPPET-DELETE': (message) => {
-    return message
+    return generateMessage(message)
   },
   'NOTE-CREATE': async (message) => {
     const res: any = await client.get(apiURLs.node.get(message.data.entityId)).then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: { ...message.data.payload, ...res } } }
+    return generateMessage(message, { ...message.data.payload, ...res })
   },
   'NOTE-UPDATE': async (message) => {
     const res = await client.get(apiURLs.node.get(message.data.entityId)).then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return generateMessage(message, res)
   },
   'NOTE-DELETE': (message) => {
-    return message
+    return generateMessage(message)
   },
   'NAMESPACE-CREATE': async (message) => {
     const res = await client.get(apiURLs.namespaces.get(message.data.entityId)).then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return generateMessage(message, res)
   },
   'NAMESPACE-UPDATE': (message) => {
-    return message
+    return generateMessage(message)
   },
   'NAMESPACE-DELETE': (message) => {
-    return message
+    return generateMessage(message)
   },
   'LINK-CREATE': async (message) => {
     const res: any = await client
       .get(apiURLs.links.getLink, { searchParams: `url=${message.data.entityId}` })
       .then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res.URL } }
+    return generateMessage(message, res.URL)
   },
   'LINK-DELETE': (message) => {
-    return message
+    return generateMessage(message)
   },
   // VIEW-CREATE call doesn't exist
   'VIEW-UPDATE': async (message) => {
     const res = await client.get(apiURLs.view.getView(message.data.entityId)).then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return generateMessage(message, res)
   },
   'VIEW-DELETE': (message) => {
-    return message
+    return generateMessage(message)
   },
   'USER-UPDATE': async (message) => {
     const res = await client.get(apiURLs.user.getFromUserId(message.data.entityId)).then((d) => d.json())
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return generateMessage(message, res)
   },
   // TODO: not getting entityId right now, test late
   'WORKSPACE-UPDATE': async (message) => {
     const res = await client.post(apiURLs.workspace.ids, { json: { ids: [message.data.entityId] } })
 
-    return { ...message, data: { ...message.data, payload: res } }
+    return generateMessage(message, res)
   }
   // TODO: where do smart captures even go, plus no request to fetch single smart capture
 }
@@ -155,7 +166,7 @@ const initializeClient = (authToken: string, workspaceID: string) => {
 
   const idToPortMap = {}
 
-  broadcastChannel = new BroadcastChannel('WebSocketChannel')
+  broadcastChannel = new BroadcastChannel<SocketMessage>('WebSocketChannel')
   const elector = createLeaderElection(broadcastChannel)
   elector.awaitLeadership().then(() => {
     console.log('leader election done')
@@ -183,7 +194,7 @@ const initializeClient = (authToken: string, workspaceID: string) => {
   wsClient.onmessage = ({ data }) => {
     console.log(data)
     // Construct object to be passed to handlers
-    const parsedData = { data: JSON.parse(data), type: 'message' }
+    const parsedData = { data: JSON.parse(data) }
 
     if (!parsedData.data.from) {
       // Broadcast to all contexts(tabs). This is because

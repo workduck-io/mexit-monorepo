@@ -32,4 +32,5 @@ export type UpdateKey = `${EntityType}-${UpdateData['operationType']}`
 export interface SocketMessage {
   action: SocketActionType
   data: UpdateData
+  id: string
 }
