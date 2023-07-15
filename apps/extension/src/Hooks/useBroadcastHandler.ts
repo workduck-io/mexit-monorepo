@@ -7,7 +7,8 @@ import {
   useHighlightStore,
   useLinkStore,
   userPreferenceStore as useUserPreferenceStore,
-  useViewStore} from '@mexit/core'
+  useViewStore
+} from '@mexit/core'
 
 import { deserializeContent } from '../Utils/serializer'
 
@@ -99,7 +100,7 @@ const useBroadcastHandler = () => {
   }
 
   const updatesHandler = (data: UpdateData) => {
-    mog('poop', { data })
+    mog('broadcast update data', { data })
 
     lookup[`${data.entityType}-${data.operationType}`](data)
   }
