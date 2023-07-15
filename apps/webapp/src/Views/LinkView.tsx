@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 
+import styled from 'styled-components'
+
 import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated, useLinkStore, ViewType } from '@mexit/core'
 import { MainHeader, Result, SearchContainer, Title } from '@mexit/shared'
 
@@ -8,11 +10,36 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useURLFilters, useURLsAPI } from '../Hooks/useURLs'
 
 import SearchFilters from './SearchFilters'
-import SearchView, { RenderFilterProps, RenderItemProps } from './SearchView'
+import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
 
 export type SnippetsProps = {
   title?: string
 }
+
+export const SplitSearchPreviewWrapper = styled.div`
+  overflow-y: auto;
+  border-radius: ${({ theme }) => theme.borderRadius.large};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[1]};
+  padding: ${({ theme }) => theme.spacing.medium};
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.large};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+
+  ${Title} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: ${({ theme }) => theme.spacing.small};
+    flex-wrap: wrap;
+    cursor: pointer;
+    margin: 0;
+    .title,
+    & > svg {
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
+    }
+  }
+`
 
 const LinkView = () => {
   const links = useLinkStore((store) => store.links)
@@ -95,9 +122,17 @@ const LinkView = () => {
     const id = `${item.url}_ResultFor_SearchLinks`
 
     return (
-      <Result view={ViewType.List} key={id} ref={ref}>
+      <Result {...props} key={id} ref={ref}>
         <LinkComponent addTagFilter={addTagFilter} link={link} />
       </Result>
+    )
+  }
+
+  const RenderPreview = ({ item }: RenderPreviewProps<any>) => {
+    return (
+      <SplitSearchPreviewWrapper>
+        <Title>{item?.title}</Title>
+      </SplitSearchPreviewWrapper>
     )
   }
 
@@ -136,6 +171,7 @@ const LinkView = () => {
           view: ViewType.List
         }}
         onSearch={onSearch}
+        RenderPreview={RenderPreview}
         RenderItem={RenderItem}
         filterActions={{
           filters,
