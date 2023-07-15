@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import { toast } from 'react-hot-toast'
 
-import arrowDownSLine from '@iconify/icons-ri/arrow-down-s-line'
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import markPenLine from '@iconify/icons-ri/mark-pen-line'
@@ -53,10 +52,9 @@ export const HighlightGroupToggle = ({ highlights, open, setOpen }: HighlightGro
   }
 
   return highlightCount > 0 ? (
-    <HighlightGroupToggleButton onClick={() => toggleOpen()}>
+    <HighlightGroupToggleButton>
       <Icon icon={markPenLine} />
       Highlights <HighlightCount>{highlightCount}</HighlightCount>
-      <Icon icon={open ? arrowUpSLine : arrowDownSLine} />
     </HighlightGroupToggleButton>
   ) : null
 }

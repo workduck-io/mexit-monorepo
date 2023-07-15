@@ -1,13 +1,20 @@
 import React, { useEffect, useMemo } from 'react'
 
-import styled from 'styled-components'
-
 import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated, useLinkStore, ViewType } from '@mexit/core'
-import { MainHeader, Result, SearchContainer, Title } from '@mexit/shared'
+import {
+  HighlightGroupsWrapper,
+  MainHeader,
+  Result,
+  SearchContainer,
+  SplitSearchPreviewWrapper,
+  Title,
+  TitleText
+} from '@mexit/shared'
 
 import LinkComponent from '../Components/Link'
+import { SingleHighlightWithToggle } from '../Components/Link/HighlightGroup'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useURLFilters, useURLsAPI } from '../Hooks/useURLs'
+import { useLinkURLs, useURLFilters, useURLsAPI } from '../Hooks/useURLs'
 
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
@@ -15,31 +22,6 @@ import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } fr
 export type SnippetsProps = {
   title?: string
 }
-
-export const SplitSearchPreviewWrapper = styled.div`
-  overflow-y: auto;
-  border-radius: ${({ theme }) => theme.borderRadius.large};
-  background-color: ${({ theme }) => theme.tokens.surfaces.s[1]};
-  padding: ${({ theme }) => theme.spacing.medium};
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.large};
-  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
-
-  ${Title} {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: ${({ theme }) => theme.spacing.small};
-    flex-wrap: wrap;
-    cursor: pointer;
-    margin: 0;
-    .title,
-    & > svg {
-      color: ${({ theme }) => theme.tokens.colors.primary.default};
-    }
-  }
-`
 
 const LinkView = () => {
   const links = useLinkStore((store) => store.links)
@@ -90,7 +72,7 @@ const LinkView = () => {
     const nFilters = generateLinkFilters(linksFromRes)
     setFilters(nFilters)
     const filtered = applyCurrentFilters(results)
-    // mog('filtered', { filtered, nFilters, currentFilters, results })
+
     return filtered
   }
 
@@ -101,19 +83,15 @@ const LinkView = () => {
     }
   }
 
-  // console.log({ result })
   const onSelect = (item: any) => {
     const linkid = item.url
     onOpenLink(linkid)
   }
 
   const onEscapeExit = () => {
-    // const nodeid = nodeUID ?? lastOpened[0] ?? baseNodeId
-    // loadNode(nodeid)
     goTo(ROUTE_PATHS.snippets, NavigationType.push)
   }
 
-  // Forwarding ref to focus on the selected result
   const BaseItem = ({ item, splitOptions, ...props }: RenderItemProps<any>, ref: React.Ref<HTMLDivElement>) => {
     const link = links?.find((s) => s.url === item.url)
     if (!item || !link) {
@@ -128,10 +106,22 @@ const LinkView = () => {
     )
   }
 
+  const { getGroupedHighlights } = useLinkURLs()
+
   const RenderPreview = ({ item }: RenderPreviewProps<any>) => {
+    const highlights = getGroupedHighlights(item)
+
     return (
       <SplitSearchPreviewWrapper>
-        <Title>{item?.title}</Title>
+        <Title>
+          <TitleText>{item?.title}</TitleText>
+        </Title>
+
+        <HighlightGroupsWrapper>
+          {highlights.map((highlight) => {
+            return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} link={item} />
+          })}
+        </HighlightGroupsWrapper>
       </SplitSearchPreviewWrapper>
     )
   }
