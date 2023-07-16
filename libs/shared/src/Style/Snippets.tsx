@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Card } from './Card'
 import { GridCss } from './Grid'
 import { size } from './Responsive'
-import { ResultDesc, SearchContainer } from './Search'
+import { ResultDesc } from './Search'
 
 export const SSnippets = styled.div`
   /* ${GridCss(2, 3)} */
@@ -78,7 +78,10 @@ export const CreateSnippet = styled(Card)`
   }
 `
 
-export const SnippetsSearchContainer = styled(SearchContainer)`
+export const SnippetsSearchContainer = styled.div`
+  margin: ${({ theme: { spacing } }) => `calc(2 * ${spacing.large}) ${spacing.large} 0`};
+  position: relative;
+  min-height: 60vh;
   ${ResultDesc} {
     @media (max-width: ${size.normal}) {
       max-width: 15rem;

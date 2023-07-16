@@ -4,9 +4,7 @@ import {
   getMIcon,
   mog,
   useAuthStore,
-  useRecentsStore,
   UserPreferences,
-  userPreferenceStore,
   userPreferenceStore as useUserPreferenceStore,
   useUserCacheStore
 } from '@mexit/core'
@@ -46,7 +44,7 @@ export const useUserService = () => {
   const setWorkspaces = useAuthStore((store) => store.setWorkspaces)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const updateWorkspace = useAuthStore((store) => store.updateWorkspace)
-  const setLastOpened = userPreferenceStore.getState().setLastOpened
+  const setpreferenceModifiedAt = useUserPreferenceStore((store) => store.setpreferenceModifiedAt)
 
   const getUserDetails = async (email: string): Promise<TempUser> => {
     const user = getUser({ email })
@@ -106,8 +104,7 @@ export const useUserService = () => {
   }
 
   const updateUserPreferences = async (): Promise<boolean> => {
-    const lastOpened = useRecentsStore.getState().lastOpened
-    if (lastOpened) setLastOpened(lastOpened)
+    setpreferenceModifiedAt(Date.now())
 
     const id = useAuthStore.getState().userDetails.id
     const getUserPreferences = useUserPreferenceStore.getState().getUserPreferences

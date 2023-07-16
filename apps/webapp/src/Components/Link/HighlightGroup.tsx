@@ -15,7 +15,8 @@ import {
   RecentType,
   useHighlightStore,
   useMetadataStore,
-  useRecentsStore
+  useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore
 } from '@mexit/core'
 import {
   DefaultMIcons,
@@ -69,6 +70,9 @@ export const SingleHighlightWithToggle = ({ highlight, link }: { highlight: High
   const highlightBlockMap = useHighlightStore((store) => store.highlightBlockMap)
   const updateHighlightBlockMap = useHighlightStore((store) => store.updateHighlightBlockMap)
   const addRecent = useRecentsStore((store) => store.addRecent)
+  const setpreferenceModifiedAtAndLastOpened = useUserPreferenceStore(
+    (store) => store.setpreferenceModifiedAtAndLastOpened
+  )
 
   const [open, setOpen] = React.useState(false)
   const highlightMap = getHighlightMap(highlight.entityId) ?? {}
@@ -123,6 +127,7 @@ export const SingleHighlightWithToggle = ({ highlight, link }: { highlight: High
     loadNode(noteId, { highlightBlockId: blockId })
     goTo(ROUTE_PATHS.node, NavigationType.push, noteId)
     addRecent(RecentType.notes, noteId)
+    setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
   }
 
   return (

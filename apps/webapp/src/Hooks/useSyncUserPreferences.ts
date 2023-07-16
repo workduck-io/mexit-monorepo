@@ -15,6 +15,7 @@ export const useUserPreferences = () => {
   const { getCurrentUser } = useUserService()
   const getUserPreferences = useUserPreferenceStore((s) => s.getUserPreferences)
   const setUserPreferences = useUserPreferenceStore((store) => store.setUserPreferences)
+  const updateRecent = useRecentsStore((store) => store.update)
 
   const updateCurrentUserPreferences = async () => {
     const user = await getCurrentUser()
@@ -25,10 +26,9 @@ export const useUserPreferences = () => {
       if (userPreferences) {
         const localUserPreferences = getUserPreferences()
         const mergedUserPreferences = mergeUserPreferences(localUserPreferences, userPreferences)
-        setUserPreferences(mergedUserPreferences)
 
-        const updateRecent = useRecentsStore.getState().update
-        updateRecent(user?.preference.lastOpened)
+        setUserPreferences(mergedUserPreferences)
+        updateRecent(mergedUserPreferences?.lastOpened)
       }
     }
   }

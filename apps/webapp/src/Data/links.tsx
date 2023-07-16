@@ -5,7 +5,6 @@ import fileDocument from '@iconify/icons-gg/file-document'
 import appsLine from '@iconify/icons-ri/apps-line'
 import linkM from '@iconify/icons-ri/link-m'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-import searchLine from '@iconify/icons-ri/search-line'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 
@@ -48,14 +47,6 @@ const useNavlinks = () => {
 
   const getLinks = () => {
     const links: NavLinkData[] = [
-      {
-        title: 'Search',
-        path: ROUTE_PATHS.search,
-        icon: GetIcon(searchLine),
-        shortcut: shortcuts.showSearch.keystrokes
-        // count: count.tasks
-        // isComingSoon: true
-      },
       {
         title: 'Notes',
         path: `${ROUTE_PATHS.node}/${nodeid}`,

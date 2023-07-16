@@ -13,6 +13,7 @@ import {
   useContentStore,
   useMetadataStore,
   useRecentsStore,
+  userPreferenceStore as useUserPreferenceStore,
   WORKSPACE_HEADER
 } from '@mexit/core'
 import {
@@ -60,6 +61,9 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
   const theme = useTheme()
   const getContent = useContentStore((store) => store.getContent)
   const addInRecents = useRecentsStore((s) => s.addRecent)
+  const setpreferenceModifiedAtAndLastOpened = useUserPreferenceStore(
+    (store) => store.setpreferenceModifiedAtAndLastOpened
+  )
   const notesMetadata = useMetadataStore((s) => s.metadata.notes[nodeId])
   const updateMetadata = useMetadataStore((s) => s.updateMetadata)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
@@ -100,6 +104,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
           mog('ErrorMakingNodePrivate', error)
         } else {
           addInRecents(RecentType.notes, nodeId)
+          setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
           updateMetadata('notes', nodeId, { publicAccess: false })
         }
       })
@@ -119,6 +124,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
           mog('ErrorMakingNodePublic', error)
         } else {
           addInRecents(RecentType.notes, nodeId)
+          setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
           updateMetadata('notes', nodeId, { publicAccess: true })
         }
       })

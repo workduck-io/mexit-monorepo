@@ -13,12 +13,15 @@ import { createStore } from '../Utils/storeCreator'
 import { LastOpenedType } from './recents.store'
 
 export interface UserPreferenceStore extends UserPreferences {
+  preferenceModifiedAt?: number
+  setpreferenceModifiedAt?: (preferenceModifiedAt: number) => void
   smartCaptureExcludedFields?: any
   space: SpacePreference
   addSpacePreference: (spaceId: string, spacePreferenceData: Partial<SpacePreferenceData>) => void
   clear: () => void
   setTheme: (themeId: string, mode?: 'light' | 'dark') => void
   setLastOpened: (lastOpened: LastOpenedType) => void
+  setpreferenceModifiedAtAndLastOpened: (preferenceModifiedAt: number, lastOpened: LastOpenedType) => void
   setLastOpenedNotes: (lastOpenedNotes: LastOpenedNotes) => void
   setLastUsedSnippets: (lastUsedSnippets: LastUsedSnippets) => void
   getUserPreferences: () => UserPreferences
@@ -29,6 +32,7 @@ export interface UserPreferenceStore extends UserPreferences {
 }
 
 const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
+  preferenceModifiedAt: Date.now(),
   version: 'unset',
   theme: { themeId: 'xem', mode: 'dark' },
   lastOpened: { notes: [], snippet: [], highlight: [] },
@@ -56,7 +60,8 @@ const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
       space: {},
       lastOpenedNotes: {},
       lastUsedSnippets: {},
-      smartCaptureExcludedFields: {}
+      smartCaptureExcludedFields: {},
+      preferenceModifiedAt: get().preferenceModifiedAt
     })
   },
 
@@ -83,7 +88,8 @@ const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
       space: get().space,
       activeNamespace: get().activeNamespace,
       lastUsedSnippets: get().lastUsedSnippets,
-      theme: get().theme
+      theme: get().theme,
+      preferenceModifiedAt: get().preferenceModifiedAt
     }
   },
   setUserPreferences: (userPreferences: UserPreferences) => {
@@ -96,6 +102,14 @@ const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
   setLastOpened: (lastOpened) => {
     set({ lastOpened: lastOpened })
   },
+  setpreferenceModifiedAt: (preferenceModifiedAt) => {
+    set({ preferenceModifiedAt: preferenceModifiedAt })
+  },
+
+  setpreferenceModifiedAtAndLastOpened: (preferenceModifiedAt, lastOpened) => {
+    set({ lastOpened: lastOpened, preferenceModifiedAt: preferenceModifiedAt })
+  },
+
   setActiveNamespace: (namespace: string) => {
     set({ activeNamespace: namespace })
   },
@@ -152,7 +166,7 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     version: local.version,
     // Overwrite all notes with the remote notes which exist
     // The local notes which do not exist in the remote notes will be left alone
-    lastOpened: remote.lastOpened ?? local.lastOpened,
+    lastOpened: local?.preferenceModifiedAt < remote?.preferenceModifiedAt ? remote?.lastOpened : local?.lastOpened,
     activeNamespace: remote.activeNamespace ?? local.activeNamespace,
     lastOpenedNotes: getLimitedEntries({ ...local.lastOpenedNotes, ...mergedLastOpenedNotes }),
     lastUsedSnippets: { ...local.lastUsedSnippets, ...mergedLastUsedSnippets },

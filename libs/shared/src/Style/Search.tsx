@@ -2,6 +2,8 @@ import { animated } from 'react-spring'
 
 import styled, { css } from 'styled-components'
 
+import { Button, PrimaryButton } from '@workduck-io/mex-components'
+
 import { ViewType } from '@mexit/core'
 
 import { EditorHeader, EditorStyles } from './Editor'
@@ -62,6 +64,10 @@ export const SearchInput = styled(Input)`
   max-width: 20rem;
   transition: all 0.25s ease-in-out;
 `
+export const HomepageSearchInput = styled(Input)`
+  width: 100%;
+  transition: all 0.25s ease-in-out;
+`
 
 export const SearchHeader = styled.div`
   display: flex;
@@ -71,6 +77,7 @@ export const SearchHeader = styled.div`
   background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: ${({ theme }) => theme.spacing.medium};
+
   ${InputWrapper} {
     display: flex;
     align-items: center;
@@ -110,6 +117,74 @@ export const SearchHeader = styled.div`
       flex-shrink: 0;
     }
   }
+`
+export const HomepageSearchHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  ${PrimaryButton} {
+    height: 3rem;
+    position: relative;
+    ${MainFont}
+  }
+
+  ${Button} {
+    height: 3rem;
+    position: relative;
+    ${MainFont}
+  }
+
+  ${InputWrapper} {
+    display: flex;
+    align-items: center;
+    padding: 0 ${({ theme }) => theme.spacing.small};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    border: 1px solid transparent;
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+
+    ${Input} {
+      flex-grow: 1;
+      background: transparent;
+      border: none !important;
+      color: ${({ theme }) => theme.tokens.text.default};
+      height: 3rem;
+      width: 100%;
+      transition: all 0.2s ease-in-out;
+    }
+
+    &:hover {
+      background: ${({ theme }) => theme.generic.form.input.hover.surface};
+      box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+    }
+
+    &:focus-within {
+      border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+      box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+`
+
+export const FilterNumber = styled.div`
+  background-color: #e15047;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${MainFont}
+  color: white;
+  position: absolute;
+  top: -12px;
+  right: -9px;
 `
 
 export const SearchFilterWrapper = styled(SearchHeader)`
@@ -285,6 +360,11 @@ export const SearchContainer = styled.div`
   position: relative;
   min-height: 60vh;
 `
+export const HomepageSearchContainer = styled.div`
+  position: relative;
+  flex-grow: 1;
+  margin-bottom: 4rem;
+`
 
 export const NoSearchResults = styled.div`
   width: 100%;
@@ -439,6 +519,14 @@ export const Result = styled(animated.div)<{
 
           @media (min-width: ${size.small}) {
             min-width: 474px;
+          }
+          position: relative;
+
+          ${ResultCardFooter} {
+            position: absolute;
+            bottom: 0px;
+            width: 470px;
+            border-radius: ${theme.borderRadius.small};
           }
         `}
 
