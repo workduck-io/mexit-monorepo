@@ -9,6 +9,7 @@ import {
   handleActionRequest,
   handleAsyncActionRequest,
   handleAsyncCalendarRequest,
+  handleBroadcastRequest,
   handleCaptureRequest,
   handleHighlightRequest,
   handleNodeContentRequest,
@@ -111,6 +112,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const actionType = request.type
 
   switch (actionType) {
+    case 'BROADCAST_EVENT': {
+      ;(async () => {
+        const res = await handleBroadcastRequest(request)
+        console.log('Got response: ', res)
+        sendResponse(res)
+      })()
+      return true
+    }
+
     case 'CAPTURE_HANDLER': {
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
       ;(async () => {

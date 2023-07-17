@@ -58,14 +58,12 @@ export const useStore = () => {
       .then((string) => {
         return JSON.parse(string)
       })
-    const timestamp: string = backup.find((item) => item.key === 'timestamp')?.value
+    const timestampStore: string = backup.find((item) => item.key === 'mexit-timestamp-webapp')?.value
 
-    // First putting all the values back into backup store, then copy it to keyval db
-    // TODO: Removing the timestamp key before restoring right now, will need to only remove it from local store
-    await BackupStorage.putBulkValue(workspaceId, backup.slice(0, -1))
+    await BackupStorage.putBulkValue(workspaceId, backup)
     await restore()
 
-    return timestamp
+    return JSON.parse(timestampStore)?.timestamp
   }
 
   return {

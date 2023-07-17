@@ -30,6 +30,7 @@ export enum BroadcastSyncedChannel {
   HIGHLIGHTS = 'highlights',
   LAYOUT = 'layout',
   TEST_BROADCASTING = 'test-broadcasting',
+  TIMESTAMP = 'timestamp',
   CALENDAR = 'calendar',
   SOCKET = 'WebSocketChannel'
 }

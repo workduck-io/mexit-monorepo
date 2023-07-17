@@ -64,6 +64,7 @@ export enum StoreIdentifier {
   ROUTE = 'route-store',
   SHAREMODAL = 'share-modal',
   TREE = 'tree',
+  TIMESTAMP = 'timestamp',
   USERCACHE = 'user-cache',
   APP = 'app',
   EDITORS = 'editors',

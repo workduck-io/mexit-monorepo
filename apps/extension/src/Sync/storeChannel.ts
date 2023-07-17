@@ -12,7 +12,8 @@ import {
   useRecentsStore,
   userPreferenceStore as useUserPreferenceStore,
   useSmartCaptureStore,
-  useSnippetStore
+  useSnippetStore,
+  useTimestampStore
 } from '@mexit/core'
 
 import useInternalAuthStore from '../Hooks/useAuthStore'
@@ -47,6 +48,8 @@ const getStore = (channel: BroadcastSyncedChannel) => {
       return useSmartCaptureStore
     case BroadcastSyncedChannel.USER_PREFERENCES:
       return useUserPreferenceStore
+    case BroadcastSyncedChannel.TIMESTAMP:
+      return useTimestampStore
     default:
       throw new Error(`${channel} doesn't exist in <Webapp-Extension> connector`)
   }

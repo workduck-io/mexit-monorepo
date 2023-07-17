@@ -70,7 +70,6 @@ class BackupStorageClass {
       await cursor.continue().then(logItems)
     })
 
-    result.push({ key: 'timestamp', value: Date.now().toString() })
     mog('all value', { result })
     return result
   }

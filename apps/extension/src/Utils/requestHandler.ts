@@ -474,3 +474,22 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
     }
   }
 }
+
+export const handleBroadcastRequest = ({ subType, data }) => {
+  switch (subType) {
+    case 'GET_PAST_EVENTS': {
+      return client
+        .get(apiURLs.broadcast.getAll, {
+          headers: { 'mex-workspace-id': data.workspaceID },
+          searchParams: data.searchParams
+        })
+        .json()
+        .then((response) => {
+          return { message: response, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
+  }
+}

@@ -134,11 +134,10 @@ const messageTransformer = async (message: SocketMessage) => {
 }
 
 const batchMessageTransformer = async (messages: SocketMessage[]) => {
-  // TODO: rigorous testing needed
   const queue = new PQueue()
 
   try {
-    messages.forEach((item) =>
+    messages?.forEach((item) =>
       queue.add(async () => {
         const response = await messageTransformer(item)
         console.log('pushing transformed message', response)

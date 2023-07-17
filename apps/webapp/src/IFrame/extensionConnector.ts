@@ -13,14 +13,14 @@ import {
   initSmartCapturesExtension,
   initSnippetsExtension,
   removeDoc,
+  runBatchMessageTransformer,
   searchIndex,
   searchIndexByNodeId,
   searchIndexWithRanking,
   startRequestsWorkerService,
   startSearchWorker,
   updateDoc,
-  updateOrAppendBlocks
-} from '../Workers/controller'
+  updateOrAppendBlocks} from '../Workers/controller'
 
 import { broadCastMessage } from './channels'
 import { initializeExtension } from './initializeExtension'
@@ -45,6 +45,7 @@ export const webExtensionConnector = async () => {
     initSnippetsExtension,
     initRequestClient,
     startRequestsWorkerService,
+    runBatchMessageTransformer,
     addDoc,
     updateDoc,
     updateOrAppendBlocks,

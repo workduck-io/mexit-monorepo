@@ -7,6 +7,7 @@ import {
   useHighlightStore,
   useLinkStore,
   userPreferenceStore as useUserPreferenceStore,
+  useTimestampStore,
   useViewStore
 } from '@mexit/core'
 
@@ -36,6 +37,7 @@ const useBroadcastHandler = () => {
   const { getPathFromNodeid } = useLinks()
   const { getDefaultNamespaceId } = useNamespaces()
   const updateActiveNamespace = useUserPreferenceStore((s) => s.setActiveNamespace)
+  const updateTimestamp = useTimestampStore((s) => s.setTimestamp)
 
   const lookup: Partial<Record<UpdateKey, (data: UpdateData) => void>> = {
     'HIGHLIGHT-CREATE': (data) => addHighlightInStore({ entityId: data.entityId, properties: data.payload.properties }),
@@ -103,6 +105,7 @@ const useBroadcastHandler = () => {
     mog('broadcast update data', { data })
 
     lookup[`${data.entityType}-${data.operationType}`](data)
+    updateTimestamp(Date.now().toString())
   }
 
   return {
