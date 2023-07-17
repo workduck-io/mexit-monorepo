@@ -76,7 +76,7 @@ interface SearchOptions {
 }
 
 interface SearchViewProps<Item> {
-  setShowrecents?: (show: boolean) => void
+  setShowRecents?: (show: boolean) => void
   showFilters?: boolean
   setShowFilters?: (show: boolean) => void
   isHomepage?: boolean
@@ -188,7 +188,7 @@ const HomepageSearchView = <Item,>({
   RenderFilters,
   showFilters,
   setShowFilters,
-  setShowrecents,
+  setShowRecents,
   options = { view: ViewType.List },
   filterActions,
   searchState,
@@ -230,13 +230,13 @@ const HomepageSearchView = <Item,>({
 
       if (initItems?.length > 0 || currentFilters.length > 0) {
         setResult([], newSearchTerm)
-        setShowrecents(false)
-      } else setShowrecents(true)
+        setShowRecents(false)
+      } else setShowRecents(true)
     } else {
       const res = await onSearch(newSearchTerm)
       mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, res })
       setResult(res, newSearchTerm)
-      setShowrecents(false)
+      setShowRecents(false)
     }
   }
 

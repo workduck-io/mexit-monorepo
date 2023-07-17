@@ -16,7 +16,7 @@ import { RenderFilterProps } from '../../Views/SearchView'
 
 import HomepageSearchView from './HomepageSearchView'
 
-const HomepageSearchbar = ({ showFilters, setShowFilters, setShowrecents, isHomepage, searchState, setSS }) => {
+const HomepageSearchbar = ({ showFilters, setShowFilters, setShowRecents, isHomepage, searchState, setSS }) => {
   const { loadNode } = useLoad()
   const { queryIndexWithRanking } = useSearch()
   const { getFilters } = useViewFilters()
@@ -114,7 +114,7 @@ const HomepageSearchbar = ({ showFilters, setShowFilters, setShowrecents, isHome
           globalJoin
         }}
         showFilters={showFilters}
-        setShowrecents={setShowrecents}
+        setShowRecents={setShowRecents}
         setShowFilters={setShowFilters}
         isHomepage={isHomepage}
         searchState={searchState}

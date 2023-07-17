@@ -224,7 +224,7 @@ function DraftView<Item>() {
   const allSnippets = useSnippetStore((store) => store.snippets)
 
   // for search
-  const [showrecents, setShowrecents] = useState(true)
+  const [showRecents, setShowRecents] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
 
   const [searchState, setSS] = useState<SearchViewState<Item>>({
@@ -300,7 +300,7 @@ function DraftView<Item>() {
         setActivitySnippets(validSnippets.reverse())
       }
     }
-  }, [ilinks, bookmarks, lastOpened, _hasSnippetsHydrated, allSnippets, showrecents])
+  }, [ilinks, bookmarks, lastOpened, _hasSnippetsHydrated, allSnippets, showRecents])
 
   useEffect(() => {
     if (result && result?.length > 0) {
@@ -374,26 +374,26 @@ function DraftView<Item>() {
       <HomepageSearchbar
         showFilters={showFilters}
         setShowFilters={setShowFilters}
-        setShowrecents={setShowrecents}
+        setShowRecents={setShowRecents}
         isHomepage={true}
         searchState={searchState}
         setSS={setSS}
       />
 
-      {showrecents &&
+      {showRecents &&
         lastOpened?.notes?.length === 0 &&
         lastOpened?.snippet?.length === 0 &&
         lastOpened?.highlight?.length === 0 && <Info>No Activity Found</Info>}
 
       {/* Notes Section (results/recents) */}
       <>
-        {((showrecents && lastOpened?.notes?.length > 0) || (!showrecents && searchresultCards?.notes?.length > 0)) && (
+        {((showRecents && lastOpened?.notes?.length > 0) || (!showRecents && searchresultCards?.notes?.length > 0)) && (
           <MainHeader>
-            <ActivityTitle>{showrecents ? 'Recent' : 'Result'} Notes</ActivityTitle>
+            <ActivityTitle>{showRecents ? 'Recent' : 'Result'} Notes</ActivityTitle>
           </MainHeader>
         )}
 
-        {showrecents
+        {showRecents
           ? lastOpened &&
             activityNotes &&
             lastOpened?.notes?.length > 0 && (
@@ -508,14 +508,14 @@ function DraftView<Item>() {
       {/* //* Snippets Section (results/recents) */}
 
       <>
-        {((showrecents && lastOpened?.snippet?.length > 0) ||
-          (!showrecents && searchresultCards?.snippets?.length > 0)) && (
+        {((showRecents && lastOpened?.snippet?.length > 0) ||
+          (!showRecents && searchresultCards?.snippets?.length > 0)) && (
           <MainHeader>
-            <ActivityTitle>{showrecents ? 'Recent' : 'Result'} Snippets</ActivityTitle>
+            <ActivityTitle>{showRecents ? 'Recent' : 'Result'} Snippets</ActivityTitle>
           </MainHeader>
         )}
 
-        {showrecents
+        {showRecents
           ? lastOpened &&
             activitySnippets &&
             lastOpened?.snippet?.length > 0 && (
@@ -601,7 +601,7 @@ function DraftView<Item>() {
             )}
       </>
 
-      {showrecents && lastOpened?.highlight && lastOpened?.highlight?.length > 0 && (
+      {showRecents && lastOpened?.highlight && lastOpened?.highlight?.length > 0 && (
         <>
           <MainHeader>
             <ActivityTitle>Recent Captures</ActivityTitle>
