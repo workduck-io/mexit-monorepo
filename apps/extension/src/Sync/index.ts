@@ -10,7 +10,8 @@ import {
   useMetadataStore,
   useRecentsStore,
   useReminderStore,
-  useSnippetStore
+  useSnippetStore,
+  useTimestampStore
 } from '@mexit/core'
 
 import { childIframe } from './iframeConnector'
@@ -117,6 +118,15 @@ const messagePassing = () => {
     {
       name: BroadcastSyncedChannel.CALENDAR,
       sync: [{ field: 'tokens' }]
+    },
+    onStateChange
+  ),
+
+  storeChangeHandler(
+    useTimestampStore,
+    {
+      name: BroadcastSyncedChannel.TIMESTAMP,
+      sync: [{ field: 'timestamp' }]
     },
     onStateChange
   )

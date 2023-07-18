@@ -1,6 +1,6 @@
 import { Indexes, ISearchQuery, IUpdateDoc } from '@workduck-io/mex-search'
 
-import { ILink, PersistentData, Snippets } from '@mexit/core'
+import { ILink, PersistentData, Snippets, SocketMessage } from '@mexit/core'
 
 import { childIframe } from './iframeConnector'
 
@@ -40,6 +40,10 @@ export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
 
 export const initRequestClient = async (token: string, workspaceID: string) => {
   if (childIframe) return childIframe.initRequestClient(token, workspaceID)
+}
+
+export const runBatchMessageTransformer = (messages: SocketMessage[]) => {
+  if (childIframe) return childIframe.runBatchMessageTransformer(messages)
 }
 
 export const wInitNamespaces = async (localILinks: ILink[]) => {

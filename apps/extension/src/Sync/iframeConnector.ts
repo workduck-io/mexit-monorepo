@@ -2,6 +2,7 @@ import { connectToChild, Methods } from 'penpal'
 
 import { API_BASE_URLS, useInitStore } from '@mexit/core'
 
+import { useMessagesStore } from '../Stores/useMessageStore'
 import { getElementById, styleSlot } from '../Utils/cs-utils'
 
 import { messageHandler, MessageType } from './messageHandler'
@@ -28,8 +29,12 @@ const messageBroadcaster = () => {
   appendChild(iframe)
 
   const exposedMethods: Methods = {
-    sendToExtension: (message: MessageType) => {
-      messageHandler(message)
+    sendToExtension: (message: any) => {
+      if ('data' in message) {
+        useMessagesStore.getState().addMessage(message.data)
+      } else {
+        messageHandler(message as MessageType)
+      }
     }
   }
 

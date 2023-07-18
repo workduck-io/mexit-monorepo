@@ -7,11 +7,13 @@ const {
   MEX_API_GATEWAY_URL_BASE,
   MEXIT_FRONTEND_URL_BASE,
   GOOGLE_CAL_BASE,
-  MEXIT_LINK_SHORTENER_URL_BASE
+  MEXIT_LINK_SHORTENER_URL_BASE,
+  MEXIT_WEBSOCKET_URL
 } = config.baseURLs
 
 export const API_BASE_URLS = {
   bookmarks: `${MEXIT_BACKEND_URL_BASE}/userStar`,
+  broadcast: `${MEXIT_BACKEND_URL_BASE}/broadcast`,
   calendar: `${MEXIT_BACKEND_URL_BASE}/calendar`,
   oauth2: `${MEXIT_BACKEND_URL_BASE}/oauth2`,
   archive: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
@@ -40,13 +42,18 @@ export const API_BASE_URLS = {
   public: `${MEXIT_BACKEND_URL_BASE}/public`,
   googleCalendar: `${GOOGLE_CAL_BASE}/primary/events`,
   shareFrontend: `${MEXIT_FRONTEND_URL_BASE}/share`,
-  frontend: MEXIT_FRONTEND_URL_BASE
+  frontend: MEXIT_FRONTEND_URL_BASE,
+  websocket: MEXIT_WEBSOCKET_URL
 }
 
 export const apiURLs = {
   bookmarks: {
     create: (nodeID: string) => `${API_BASE_URLS.bookmarks}/${nodeID}`,
     getAll: `${API_BASE_URLS.bookmarks}`
+  },
+
+  broadcast: {
+    getAll: `${API_BASE_URLS.broadcast}/event`
   },
 
   calendar: {
@@ -162,9 +169,11 @@ export const apiURLs = {
   },
 
   links: {
-    getLinks: `${API_BASE_URLS.link}`,
+    getLink: `${API_BASE_URLS.link}`,
+    getAllLinks: `${API_BASE_URLS.link}/all`,
     saveLink: `${API_BASE_URLS.link}/shorten`,
-    deleteLink: (linkId: string) => `${API_BASE_URLS.link}/${linkId}`,
+    deleteLink: `${API_BASE_URLS.link}`,
+    // ↓ shortened link url using alias
     shortendLink: (shortId: string, workspaceId: string) => `${API_BASE_URLS.url}/${workspaceId}/${shortId}`
   },
 

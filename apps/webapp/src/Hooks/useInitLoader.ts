@@ -26,9 +26,11 @@ import {
   getSearchIndexInitState,
   initSearchIndex,
   restoreSearchIndex,
+  runBatchMessageTransformer,
   startRequestsWorkerService
 } from '../Workers/controller'
 
+import { useBroadcastAPI } from './API/useBroadcastAPI'
 import { useCalendarAPI } from './API/useCalendarAPI'
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
@@ -60,12 +62,13 @@ export const useInitLoader = () => {
   const setAppInitStatus = useAuthStore((store) => store.setAppInitStatus)
   const navigate = useNavigate()
 
+  const { getAllPastEvents } = useBroadcastAPI()
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
   const { getAllViews } = useViewAPI()
   const { getAllLinks } = useURLsAPI()
   const { updateBaseNode } = useNodes()
-  const { restore } = useStore()
+  const { restore, restoreFromS3 } = useStore()
   const { getAllWorkspaces } = useUserService()
   const { fetchAllHighlights } = useHighlightSync()
   const { logout } = useAuthentication()
@@ -158,6 +161,7 @@ export const useInitLoader = () => {
       await Promise.allSettled(promises)
     }
 
+    // TODO: I don't understand this particularly well
     if (
       initalizeApp !== AppInitStatus.START &&
       initalizeApp !== AppInitStatus.SWITCH &&
@@ -171,15 +175,34 @@ export const useInitLoader = () => {
       startWorkers()
         .then(async () => {
           await updateCurrentUserPreferences()
-          getAllWorkspaces()
+          await getAllWorkspaces()
 
           if (initalizeApp === AppInitStatus.RUNNING) {
-            backgroundFetch()
-            try {
-              await withTimeout(fetchAll(), 60 * 1000, 'Oops, something went wrong while fetching workspace')
-            } catch (err) {
-              setManualReload(true)
-            }
+            restoreFromS3()
+              .then((res) => {
+                if (res) {
+                  getAllPastEvents(res).then((response) => {
+                    runBatchMessageTransformer(response)
+                  })
+                }
+
+                // TODO: can and should be done by a worker
+                initHighlightBlockMap(useDataStore.getState().ilinks, useContentStore.getState().contents)
+                updateBaseNode()
+                setIsUserAuthenticated()
+
+                setAppInitStatus(AppInitStatus.COMPLETE)
+              })
+              .catch(async (err) => {
+                mog('error while restoring backup', { err })
+
+                backgroundFetch()
+                try {
+                  await withTimeout(fetchAll(), 60 * 1000, 'Oops, something went wrong while fetching workspace')
+                } catch (err) {
+                  setManualReload(true)
+                }
+              })
           }
         })
         .catch((error) => {

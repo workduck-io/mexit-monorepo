@@ -56,18 +56,35 @@ class BackupStorageClass {
   async getAllValue(tableName: string) {
     const tx = this.db.transaction(tableName, 'readonly')
     const store = tx.objectStore(tableName)
-    const result = await store.getAll()
-    mog('Get All Data', { result })
+
+    // Because of using out-of-line keys, we need both the keys and values
+    // when putting all the values back from remote
+    const result = []
+    await store.openCursor().then(async function logItems(cursor) {
+      if (!cursor) {
+        return
+      }
+
+      result.push({ key: cursor.primaryKey, value: cursor.value })
+
+      await cursor.continue().then(logItems)
+    })
+
+    mog('all value', { result })
     return result
   }
 
   async putValue(tableName: string, key: string, value: string) {
-    const tx = this.db.transaction(tableName, 'readwrite')
-    const store = tx.objectStore(tableName)
+    try {
+      const tx = this.db.transaction(tableName, 'readwrite')
+      const store = tx.objectStore(tableName)
 
-    const result = await store.put(value, key)
-    mog('Put Data ', { result })
-    return result
+      const result = await store.put(value, key)
+      mog('Put Data ', { result })
+      return result
+    } catch (error) {
+      mog('error', { error })
+    }
   }
 
   async backUpToS3(tableName: string) {
@@ -83,11 +100,11 @@ class BackupStorageClass {
     })
   }
 
-  async putBulkValue(tableName: string, values: object[]) {
+  async putBulkValue(tableName: string, values: any[]) {
     const tx = this.db.transaction(tableName, 'readwrite')
     const store = tx.objectStore(tableName)
-    for (const value of values) {
-      const result = await store.put(value)
+    for (const object of values) {
+      const result = await store.put(object.value, object.key)
       mog('Put Bulk Data ', { result })
     }
     return this.getAllValue(tableName)

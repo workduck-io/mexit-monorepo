@@ -19,7 +19,6 @@ import UserPage from './Components/User/UserPage'
 import { ROUTE_PATHS } from './Hooks/useRouting'
 import { useSaveNodeName } from './Hooks/useSaveNodeName'
 import useSocket from './Hooks/useSocket'
-import { SocketActionType } from './Types/Socket'
 import Archive from './Views/Archive'
 import CalendarService from './Views/Calendars'
 import DraftView from './Views/DraftView'
@@ -218,6 +217,7 @@ export const Switch = ({ children }) => {
 
   const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
 
+  // LATER: look at this later when we need more updates
   const fromSocket = useSocket()
 
   useEffect(() => {
@@ -231,18 +231,18 @@ export const Switch = ({ children }) => {
     if (location.pathname) {
       if (location.pathname.startsWith(ROUTE_PATHS.snippets)) {
         // mog('Showing Sidebar', { location })
-        fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
+        // fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
         showSidebar()
         hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.node)) {
-        fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
+        // fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
         // mog('Showing Sidebar', { location })
         showAllSidebars()
       } else if (location.pathname.startsWith(ROUTE_PATHS.archive)) {
         hideAllSidebars()
         // hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.view)) {
-        fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: '' } })
+        // fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: '' } })
         showSidebar()
         hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.namespaceShare)) {

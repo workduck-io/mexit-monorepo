@@ -9,7 +9,7 @@ import { useApi } from './useNodeAPI'
 
 export const PollingInterval = {
   [PollActions.shared]: 5 * 60 * 1000, // 5 minutes
-  [PollActions.hierarchy]: 5 * 60 * 1000, // 5 minutes
+  [PollActions.hierarchy]: 15 * 60 * 1000, // 15 minutes
   [PollActions.bookmarks]: 30 * 60 * 1000, // 30 minutes
   [PollActions.snippets]: 30 * 60 * 1000 // 30 minutes
 }

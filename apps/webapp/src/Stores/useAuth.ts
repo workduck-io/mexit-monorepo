@@ -29,6 +29,7 @@ import {
   useRouteStore,
   userPreferenceStore as useUserPreferenceStore,
   useSnippetStore,
+  useStore,
   useTodoStore,
   useUserCacheStore} from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
@@ -43,6 +44,7 @@ type LoginResult = { loginData: UserCred; loginStatus: string }
 export const useAuthentication = () => {
   const setUnAuthenticated = useAuthStore((store) => store.setUnAuthenticated)
   const { signIn, signOut, signUp, verifySignUp, googleSignIn } = useAuth()
+  const { backup } = useStore()
 
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
@@ -109,6 +111,7 @@ export const useAuthentication = () => {
   }
 
   const logout = async () => {
+    await backup()
     await signOut()
     try {
       await terminateAllWorkers()

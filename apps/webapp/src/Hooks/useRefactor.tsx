@@ -1,4 +1,4 @@
-import { getUniquePath, ILink,isMatch, mog, NodeLink, RefactorPath, useDataStore } from '@mexit/core'
+import { getUniquePath, ILink, isMatch, mog, NodeLink, RefactorPath, useDataStore } from '@mexit/core'
 
 import { useApi } from './API/useNodeAPI'
 import { useEditorBuffer } from './useEditorBuffer'
@@ -9,7 +9,7 @@ interface NamespaceChangedPaths {
   addedPaths: ILink[]
 }
 
-interface RefactorResponse {
+export interface RefactorResponse {
   changedPaths: Record<string, NamespaceChangedPaths>
 }
 
@@ -73,18 +73,24 @@ export const useRefactor = () => {
     return refactored
   }
 
-  // const execRefactor = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
-  //   // const refactored = getMockRefactor(from, to, clearBuffer)
+  const execRefactorFromResponse = (data: RefactorResponse) => {
+    const addedILinks: ILink[] = []
+    const removedILinks: ILink[] = []
 
-  //   const nodeId = getNodeidFromPath(from.path, from.namespaceID)
-  //   const data = await api
-  //     .refactorHeirarchy({ path: from.path.split('.').join('#') }, { path: to.path.split('.').join('#') }, nodeId)
-  //     .then((response) => {
-  //       return response
-  //     })
+    Object.entries(data.changedPaths).forEach(([nsId, nsObject]) => {
+      nsObject.addedPaths.forEach((ilink) => {
+        ilink.namespace = nsId
+      })
+      nsObject.removedPaths.forEach((ilink) => {
+        ilink.namespace = nsId
+      })
+      addedILinks.push(...nsObject.addedPaths)
+      removedILinks.push(...nsObject.removedPaths)
+    })
+    const refactored = updateILinks(addedILinks, removedILinks)
 
-  //   return data
-  // }
+    return refactored
+  }
 
   const execRefactorAsync = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
     mog('REFACTOR: FROM < TO', { from, to })
@@ -100,27 +106,13 @@ export const useRefactor = () => {
       { path: uniquePath.split('.').join('#'), namespaceID: to.namespaceID ?? from.namespaceID },
       nodeID
     ).then((response: RefactorResponse) => {
-      const addedILinks: ILink[] = []
-      const removedILinks: ILink[] = []
-
-      Object.entries(response.changedPaths).forEach(([nsId, nsObject]) => {
-        nsObject.addedPaths.forEach((ilink) => {
-          ilink.namespace = nsId
-        })
-        nsObject.removedPaths.forEach((ilink) => {
-          ilink.namespace = nsId
-        })
-        addedILinks.push(...nsObject.addedPaths)
-        removedILinks.push(...nsObject.removedPaths)
-      })
-      const refactored = updateILinks(addedILinks, removedILinks)
-      return refactored
+      return execRefactorFromResponse(response)
     })
 
     return res
   }
 
-  return { getMockRefactor, execRefactorAsync }
+  return { getMockRefactor, execRefactorAsync, execRefactorFromResponse }
 }
 
 // DO NOT DELETE. FOR REFERENCE

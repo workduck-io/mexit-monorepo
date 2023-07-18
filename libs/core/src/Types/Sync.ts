@@ -30,7 +30,9 @@ export enum BroadcastSyncedChannel {
   HIGHLIGHTS = 'highlights',
   LAYOUT = 'layout',
   TEST_BROADCASTING = 'test-broadcasting',
-  CALENDAR = 'calendar'
+  TIMESTAMP = 'timestamp',
+  CALENDAR = 'calendar',
+  SOCKET = 'WebSocketChannel'
 }
 
 export enum SharedStoreKey {

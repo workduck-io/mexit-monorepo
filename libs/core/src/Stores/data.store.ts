@@ -36,7 +36,10 @@ const dataStoreConfig = (set, get) => ({
   setAllSpaces: (spaces) => {
     set({ spaces })
   },
-  addSpace: (space) => set({ spaces: [...get().spaces, space] }),
+  addSpace: (space) => {
+    const filteredSpaces = get().spaces.filter((item) => item.id !== space.id)
+    set({ spaces: [...filteredSpaces, space] })
+  },
 
   initializeDataStore: (initData) => {
     // mog('Initializing Data store', { initData })
@@ -50,7 +53,8 @@ const dataStoreConfig = (set, get) => ({
   },
 
   addNamespace: (namespace) => {
-    set({ namespaces: [...get().namespaces, namespace] })
+    const filteredSpaces = get().namespaces.filter((item) => item.id !== namespace.id)
+    set({ namespaces: [...filteredSpaces, namespace] })
   },
 
   setNamespaces: (namespaces) => set({ namespaces }),

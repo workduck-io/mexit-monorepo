@@ -1,41 +1,25 @@
 import { useEffect } from 'react'
 
-import { Indexes } from '@workduck-io/mex-search'
-
 import {
-  convertContentToRawText,
-  DefaultMIcons,
-  extractLinksFromData,
-  extractMetadata,
   mog,
-  nicePromise,
-  Snippet,
   useAuthStore,
   useContentStore,
   useDataStore,
-  useDescriptionStore,
   useHighlightStore,
   useInitStore,
   useLinkStore,
-  useSmartCaptureStore,
-  useSnippetStore
+  useSnippetStore,
+  useTimestampStore
 } from '@mexit/core'
-import { useSlashCommands } from '@mexit/shared'
 
 import {
   getSearchIndexInitState,
   initSearchIndex,
-  startRequestsWorkerService,
-  wInitHighlights,
-  wInitLinks,
-  wInitNamespaces,
-  wInitSmartCaptures,
-  wInitSnippets
+  runBatchMessageTransformer,
+  startRequestsWorkerService
 } from '../Sync/invokeOnWorker'
-import { deserializeContent } from '../Utils/serializer'
 
-import { useSearch } from './useSearch'
-import { useUpdater } from './useUpdater'
+import { useBroadcastAPI } from './useBroadcastAPI'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -48,134 +32,7 @@ export const useInitLoader = () => {
   const linksStoreHydrated = useLinkStore((s) => s._hasHydrated)
   const highlightStoreHydrated = useHighlightStore((store) => store._hasHydrated)
 
-  const { setNamespaces, setIlinks, addInArchive } = useDataStore()
-
-  const { updateFromNotes } = useUpdater()
-  const updateDescription = useDescriptionStore((store) => store.updateDescription)
-  const setSlashCommands = useDataStore((store) => store.setSlashCommands)
-
-  const updateSnippetsInStore = useSnippetStore((state) => state.initSnippets)
-  const { updateDocument } = useSearch()
-
-  const setLinks = useLinkStore((store) => store.setLinks)
-  const setHighlights = useHighlightStore((store) => store.setHighlights)
-  const setConfig = useSmartCaptureStore((s) => s.setSmartCaptureList)
-
-  const { generateSlashCommands } = useSlashCommands()
-
-  const getAllNamespaces = async () => {
-    const localILinks = useDataStore.getState().ilinks
-    const { response, ns, newILinks, archivedILinks } = await wInitNamespaces(localILinks)
-
-    mog('NamespacesInitResponse: ', { response, ns, newILinks, archivedILinks })
-
-    if (ns.length === 0) {
-      return
-    }
-
-    setNamespaces(ns)
-
-    setIlinks(newILinks)
-    addInArchive(archivedILinks)
-
-    response?.fulfilled?.forEach(async (nodes) => {
-      if (nodes) {
-        const notes = {}
-        const metadatas = {}
-
-        nodes.rawResponse?.map((note) => {
-          metadatas[note.id] = extractMetadata(note, { icon: DefaultMIcons.NOTE })
-          notes[note.id] = { type: 'editor', content: deserializeContent(note.data) }
-        })
-
-        await updateFromNotes(notes, metadatas)
-      }
-    })
-  }
-
-  const updateSnippetIndex = async (snippet) => {
-    const tags = snippet?.template ? ['template'] : ['snippet']
-
-    await updateDocument({
-      indexKey: Indexes.SNIPPET,
-      id: snippet.id,
-      contents: snippet.content,
-      title: snippet.title,
-      options: {
-        tags
-      }
-    })
-  }
-
-  const updateSlashCommands = (snippets: Snippet[]) => {
-    const slashCommands = generateSlashCommands(snippets)
-    setSlashCommands(slashCommands)
-  }
-
-  const updateSnippets = async (snippets: Record<string, Snippet>) => {
-    const existingSnippets = useSnippetStore.getState().snippets
-
-    const newSnippets = { ...(Array.isArray(existingSnippets) ? {} : existingSnippets), ...snippets }
-
-    updateSnippetsInStore(newSnippets)
-    const snippetsArr = Object.values(newSnippets)
-    updateSlashCommands(snippetsArr)
-
-    for await (const snippet of snippetsArr) {
-      updateDescription(snippet.id, {
-        rawText: convertContentToRawText(snippet.content, '\n'),
-        truncatedContent: snippet.content.slice(0, 8)
-      })
-      try {
-        await updateSnippetIndex(snippet)
-      } catch (error) {
-        mog('ErrorUpdatingSnippetIdx', { error })
-      }
-    }
-  }
-
-  const getAllSnippets = async () => {
-    const localSnippets = useSnippetStore.getState().snippets
-    const { response } = await wInitSnippets(localSnippets)
-
-    response?.fulfilled?.forEach(async (snippets) => {
-      const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
-      await updateSnippets(snippetsRecord)
-    })
-  }
-
-  const getAllLinks = async () => {
-    const d = await wInitLinks()
-    const links = extractLinksFromData(d)
-    if (links) setLinks(links)
-  }
-
-  const getAllHighlights = async () => {
-    const d = await wInitHighlights()
-    if (d) setHighlights(d)
-  }
-
-  const getAllSmartCaptures = async () => {
-    const d = await wInitSmartCaptures()
-    if (d) setConfig(d)
-  }
-
-  const fetchAll = async () => {
-    await nicePromise(getAllNamespaces)
-    await nicePromise(getAllSnippets)
-    await nicePromise(getAllHighlights)
-    await nicePromise(getAllLinks)
-    await nicePromise(getAllSmartCaptures)
-
-    // await Promise.allSettled([
-    //   getAllNamespaces(),
-    //   getAllSnippets(),
-    //   getAllHighlights(),
-    //   getAllLinks(),
-    //   getAllSmartCaptures()
-    // ])
-    mog('Fetch All Resolved completely')
-  }
+  const { getAllPastEvents } = useBroadcastAPI()
 
   const startWorkers = async () => {
     mog('Starting Workers')
@@ -211,8 +68,16 @@ export const useInitLoader = () => {
     ) {
       startWorkers()
         .then(() => {
-          mog('All workers initialized from extension. Fetching data now')
-          fetchAll()
+          mog('All workers initialized from extension. Comparing backup timestamp now')
+          // fetchAll()
+          const lastFetchedTimestamp = useTimestampStore.getState()?.timestamp
+          if (lastFetchedTimestamp) {
+            getAllPastEvents(lastFetchedTimestamp).then(({ message, error }) => {
+              if (!error) {
+                runBatchMessageTransformer(message)
+              }
+            })
+          }
         })
         .catch((error) => {
           mog('Error while initializing: ', { error })

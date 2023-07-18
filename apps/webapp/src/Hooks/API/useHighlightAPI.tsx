@@ -3,6 +3,12 @@ import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, Highlight, mog } from '@mexit/core'
 import { deserializeContent } from '../../Utils/serializer'
 
 export const useHighlightAPI = () => {
+  const getHighlight = async (id: string) => {
+    const res = await API.highlight.get(id)
+
+    return res
+  }
+
   const saveHighlight = async (h: Highlight) => {
     const reqData = {
       // workspaceId: getWorkspaceId(),
@@ -52,6 +58,7 @@ export const useHighlightAPI = () => {
   }
 
   return {
+    getHighlight,
     getAllHighlights,
     saveHighlight,
     deleteHighlight

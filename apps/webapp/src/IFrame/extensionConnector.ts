@@ -1,7 +1,6 @@
-import { get } from 'idb-keyval'
 import { connectToParent as connectToExtension } from 'penpal'
 
-import { mog, StorePersistentKeys } from '@mexit/core'
+import { mog } from '@mexit/core'
 
 import {
   addDoc,
@@ -14,27 +13,19 @@ import {
   initSmartCapturesExtension,
   initSnippetsExtension,
   removeDoc,
+  runBatchMessageTransformer,
   searchIndex,
   searchIndexByNodeId,
   searchIndexWithRanking,
   startRequestsWorkerService,
   startSearchWorker,
   updateDoc,
-  updateOrAppendBlocks
-} from '../Workers/controller'
+  updateOrAppendBlocks} from '../Workers/controller'
 
 import { broadCastMessage } from './channels'
 import { initializeExtension } from './initializeExtension'
 import { syncStoresWithExtension } from './syncedStores'
 import { uploadImageToCDN } from './uploadImageToCDN'
-
-const getStoreValueFromIDB = async (key: StorePersistentKeys, field?: string) => {
-  const idbValue = await get(key)
-  if (idbValue) {
-    const jsonStoreValue = JSON.parse(idbValue).state
-    return field ? jsonStoreValue[field] : jsonStoreValue
-  }
-}
 
 export const webExtensionConnector = async () => {
   /*
@@ -54,6 +45,7 @@ export const webExtensionConnector = async () => {
     initSnippetsExtension,
     initRequestClient,
     startRequestsWorkerService,
+    runBatchMessageTransformer,
     addDoc,
     updateDoc,
     updateOrAppendBlocks,

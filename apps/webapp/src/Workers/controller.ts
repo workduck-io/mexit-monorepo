@@ -11,9 +11,9 @@ import {
   PersistentData,
   SearchRepExtra,
   Snippets,
+  SocketMessage,
   useAuthStore,
-  withTimeout
-} from '@mexit/core'
+  withTimeout} from '@mexit/core'
 
 import { WorkerRequestType } from '../Utils/worker'
 
@@ -72,8 +72,8 @@ export const initRequestClient = (token: string, workspaceId: string) => {
   }
 }
 
-export const terminateRequestWorker = async () => {
-  // if (requestsWorker) requestsWorker = await Thread.terminate(requestsWorker)
+export const runBatchMessageTransformer = async (messages: SocketMessage[]) => {
+  await requestsWorker.batchMessageTransformer(messages)
 }
 
 export const updateILink = async (ilink: ILink) => {
