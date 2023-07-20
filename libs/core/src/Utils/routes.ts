@@ -129,7 +129,7 @@ export const apiURLs = {
   prompt: {
     getAllPrompts: `${API_BASE_URLS.prompt}/all`, // Returns `downloaded` and `created` prompts
     promptUserAuthInfo: `${API_BASE_URLS.prompt}/userAuth`,
-    generateResult: (promptId: string) => `${API_BASE_URLS.prompt}/result/${promptId}`,
+    generateResult: `https://ejdxpliemd4kkubdpdgrh6qlku0rhvku.lambda-url.us-east-1.on.aws`,
     getAllPromptsProvider: `${API_BASE_URLS.prompt}/providers`
   },
   share: {

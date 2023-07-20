@@ -10,9 +10,9 @@ export class PromptAPI {
     this.client = client
   }
 
-  async generateResult(promptId: string, data, options?: Options) {
+  async generateResult(data, options?: Options) {
     return await this.client.post(
-      apiURLs.prompt.generateResult(promptId),
+      apiURLs.prompt.generateResult,
       {
         options: {
           max_tokens: 1000,

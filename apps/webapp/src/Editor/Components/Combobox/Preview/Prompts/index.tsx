@@ -110,8 +110,9 @@ const PromptPreview: React.FC<PromptPreviewProps> = ({ promptId }) => {
         if (!isLoading) {
           useComboboxStore.getState().setItemLoading({ item: promptId, message: 'Generating...' })
 
+          //TODO: This is where the streaming lambda has to be used
           API.prompt
-            .generateResult(promptId, {})
+            .generateResult({ promptId })
             .then((res) => {
               if (res) {
                 const result = [res.content]
