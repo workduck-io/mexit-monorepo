@@ -284,8 +284,8 @@ export const useCreateNewMenu = () => {
         false,
         DefaultMIcons.AI
       ),
-      getMenuItem('Send', blockMenuItems.onSendToClick, false, DefaultMIcons.SEND),
-      getMenuItem('Move', blockMenuItems.onMoveToClick, false, DefaultMIcons.MOVE),
+      // getMenuItem('Send', blockMenuItems.onSendToClick, false, DefaultMIcons.SEND),
+      // getMenuItem('Move', blockMenuItems.onMoveToClick, false, DefaultMIcons.MOVE),
       getMenuItem('Delete', blockMenuItems.onDeleteClick, false, DefaultMIcons.DELETE)
     ]
   }

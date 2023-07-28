@@ -31,6 +31,7 @@ const ItemPreview: React.FC<ItemPreviewProps> = ({ item, metadata }) => {
       <ComboSeperator fixedWidth>
         <section>
           <EditorPreviewRenderer
+            noStyle
             noMouseEvents
             content={preview?.content || preview}
             readOnly

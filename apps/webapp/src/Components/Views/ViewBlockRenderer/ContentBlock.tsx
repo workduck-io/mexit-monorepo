@@ -4,7 +4,7 @@ import styled, { css, useTheme } from 'styled-components'
 
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { ModalsType, mog, SuperBlocks, useModalStore } from '@mexit/core'
+import { ModalsType, SuperBlocks, useModalStore } from '@mexit/core'
 import { Group, MexIcon } from '@mexit/shared'
 
 import { SearchBlockIcons } from '../../../Editor/Components/Blocks/BlockIcons'
@@ -25,7 +25,7 @@ export const ContentBlockContainer = styled.div`
   gap: ${({ theme }) => theme.spacing.medium};
 `
 
-export const BlockHeader = styled(GroupHeader) <{ isOpen?: boolean }>`
+export const BlockHeader = styled(GroupHeader)<{ isOpen?: boolean }>`
   transition: all 0.3s ease-in-out;
   animation: ${(props) => (props.isOpen ? SlideDownKeyFrames : SlideUpKeyFrames)} 0.3s ease-out;
   display: flex;
@@ -67,9 +67,16 @@ type BlockProps = {
 
 export const CaptureBlock = ({ block }: BlockProps) => {
   const theme = useTheme()
+  const toggleModal = useModalStore((store) => store.toggleOpen)
+
+  const handleToggleAccordion = (ev) => {
+    if (ev.detail === 2) {
+      toggleModal(ModalsType.previewNote, { noteId: block.parent, blockId: block.id })
+    }
+  }
 
   return (
-    <ContentBlockContainer>
+    <ContentBlockContainer onClick={handleToggleAccordion}>
       <Group>
         <VerticalStretch>
           <MexIcon
@@ -87,7 +94,7 @@ export const CaptureBlock = ({ block }: BlockProps) => {
           isReadOnly
           id={block.id}
           parent={block.parent}
-          type={SuperBlocks.CONTENT}
+          type={block.entity as any}
         >
           <div style={{ lineHeight: 1.58 }}>{block.text}</div>
         </SmartCaptureSuperBlock>
@@ -128,8 +135,6 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
       useBuffer: true
     })
 
-    mog('UPDATED BLOCK', { updatedBlock, properties })
-
     updateBlocks({
       id: noteId,
       contents: [updatedBlock]
@@ -139,7 +144,7 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
   const canOpen = block?.text?.length > 200
 
   return (
-    <ContentBlockContainer>
+    <ContentBlockContainer onClick={handleToggleAccordion}>
       {/* <BlockHeader isOpen={isOpen} onClick={handleToggleAccordion}> */}
       {/* <VerticalStretch> */}
       {/*   <MexIcon */}

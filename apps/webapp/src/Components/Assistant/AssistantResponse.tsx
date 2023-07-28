@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { createPlateEditor, deserializeMd, focusEditor, getPlateEditorRef, insertNodes } from '@udecode/plate'
 
-import { AIEvent, generateTempId, useEditorStore } from '@mexit/core'
+import { AIEvent, createSuperBlockContent, generateTempId, SuperBlocks, useEditorStore } from '@mexit/core'
 import { InsertMenu } from '@mexit/shared'
 
 import components from '../../Editor/Components/EditorPreviewComponents'
@@ -23,7 +23,7 @@ const AssistantResponse = ({ event }: { event: AIEvent }) => {
       id: generateTempId()
     }))
 
-    return deserializedContent
+    return [createSuperBlockContent(SuperBlocks.CONTENT, deserializedContent)]
   }
 
   const insertContent = (content: string) => {
@@ -46,6 +46,7 @@ const AssistantResponse = ({ event }: { event: AIEvent }) => {
 
   const handleOnInsert = (id?: string) => {
     const content = event?.content
+
     insertContent(content)
   }
 

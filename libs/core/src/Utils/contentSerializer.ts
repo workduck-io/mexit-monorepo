@@ -6,9 +6,8 @@ import { directKeys, DirectProperties, directPropertyKeys, mappedKeys } from './
 
 interface SerializedBlock {
   id: string
-  elementType: string
+  type: string
   children: SerializedBlock[]
-  metadata?: any
   properties?: any
 }
 
@@ -129,6 +128,7 @@ export const deserializeContent = (sanatizedContent: any[]) => {
       const dEl = deserializeSpecial[el.elementType](el)
       return dEl
     }
+
     const nl: any = {
       type: el.type,
       id: el.id

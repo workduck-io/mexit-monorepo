@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { Value } from '@udecode/plate'
 import { useFocused, useReadOnly, useSelected } from 'slate-react'
 
+import { useEditorBlockSelection } from '../../Actions/useEditorBlockSelection'
 import useUpdateBlock from '../../Hooks/useUpdateBlock'
 
 import { MetadataFields, PropertiyFields, SuperBlockElementProps, SuperBlockProps } from './SuperBlock.types'
@@ -16,9 +17,14 @@ export const withSuperBlockElement = (Component: FC<SuperBlockProps>) => {
     const isBlockSelected = useSelected()
 
     const { updateMetadataProperties } = useUpdateBlock()
+    const { deleteParentBlock } = useEditorBlockSelection()
 
     const handleOnChange = (properties: Partial<PropertiyFields>) => {
       updateMetadataProperties(element, properties)
+    }
+
+    const handleOnDelete = () => {
+      deleteParentBlock(element.id)
     }
 
     if (!element) return <></>
@@ -35,6 +41,7 @@ export const withSuperBlockElement = (Component: FC<SuperBlockProps>) => {
         value={element.properties ?? ({} as PropertiyFields)}
         metadata={element.metadata ?? ({} as MetadataFields)}
         onChange={handleOnChange}
+        onDelete={handleOnDelete}
       >
         {children}
       </Component>

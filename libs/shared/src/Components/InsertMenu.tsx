@@ -111,7 +111,10 @@ const AnchorNode = ({ selected, items, icon, title, shortcut }) => {
   const label = selectedItem?.label ?? title
 
   return (
-    <Tooltip content={shortcut ? <TooltipTitleWithShortcut title={title} shortcut={shortcut} /> : title} delay={100}>
+    <Tooltip
+      content={shortcut ? <TooltipTitleWithShortcut title={title} shortcut={shortcut} /> : title ?? 'Options'}
+      delay={100}
+    >
       <StyledButton>
         <Group>
           <IconDisplay icon={itemIcon} size={14} />

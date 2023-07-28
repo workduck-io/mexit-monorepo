@@ -17,6 +17,10 @@ export const keysToExcludeInGrouping = [
   'caption',
   'url',
   'updatedAt',
+  'title',
+  'active',
+  'entity',
+  'value',
   'lastEditedBy',
   'tags',
   'text',
@@ -29,6 +33,10 @@ export const keysToExcludeInSorting = [
   'caption',
   'updatedBy',
   'lastEditedBy',
+  'title',
+  'active',
+  'entity',
+  'value',
   'tags',
   'parent',
   'type'
@@ -53,7 +61,6 @@ type KeyFrequencyMapType = Record<string, number>
 
 export const getKeyFrequencyMap = (data: Record<string, any>[]): KeyFrequencyMapType => {
   const keyFrequencyMap: KeyFrequencyMapType = {}
-  console.log('DATA ', { data })
   const iterateObject = (obj: Record<string, any>, keyPrefix = '') => {
     Object.keys(obj).forEach((objKey) => {
       const key = keyPrefix ? `${keyPrefix}.${objKey}` : objKey

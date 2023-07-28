@@ -5,7 +5,17 @@ import Highlighter from 'web-highlighter'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { camelCase, generateTempId, SupportedAIEventTypes, useFloatingStore, useHistoryStore } from '@mexit/core'
+import {
+  addProperty,
+  camelCase,
+  convertContentToRawText,
+  createSuperBlockContent,
+  generateTempId,
+  SuperBlocks,
+  SupportedAIEventTypes,
+  useFloatingStore,
+  useHistoryStore
+} from '@mexit/core'
 
 import { useAIOptions } from '../../Hooks/useAIOptions'
 import { StyledButton } from '../../Style/Buttons'
@@ -43,7 +53,14 @@ const AIPreviewContainer: React.FC<AIPreviewProps> = (props) => {
       id: generateTempId()
     }))
 
-    return deserializedContent
+    const superBlock = createSuperBlockContent(SuperBlocks.CONTENT, deserializedContent)
+    const convertedContent = [
+      addProperty(superBlock, {
+        title: convertContentToRawText(deserializedContent)
+      })
+    ]
+
+    return convertedContent
   }
 
   const insertContent = (content: string, replace = true) => {

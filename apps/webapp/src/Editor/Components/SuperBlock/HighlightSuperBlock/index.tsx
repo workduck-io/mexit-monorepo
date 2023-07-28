@@ -12,6 +12,7 @@ const HighlightSuperBlock: React.FC<SuperBlockProps> = (props) => {
       {...restProps}
       $isActive={restProps.isActive}
       $isSelected={restProps.isSelected}
+      $isReadOnly={props.isReadOnly}
       LeftHeaderRenderer={
         <SuperBlockTitle
           id={restProps.id}
@@ -20,7 +21,9 @@ const HighlightSuperBlock: React.FC<SuperBlockProps> = (props) => {
           onChange={restProps.onChange}
           heading="Capture"
           value={restProps.value}
-          icon={DefaultMIcons.HIGHLIGHT} />
+          icon={DefaultMIcons.HIGHLIGHT}
+          isReadOnly={props.isReadOnly}
+        />
       }
     >
       {children}

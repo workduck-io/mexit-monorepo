@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react'
 import { nanoid } from 'nanoid'
 
 import { generateCommentId, MIcon, useAuthStore, useEditorStore, UserReaction } from '@mexit/core'
-import { Popover } from '@mexit/shared'
+import { DefaultMIcons, IconDisplay, Popover } from '@mexit/shared'
 
 import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
 import { useComments } from '../../../Hooks/useComments'
@@ -20,6 +20,7 @@ interface IBlockInfo {
   parent: string // Parnet of this Block
   isSelected?: boolean
   isFocused?: boolean
+  showDelete?: boolean
 }
 
 /**
@@ -29,7 +30,7 @@ interface IBlockInfo {
  * Reactions
  * Comment
  */
-export const BlockInfo: React.FC<IBlockInfo> = ({ id, parent, isSelected, isFocused }) => {
+export const BlockInfo: React.FC<IBlockInfo> = ({ id, parent, onDelete, isSelected, isFocused }) => {
   // Whether to show all elements when hovering over the fixed blockinfo
   // For example: when only source is present
   const [hover, setHover] = useState(false)
@@ -209,6 +210,12 @@ export const BlockInfo: React.FC<IBlockInfo> = ({ id, parent, isSelected, isFocu
                 {hasComments && comments.length}
               </BlockInfoButton>
             </Popover>
+          )}
+
+          {onDelete && (
+            <BlockInfoButton onClick={onDelete}>
+              <IconDisplay icon={DefaultMIcons.DELETE} />
+            </BlockInfoButton>
           )}
         </BlockInfoWrapper>
       )}

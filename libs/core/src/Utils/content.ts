@@ -8,6 +8,8 @@ import { MIcon } from '../Types/Store'
 import { createSuperBlockContent, updateIds } from './dataTransform'
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_LINK, ELEMENT_MENTION, ELEMENT_UL } from './editorElements'
 import { generateHighlightId, generateTempId } from './idGenerator'
+import { convertContentToRawText } from './parseData'
+import { getSlug } from './strings'
 
 const ELEMENT_TODO_LI = 'action_item'
 const ELEMENT_PARAGRAPH = 'p'
@@ -136,6 +138,7 @@ export const insertItemInArray = <T>(array: T[], items: Array<T>, index: number)
 
 export const getHighlightContent = (highlight: Highlight, link?: Link) => {
   const blockContent = highlight.properties.content
+  const titleOfBlock = getSlug(convertContentToRawText(blockContent))
 
   const properties = {
     entity: {
@@ -145,10 +148,10 @@ export const getHighlightContent = (highlight: Highlight, link?: Link) => {
           id: generateHighlightId(),
           parent: highlight.entityId
         }
-      },
-      title: link?.title,
-      url: highlight?.properties?.sourceUrl
-    }
+      }
+    },
+    title: titleOfBlock,
+    url: highlight?.properties?.sourceUrl
   }
 
   if (blockContent) {

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import { useDebounce } from 'use-debounce'
 
-import { getMenuItem, MIcon, SuperBlocks } from '@mexit/core'
+import { getMenuItem, MIcon, superBlockFieldValidator, SuperBlocks } from '@mexit/core'
 import { EntitiesInfo, Group, IconDisplay, Select, Tooltip } from '@mexit/shared'
 
 import { Source } from '../../../Components/SourceInfo'
@@ -20,6 +20,7 @@ interface SuperBlockTitleInfoProps {
   type: SuperBlocks
   heading: string
   value: PropertiyFields
+  isReadOnly?: boolean
   icon: MIcon
   onChange?: (properties: Partial<PropertiyFields>) => void
 }
@@ -54,6 +55,7 @@ export const BlockTitleRename = (props) => {
   return (
     <Tooltip content={defferedValue?.length ? defferedValue : 'Untitled'}>
       <RenameInput
+        disabled={props.isReadOnly}
         name="title"
         length={defferedValue !== title ? title.length + 4 : title.length - 2}
         defaultValue={title}
@@ -65,7 +67,7 @@ export const BlockTitleRename = (props) => {
   )
 }
 
-const BlockTitleInfo = ({ title, type, value, onFocusBlock, onChange, onSwitchType }) => {
+const BlockTitleInfo = ({ title, type, value, isReadOnly, onFocusBlock, onChange, onSwitchType }) => {
   const convertableItems = useMemo(() => {
     return Object.keys(EntitiesInfo)
       .filter(
@@ -83,9 +85,9 @@ const BlockTitleInfo = ({ title, type, value, onFocusBlock, onChange, onSwitchTy
 
   return (
     <Group>
-      <Select items={convertableItems} defaultValue={EntitiesInfo[type] as any} />
+      <Select items={convertableItems} isReadOnly={isReadOnly} defaultValue={EntitiesInfo[type] as any} />
       <span>|</span>
-      <BlockTitleRename onChange={onChange} onEnter={onFocusBlock} title={title} />
+      <BlockTitleRename key={title} isReadOnly={isReadOnly} onChange={onChange} onEnter={onFocusBlock} title={title} />
     </Group>
   )
 }
@@ -97,10 +99,11 @@ const SuperBlockTitle: React.FC<SuperBlockTitleInfoProps> = ({
   type,
   name = 'title',
   value,
+  isReadOnly,
   onChange
 }) => {
   const title = value?.[name]
-  const blockSourceUrl = value?.url
+  const blockSourceUrl = superBlockFieldValidator(type, 'url') ? value?.url : undefined
 
   const { changeSuperBlockType } = useUpdateBlock()
   const { focusBlock } = useFocusBlock()
@@ -117,6 +120,7 @@ const SuperBlockTitle: React.FC<SuperBlockTitleInfoProps> = ({
     <Group>
       {blockSourceUrl ? <Source source={blockSourceUrl} /> : <IconDisplay icon={icon} size={14} />}
       <BlockTitleInfo
+        isReadOnly={isReadOnly}
         onFocusBlock={handleFocusBlock}
         onSwitchType={handleOnTypeSwitch}
         title={title}

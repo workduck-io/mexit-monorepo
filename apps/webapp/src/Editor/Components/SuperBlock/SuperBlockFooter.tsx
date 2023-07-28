@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 import { useTheme } from 'styled-components'
 
@@ -12,6 +12,7 @@ import { Section } from './SuperBlock.styled'
 interface BlockTagsProps {
   name: string
   isSelected?: boolean
+  isReadOnly?: boolean
   value: Record<string, any>
   onChange: (propertiesToUpdate: Record<string, any>) => void
 }
@@ -22,7 +23,7 @@ const TagMenu = ({ onCreate, onAdd }) => {
   return <AddTagMenu key={allTags?.length} createTag={onCreate} tags={allTags} addTag={onAdd} />
 }
 
-const BlockTags = ({ name, value, isSelected, onChange }: BlockTagsProps) => {
+const BlockTags = ({ name, value, isSelected, onChange, isReadOnly }: BlockTagsProps) => {
   const addTag = useDataStore((s) => s.addTag)
 
   const tags = value?.[name] ?? []
@@ -59,8 +60,14 @@ const BlockTags = ({ name, value, isSelected, onChange }: BlockTagsProps) => {
 
   return (
     <Group contentEditable={false}>
-      {tags.length > 0 && <TagsLabel tags={tags} onClick={addTagFilter} onDelete={(val: string) => onRemoveTag(val)} />}
-      {isSelected && <TagMenu onCreate={onAddNewTag} onAdd={onAddNewTag} />}
+      {tags.length > 0 && (
+        <TagsLabel
+          tags={tags}
+          onClick={addTagFilter}
+          onDelete={isReadOnly ? undefined : (val: string) => onRemoveTag(val)}
+        />
+      )}
+      {isSelected && !isReadOnly && <TagMenu onCreate={onAddNewTag} onAdd={onAddNewTag} />}
     </Group>
   )
 }
@@ -73,19 +80,30 @@ const RenderData = ({ value }) => {
   )
 }
 
-const SuperBlockFooter = ({ isSelected, value, onChange, FooterRightRenderer }) => {
+const SuperBlockFooter = ({ isSelected, value, onChange, isReadOnly, FooterRightRenderer }) => {
   const theme = useTheme()
   const [show, setShow] = useState(false)
+  const targetRef = useRef(null)
+  const [dimensions, setDimensions] = useState({} as any)
+
+  useLayoutEffect(() => {
+    if (targetRef.current) {
+      setDimensions({
+        width: targetRef.current.offsetWidth,
+        height: targetRef.current.offsetHeight
+      })
+    }
+  }, [])
 
   return (
     <>
       {show && <RenderData value={value} />}
-      <Section margin={`${theme.spacing.large} 0 0`} contentEditable={false}>
+      <Section margin={`${theme.spacing.medium} 0 0`} contentEditable={false} ref={targetRef} $width={dimensions.width}>
         {false && (
           <IconButton title="Log" onClick={() => setShow((s) => !s)} icon={getMIcon('ICON', 'mdi:math-log').value} />
         )}
-        <BlockTags isSelected={isSelected} name="tags" value={value} onChange={onChange} />
-        {FooterRightRenderer && <FooterRightRenderer value={value} onChange={onChange} />}
+        <BlockTags isReadOnly={isReadOnly} isSelected={isSelected} name="tags" value={value} onChange={onChange} />
+        {FooterRightRenderer && <FooterRightRenderer isReadOnly={isReadOnly} value={value} onChange={onChange} />}
       </Section>
     </>
   )

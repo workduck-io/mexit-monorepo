@@ -149,7 +149,7 @@ export interface BlockIndexData {
   text: string
 }
 
-export type NodeEditorContent = BlockType[]
+export type NodeEditorContent = any[]
 
 export interface NodeContent {
   type: string

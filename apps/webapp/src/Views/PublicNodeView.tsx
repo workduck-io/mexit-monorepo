@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import styled from 'styled-components'
 
-import { mog, usePublicNodeStore } from '@mexit/core'
+import { extractMetadata, mog, usePublicNodeStore } from '@mexit/core'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
 import PublicDataInfobar from '../Components/Infobar/PublicNodeInfobar'
@@ -43,8 +43,9 @@ const PublicNodeView = () => {
           // mog('check', { nodeContent, nodeProperties })
         } else {
           setShowLoader(true)
-          setNode({ ...node, id: nodeId, metadata: node.metadata })
-          setContent(node.id, node.content, node?.metadata)
+          const metadata = extractMetadata(node.metadata)
+          setNode({ ...node, id: nodeId, metadata })
+          setContent(node.id, node.content, metadata)
           setShowLoader(false)
         }
       } catch (error) {

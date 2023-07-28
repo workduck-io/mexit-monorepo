@@ -23,8 +23,8 @@ export const EntitiesInfo: Partial<Record<string, SearchEntityType>> = {
   },
   [SuperBlocks.CAPTURE]: {
     id: 'smartCaptures',
-    label: 'Public Info',
-    icon: getMIcon('ICON', 'grommet-icons:contact-info')
+    label: 'Profiles',
+    icon: getMIcon('ICON', 'material-symbols:capture-rounded')
   },
   [SuperBlocks.CONTENT]: {
     id: 'contents',

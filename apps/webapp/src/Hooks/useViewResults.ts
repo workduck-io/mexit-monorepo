@@ -49,6 +49,7 @@ const useViewResults = (path: string) => {
     if (query.length) {
       queryIndex(Indexes.MAIN, query).then((queryResult) => {
         if (queryResult) {
+          console.log('QUIERY RESULT', queryResult)
           setResults(queryResult)
         }
       })

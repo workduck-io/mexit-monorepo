@@ -12,7 +12,6 @@ import { getMenuItem, MIcon } from '@mexit/core'
 import {
   DefaultMIcons,
   GenericFlex,
-  Group,
   IconDisplay,
   InsertMenu,
   Menu,
@@ -228,21 +227,19 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
                 <Icon icon={stackLine} />
                 <span>{view?.title}</span>
                 {view?.id && !isDefault && <ViewChangeStatus viewId={view?.id} />}
+                <InsertMenu
+                  key={`${isDefault}-${currentFilters.length === 0}`}
+                  allowSearch={false}
+                  items={viewOptions}
+                  isMenu
+                  icon={DefaultMIcons.MENU}
+                />
               </TaskViewTitle>
             </TaskViewHeaderWrapper>
           )}
         </TaskHeaderTitleSection>
 
-        <Group>
-          <CreateNewMenu />
-          <InsertMenu
-            key={`${isDefault}-${currentFilters.length === 0}`}
-            allowSearch={false}
-            items={viewOptions}
-            isMenu
-            icon={DefaultMIcons.MENU}
-          />
-        </Group>
+        <CreateNewMenu />
       </StyledTaskHeader>
     </>
   )

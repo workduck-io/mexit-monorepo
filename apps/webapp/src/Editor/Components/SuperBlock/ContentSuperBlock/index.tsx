@@ -11,8 +11,9 @@ const ContentSuperBlock: React.FC<SuperBlockProps> = (props) => {
   return (
     <SuperBlock
       {...restProps}
-      $isActive={props.isActive}
-      $isSelected={props.isSelected}
+      $isActive={restProps.isActive}
+      $isSelected={restProps.isSelected}
+      $isReadOnly={restProps.isReadOnly}
       LeftHeaderRenderer={
         <SuperBlockTitle
           id={restProps.id}
@@ -22,6 +23,7 @@ const ContentSuperBlock: React.FC<SuperBlockProps> = (props) => {
           icon={DefaultMIcons.NOTE}
           heading="Content"
           value={restProps.value}
+          isReadOnly={restProps.isReadOnly}
         />
       }
     >

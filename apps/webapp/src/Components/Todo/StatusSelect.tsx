@@ -1,7 +1,7 @@
 import { getMenuItem, getMIcon, TaskStatus } from '@mexit/core'
 import { InsertMenu } from '@mexit/shared'
 
-export const StatusSelect = ({ name, value, shortcut, onChange }) => {
+export const StatusSelect = ({ name, value, shortcut = undefined, onChange }) => {
   const handleOnClick = (status) => {
     onChange({ status: status })
   }
@@ -11,6 +11,7 @@ export const StatusSelect = ({ name, value, shortcut, onChange }) => {
       isMenu
       allowSearch
       placeholder="Set status..."
+      type="modal"
       shortcut={shortcut}
       title="Status"
       selected={value}

@@ -1,17 +1,16 @@
 import toast from 'react-hot-toast'
 
-import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId, Value } from '@udecode/plate'
+import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId } from '@udecode/plate'
 import { getRootProps } from '@udecode/plate-styled-components'
 import { useFocused, useReadOnly, useSelected } from 'slate-react'
 
 import { ModalsType, useModalStore } from '@mexit/core'
 
-import { SuperBlockProps } from '../../Editor/Components/SuperBlock/SuperBlock.types'
 import { getNodeIdFromEditor } from '../../Editor/Utils/helper'
 
 import { TodoBase } from './Todo'
 
-const Todo = <V extends Value>(props: SuperBlockProps<V>) => {
+const Todo = (props) => {
   const { attributes, children, element } = props
 
   const rootProps = getRootProps(props)
@@ -31,8 +30,7 @@ const Todo = <V extends Value>(props: SuperBlockProps<V>) => {
     const editor = getPlateEditorRef()
     const blockNode = getNodeEntries(editor, {
       at: [],
-      match: (node) => element.id === node.id,
-      block: true
+      match: (node) => element.id === node.id
     })
 
     try {
@@ -55,7 +53,6 @@ const Todo = <V extends Value>(props: SuperBlockProps<V>) => {
       showOptions={selected && focused}
       todoid={element?.id}
       showDelete={showDelete}
-      showPriority
       parentNodeId={nodeid}
       controls={{
         onDeleteClick

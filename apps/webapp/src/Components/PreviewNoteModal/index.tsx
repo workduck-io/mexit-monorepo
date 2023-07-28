@@ -148,6 +148,7 @@ const PreviewNoteModal = () => {
               <Editor
                 focusBlockId={modalData?.blockId}
                 content={content}
+                withHover={false}
                 onChange={onChange}
                 options={{ focusOptions: false }}
                 readOnly={readOnly}

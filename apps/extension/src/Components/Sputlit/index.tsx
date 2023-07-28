@@ -137,10 +137,6 @@ const Sputlit = () => {
       <Overlay
         id="sputlit-overlay"
         onClick={() => {
-          // * No Editor mode, on blur don't call save note
-          // if (!previewMode) {
-          //   saveIt(true, true)
-          // }
           setVisualState(VisualState.animatingOut)
         }}
       />

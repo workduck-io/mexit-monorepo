@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 
-import { SuperBlocks, SuperBlocksType } from '@mexit/core'
+import { SuperBlocks } from '@mexit/core'
 import {
   DefaultMIcons,
   EntitiesInfo,
@@ -43,7 +43,7 @@ const EntityFilterMenu = ({ onChange }) => {
 
           return (
             <MenuItem
-              selected={isSelected(key as SuperBlocksType<any>)}
+              selected={isSelected(key as any)}
               icon={entity.icon}
               multiSelect
               key={`${viewId}-${entity.id}`}

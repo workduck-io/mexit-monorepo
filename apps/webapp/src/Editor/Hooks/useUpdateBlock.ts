@@ -36,7 +36,7 @@ const useUpdateBlock = () => {
 
     if (editor) {
       const noteId = getNodeIdFromEditor(parentId)
-      const nodeEntry = findNode(editor, { block: true, mode: 'highest', match: { id: blockId } })
+      const nodeEntry = findNode(editor, { block: true, match: { id: blockId } })
 
       if (nodeEntry) {
         const [element, path] = nodeEntry as any

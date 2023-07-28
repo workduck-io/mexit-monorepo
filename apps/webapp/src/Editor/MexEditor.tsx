@@ -56,6 +56,8 @@ export const MexEditorBase = (props: MexEditorProps) => {
   const clearHighlights = useBlockHighlightStore((store) => store.clearAllHighlightedBlockIds)
   const highlightedBlockIds = useBlockHighlightStore((store) => store.highlighted.editor)
 
+  const isReadOnly = props.options?.editableProps?.readOnly
+
   useEffect(() => {
     // const editorRef = getPlateEditorRef()
 
@@ -107,15 +109,16 @@ export const MexEditorBase = (props: MexEditorProps) => {
         id={props.editorId}
         editableProps={props?.options?.editableProps}
         value={props.value}
+        isReady={isReadOnly}
         plugins={plugins}
         onChange={onChange}
       >
         {props.options?.withBalloonToolbar && props.BalloonMarkToolbarButtons}
-        {isEmpty && <MultiComboboxContainer config={comboConfigData} />}
-        {props.options?.withGlobalListener !== false && <GlobalEditorListener />}
+        {isEmpty && !isReadOnly && <MultiComboboxContainer config={comboConfigData} />}
+        {props.options?.withGlobalListener !== false && !isReadOnly && <GlobalEditorListener />}
       </Plate>
       {props.debug && <pre>{JSON.stringify(content, null, 2)}</pre>}
-      <AIPreviewContainer id={props.editorId} />
+      {!isReadOnly && <AIPreviewContainer id={props.editorId} />}
     </>
   )
 }

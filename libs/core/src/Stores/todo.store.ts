@@ -39,7 +39,7 @@ export const createTodo = (
     id: todoId,
     nodeid,
     content,
-    metadata: {
+    properties: {
       status: metaData?.status ?? TodoStatus.todo,
       priority: metaData?.priority ?? PriorityType.noPriority
     },
@@ -176,16 +176,20 @@ const todoStoreConfig = (set, get) => ({
     const todo = get().getTodoOfNodeWithoutCreating(nodeId, todoId)
     if (!todo) return
 
-    const newTodo = { ...todo, metadata: { ...todo.metadata, priority } }
+    const newTodo = { ...todo, properties: { ...todo.properties, priority } }
     get().updateTodoOfNode(nodeId, newTodo)
   },
   updateStatusOfTodo: (nodeId: string, todoId: string, status: TodoStatus) => {
     // mog('updateSta', { nodeid, todoId, status })
     if (!nodeId) return
+
     const todo = get().getTodoOfNodeWithoutCreating(nodeId, todoId)
+    console.log('UPDATING TODO', { todo, status })
     if (!todo) return
 
-    const newTodo = { ...todo, metadata: { ...todo.metadata, status } }
+    const newTodo = { ...todo, properties: { ...todo.properties, status } }
+    console.log('UPDATING TODO', { newTodo })
+
     get().updateTodoOfNode(nodeId, newTodo)
   },
   moveTodo: (todoId: string, fromId: string, toId: string) => {

@@ -23,6 +23,7 @@ export const getBlockFieldIcon = (type: string): MIcon => {
     case 'updatedAt':
       return { type: 'ICON', value: 'ri:refresh-line' }
     case 'createdBy':
+    case 'assignee':
     case 'updatedBy':
       return DefaultMIcons.MENTION
     case 'parent':

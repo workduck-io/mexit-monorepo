@@ -14,7 +14,7 @@ import { useFocusBlock } from '../../Stores/useFocusBlock'
 
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
-const EditorWrapper = styled(EditorStyles)<{ withShadow?: boolean }>`
+const EditorWrapper = styled(EditorStyles)<{ withShadow?: boolean; withHover?: boolean }>`
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -28,16 +28,19 @@ const EditorWrapper = styled(EditorStyles)<{ withShadow?: boolean }>`
 
   border-radius: ${({ theme }) => theme.borderRadius.small};
 
-  ${({ withShadow, theme }) =>
+  ${({ withShadow, withHover = true, theme }) =>
     withShadow
       ? css`
           box-shadow: ${theme.tokens.shadow.medium};
           background-color: rgba(${theme.rgbTokens.surfaces.s[2]}, 0.5);
         `
       : css`
-          &:hover {
-            background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[0]}, 0.5);
-          }
+          ${withHover &&
+          css`
+            &:hover {
+              background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[0]}, 0.5);
+            }
+          `}
           &:focus-within {
             &:hover {
               background-color: transparent;
@@ -57,6 +60,7 @@ interface EditorProps {
   autoFocus?: boolean
   onFocusClick?: () => void
   withShadow?: boolean
+  withHover?: boolean
   options?: any
   onAutoSave?: (content: NodeEditorContent) => void
 }
@@ -72,6 +76,7 @@ const Editor: React.FC<EditorProps> = ({
   includeBlockInfo = false,
   onAutoSave,
   onFocusClick,
+  withHover = true,
   withShadow = false,
   options
 }) => {
@@ -119,7 +124,7 @@ const Editor: React.FC<EditorProps> = ({
   const comboboxConfig: ComboboxConfig = useEditorPluginConfig(nodeUID)
 
   return (
-    <EditorWrapper withShadow={withShadow}>
+    <EditorWrapper withShadow={withShadow} withHover={withHover}>
       <MexEditor
         comboboxConfig={comboboxConfig}
         components={components}

@@ -158,9 +158,15 @@ const SnippetEditor = () => {
             </InfoTools>
           </NodeInfo>
         </EditorHeader>
-        <EditorWrapper onClick={onFocusClick}>
+        <EditorWrapper>
           {snippet && (
-            <Editor autoFocus={false} onChange={onChangeSave} content={content} nodeUID={snippet?.id ?? snippetId} />
+            <Editor
+              autoFocus={false}
+              withHover={false}
+              onChange={onChangeSave}
+              content={content}
+              nodeUID={snippet?.id ?? snippetId}
+            />
           )}
         </EditorWrapper>
       </StyledEditor>

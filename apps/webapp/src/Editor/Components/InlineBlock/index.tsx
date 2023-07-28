@@ -89,7 +89,7 @@ const InlineBlock = (props: any) => {
           </FlexBetween>
           {(nodeType === NodeType.SHARED || nodeType === NodeType.DEFAULT) && (
             <StyledInlineBlockPreview>
-              <EditorPreviewRenderer content={content} editorId={`__preview__${blockId ?? nodeid}`} />
+              <EditorPreviewRenderer noMouseEvents content={content} editorId={`__preview__${blockId ?? nodeid}`} />
             </StyledInlineBlockPreview>
           )}
         </StyledInlineBlock>

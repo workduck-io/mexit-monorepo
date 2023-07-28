@@ -9,7 +9,18 @@ import {
   TNodeEntry
 } from '@udecode/plate'
 
-import { BlockType, generateTempId, getBlockMetadata, mog, NodeEditorContent, updateIds, useBlockStore, useContentStore, useEditorStore } from '@mexit/core'
+import {
+  BlockType,
+  generateTempId,
+  getBlockMetadata,
+  getDefaultContent,
+  mog,
+  NodeEditorContent,
+  updateIds,
+  useBlockStore,
+  useContentStore,
+  useEditorStore
+} from '@mexit/core'
 
 import { defaultContent } from '../../Data/baseData'
 
@@ -75,6 +86,27 @@ export const useEditorBlockSelection = () => {
     return editorBlocks
   }
 
+  const deleteParentBlock = (blockId: string) => {
+    const editor = getPlateEditorRef()
+    const content = editor?.children
+
+    if (content) {
+      const blockIndex = content.findIndex((block) => block.id === blockId)
+
+      if (blockIndex) {
+        const path = [blockIndex]
+
+        removeNodes(editor, {
+          at: path
+        })
+
+        if (blockIndex === 0 && content.length === 1) {
+          insertNodes(editor, [getDefaultContent()])
+        }
+      }
+    }
+  }
+
   const convertToBlocks = () => {
     const editor = getPlateEditorRef()
 
@@ -102,6 +134,7 @@ export const useEditorBlockSelection = () => {
     getContentWithNewBlocks,
     deleteContentBlocks,
     convertToBlocks,
-    deleteSelectedBlock
+    deleteSelectedBlock,
+    deleteParentBlock
   }
 }

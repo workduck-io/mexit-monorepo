@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
 import { getNextStatus, PriorityDataType, PriorityType, TodoStatus, TodoType, useTodoStore } from '@mexit/core'
-import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
+import { CheckBoxWrapper, StyledTodoStatus, TodoContainer, TodoText } from '@mexit/shared'
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 
@@ -79,13 +79,15 @@ export const TodoBase = ({
     e.stopPropagation()
 
     if (readOnly) return
-    const nextStatus = getNextStatus(todo.metadata.status)
+    const nextStatus = getNextStatus(todo.properties.status)
 
-    if (controls && controls.onChangeStatus) controls.onChangeStatus(todoid, nextStatus, element)
-    else {
+    if (controls && controls.onChangeStatus) {
+      controls.onChangeStatus(todoid, nextStatus, element)
+    } else {
       element && insertInEditor(element, { status: nextStatus })
       updateStatus(parentNodeId, todoid, nextStatus)
     }
+
     setAnimate(true)
   }
 
@@ -93,12 +95,12 @@ export const TodoBase = ({
     <TodoContainer
       key={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
       id="mexit-todo-container"
-      checked={todo?.metadata.status === TodoStatus.completed}
+      checked={todo?.properties.status === TodoStatus.completed}
     >
       <CheckBoxWrapper id={`TodoStatusFor_${todo.id}_${oid}`} contentEditable={false}>
         <StyledTodoStatus
           animate={animate}
-          status={todo.metadata.status}
+          status={todo?.properties?.status}
           onMouseDown={(e) => e.stopPropagation()}
           onClick={changeStatus}
         />
@@ -107,7 +109,7 @@ export const TodoBase = ({
       <TodoText contentEditable={!readOnlyContent} suppressContentEditableWarning>
         {children}
       </TodoText>
-      <TodoOptions id={`TodoOptionsFor_${oid}_${todoid}`} contentEditable={false}>
+      {/* <TodoOptions id={`TodoOptionsFor_${oid}_${todoid}`} contentEditable={false}>
         {showOptions && showDelete && (
           <MexIcon
             onClick={() => {
@@ -120,17 +122,17 @@ export const TodoBase = ({
             margin="0"
             fontSize={20}
           />
-        )}
+        )} */}
 
-        {/* {(showOptions || (todo.metadata.priority !== PriorityType.noPriority && showPriority)) && (
+      {/* {(showOptions || (todo.properties.priority !== PriorityType.noPriority && showPriority)) && (
           <PrioritySelect
             readOnly={readOnly}
-            isVisible={element || (todo.metadata.priority !== PriorityType.noPriority && showPriority)}
-            value={todo.metadata.priority}
+            isVisible={element || (todo.properties.priority !== PriorityType.noPriority && showPriority)}
+            value={todo.properties.priority}
             onPriorityChange={onPriorityChange}
           />
         )} */}
-      </TodoOptions>
+      {/* </TodoOptions> */}
     </TodoContainer>
   )
 }

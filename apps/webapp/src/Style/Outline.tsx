@@ -18,7 +18,8 @@ export const OutlineItemRender = styled.div<{ level?: number; heading?: boolean 
   padding-left: ${({ theme }) => theme.spacing.small};
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
   cursor: pointer;
   font-size: 0.9rem;
 

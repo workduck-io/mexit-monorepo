@@ -261,3 +261,20 @@ export const createSuperBlockContent = (type: SuperBlocks, content: NodeEditorCo
     type
   }
 }
+
+export const addProperty = (obj: any, propertiesToInsert: Record<string, any>) => {
+  const properties = obj.properties ?? {}
+  const metadata = obj.metadata ?? {}
+
+  return {
+    ...obj,
+    properties: {
+      ...properties,
+      ...propertiesToInsert
+    },
+    metadata: {
+      ...metadata,
+      updatedAt: Date.now()
+    }
+  }
+}

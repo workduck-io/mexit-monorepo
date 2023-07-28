@@ -22,21 +22,21 @@ export const handleCaptureRequest = ({ subType, data }) => {
   const content = data.content ?? defaultContent.content
   const contentWithSuperBlocks = data?.highlightId
     ? [
-      {
-        ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, content),
-        properties: {
-          entity: {
-            active: SuperBlocks.HIGHLIGHT,
-            values: {
-              [SuperBlocks.HIGHLIGHT]: {
-                id: data.highlightId,
-                parent: data.highlightId
+        {
+          ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, content),
+          properties: {
+            entity: {
+              active: SuperBlocks.HIGHLIGHT,
+              values: {
+                [SuperBlocks.HIGHLIGHT]: {
+                  id: data.highlightId,
+                  parent: data.highlightId
+                }
               }
             }
-          },
+          }
         }
-      }
-    ]
+      ]
     : content
 
   switch (subType) {

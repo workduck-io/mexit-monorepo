@@ -116,7 +116,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           if (staticBoard) return
           event.preventDefault()
           if (event.detail === 2) {
-            toggleModal(ModalsType.previewNote, { noteId: todo.nodeid, blockId: todo.id })
+            toggleModal(ModalsType.previewNote, { noteId: nodeid, blockId: todoid })
           }
         }}
       >
@@ -129,7 +129,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           onChange={handleOnChange}
           isActive
           isSelected
-          isReadOnly
+          isReadOnly={true}
         >
           <Text>{block.text}</Text>
         </TaskSuperBlock>

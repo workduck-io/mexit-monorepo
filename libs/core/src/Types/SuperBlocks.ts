@@ -10,10 +10,26 @@ export const SUPER_BLOCK_PREFIX = 'super-block-'
 
 export type SuperBlocksType<Str extends string> = `super-block-${Lowercase<Str>}`
 
-let blockType: SuperBlocksType<'content'>
-
 const SuperBlockFields = {
   [SuperBlocks.TASK]: ['status', 'assignee', 'priority']
+}
+
+/**
+ *
+ * @param type : SuperBlocks
+ * @param field : string
+ *
+ * Returns true if the field is valid for the superblock type
+ */
+export const superBlockFieldValidator = (type: SuperBlocks, field: string) => {
+  switch (type) {
+    case SuperBlocks.CONTENT:
+    case SuperBlocks.TASK:
+      return !['url'].includes(field)
+    default: {
+      return true
+    }
+  }
 }
 
 export const getSuperBlockFields = (item: any) => {

@@ -11,6 +11,7 @@ interface PriorityMenuSelect {
   withLabel?: boolean
   readOnly?: boolean
   isVisible?: boolean
+  isReadOnly?: boolean
   name?: string
   shortcut?: string
 }
@@ -34,6 +35,7 @@ const PrioritySelect = ({
   readOnly,
   isVisible,
   name,
+  isReadOnly,
   value,
   shortcut,
   onPriorityChange,
@@ -42,7 +44,7 @@ const PrioritySelect = ({
   const [selected, setSelected] = useState(false)
 
   const onPriorityChangeHide = (id: PriorityType) => {
-    onPriorityChange({ type: id })
+    if (!isReadOnly) onPriorityChange({ type: id })
   }
 
   const theme = useTheme()
@@ -54,11 +56,12 @@ const PrioritySelect = ({
 
   return (
     <InsertMenu
-      isMenu
+      isMenu={!isReadOnly}
       allowSearch
       placeholder="Set priority..."
       shortcut={shortcut}
       title="Priority"
+      type="modal"
       selected={value}
       onClick={onPriorityChangeHide}
       icon={getMIcon('ICON', Priority[value ?? 'noPriority'].icon)}

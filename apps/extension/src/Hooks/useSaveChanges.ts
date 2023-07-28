@@ -8,6 +8,7 @@ import {
   ELEMENT_TAG,
   extractMetadata,
   getHighlightBlockMap,
+  getHighlightContent,
   Highlight,
   NodeProperties,
   RecentType,
@@ -64,8 +65,8 @@ export function useSaveChanges() {
   const setContent = useContentStore((s) => s.setContent)
   const appendContent = useContentStore((s) => s.appendContent)
   const updateMetadata = useMetadataStore((s) => s.updateMetadata)
-  const addRecent = useRecentsStore((store) => store.addRecent)
   const addHighlight = useHighlightStore((s) => s.addHighlight)
+  const addRecent = useRecentsStore((store) => store.addRecent)
   const addHighlightInStore = useHighlightStore((s) => s.addHighlightEntity)
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
@@ -82,7 +83,15 @@ export function useSaveChanges() {
 
     const node = useSputlitStore.getState().node
     const selection = useSputlitStore.getState().selection
-    const nodeContent = useEditorStore.getState().nodeContent
+    const capturedContent = useEditorStore.getState().nodeContent
+
+    const { highlight, blockHighlightMap } = await createHighlightEntityFromSelection(
+      selection,
+      node.nodeid,
+      capturedContent
+    )
+
+    const nodeContent = getHighlightContent(highlight)
 
     addRecent(RecentType.notes, node.nodeid)
     setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
@@ -90,12 +99,6 @@ export function useSaveChanges() {
     setContent(node.nodeid, nodeContent)
     setSelection(undefined)
     setActiveItem()
-
-    const { highlight, blockHighlightMap } = await createHighlightEntityFromSelection(
-      selection,
-      node.nodeid,
-      nodeContent
-    )
 
     const res = await saveNode({
       notify: options.notification,
@@ -247,6 +250,7 @@ export function useSaveChanges() {
     if (highlight) {
       // Save highlight
       const highlightId = await saveHighlight(highlight)
+      highlight.properties.content = content
 
       if (highlightId) {
         highlight.entityId = highlightId
@@ -301,7 +305,7 @@ export function useSaveChanges() {
   const appendAndSave = async ({
     nodeid,
     content: toAppendContent,
-    highlight,
+    highlight: isHighlight,
     saveAndExit = true,
     notification = true
   }: AppendAndSaveProps) => {
@@ -332,11 +336,14 @@ export function useSaveChanges() {
       }
     }
 
-    if (highlight) {
+    if (isHighlight) {
       const selection = useSputlitStore.getState().selection
       const { highlight } = await createHighlightEntityFromSelection(selection, node.nodeid, toAppendContent)
 
       if (highlight) {
+        const content = getHighlightContent(highlight)
+
+        request.body.content = content
         request.body.highlightId = highlight.entityId
       }
     }

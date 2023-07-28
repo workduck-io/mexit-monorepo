@@ -26,7 +26,6 @@ export const directPropertyKeys = [
   'blockMeta',
   'status',
   'lang',
-  'metadata',
   'properties'
 ]
 

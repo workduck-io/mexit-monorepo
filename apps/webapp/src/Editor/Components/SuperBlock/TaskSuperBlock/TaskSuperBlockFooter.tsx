@@ -54,7 +54,8 @@ export const TaskSuperBlockFooter = ({ value, onChange }) => {
         isMenu
         allowSearch
         name="assignee"
-        shortcut="KeyA"
+        type="modal"
+        // shortcut="KeyA"
         placeholder="Assign to..."
         selected={value?.['assignee']}
         icon={DefaultMIcons.MENTION}
@@ -67,7 +68,7 @@ export const TaskSuperBlockFooter = ({ value, onChange }) => {
         name="status"
         value={value?.['status'] ?? TaskStatusType.todo}
         onChange={onStatusChange}
-        shortcut="KeyS"
+        // shortcut="KeyS"
       />
 
       <PrioritySelect
@@ -75,7 +76,7 @@ export const TaskSuperBlockFooter = ({ value, onChange }) => {
         value={value?.['priority']}
         onPriorityChange={onPriorityChange}
         isVisible
-        shortcut="KeyP"
+        // shortcut="KeyP"
       />
       {/* {isBlockSelected && <IconButton title="Delete" icon={DefaultMIcons.DELETE.value} onClick={removeNode} />} */}
     </Group>

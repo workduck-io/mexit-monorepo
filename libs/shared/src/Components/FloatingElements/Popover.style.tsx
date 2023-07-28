@@ -16,7 +16,7 @@ interface PopoverWrapperProps {
   transparent?: boolean
 }
 export const PopoverWrapper = styled.div<PopoverWrapperProps>`
-  z-index: 10;
+  z-index: 10001;
   background: ${({ theme, transparent }) => (transparent ? 'transparent' : theme.tokens.surfaces.s[2])};
   color: ${({ theme }) => theme.tokens.text.default};
   border-radius: ${({ theme }) => theme.borderRadius.small};

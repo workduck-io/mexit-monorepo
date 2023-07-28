@@ -6,7 +6,6 @@ import { exposeX } from './worker-utils'
 
 let searchX = new SearchX()
 
-
 let hasInitialized = false
 
 export interface InitializeSearchEntity {
@@ -67,7 +66,7 @@ const searchWorker = {
     })
   },
   updateILink: (ilink: ILink) => {
-    searchX.updateIlink(ilink)
+    searchX.updateIlink(ilink as any)
   },
 
   removeDoc: (indexKey: Indexes, id: string) => {
@@ -75,8 +74,7 @@ const searchWorker = {
   },
 
   searchIndex: (indexKey: Indexes, query: ISearchQuery) => {
-
-    console.log("NODES", searchX._graphX.getRelatedNodes("NODE_C68kY8GJ3EWi3UQTFKxEL"))
+    console.log('NODES', searchX._graphX.getRelatedNodes('NODE_C68kY8GJ3EWi3UQTFKxEL'))
 
     try {
       const res = searchX.search({ options: query, indexKey })

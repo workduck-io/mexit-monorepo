@@ -3,8 +3,10 @@ import toast from 'react-hot-toast'
 
 import {
   ActionType,
+  addProperty,
   CategoryType,
   createNodeWithUid,
+  createSuperBlockContent,
   deleteQueryParams,
   DRAFT_NODE,
   generateSnippetId,
@@ -18,6 +20,7 @@ import {
   QuickLinkType,
   SEPARATOR,
   SingleNamespace,
+  SuperBlocks,
   useAuthStore,
   useDataStore,
   useLayoutStore,
@@ -87,13 +90,20 @@ export function useActionExecutor() {
 
           default:
             const content = useEditorStore.getState().nodeContent
-            if (item.extras.new && item.extras.newItemType === 'snippet') {
-              const title = getSlug(search.value !== '' ? search.value : DRAFT_NODE)
+            const isCreateNewSnippet = item.extras.new && item.extras.newItemType === 'snippet'
+
+            if (isCreateNewSnippet) {
+              const query = search.value !== '' ? search.value : DRAFT_NODE
+              const title = getSlug(query)
 
               addSnippet({
                 id: generateSnippetId(),
                 title,
-                content,
+                content: [
+                  addProperty(createSuperBlockContent(SuperBlocks.CONTENT, content), {
+                    title
+                  })
+                ],
                 template: false
               })
 

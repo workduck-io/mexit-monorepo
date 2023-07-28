@@ -5,11 +5,10 @@ import headingIcon from '@iconify/icons-ri/heading'
 import listOrdered from '@iconify/icons-ri/list-ordered'
 import listUnordered from '@iconify/icons-ri/list-unordered'
 import taskLine from '@iconify/icons-ri/task-line'
-import { Icon } from '@iconify/react'
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate'
 
-import { ELEMENT_TODO_LI,ELEMENTS_IN_OUTLINE, useBlockHighlightStore } from '@mexit/core'
-import { InfoWidgetWrapper, Note , OutlineHelp } from '@mexit/shared'
+import { ELEMENT_TODO_LI, ELEMENTS_IN_OUTLINE, useBlockHighlightStore } from '@mexit/core'
+import { EntitiesInfo, IconDisplay, InfoWidgetWrapper, Note, OutlineHelp } from '@mexit/shared'
 
 import Collapse from '../../Layout/Collapse'
 import { OutlineItem, useAnalysisStore } from '../../Stores/useAnalysis'
@@ -43,7 +42,7 @@ const Outline = ({ staticOutline, editorId }: OutlineProps) => {
         {outline?.length > 0 ? (
           <OutlineWrapper>
             {outline.map((outlineItem) => {
-              const icon = getOutlineIcon(outlineItem.type)
+              const icon = EntitiesInfo[outlineItem.type]?.icon
               const isHeading = ELEMENTS_IN_OUTLINE.includes(outlineItem.type.toLowerCase())
               return (
                 <OutlineItemRender
@@ -57,7 +56,7 @@ const Outline = ({ staticOutline, editorId }: OutlineProps) => {
                   heading={isHeading}
                 >
                   <OutlineIconWrapper>
-                    {isHeading ? outlineItem.type.toUpperCase() : <Icon icon={icon} />}
+                    {isHeading ? outlineItem.type.toUpperCase() : <IconDisplay icon={icon} />}
                   </OutlineIconWrapper>
                   <OutlineItemText level={outlineItem.level} heading={isHeading}>
                     {outlineItem.title}

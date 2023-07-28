@@ -54,64 +54,64 @@ export const useFloatingToolbar = ({
   const selectionExpanded = editor && isSelectionExpanded(editor)
   const selectionText = editor && getSelectionText(editor)
 
-  // useEffect(() => {
-  //   function handleMouseUp(event: MouseEvent) {
-  //     setTimeout(() => {
-  //       const selection = window.getSelection()
-  //       const range =
-  //         typeof selection?.rangeCount === 'number' && selection.rangeCount > 0 ? selection.getRangeAt(0) : null
+  useEffect(() => {
+    function handleMouseUp(event: MouseEvent) {
+      setTimeout(() => {
+        const selection = window.getSelection()
+        const range =
+          typeof selection?.rangeCount === 'number' && selection.rangeCount > 0 ? selection.getRangeAt(0) : null
 
-  //       if (selection?.isCollapsed) {
-  //         setOpen(false)
-  //         return
-  //       }
+        if (selection?.isCollapsed) {
+          setOpen(false)
+          return
+        }
 
-  //       if (range) {
-  //         setOpen(true)
-  //       }
-  //     })
-  //   }
+        if (range) {
+          setOpen(true)
+        }
+      })
+    }
 
-  //   function handleMouseDown(event: MouseEvent) {
-  //     setOpen(false)
-  //   }
+    function handleMouseDown(event: MouseEvent) {
+      setOpen(false)
+    }
 
-  //   if (floatingOptions?.windowSelection) {
-  //     window.addEventListener('mouseup', handleMouseUp)
-  //     window.addEventListener('mousedown', handleMouseDown)
-  //   }
+    if (floatingOptions?.windowSelection) {
+      window.addEventListener('mouseup', handleMouseUp)
+      window.addEventListener('mousedown', handleMouseDown)
+    }
 
-  //   return () => {
-  //     window.removeEventListener('mouseup', handleMouseUp)
-  //     window.removeEventListener('mousedown', handleMouseDown)
-  //   }
-  // }, [])
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('mousedown', handleMouseDown)
+    }
+  }, [])
 
-  // // On refocus, the editor keeps the previous selection,
-  // // so we need to wait it's collapsed at the new position before displaying the floating toolbar.
-  // useEffect(() => {
-  //   if (!focused) {
-  //     setWaitForCollapsedSelection(true)
-  //   }
+  // On refocus, the editor keeps the previous selection,
+  // so we need to wait it's collapsed at the new position before displaying the floating toolbar.
+  useEffect(() => {
+    if (!focused) {
+      setWaitForCollapsedSelection(true)
+    }
 
-  //   if (!selectionExpanded) {
-  //     setWaitForCollapsedSelection(false)
-  //   }
-  // }, [focused, selectionExpanded])
+    if (!selectionExpanded) {
+      setWaitForCollapsedSelection(false)
+    }
+  }, [focused, selectionExpanded])
 
-  // useEffect(() => {
-  //   if (
-  //     (!selectionExpanded || !selectionText || editor?.id !== focusedEditorId) &&
-  //     toolbarState === 'normal' &&
-  //     !floatingOptions.windowSelection
-  //   ) {
-  //     setOpen(false)
-  //   } else if (toolbarState !== 'normal' && editor?.id === focusedEditorId) {
-  //     setOpen(false)
-  //   } else if (selectionText && selectionExpanded && !waitForCollapsedSelection) {
-  //     setOpen(true)
-  //   }
-  // }, [editor?.id, editor?.selection, focusedEditorId, selectionExpanded, selectionText, waitForCollapsedSelection])
+  useEffect(() => {
+    if (
+      (!selectionExpanded || !selectionText || editor?.id !== focusedEditorId) &&
+      toolbarState === 'normal' &&
+      !floatingOptions.windowSelection
+    ) {
+      setOpen(false)
+    } else if (toolbarState !== 'normal' && editor?.id === focusedEditorId) {
+      setOpen(false)
+    } else if (selectionText && selectionExpanded && !waitForCollapsedSelection) {
+      setOpen(true)
+    }
+  }, [editor?.id, editor?.selection, focusedEditorId, selectionExpanded, selectionText, waitForCollapsedSelection])
 
   const floatingResult = useVirtualFloating(
     mergeProps(
@@ -142,11 +142,11 @@ export const useFloatingToolbar = ({
     }
   }, [open])
 
-  // useEffect(() => {
-  //   if (selectionTextLength > 0) {
-  //     update?.()
-  //   }
-  // }, [selectionTextLength, update])
+  useEffect(() => {
+    if (selectionTextLength > 0) {
+      update?.()
+    }
+  }, [selectionTextLength, update])
 
   return { ...floatingResult, open }
 }

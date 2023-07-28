@@ -163,7 +163,7 @@ export const ShortcutText = styled.div`
 export const ComboSeperator = styled.div<{ fixedWidth?: boolean }>`
   margin-left: 0.5rem;
 
-  section {
+  & > section {
     height: 30vh !important;
     overflow-y: auto;
     overflow-x: hidden;

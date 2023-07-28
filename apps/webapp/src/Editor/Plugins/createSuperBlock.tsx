@@ -76,7 +76,7 @@ const onNodeSplit = <N extends TDescendant>(operation: TOperation<N>, apply: any
   const node = operation.properties as TNode
 
   // only for elements (node with a type)`
-  if (queryNode([node, []], {}) && Object.values(SuperBlocks).includes(node?.type)) {
+  if (queryNode([node, []], {}) && Object.values(SuperBlocks).includes(node?.type as any)) {
     // const entity = updateEntity(noteId, [node])
 
     return apply({

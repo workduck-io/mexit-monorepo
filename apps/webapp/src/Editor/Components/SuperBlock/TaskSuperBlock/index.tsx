@@ -12,8 +12,9 @@ const TaskSuperBlock: React.FC<SuperBlockProps> = (props) => {
   return (
     <SuperBlock
       {...(restProps as any)}
-      $isActive
-      $isSelected
+      $isActive={props.isActive}
+      $isSelected={props.isSelected}
+      $isReadOnly={props.isReadOnly}
       LeftHeaderRenderer={
         <SuperBlockTitle
           id={restProps.id}
@@ -22,6 +23,7 @@ const TaskSuperBlock: React.FC<SuperBlockProps> = (props) => {
           type={restProps.type}
           icon={DefaultMIcons.TASK}
           heading="Task"
+          isReadOnly={props.isReadOnly}
           value={props.value}
         />
       }

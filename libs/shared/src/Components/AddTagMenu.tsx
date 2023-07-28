@@ -40,6 +40,7 @@ export const AddTagMenu = ({ tags, addTag, createTag, root, link }: AddTagMenuPr
         </StyledTag>
       }
       allowSearch
+      type="modal"
       onCreate={onCreateNewTag}
       searchPlaceholder={`Search for a tag`}
       root={root}

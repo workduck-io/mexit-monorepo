@@ -18,6 +18,8 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({ type, ...rest }) => {
       return <TodoRenderer {...rest} />
     case SuperBlocks.CAPTURE:
       return <CaptureBlock {...rest} />
+    case SuperBlocks.HIGHLIGHT:
+      return <CaptureBlock {...rest} />
     case SuperBlocks.CONTENT:
     default:
       return <ContentBlock {...rest} />

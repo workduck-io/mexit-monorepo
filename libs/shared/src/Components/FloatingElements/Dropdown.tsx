@@ -73,7 +73,7 @@ export const MenuItem = forwardRef<
   }
 >(({ label, disabled, count, color, fontSize, name, icon, multiSelect, selected, ...props }, ref) => {
   return (
-    <MenuItemWrapper {...props} ref={ref} name={name} role="menuitem" disabled={disabled}>
+    <MenuItemWrapper {...props} ref={ref} role="menuitem" disabled={disabled}>
       <FilterMenuDiv>
         {multiSelect && (
           <MultiSelectIcon selected={selected}>
