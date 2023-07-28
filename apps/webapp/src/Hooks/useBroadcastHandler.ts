@@ -1,4 +1,5 @@
 import {
+  deserializeContent,
   mog,
   SEPARATOR,
   UpdateData,
@@ -10,8 +11,6 @@ import {
   useTimestampStore,
   useViewStore
 } from '@mexit/core'
-
-import { deserializeContent } from '../Utils/serializer'
 
 import { useLinks } from './useLinks'
 import { useNamespaces } from './useNamespaces'
