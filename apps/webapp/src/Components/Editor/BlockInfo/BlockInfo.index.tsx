@@ -20,7 +20,7 @@ interface IBlockInfo {
   parent: string // Parnet of this Block
   isSelected?: boolean
   isFocused?: boolean
-  showDelete?: boolean
+  onDelete?: () => void
 }
 
 /**

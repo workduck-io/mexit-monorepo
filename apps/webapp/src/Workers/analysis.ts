@@ -59,7 +59,11 @@ const getOutline = (content: NodeEditorContent, options?: AnalysisOptions): Outl
   content.map((superBlock) => {
     outline.push({
       type: superBlock.type,
-      title: superBlock.properties.title ?? convertContentToRawText(superBlock.children, ' ', options),
+      title:
+        superBlock.properties.title ??
+        convertContentToRawText(superBlock.children, ' ', {
+          extra: options?.modifier
+        }),
       id: superBlock.id,
       level: 1
     })
