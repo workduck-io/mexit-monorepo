@@ -41,7 +41,7 @@ import { useSlashCommandOnChange } from '../SlashCommands/useSlashCommandOnChang
 
 export interface ComboTypeHandlers {
   slateElementType: string
-  newItemHandler: (newItem: string, parentId?) => any // eslint-disable-line @typescript-eslint/no-explicit-any
+  newItemHandler: (newItem: string, parentId?, editor?) => any // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 const handleOnTab = (item, itemType): boolean => {
@@ -150,7 +150,11 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             const [element, path]: any = node
 
             const tags = element.properties?.tags ?? []
-            updateMetadataProperties(element, { tags: [...tags.filter(t => t.value !== item.text), { value: item.text }] }, path)
+            updateMetadataProperties(
+              element,
+              { tags: [...tags.filter((t) => t.value !== item.text), { value: item.text }] },
+              path
+            )
           }
         } else if (itemType === QuickLinkType.prompts) {
           const resultIndex = usePromptStore.getState().resultIndexes[item.key]
@@ -169,7 +173,11 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             const [element, path]: any = node
             const mentions = element.properties?.mentions ?? []
 
-            updateMetadataProperties(element, { mentions: [...mentions.filter(m => m.value !== item.key), { value: item.key }] }, path)
+            updateMetadataProperties(
+              element,
+              { mentions: [...mentions.filter((m) => m.value !== item.key), { value: item.key }] },
+              path
+            )
           }
           if (comboType.onItemInsert && tab !== true) comboType.onItemInsert(item.text)
         } else if (itemType === QuickLinkType.taskView) {

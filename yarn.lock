@@ -1267,6 +1267,13 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
+"@babel/runtime@^7.21.0":
+  version "7.22.6"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.6.tgz#57d64b9ae3cff1d67eb067ae117dac087f5bd438"
+  integrity sha512-wDb5pWm4WDdF6LFUde3Jl8WzPA+3ZbxYqkC6xAXuD3irdEHN1k0NfTRrJD8ZD378SJ61miMLCqIOXYhd8x+AJQ==
+  dependencies:
+    regenerator-runtime "^0.13.11"
+
 "@babel/template@^7.20.7":
   version "7.20.7"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.20.7.tgz#a15090c2839a83b02aa996c0b4994005841fd5a8"
@@ -3999,10 +4006,10 @@
     polished "^4.1.4"
     react-spring "^9.5.2"
 
-"@workduck-io/mex-search@0.0.10":
+"@workduck-io/mex-search@^0.0.10":
   version "0.0.10"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-search/0.0.10/1a57fa11531a4844859826e9f2a642cf5fa58794#1a57fa11531a4844859826e9f2a642cf5fa58794"
-  integrity sha512-cSaiVpKyPdoFn4WzFxizMcgFK/ISMvFBFT7sMnbpYFpR1gNbspgrzdk/VCkiwB61QvomziDB0b3pRjvj1BS0rA==
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-search/0.0.10/32553853d9f9f7b1f96a95eb12a32606164f3db7#32553853d9f9f7b1f96a95eb12a32606164f3db7"
+  integrity sha512-ipC3MbdPm8iiexZu6jKAVefj/0VD8J24qSmi+MWpe1sCSmbzBXh6GBUPl4QKD8D2wgeC2y1a10g1Vdn60fHTrg==
   dependencies:
     "@workduck-io/flexsearch" "0.7.22"
     "@workduck-io/mex-utils" "^0.0.9"
@@ -4755,10 +4762,17 @@ chrome-webstore-upload@^1.0.0:
   dependencies:
     got "^11.8.2"
 
-chrono-node@^2.3.8, chrono-node@^2.3.9:
+chrono-node@^2.3.8:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/chrono-node/-/chrono-node-2.6.2.tgz#cfdd8ddb25efcf7feec6459c4ae8050b70e23a82"
   integrity sha512-RZvQNwos1gre+xj3n8bZKKlO5BAQ6Z2qMEtbMQuVnF5xtku5kkMLq7F8a0NWPZLwQ5+78yZ9w6FAbqA9d9GwzQ==
+  dependencies:
+    dayjs "^1.10.0"
+
+chrono-node@^2.3.9:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/chrono-node/-/chrono-node-2.6.4.tgz#c6532450d03bb41b5bd6f5509909bf158a739d9e"
+  integrity sha512-weCpfagfISvUMleIIqCi12AL9iQYn1ybX/6RB9qolynvHNvYlfdJete51uyB8TmwDTgEeKFEq0I5p/SHhOfhsw==
   dependencies:
     dayjs "^1.10.0"
 
@@ -5141,10 +5155,17 @@ damerau-levenshtein@^1.0.7:
   resolved "https://registry.yarnpkg.com/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz#b43d286ccbd36bc5b2f7ed41caf2d0aba1f8a6e7"
   integrity sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
 
-date-fns@^2.24.0, date-fns@^2.28.0, date-fns@^2.29.1:
+date-fns@^2.24.0, date-fns@^2.28.0:
   version "2.29.3"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
   integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
+
+date-fns@^2.29.1:
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
+  integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
 
 dayjs@^1.10.0, dayjs@^1.10.8:
   version "1.11.7"

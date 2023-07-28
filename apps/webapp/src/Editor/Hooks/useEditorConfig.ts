@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 
+import { getBlockAbove } from '@udecode/plate'
+
 import {
   apiURLs,
   ComboboxType,
@@ -43,6 +45,8 @@ import { ComboboxKey } from '../Types/Combobox'
 import { ComboboxConfig, ComboConfigData } from '../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../Utils/helper'
 
+import useUpdateBlock from './useUpdateBlock'
+
 export const useEditorPluginConfig = (editorId: string, options?: PluginOptionType): ComboboxConfig => {
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
@@ -54,6 +58,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const { openReminderModal } = useOpenReminderModal()
   const { getSnippetConfigs } = useSnippets()
   const snippetConfigs = getSnippetConfigs()
+  const { updateMetadataProperties } = useUpdateBlock()
   const { params, location } = useRouting()
   const mentionable = useMentionStore((state) => state.mentionable)
   const invitedUsers = useMentionStore((state) => state.invitedUsers)
@@ -175,8 +180,22 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       },
       tag: {
         slateElementType: ELEMENT_TAG,
-        newItemHandler: (newItem) => {
+        newItemHandler: (newItem, parent, editor) => {
           addTag(newItem)
+
+          const node = getBlockAbove(editor, { block: true, mode: 'highest' })
+
+          if (node) {
+            const [element, path]: any = node
+
+            const tags = element.properties?.tags ?? []
+
+            updateMetadataProperties(
+              element,
+              { tags: [...tags.filter((t) => t.value !== newItem), { value: newItem }] },
+              path
+            )
+          }
           return newItem
         },
         renderElement: TagComboboxItem
