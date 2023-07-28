@@ -24,7 +24,7 @@ import {
   useTypeahead
 } from '@floating-ui/react'
 
-import { MIcon , useLayoutStore } from '@mexit/core'
+import { MIcon, useLayoutStore } from '@mexit/core'
 import { getMIcon, Group, IconDisplay, ItemLabel, MenuItemClassName, MenuItemWrapper, MenuWrapper } from '@mexit/shared'
 
 export const ContextMenuItem = forwardRef<

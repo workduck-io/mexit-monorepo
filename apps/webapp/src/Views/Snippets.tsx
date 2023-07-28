@@ -4,7 +4,6 @@ import magicLine from '@iconify/icons-ri/magic-line'
 import { Icon } from '@iconify/react'
 import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
-import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import generateName from 'project-name-generator'
 
@@ -17,6 +16,7 @@ import {
   convertContentToRawText,
   DRAFT_NODE,
   generateSnippetId,
+  getDefaultContent,
   mog,
   RecentType,
   SNIPPET_PREFIX,
@@ -119,7 +119,7 @@ const Snippets = () => {
       id: snippetId,
       title: snippetName,
       icon: DefaultMIcons.SNIPPET,
-      content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
+      content: [getDefaultContent()]
     })
 
     loadSnippet(snippetId)
@@ -136,7 +136,7 @@ const Snippets = () => {
       title: snippetName,
       template: true,
       icon: DefaultMIcons.TEMPLATE,
-      content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
+      content: [getDefaultContent()]
     })
 
     loadSnippet(snippetId)

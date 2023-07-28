@@ -98,11 +98,13 @@ export const FilterGlobalJoinWrapper = styled(GenericFlex)`
   flex-shrink: 0;
 `
 
-export const SortSectionWrapper = styled.div`
+export const SortSectionWrapper = styled.div<{ border?: boolean }>`
   display: flex;
   align-items: center;
   background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
+
+  border: ${({ border, theme }) => (border ? `1px solid ${theme.tokens.surfaces.separator}` : 'none')};
 `
 
 export const SortOrderWrapper = styled(GenericFlex)`

@@ -1,23 +1,28 @@
 import {
   createPluginFactory,
+  getPlateEditorRef,
   HotkeyPlugin,
-  onKeyDownToggleElement
-  // PlateEditor,
-  // WithOverride
-} from '@udecode/plate-core'
+  PlateEditor,
+  Value,
+  WithPlatePlugin
+} from '@udecode/plate'
 
 import { ELEMENT_TODO_LI } from '@mexit/core'
+
+import { onKeyDownToggleElement } from '../Utils/onKeyDownToggleElement'
+
+export const withTodoList = <V extends Value = Value, E extends PlateEditor<V> = PlateEditor<V>>(
+  editor: E,
+  { options }: WithPlatePlugin<any, V, E>
+) => {
+  const e = getPlateEditorRef()
+
+  return editor
+}
 
 export const createTodoPlugin = createPluginFactory<HotkeyPlugin>({
   key: ELEMENT_TODO_LI,
   isElement: true,
-  handlers: {
-    onKeyDown: onKeyDownToggleElement
-  },
-  options: {
-    hotkey: ['mod+opt+4', 'mod+shift+4']
-  },
-  // withOverrides: withTodos,
   deserializeHtml: {
     attributeNames: ['data-nodeid'],
     getNode: (el, node) => {
@@ -30,5 +35,11 @@ export const createTodoPlugin = createPluginFactory<HotkeyPlugin>({
         checked: el.getAttribute('data-slate-value')
       }
     }
+  },
+  handlers: {
+    onKeyDown: onKeyDownToggleElement
+  },
+  options: {
+    hotkey: ['mod+opt+4', 'mod+shift+4']
   }
 })

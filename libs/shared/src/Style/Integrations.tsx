@@ -193,11 +193,6 @@ export const IntegrationScroll = styled.div`
   overflow-y: auto;
 `
 
-export const Text = styled.div`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.tokens.text.heading};
-`
-
 export const FullHeight = styled.div`
   height: 100%;
   width: 100%;

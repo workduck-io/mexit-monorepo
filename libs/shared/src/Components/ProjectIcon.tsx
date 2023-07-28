@@ -21,6 +21,7 @@ export const DEFAULT_IMAGE_URL = 'https://www.gravatar.com/avatar/?r=g&d=identic
 
 export const ProjectIconMex: React.FC<{
   isMex?: boolean
+
   margin?: string
   icon: string
   size?: number

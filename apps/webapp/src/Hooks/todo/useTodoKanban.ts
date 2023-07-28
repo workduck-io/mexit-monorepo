@@ -5,6 +5,7 @@ import { SearchResult } from '@workduck-io/mex-search'
 import { PriorityType, TodoStatus, TodoType, useTodoStore } from '@mexit/core'
 
 import { defaultContent } from '../../Data/baseData'
+import { PropertiyFields } from '../../Editor/Components/SuperBlock/SuperBlock.types'
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { KanbanBoard, KanbanCard, KanbanColumn } from '../../Types/Kanban'
 import { useSearch } from '../useSearch'
@@ -25,8 +26,6 @@ export interface BlockKanbanBoard extends KanbanBoard {
   columns: KanbanBoardColumn[]
 }
 
-// interface KanbanStore extends FilterStore<TodoType> {}
-
 export const getPureContent = (todo: TodoType) => {
   const content = todo?.content
 
@@ -44,12 +43,13 @@ export const useTodoKanban = () => {
   const { updateBlocks } = useSearch()
   const { setInfoOfBlockInContent } = useUpdateBlock()
 
-  const updateTodoLocally = (todo: TodoType, blockData: any) => {
-    const newTodo = { ...todo, metadata: { ...todo.metadata, ...blockData } }
+  const updateTodoLocally = (todo: TodoType, properties: Partial<PropertiyFields>) => {
+    const newTodo = { ...todo, properties: { ...todo.properties, ...properties } }
     updateTodo(todo.nodeid, newTodo)
+
     const updatedBlock = setInfoOfBlockInContent(todo.nodeid, {
       blockId: todo.id,
-      blockData,
+      properties,
       useBuffer: true
     })
 
@@ -91,6 +91,7 @@ export const useTodoKanban = () => {
 
   return {
     moveTodo,
+    updateTodoLocally,
     getPureContent,
     getBlocksBoard,
     changePriority,

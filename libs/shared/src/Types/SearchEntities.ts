@@ -1,6 +1,4 @@
-import { Entities } from '@workduck-io/mex-search'
-
-import { MIcon } from '@mexit/core'
+import { MIcon, SuperBlocks } from '@mexit/core'
 
 import { DefaultMIcons, getMIcon } from '../Components/Icons'
 
@@ -10,27 +8,27 @@ export interface SearchEntityType {
   icon: MIcon
 }
 
-export const SearchableEntities = [Entities.TASK, Entities.REMINDER, Entities.CONTENT_BLOCK]
+export const SearchableEntities = [SuperBlocks.TASK, SuperBlocks.CONTENT, SuperBlocks.CAPTURE]
 
 export const EntitiesInfo: Partial<Record<string, SearchEntityType>> = {
-  [Entities.TASK]: {
+  [SuperBlocks.TASK]: {
     id: 'tasks',
-    label: 'Tasks',
+    label: 'Task',
     icon: DefaultMIcons.TASK
   },
-  [Entities.REMINDER]: {
-    id: 'reminders',
-    label: 'Reminders',
-    icon: DefaultMIcons.REMINDER
+  [SuperBlocks.HIGHLIGHT]: {
+    id: 'captures',
+    label: 'Capture',
+    icon: DefaultMIcons.HIGHLIGHT
   },
-  [Entities.IMAGE]: {
-    id: 'images',
-    label: 'Images',
-    icon: DefaultMIcons.IMAGE
+  [SuperBlocks.CAPTURE]: {
+    id: 'smartCaptures',
+    label: 'Profiles',
+    icon: getMIcon('ICON', 'material-symbols:capture-rounded')
   },
-  [Entities.CONTENT_BLOCK]: {
+  [SuperBlocks.CONTENT]: {
     id: 'contents',
-    label: 'Contents',
+    label: 'Content',
     icon: getMIcon('ICON', 'ri:text')
   },
   Ungrouped: {

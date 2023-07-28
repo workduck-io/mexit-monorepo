@@ -4,7 +4,6 @@ import Tippy from '@tippyjs/react'
 
 import { ProjectIconMex, StyledSource } from '@mexit/shared'
 
-
 // * Get Favicon url
 const getFavicon = (source: string) => {
   return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${source}&size=32`
@@ -18,7 +17,7 @@ export const Source: React.FC<{ source: string }> = ({ source }) => {
   }
 
   return (
-    <StyledSource $isVisible={true} contentEditable={false} onClick={onClick}>
+    <StyledSource id="source-icon" $isVisible={true} contentEditable={false} onClick={onClick}>
       <Tippy
         delay={100}
         interactiveDebounce={100}

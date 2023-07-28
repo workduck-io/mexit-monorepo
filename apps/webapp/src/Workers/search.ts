@@ -27,9 +27,9 @@ const searchWorker = {
 
     try {
       searchX.initializeSearch({
-        ilinks: fileData.ilinks,
+        ilinks: fileData.ilinks as any,
         highlights: fileData.highlights as any,
-        links: fileData.links,
+        links: fileData.links ?? [],
         reminders: fileData.reminders,
         contents: { contents: fileData.contents } as any,
         snippets: {
@@ -59,13 +59,14 @@ const searchWorker = {
     })
   },
   updateDoc: (doc: IUpdateDoc) => {
+    console.log('Updating doc', { doc })
     searchX.addOrUpdateDocument({
       ...doc,
       contents: doc.contents?.map((item) => ({ ...item, metadata: item.metadata ?? {} }))
     })
   },
   updateILink: (ilink: ILink) => {
-    searchX.updateIlink(ilink)
+    searchX.updateIlink(ilink as any)
   },
 
   removeDoc: (indexKey: Indexes, id: string) => {
@@ -73,6 +74,8 @@ const searchWorker = {
   },
 
   searchIndex: (indexKey: Indexes, query: ISearchQuery) => {
+    console.log('NODES', searchX._graphX.getRelatedNodes('NODE_C68kY8GJ3EWi3UQTFKxEL'))
+
     try {
       const res = searchX.search({ options: query, indexKey })
       mog('SearchX Results:', { res, query })

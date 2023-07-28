@@ -121,7 +121,6 @@ const NavContent = () => {
 const Nav = ({ children }) => {
   const sidebar = useLayoutStore((store) => store.sidebar)
   const focusMode = useLayoutStore((store) => store.focusMode)
-  const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
   const isUserEditing = useEditorStore((state) => state.isEditing)
   const { getFocusProps } = useLayout()
 

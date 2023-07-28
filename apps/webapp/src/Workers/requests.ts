@@ -12,6 +12,7 @@ import {
   batchArray,
   batchArrayWithNamespaces,
   DefaultMIcons,
+  deserializeContent,
   generateMessageId,
   Highlight,
   ILink,
@@ -23,7 +24,6 @@ import {
   UpdateKey
 } from '@mexit/core'
 
-import { deserializeContent } from '../Utils/serializer'
 import { WorkerRequestType } from '../Utils/worker'
 
 import { exposeX } from './worker-utils'

@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { ModalsType, PriorityType, useContentStore, useModalStore, useTodoStore, ViewType } from '@mexit/core'
-import { TaskCard } from '@mexit/shared'
+import { ModalsType, mog, PriorityType, useContentStore, useModalStore, useTodoStore, ViewType } from '@mexit/core'
+import { TaskCard, Text } from '@mexit/shared'
 
+import { PropertiyFields } from '../../Editor/Components/SuperBlock/SuperBlock.types'
+import TaskSuperBlock from '../../Editor/Components/SuperBlock/TaskSuperBlock'
+import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
-import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
-import Plateless from '../Editor/Plateless'
-import { TodoBase as Todo } from '../Todo/Todo'
+import { usePermissions } from '../../Hooks/usePermissions'
+import { useSearch } from '../../Hooks/useSearch'
 
 interface RenderTaskProps {
   id: string
@@ -17,6 +19,8 @@ interface RenderTaskProps {
   nodeid: string
 
   selectedCardId?: string | null
+
+  block?: any
 
   /** whether the task is in a static kanban board, for example in read only view embeds */
   staticBoard?: boolean
@@ -34,16 +38,14 @@ interface RenderTaskProps {
 }
 
 export const RenderBoardTask = React.memo<RenderTaskProps>(
-  ({ id, todoid, nodeid, staticBoard, refreshCallback, selectedCardId }: RenderTaskProps) => {
+  ({ id, todoid, block, nodeid, staticBoard, refreshCallback, selectedCardId }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
     const documentUpdated = useContentStore((s) => s.docUpdated)
     const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
     const ref = React.useRef<HTMLDivElement>(null)
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid, documentUpdated])
-    const pC = useMemo(() => getPureContent(todo), [id, todo])
     const { accessWhenShared } = usePermissions()
-    const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
     const toggleModal = useModalStore((store) => store.toggleOpen)
 
     useEffect(() => {
@@ -81,24 +83,57 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
       []
     )
 
-    if (!todo) return null
+    const { setInfoOfBlockInContent } = useUpdateBlock()
+    const { updateBlocks } = useSearch()
 
-    const priorityShown = todo?.metadata?.priority !== PriorityType.noPriority
+    const handleOnChange = (properties: Partial<PropertiyFields>) => {
+      const noteId = block.parent
+
+      const updatedBlock = setInfoOfBlockInContent(block.parent, {
+        blockId: block.id,
+        properties,
+        useBuffer: true
+      })
+
+      mog('UPDATED BLOCK', { updatedBlock, properties })
+
+      updateBlocks({
+        id: noteId,
+        contents: [updatedBlock]
+      })
+    }
+
+    // if (!todo) return null
+
+    const priorityShown = todo?.properties?.priority !== PriorityType.noPriority
 
     return (
       <TaskCard
-        id={`${todo.nodeid}_${todo.id}`}
-        key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
+        id={`${nodeid}_${todoid}`}
+        key={`TODO_PREVIEW_${nodeid}_${todoid}`}
         priorityShown={priorityShown}
         onMouseDown={(event) => {
           if (staticBoard) return
           event.preventDefault()
           if (event.detail === 2) {
-            toggleModal(ModalsType.previewNote, { noteId: todo.nodeid, blockId: todo.id })
+            toggleModal(ModalsType.previewNote, { noteId: nodeid, blockId: todoid })
           }
         }}
       >
-        <Todo
+        <TaskSuperBlock
+          id={block.id}
+          type={block.type}
+          parent={block.parent}
+          value={block.data.properties}
+          metadata={block.data.metadata}
+          onChange={handleOnChange}
+          isActive
+          isSelected
+          isReadOnly={true}
+        >
+          <Text>{block.text}</Text>
+        </TaskSuperBlock>
+        {/* <Todo
           showDelete={false}
           todoid={todo.id}
           readOnly={readOnly}
@@ -108,7 +143,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           parentNodeId={todo.nodeid}
         >
           <Plateless content={pC} />
-        </Todo>
+        </Todo> */}
       </TaskCard>
     )
   }

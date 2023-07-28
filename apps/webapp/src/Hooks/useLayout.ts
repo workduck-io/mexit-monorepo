@@ -1,4 +1,4 @@
-import { FocusMode , useLayoutStore } from '@mexit/core'
+import { FocusMode, useLayoutStore } from '@mexit/core'
 
 const useLayout = () => {
   const toggleFocusModeBool = useLayoutStore((store) => store.toggleFocusMode)

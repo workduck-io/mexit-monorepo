@@ -25,7 +25,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TD,
   ELEMENT_TODO_LI,
-  ELEMENT_UL,
+  ExitBreakRule,
   getParentNode,
   getPluginType,
   insertEmptyCodeBlock,
@@ -34,7 +34,6 @@ import {
   isElement,
   isSelectionAtBlockStart,
   isType,
-  KEYS_HEADING,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
@@ -48,12 +47,9 @@ import {
 
 import {
   ELEMENT_INLINE_BLOCK,
-  ELEMENT_SECTION_SEPARATOR,
   ELEMENT_SYNC_BLOCK,
   ELEMENT_TASK_VIEW_BLOCK,
   generateTempId,
-  getDefaultContent,
-  SECTION_SEPARATOR,
   TodoStatus
 } from '@mexit/core'
 
@@ -66,11 +62,13 @@ const preFormat = (editor: PlateEditor<Value>) => unwrapList(editor)
 export const formatQuery = (editor: PlateEditor<Value>, options: AutoformatQueryOptions) => {
   const parentEntry = getParentNode(editor, editor.selection.focus)
   if (!parentEntry) return
+
   const [node] = parentEntry
 
   if (isElement(node) && node.type !== ELEMENT_CODE_LINE && node.type !== ELEMENT_CODE_BLOCK) {
     return true
   }
+
   return false
 }
 
@@ -98,17 +96,6 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
   },
   {
     mode: 'block',
-    type: ELEMENT_SECTION_SEPARATOR,
-    match: [SECTION_SEPARATOR],
-    triggerAtBlockStart: true,
-    query: formatQuery,
-    format: (editor: PlateEditor<Value>) => {
-      const content = [getDefaultContent(ELEMENT_SECTION_SEPARATOR), getDefaultContent()]
-      insertNodes(editor, content)
-    }
-  },
-  {
-    mode: 'block',
     type: ELEMENT_H4,
     match: ['h4', 'H4'],
     query: formatQuery,
@@ -132,17 +119,41 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     mode: 'block',
     type: ELEMENT_LI,
     match: ['* ', '- '],
+    triggerAtBlockStart: false,
     query: formatQuery,
-    preFormat,
+    // preFormat,
     format: (editor: PlateEditor<Value>) => {
       if (editor.selection) {
         const parentEntry = getParentNode(editor, editor.selection)
         if (!parentEntry) return
+
         const [node] = parentEntry
+
         if (isElement(node) && !isType(editor, node, ELEMENT_CODE_BLOCK) && !isType(editor, node, ELEMENT_CODE_LINE)) {
-          toggleList(editor, {
-            type: ELEMENT_UL
-          })
+          const content = [
+            {
+              type: 'ul',
+              id: generateTempId(),
+              children: [
+                {
+                  type: 'li',
+                  children: [
+                    {
+                      type: 'lic',
+                      children: [
+                        {
+                          type: 'p',
+                          text: ''
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+
+          insertNodes(editor, content)
         }
       }
     }
@@ -170,7 +181,7 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     mode: 'block',
     type: ELEMENT_TODO_LI,
     match: '[]',
-    triggerAtBlockStart: true,
+    triggerAtBlockStart: false,
     format: (editor: PlateEditor<Value>) => {
       setElements(editor, {
         type: ELEMENT_TODO_LI,
@@ -285,16 +296,8 @@ export const optionsExitBreakPlugin = {
       {
         hotkey: 'mod+shift+enter',
         before: true
-      },
-      {
-        hotkey: 'enter',
-        query: {
-          start: true,
-          end: true,
-          allow: KEYS_HEADING
-        }
       }
-    ]
+    ] as ExitBreakRule[]
   }
 }
 

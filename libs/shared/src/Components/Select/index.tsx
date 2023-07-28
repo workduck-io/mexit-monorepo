@@ -9,24 +9,35 @@ import { getMIcon } from '../Icons'
 
 interface SelectProps {
   items: MenuListItemType[]
+  defaultValue?: MenuListItemType
   onClick?: (option: MenuListItemType) => void
   label?: string
   root?: any
+  isReadOnly?: boolean
 }
 
-export const Select: React.FC<SelectProps> = ({ items, onClick, label = 'Select', root }) => {
-  const [selected, setSelected] = useState(null)
+export const Select: React.FC<SelectProps> = ({ items, onClick, isReadOnly, defaultValue, label = 'Select', root }) => {
+  const [selected, setSelected] = useState(defaultValue)
 
   const handleOnClick = (option: MenuListItemType) => {
     setSelected(option)
     if (onClick) onClick(option)
-    else if (option.onSelect) option.onSelect(option)
+    else if (option?.onSelect) option.onSelect(option)
+  }
+
+  if (isReadOnly) {
+    return (
+      <Group>
+        <ItemLabel fontSize="small">{selected?.label ?? items?.at(0)?.label ?? label}</ItemLabel>
+      </Group>
+    )
   }
 
   return (
     <Menu
       noHover
       noBackground
+      type="modal"
       root={root}
       values={
         <Group>

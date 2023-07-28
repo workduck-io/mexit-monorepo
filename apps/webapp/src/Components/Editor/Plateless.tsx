@@ -21,7 +21,8 @@ import {
   ELEMENT_TODO_LI,
   ELEMENT_TR,
   ELEMENT_UL,
-  mog
+  mog,
+  SuperBlocks
 } from '@mexit/core'
 
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
@@ -54,7 +55,11 @@ const MultiLineElementsArray = [
   ELEMENT_UL,
   ELEMENT_OL,
   ELEMENT_LI,
-  ELEMENT_LIC
+  ELEMENT_LIC,
+  SuperBlocks.CAPTURE,
+  SuperBlocks.CONTENT,
+  SuperBlocks.TASK,
+  SuperBlocks.CAPTURE
 ] as const
 
 export type InlineElements = (typeof InlineElementsArray)[number]
@@ -202,6 +207,9 @@ const useTypeMap = (multiline: boolean): TypeMap => {
     [ELEMENT_UL]: ({ children }) => <ul>{children}</ul>,
     [ELEMENT_OL]: ({ children }) => <ol>{children}</ol>,
     [ELEMENT_LIC]: ({ children }) => <>{children}</>,
+    [SuperBlocks.CAPTURE]: ({ children }) => <>{children}</>,
+    [SuperBlocks.CONTENT]: ({ children }) => <>{children}</>,
+    [SuperBlocks.TASK]: ({ children }) => <>{children}</>,
     [ELEMENT_LI]: ({ children }) => <li>{children}</li>,
     [ELEMENT_TODO_LI]: ({ children, node }) => <li>{children}</li>
   }
@@ -282,13 +290,16 @@ const RenderPlateless = React.memo<RenderPlatelessProps>(
             </RenderItem>
           )
         }
+
         if (node.type === undefined && node.text !== undefined) {
           return plainTextRenderer(node)
         }
+
         mog('Plateless Error: Cannot render node', { node })
         // Unrenderable elements are skipped
         return null
       })
+
     return <>{childrenRender}</>
   }
 )

@@ -33,7 +33,6 @@ export const TodoBase = ({
   controls,
   showDelete = true
 }: TodoProps) => {
-  // mog('Todo', { parentNodeId, todoid, readOnly })
   const [showOptions, setShowOptions] = useState(false)
 
   const [animate, setAnimate] = useState(false)
@@ -63,8 +62,8 @@ export const TodoBase = ({
   }
 
   const changeStatus = () => {
-    if (controls && controls.onChangeStatus) controls.onChangeStatus(todoid, getNextStatus(todo.metadata.status))
-    else updateStatus(parentNodeId, todoid, getNextStatus(todo.metadata.status))
+    if (controls && controls.onChangeStatus) controls.onChangeStatus(todoid, getNextStatus(todo.properties.status))
+    else updateStatus(parentNodeId, todoid, getNextStatus(todo.properties.status))
     setAnimate(true)
   }
 
@@ -72,14 +71,14 @@ export const TodoBase = ({
     <TodoContainer
       key={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
       id={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
-      checked={todo?.metadata.status === TodoStatus.completed}
+      checked={todo?.properties.status === TodoStatus.completed}
       onMouseEnter={() => {
         setShowOptions(true)
       }}
       onMouseLeave={() => setShowOptions(false)}
     >
       <CheckBoxWrapper id={`TodoStatusFor_${todo.id}_${oid}`} contentEditable={false}>
-        <StyledTodoStatus animate={animate} status={todo.metadata.status} onClick={changeStatus} />
+        <StyledTodoStatus animate={animate} status={todo.properties.status} onClick={changeStatus} />
       </CheckBoxWrapper>
 
       <TodoText contentEditable={!readOnly} suppressContentEditableWarning>
@@ -98,11 +97,11 @@ export const TodoBase = ({
           />
         )}
 
-        {(showOptions || todo.metadata.priority !== PriorityType.noPriority) && (
+        {(showOptions || todo.properties.priority !== PriorityType.noPriority) && (
           <PrioritySelect
             readOnly={readOnly}
-            isVisible={element || todo.metadata.priority !== PriorityType.noPriority}
-            value={todo.metadata.priority}
+            isVisible={element || todo.properties.priority !== PriorityType.noPriority}
+            value={todo.properties.priority}
             onPriorityChange={onPriorityChange}
           />
         )}

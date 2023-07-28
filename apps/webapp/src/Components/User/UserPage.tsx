@@ -16,6 +16,7 @@ import {
   InfoLabel,
   ProfileContainer,
   ProfileIcon,
+  ProfileImage,
   Title,
   UserCard
 } from '@mexit/shared'
@@ -23,8 +24,6 @@ import {
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { ALIAS_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'
-
-import { ProfileImage } from './ProfileImage'
 
 export interface UpdateUserFormData {
   name: string

@@ -17,13 +17,15 @@ import {
   mog,
   SelfMention,
   useEditorStore,
-  useMentionStore, 
+  useMentionStore,
   useShareModalStore,
-  useUserCacheStore} from '@mexit/core'
+  useUserCacheStore
+} from '@mexit/core'
 import {
   AccessTag,
   MentionTooltip,
   MentionTooltipContent,
+  ProfileImage,
   SMention,
   SMentionRoot,
   TooltipAlias,
@@ -31,7 +33,6 @@ import {
   Username
 } from '@mexit/shared'
 
-import { ProfileImage } from '../../../Components/User/ProfileImage'
 import { useUserService } from '../../../Hooks/API/useUserAPI'
 import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useMentions } from '../../../Hooks/useMentions'

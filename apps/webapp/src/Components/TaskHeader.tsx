@@ -1,27 +1,24 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-import trashIcon from '@iconify/icons-codicon/trash'
-import edit2Line from '@iconify/icons-ri/edit-2-line'
-import fileCopyLine from '@iconify/icons-ri/file-copy-line'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
-import { IconButton, LoadingButton, ToolbarTooltip } from '@workduck-io/mex-components'
+import { ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { MIcon } from '@mexit/core'
+import { getMenuItem, MIcon } from '@mexit/core'
 import {
   DefaultMIcons,
   GenericFlex,
   IconDisplay,
+  InsertMenu,
   Menu,
   MenuItem,
   PrimaryText,
   TaskHeader as StyledTaskHeader,
   TaskHeaderTitleSection,
-  TaskViewControls,
   TaskViewHeaderWrapper,
   TaskViewTitle
 } from '@mexit/shared'
@@ -209,6 +206,15 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
     }
   }
 
+  const viewOptions = useMemo(() => {
+    return [
+      getMenuItem('Update View', () => handleUpdateView(), isDefault, DefaultMIcons.EDIT),
+      getMenuItem('Clone View', () => handleCloneView(), currentFilters.length === 0, DefaultMIcons.COPY),
+      getMenuItem('Save As', () => handleSaveAsView(), currentFilters.length === 0, DefaultMIcons.SAVE),
+      getMenuItem('Delete View', () => onDeleteView(), isDefault || currentFilters.length === 0, DefaultMIcons.DELETE)
+    ]
+  }, [isDefault, currentFilters])
+
   return (
     <>
       <ViewBreadcrumbs path={view?.path} />
@@ -221,34 +227,18 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
                 <Icon icon={stackLine} />
                 <span>{view?.title}</span>
                 {view?.id && !isDefault && <ViewChangeStatus viewId={view?.id} />}
+                <InsertMenu
+                  key={`${isDefault}-${currentFilters.length === 0}`}
+                  allowSearch={false}
+                  items={viewOptions}
+                  isMenu
+                  icon={DefaultMIcons.MENU}
+                />
               </TaskViewTitle>
-              <TaskViewControls>
-                {!isDefault && (
-                  <IconButton title="Update View" onClick={handleUpdateView} singleton={target} icon={edit2Line} />
-                )}
-                <IconButton
-                  title="Clone View"
-                  onClick={handleCloneView}
-                  disabled={currentFilters.length === 0}
-                  singleton={target}
-                  icon={fileCopyLine}
-                />
-                <IconButton
-                  title="Save as"
-                  onClick={handleSaveAsView}
-                  disabled={currentFilters.length === 0}
-                  singleton={target}
-                  icon="fluent:save-copy-24-regular"
-                />
-                {!isDefault && (
-                  <LoadingButton title="Delete View" loading={deleting} onClick={onDeleteView} singleton={target}>
-                    <Icon icon={trashIcon} />
-                  </LoadingButton>
-                )}
-              </TaskViewControls>
             </TaskViewHeaderWrapper>
           )}
         </TaskHeaderTitleSection>
+
         <CreateNewMenu />
       </StyledTaskHeader>
     </>

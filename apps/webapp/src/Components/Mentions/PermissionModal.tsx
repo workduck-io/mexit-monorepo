@@ -22,6 +22,7 @@ import {
   GenericFlex,
   IconDisplay,
   mergeAccess,
+  ProfileImage,
   StyledCreatatbleSelect,
   Text
 } from '@mexit/shared'
@@ -35,7 +36,6 @@ import { useNodes } from '../../Hooks/useNodes'
 import { getUserAccess, usePermissions } from '../../Hooks/usePermissions'
 import { ModalActions, ModalFooter } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
-import { ProfileImage } from '../User/ProfileImage'
 
 import { MultiEmailInviteModalContent } from './MultiEmailInvite'
 import {

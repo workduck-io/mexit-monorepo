@@ -4,13 +4,10 @@ import toast from 'react-hot-toast'
 import generateName from 'project-name-generator'
 
 import {
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TODO_LI,
   generateSnippetId,
-  generateTempId,
   getDefaultContent,
   ModalsType,
-  TodoStatus,
+  SuperBlocks,
   useEditorStore,
   useLayoutStore,
   useModalStore,
@@ -47,14 +44,7 @@ export const useOnNewItem = () => {
 
   const onNewTask = () => {
     const dailyTasksNoteId = getNewTaskNode(true)?.nodeid
-    const todo = createDefaultTodo(dailyTasksNoteId, [
-      {
-        type: ELEMENT_TODO_LI,
-        children: [{ text: '', type: ELEMENT_PARAGRAPH, id: generateTempId() }],
-        status: TodoStatus.todo,
-        id: generateTempId()
-      }
-    ])
+    const todo = createDefaultTodo(dailyTasksNoteId, [getDefaultContent(SuperBlocks.TASK)])
 
     openModal(ModalsType.todo, todo)
   }

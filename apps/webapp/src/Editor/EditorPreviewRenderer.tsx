@@ -48,6 +48,8 @@ const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean; readOnly?: boo
   ${({ readOnly }) =>
     readOnly &&
     css`
+      padding: 0;
+
       ${TodoContainer}, button, input, textarea, select, option {
         pointer-events: none;
       }

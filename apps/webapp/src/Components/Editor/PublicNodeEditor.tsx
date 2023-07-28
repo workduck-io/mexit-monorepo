@@ -60,7 +60,8 @@ const PublicNodeEditor = ({ nodeId, node, namespaceId }) => {
       <PublicStyledEditor className="mex_editor">
         <EditorWrapper onClick={onFocusClick}>
           <Editor
-            readOnly={true}
+            withHover={false}
+            readOnly
             nodeUID={nodeId}
             nodePath={node?.title ?? ''}
             content={node?.content ?? defaultContent.content}

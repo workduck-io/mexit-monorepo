@@ -7,7 +7,7 @@ import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import { Icon } from '@iconify/react'
 import { useCombobox } from 'downshift'
 
-import { capitalize,mog } from '@mexit/core'
+import { capitalize } from '@mexit/core'
 import { SearchFilterInputWrapper, SearchIndexValue, StyledCombobox, StyledMenu, Suggestion } from '@mexit/shared'
 
 import Input from '../Input'
@@ -53,7 +53,6 @@ const SearchIndexInput = ({ indexGroups, onChange, placeholder }: SearchIndexInp
     },
     onSelectedItemChange: ({ selectedItem }) => {
       if (selectedItem) {
-        mog('selectedItem', { selectedItem, indexGroups })
         onChange(selectedItem)
         setSelectedGroup(selectedItem)
         setInputValue('')

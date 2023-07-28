@@ -133,7 +133,7 @@ export const useComboboxOnKeyDown = (config: ComboConfigData): KeyboardHandler =
           // mog('CreatableOnSelect', { comboType, comboboxKey })
           return internal.ilink.newItemHandler(newItem, noteId)
         }
-        if (comboType) return comboType.newItemHandler(newItem, noteId)
+        if (comboType) return comboType.newItemHandler(newItem, noteId, editor)
       },
       comboboxKey !== ComboboxKey.SLASH_COMMAND
     )

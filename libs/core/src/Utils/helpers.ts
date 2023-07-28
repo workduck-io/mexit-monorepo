@@ -1,3 +1,4 @@
+import { SuperBlocks } from '../Types'
 import { NodeContent, NodeProperties } from '../Types/Editor'
 
 import { ELEMENT_PARAGRAPH } from './editorElements'
@@ -14,13 +15,25 @@ export function wrapErr<T>(f: (result: T) => void) {
 
 export const defaultContent: NodeContent = {
   type: 'init',
-  content: [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],
+  content: [
+    {
+      id: generateTempId(),
+      type: SuperBlocks.CONTENT,
+      children: [{ type: ELEMENT_PARAGRAPH, id: generateTempId(), children: [{ text: '' }] }]
+    }
+  ],
   version: -1
 }
 
+export const getBasicContent = (type: string = ELEMENT_PARAGRAPH) => ({
+  type,
+  id: generateTempId(),
+  children: [{ text: '' }]
+})
+
 export const URL_DOMAIN_REG = /:\/\/(.[^/]+)/
 
-export const getDefaultContent = (type: string = ELEMENT_PARAGRAPH) => ({
+export const getDefaultContent = (type: string = SuperBlocks.CONTENT) => ({
   ...defaultContent.content[0],
   type,
   id: generateTempId()

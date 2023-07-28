@@ -3,6 +3,7 @@ import {
   API,
   batchArray,
   DefaultMIcons,
+  deserializeContent,
   extractMetadata,
   iLinksToUpdate,
   mog,
@@ -11,7 +12,6 @@ import {
   useDataStore
 } from '@mexit/core'
 
-import { deserializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
 import { useUpdater } from '../useUpdater'

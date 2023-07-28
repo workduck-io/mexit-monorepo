@@ -7,31 +7,11 @@ import timeLine from '@iconify/icons-ri/time-line'
 import { Icon } from '@iconify/react'
 import Tippy, { TippyProps } from '@tippyjs/react'
 import { default as TippyHeadless, TippyProps as TippyHeadlessProps } from '@tippyjs/react/headless'
-import {
-  DragHandleProps,
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_H1,
-  ELEMENT_H2,
-  ELEMENT_H3,
-  ELEMENT_H4,
-  ELEMENT_H5,
-  ELEMENT_H6,
-  ELEMENT_IMAGE,
-  ELEMENT_MEDIA_EMBED,
-  ELEMENT_OL,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TABLE,
-  ELEMENT_TODO_LI,
-  ELEMENT_UL,
-  withDraggables
-} from '@udecode/plate'
+import { DragHandleProps, withDraggables } from '@udecode/plate'
 import styled, { css } from 'styled-components'
 
-import { ELEMENT_CAPTURE, IS_DEV, useBlockStore, useEditorStore } from '@mexit/core'
-import { RelativeTime } from '@mexit/shared'
-
-import { ProfileImage } from '../../Components/User/ProfileImage'
+import { IS_DEV, SuperBlocks, useBlockStore, useEditorStore } from '@mexit/core'
+import { ProfileImage, RelativeTime } from '@mexit/shared'
 
 const StyledTip = styled.div`
   display: flex;
@@ -203,109 +183,23 @@ export const withStyledDraggables = (components: any) => {
 
   return withDraggables(components, [
     {
-      keys: [ELEMENT_PARAGRAPH, ELEMENT_UL, ELEMENT_OL, ELEMENT_CAPTURE],
+      keys: Object.values(SuperBlocks),
       level: 0
     },
     {
-      keys: [
-        ELEMENT_CAPTURE,
-        ELEMENT_PARAGRAPH,
-        ELEMENT_BLOCKQUOTE,
-        ELEMENT_TODO_LI,
-        ELEMENT_H1,
-        ELEMENT_H2,
-        ELEMENT_H3,
-        ELEMENT_H4,
-        ELEMENT_H5,
-        ELEMENT_H6,
-        ELEMENT_IMAGE,
-        ELEMENT_OL,
-        ELEMENT_UL,
-        // ELEMENT_SYNC_BLOCK,
-        // ELEMENT_INLINE_BLOCK,
-        // ELEMENT_ILINK,
-        ELEMENT_TABLE,
-        ELEMENT_MEDIA_EMBED,
-        ELEMENT_CODE_BLOCK,
-        // ELEMENT_ACTION_BLOCK
-      ],
+      keys: Object.values(SuperBlocks),
       onRenderDragHandle: ({ className, styles, element }) => {
         return <DragHandle className={className} styles={styles} element={element} />
       }
     },
     {
-      key: ELEMENT_H1,
+      key: SuperBlocks.CONTENT,
       styles: {
         gutterLeft: {
           alignItems: 'center'
         },
         blockToolbarWrapper: {
           height: '1.3em'
-        }
-      }
-    },
-    {
-      key: ELEMENT_H2,
-      styles: {
-        gutterLeft: {
-          alignItems: 'center'
-        },
-        blockToolbarWrapper: {
-          height: '1.3em'
-        }
-      }
-    },
-    {
-      key: ELEMENT_H3,
-      styles: {
-        gutterLeft: {
-          alignItems: 'center'
-        },
-        blockToolbarWrapper: {
-          height: '1.3em'
-        }
-      }
-    },
-    {
-      keys: [ELEMENT_H4, ELEMENT_H5, ELEMENT_H6],
-      styles: {
-        gutterLeft: {
-          alignItems: 'center'
-        },
-        blockToolbarWrapper: {
-          height: '1.3em'
-        }
-      }
-    },
-    {
-      keys: [ELEMENT_PARAGRAPH, ELEMENT_UL, ELEMENT_OL],
-      styles: {
-        gutterLeft: {
-          alignItems: 'center'
-        }
-      }
-    },
-    {
-      key: ELEMENT_BLOCKQUOTE,
-      styles: {
-        gutterLeft: {
-          alignItems: 'center'
-        }
-      }
-    },
-    {
-      key: ELEMENT_CODE_BLOCK,
-      styles: {
-        gutterLeft: {
-          alignItems: 'center'
-        }
-      }
-    },
-    {
-      key: ELEMENT_TODO_LI,
-      styles: {
-        gutterLeft: {
-          alignItems: 'center'
         }
       }
     }

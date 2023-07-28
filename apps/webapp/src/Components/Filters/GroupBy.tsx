@@ -24,6 +24,7 @@ const GroupByMenu = ({ onChange }) => {
   return (
     <SortSectionWrapper>
       <Menu
+        border
         noHover
         key={`${viewId}-${groupingOptions?.length}`}
         values={

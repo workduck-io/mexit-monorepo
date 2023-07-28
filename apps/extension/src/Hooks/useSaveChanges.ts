@@ -8,11 +8,13 @@ import {
   ELEMENT_TAG,
   extractMetadata,
   getHighlightBlockMap,
+  getHighlightContent,
   Highlight,
   NodeProperties,
   RecentType,
   SaveableRange,
   SEPARATOR,
+  serializeContent,
   SingleNamespace,
   useAuthStore,
   useContentStore,
@@ -28,7 +30,6 @@ import { getDeserializeSelectionToNodes } from '@mexit/shared'
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../Editor/plugins'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { serializeContent } from '../Utils/serializer'
 
 import { useEditorStore } from './useEditorStore'
 import { useHighlights } from './useHighlights'
@@ -64,8 +65,8 @@ export function useSaveChanges() {
   const setContent = useContentStore((s) => s.setContent)
   const appendContent = useContentStore((s) => s.appendContent)
   const updateMetadata = useMetadataStore((s) => s.updateMetadata)
-  const addRecent = useRecentsStore((store) => store.addRecent)
   const addHighlight = useHighlightStore((s) => s.addHighlight)
+  const addRecent = useRecentsStore((store) => store.addRecent)
   const addHighlightInStore = useHighlightStore((s) => s.addHighlightEntity)
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
@@ -82,7 +83,15 @@ export function useSaveChanges() {
 
     const node = useSputlitStore.getState().node
     const selection = useSputlitStore.getState().selection
-    const nodeContent = useEditorStore.getState().nodeContent
+    const capturedContent = useEditorStore.getState().nodeContent
+
+    const { highlight, blockHighlightMap } = await createHighlightEntityFromSelection(
+      selection,
+      node.nodeid,
+      capturedContent
+    )
+
+    const nodeContent = getHighlightContent(highlight)
 
     addRecent(RecentType.notes, node.nodeid)
     setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
@@ -90,12 +99,6 @@ export function useSaveChanges() {
     setContent(node.nodeid, nodeContent)
     setSelection(undefined)
     setActiveItem()
-
-    const { highlight, blockHighlightMap } = await createHighlightEntityFromSelection(
-      selection,
-      node.nodeid,
-      nodeContent
-    )
 
     const res = await saveNode({
       notify: options.notification,
@@ -207,16 +210,13 @@ export function useSaveChanges() {
       }
     }
 
-    const highlightId = await saveHighlight(
-      {
-        ...highlight,
-        properties: {
-          ...highlight?.properties,
-          content: serializeContent(content, '')
-        }
-      },
-      document.title
-    )
+    const highlightId = await saveHighlight({
+      ...highlight,
+      properties: {
+        ...highlight?.properties,
+        content: serializeContent(content)
+      }
+    })
 
     if (highlightId) {
       addHighlightInStore({
@@ -243,32 +243,20 @@ export function useSaveChanges() {
       properties: {
         sourceUrl: selection?.range && deleteQueryParams(window.location.href),
         saveableRange: selection?.range,
-        content: serializeContent(content, '')
+        content: serializeContent(content)
       }
     }
 
     if (highlight) {
       // Save highlight
-      const sourceTitle = document.title
-      const highlightId = await saveHighlight(highlight, sourceTitle)
+      const highlightId = await saveHighlight(highlight)
+      highlight.properties.content = content
 
       if (highlightId) {
-        const updateContent = content?.map((block) => {
-          return {
-            ...block,
-            metadata: {
-              elementMetadata: {
-                id: highlightId,
-                type: 'highlightV1'
-              }
-            }
-          }
-        })
-
         highlight.entityId = highlightId
 
         // Extract the blockids for which we have captured highlights
-        const blockHighlightMap = getHighlightBlockMap(nodeid, updateContent)
+        const blockHighlightMap = getHighlightBlockMap(nodeid, content)
 
         // Add highlight in local store and nodeblockmap
         addHighlight(highlight, blockHighlightMap)
@@ -317,7 +305,7 @@ export function useSaveChanges() {
   const appendAndSave = async ({
     nodeid,
     content: toAppendContent,
-    highlight,
+    highlight: isHighlight,
     saveAndExit = true,
     notification = true
   }: AppendAndSaveProps) => {
@@ -348,15 +336,14 @@ export function useSaveChanges() {
       }
     }
 
-    if (highlight) {
+    if (isHighlight) {
       const selection = useSputlitStore.getState().selection
-      const { highlight, blockHighlightMap } = await createHighlightEntityFromSelection(
-        selection,
-        node.nodeid,
-        toAppendContent
-      )
+      const { highlight } = await createHighlightEntityFromSelection(selection, node.nodeid, toAppendContent)
 
       if (highlight) {
+        const content = getHighlightContent(highlight)
+
+        request.body.content = content
         request.body.highlightId = highlight.entityId
       }
     }

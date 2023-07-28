@@ -10,6 +10,7 @@ import { Indexes, SearchResult } from '@workduck-io/mex-search'
 import {
   batchArray,
   convertContentToRawText,
+  deserializeContent,
   extractMetadata,
   getContent,
   mog,
@@ -43,7 +44,6 @@ import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useNamespaces } from '../Hooks/useNamespaces'
 import { useSearch } from '../Hooks/useSearch'
 import { ModalHeader } from '../Style/Refactor'
-import { deserializeContent } from '../Utils/serializer'
 import { WorkerRequestType } from '../Utils/worker'
 import { runBatchWorker } from '../Workers/controller'
 

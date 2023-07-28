@@ -46,16 +46,14 @@ import {
   BalloonToolbar,
   ButtonSeparator,
   DefaultMIcons,
-  getMIcon,
   IconDisplay,
   useBalloonToolbarStore
 } from '@mexit/shared'
 
 import useUpdateBlock from '../../../Editor/Hooks/useUpdateBlock'
 
-import { SelectionToNode, SelectionToNodeInput } from './components/SelectionToNode'
-import { SelectionToSnippet, SelectionToSnippetInput } from './components/SelectionToSnippet'
-import { SelectionToTask } from './components/SelectionToTask'
+import { SelectionToNodeInput } from './components/SelectionToNode'
+import { SelectionToSnippetInput } from './components/SelectionToSnippet'
 
 const BallonMarkToolbarButtons = () => {
   const [isOptionOpen, setIsOptionOpen] = React.useState<string | null>(null)
@@ -237,9 +235,9 @@ const BallonMarkToolbarButtons = () => {
                 />
               </BallonOptionsUnwrapper>
 
-              <ButtonSeparator />
+              {/* <ButtonSeparator /> */}
 
-              <BallonOptionsUnwrapper
+              {/* <BallonOptionsUnwrapper
                 id="Create New"
                 icon={DefaultMIcons.ADD}
                 active={isOptionOpen}
@@ -259,7 +257,7 @@ const BallonMarkToolbarButtons = () => {
                   icon={<IconDisplay size={20} icon={DefaultMIcons.SNIPPET} />}
                   tooltip={{ content: 'Convert to Snippet', ...tooltip }}
                 />
-              </BallonOptionsUnwrapper>
+              </BallonOptionsUnwrapper> */}
             </>
           ),
           'new-note': <SelectionToNodeInput />,

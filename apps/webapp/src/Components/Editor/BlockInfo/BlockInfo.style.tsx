@@ -4,23 +4,23 @@ import { Button } from '@workduck-io/mex-components'
 
 const scale = keyframes`
   from {
-    transform: translate(50%) scale(0.5);
+    transform:  scale(0.75);
     opacity: 0.5;
   }
 
   to {
-    transform: translate(100%) scale(1);
+    transform: scale(1);
     opacity: 1;
   }
 `
 
 export const BlockInfoWrapper = styled.div<{ animate?: boolean }>`
-  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   z-index: 5;
   color: ${({ theme }) => theme.tokens.text.default};
   border-radius: ${({ theme }) => theme.spacing.small};
-  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
   font-size: 14px;
+  position: relative;
+  user-select: none;
   ${({ animate }) =>
     animate
       ? css`
@@ -30,13 +30,10 @@ export const BlockInfoWrapper = styled.div<{ animate?: boolean }>`
       : css`
           opacity: 0;
         `}
-  position: absolute;
-  right: 0;
-  top: 0;
+
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  transform: translate(100%, 0%);
 `
 
 export const BlockInfoBlockWrapper = styled.div`
@@ -45,6 +42,8 @@ export const BlockInfoBlockWrapper = styled.div`
 `
 
 export const BlockInfoButton = styled(Button)`
+  background: none;
+  box-shadow: none;
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};

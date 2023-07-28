@@ -6,9 +6,8 @@ import filterOffLine from '@iconify-icons/ri/filter-off-line'
 import { nanoid } from 'nanoid'
 
 import { ToolbarTooltip } from '@workduck-io/mex-components'
-import { Entities } from '@workduck-io/mex-search'
 
-import { Filter, Filters, GlobalFilterJoin } from '@mexit/core'
+import { Filter, Filters, GlobalFilterJoin, SuperBlocks } from '@mexit/core'
 import {
   FilterValuesWrapper,
   SearchFilterCancel,
@@ -28,7 +27,7 @@ import ViewSelector, { ViewSelectorProps } from './ViewSelector'
 interface SearchFiltersProps {
   filters: Filters
   currentFilters: Filter[]
-  onEntityFilterChange?: (entitiy: Entities) => void
+  onEntityFilterChange?: (entitiy: SuperBlocks) => void
   globalJoin?: GlobalFilterJoin
   setGlobalJoin?: (join: GlobalFilterJoin) => void
   addCurrentFilter: (filter: Filter) => void

@@ -1,9 +1,11 @@
-import React, { cloneElement, useMemo, useState } from 'react'
+import React, { cloneElement, useMemo, useRef, useState } from 'react'
 import { mergeRefs } from 'react-merge-refs'
 
 import {
+  arrow,
   autoUpdate,
   flip,
+  FloatingArrow,
   FloatingPortal,
   offset,
   Placement,
@@ -13,7 +15,8 @@ import {
   useHover,
   useInteractions,
   useRole
-} from '@floating-ui/react-dom-interactions'
+} from '@floating-ui/react'
+import { useTheme } from 'styled-components'
 
 import { TooltipWrapper } from './Tooltip.style'
 
@@ -32,14 +35,25 @@ interface Props {
  *
  * Ref: https://codesandbox.io/s/winter-tree-wmmffl?file=/src/App.tsx
  */
-export const Tooltip = ({ children, content, delay = 500, offsetPx = 5, placement = 'top', root }: Props) => {
+export const Tooltip = ({ children, content, delay = 500, offsetPx = 10, placement = 'top', root }: Props) => {
   const [open, setOpen] = useState(false)
+
+  const theme = useTheme()
+  const arrowRef = useRef(null)
 
   const { x, y, reference, floating, strategy, context } = useFloating({
     placement,
     open,
     onOpenChange: setOpen,
-    middleware: [offset(offsetPx), flip(), shift({ padding: 8 })],
+    middleware: [
+      offset(offsetPx),
+      flip(),
+      shift({ padding: 8 }),
+      arrow({
+        element: arrowRef,
+        padding: 10
+      })
+    ],
     whileElementsMounted: autoUpdate
   })
 
@@ -72,6 +86,16 @@ export const Tooltip = ({ children, content, delay = 500, offsetPx = 5, placemen
             }}
             {...getFloatingProps()}
           >
+            <FloatingArrow
+              height={3}
+              width={8}
+              radius={1}
+              fill={theme.tokens.surfaces.modal}
+              stroke={theme.tokens.surfaces.s[3]}
+              strokeWidth={0.1}
+              ref={arrowRef}
+              context={context}
+            />
             {content}
           </TooltipWrapper>
         )}

@@ -176,6 +176,7 @@ const ContentEditor = () => {
         content={nodeContent}
         nodeUID={nodeid}
         readOnly={viewOnly}
+        withHover={false}
         autoFocus={false}
       />
     </EditorWrapper>

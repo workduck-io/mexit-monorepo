@@ -101,8 +101,8 @@ export const useSearch = () => {
         const localNodes = []
 
         nodeItems?.forEach((item) => {
-          // const localNode = isLocalNode(item.id)
           const node = ilinks.find((i) => i.nodeid === item.parent)
+
           if (node) {
             const listItem = getListItemFromNode(node, item.text, item.id, actionType)
             localNodes.push(listItem)
@@ -113,6 +113,7 @@ export const useSearch = () => {
           const snippets = useSnippetStore.getState().snippets
           snippetItems?.forEach((snippet) => {
             const snip = snippets?.[snippet?.parent]
+
             if (snip) {
               const item = getListItemFromSnippet(snip, actionType)
               localNodes.push(item)

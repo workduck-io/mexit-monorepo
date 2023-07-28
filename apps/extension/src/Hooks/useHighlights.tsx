@@ -6,6 +6,7 @@ import {
   mog,
   NodeEditorContent,
   SEPARATOR,
+  SuperBlocks,
   useAuthStore,
   useContentStore,
   useHighlightStore,
@@ -130,7 +131,7 @@ export const useHighlights = () => {
    * Doesn't add to the store.
    *   That will need the block map.
    */
-  const saveHighlight = async (highlight: Highlight, sourceTitle: string) => {
+  const saveHighlight = async (highlight: Highlight) => {
     // const link = getLink(highlight.properties.sourceUrl)
     // if (!link) {
     //   await saveLink({ url: highlight.properties.sourceUrl, title: sourceTitle })
@@ -241,10 +242,7 @@ export const useHighlightAPI = () => {
 
 const filterHighlightBlocks = (content: NodeEditorContent, highlightId: string) => {
   return content.filter((block) => {
-    if (
-      block?.metadata?.elementMetadata?.type === 'highlightV1' &&
-      block?.metadata?.elementMetadata?.id === highlightId
-    ) {
+    if (block.type === SuperBlocks.HIGHLIGHT && block?.metadata?.entityId === highlightId) {
       return false
     }
     return true

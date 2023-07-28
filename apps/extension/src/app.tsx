@@ -28,6 +28,7 @@ export function PortalMaker(props: Props) {
 
 const Extension = () => {
   const authenticated = useAuthStore((a) => a.authenticated)
+
   return (
     <>
       {authenticated && <ReminderArmer />}

@@ -48,7 +48,6 @@ import { useAuth } from '@workduck-io/dwindle'
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
 import { TableWrapper, useUploadToCDN } from '@mexit/shared'
 
-import { createBlockModifierPlugin } from './createBlockModifierPlugin'
 import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
@@ -145,7 +144,7 @@ export const generatePlugins = (options: PluginOptionType) => {
       }
     }),
     createNodeIdPlugin(optionsCreateNodeIdPlugin),
-    createBlockModifierPlugin(),
+    // createBlockModifierPlugin(),
 
     // serialization / deseriailization
 

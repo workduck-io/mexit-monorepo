@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components'
 
 import { Infobox, LoadingButton } from '@workduck-io/mex-components'
 
-import { API, mog, usePromptStore } from '@mexit/core'
+import { API, usePromptStore } from '@mexit/core'
 import {
   ActionGroupIcon,
   DEFAULT_LIST_ITEM_ICON,
@@ -39,7 +39,6 @@ const PromptProvidersPage = () => {
 
   const onInputChange = (event) => {
     const inputTargetValue = event.target.value
-    mog('SETTING VALUE', { inputTargetValue })
     setValue(inputTargetValue)
   }
 

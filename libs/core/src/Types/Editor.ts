@@ -30,11 +30,13 @@ export interface BlockIndexData {
 export interface NodeMetadata {
   createdBy: string
   createdAt: number
-  lastEditedBy: string
+  updatedBy: string
   updatedAt: number
   icon?: MIcon | undefined
 
   elementMetadata: ElementHighlightMetadata
+
+  properties?: Record<string, any>
   publicAccess?: boolean
   iconUrl?: string
   // The snippet ID with which all the children nodes should be populated
@@ -257,9 +259,9 @@ export type BlockMetaDataType = {
 export type BlocksType = Record<string, BlockType>
 
 export type BlockType = {
-  id: string
-  children: BlockType[]
-  type: string
+  id?: string
+  children?: any[]
+  type?: string
   text?: string
   blockMeta?: BlockMetaDataType
 }

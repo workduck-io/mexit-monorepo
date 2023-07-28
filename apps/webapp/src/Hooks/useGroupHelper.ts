@@ -35,6 +35,7 @@ const useGroupHelper = () => {
 
       case 'lastEditedBy':
       case 'createdBy':
+      case 'assignee':
       case 'updatedBy':
         // eslint-disable-next-line no-case-declarations
         const user = await getUserDetailsUserId(label)

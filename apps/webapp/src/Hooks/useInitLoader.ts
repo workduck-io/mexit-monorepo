@@ -116,7 +116,7 @@ export const useInitLoader = () => {
     }
   }
 
-  const restoreIndexIndex = async () => {
+  const restoreIndex = async () => {
     const workspaceId = getWorkspaceId()
 
     const backup = await BackupStorage.getValue(workspaceId, 'mexit-search-index')
@@ -125,7 +125,7 @@ export const useInitLoader = () => {
 
   useEffect(() => {
     if (initalizeApp === AppInitStatus.SWITCH) {
-      // restoreIndexIndex()
+      // restoreIndex()
 
       restore().then((res) => {
         const appInitStatus = res ? AppInitStatus.COMPLETE : AppInitStatus.RUNNING

@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createPlateUI, withProps } from '@udecode/plate'
-import { StyledElement } from '@udecode/plate-styled-components'
+import { createPlateUI, StyledElement, withProps } from '@udecode/plate'
 
 import {
-    ELEMENT_CAPTURE,
+  ELEMENT_CAPTURE,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
@@ -40,7 +39,7 @@ export const editorPreviewComponents = createPlateUI({
       }
     }
   }),
-  [ELEMENT_TODO_LI]: Todo as any,
+  [ELEMENT_TODO_LI]: Todo,
   [ELEMENT_TAG]: TagWrapper as any,
   [ELEMENT_ILINK]: QuickLinkElement as any,
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any,

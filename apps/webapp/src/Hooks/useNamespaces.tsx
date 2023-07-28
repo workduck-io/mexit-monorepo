@@ -9,8 +9,9 @@ import {
   RESERVED_NAMESPACES,
   SHARED_NAMESPACE,
   SingleNamespace,
-  useDataStore
-, useMentionStore } from '@mexit/core'
+  useDataStore,
+  useMentionStore
+} from '@mexit/core'
 
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useNodes } from './useNodes'

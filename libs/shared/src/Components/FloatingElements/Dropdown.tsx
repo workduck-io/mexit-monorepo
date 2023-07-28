@@ -58,6 +58,7 @@ export const MenuItem = forwardRef<
   {
     label: string
     icon: MIcon
+    name?: string
     tabIndex?: number
     role?: string
     className?: string
@@ -70,7 +71,7 @@ export const MenuItem = forwardRef<
     color?: string
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   }
->(({ label, disabled, count, color, fontSize, icon, multiSelect, selected, ...props }, ref) => {
+>(({ label, disabled, count, color, fontSize, name, icon, multiSelect, selected, ...props }, ref) => {
   return (
     <MenuItemWrapper {...props} ref={ref} role="menuitem" disabled={disabled}>
       <FilterMenuDiv>
@@ -306,6 +307,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
         once: true,
         capture: true
       })
+
       window.addEventListener('keydown', onKeyDown, true)
       return () => {
         window.removeEventListener('pointermove', onPointerMove, {

@@ -7,6 +7,7 @@ import { MIcon } from '@mexit/core'
 import { IconWrapper } from '../Style/IconPicker.style'
 import { WDLogo } from '../Utils/Logo'
 
+import { ProfileImage } from './ProfileImage'
 import { DEFAULT_IMAGE_URL } from './ProjectIcon'
 
 interface IconDisplayProps {
@@ -50,6 +51,9 @@ const IconItem = ({ type, value }) => {
       )
     case 'MEX':
       return <WDLogo />
+
+    case 'AVATAR':
+      return <ProfileImage email={value} size={32} />
     default:
       break
   }
@@ -57,8 +61,9 @@ const IconItem = ({ type, value }) => {
 
 export const IconDisplay = ({ icon, ...rest }: IconDisplayProps) => {
   if (!icon) return null
+
   return (
-    <IconWrapper {...rest}>
+    <IconWrapper {...rest} type={icon.type}>
       <IconItem {...icon} />
     </IconWrapper>
   )

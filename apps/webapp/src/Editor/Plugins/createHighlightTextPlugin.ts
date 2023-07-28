@@ -1,8 +1,7 @@
 import { getNodesRange } from '@udecode/plate'
 import { createPluginFactory, Decorate } from '@udecode/plate-core'
 
-import { mog, useBlockHighlightStore } from '@mexit/core'
-
+import { useBlockHighlightStore } from '@mexit/core'
 
 interface HighlightPlugin {} // eslint-disable-line @typescript-eslint/no-empty-interface
 
@@ -26,7 +25,7 @@ export const decorateHighlightElement: Decorate =
         ranges.push({ ...range1, [type]: true })
       }
     } catch (e) {
-      mog('DecorateFindReplaceError', { error: e })
+      console.error('DecorateFindReplaceError', e)
     }
 
     return ranges

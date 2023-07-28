@@ -54,12 +54,13 @@ const Workspaces = ({ setShow, active, show }) => {
     event?.preventDefault()
     event?.stopPropagation()
 
+    setShow(false)
+
     backup().then(() => {
       resetSearchIndex()
       setAppInitStatus(AppInitStatus.SWITCH)
     })
 
-    setShow(false)
     setActiveWorkspace(id)
 
     API.user

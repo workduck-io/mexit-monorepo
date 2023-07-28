@@ -25,8 +25,8 @@ export const directPropertyKeys = [
   'actionContext',
   'blockMeta',
   'status',
-  'priority',
-  'lang'
+  'lang',
+  'properties'
 ]
 
 export const PropKeysArray = [...directPropertyKeys] as const
@@ -68,8 +68,9 @@ export const getHighlightBlockMap = (nodeId: string, content: any[]) => {
     nodeId,
     blockIds: []
   }
+
   content?.forEach((item) => {
-    if (item?.metadata?.elementMetadata) {
+    if (item?.metadata?.entityId) {
       nodeBlockMap.blockIds.push(item.id)
     }
   })

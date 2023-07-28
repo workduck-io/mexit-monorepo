@@ -8,15 +8,14 @@ import Board from '@asseinfo/react-kanban'
 import { get } from 'lodash'
 import { useTheme } from 'styled-components'
 
-import { Entities, Indexes, SearchResult } from '@workduck-io/mex-search'
+import { Indexes, SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
 import {
-  ELEMENT_PARAGRAPH,
-  mog,
   MoveBlocksType,
   PriorityType,
   SEPARATOR,
+  SuperBlocks,
   useLayoutStore,
   useModalStore,
   useMultipleEditors,
@@ -61,7 +60,7 @@ const KanbanView: React.FC<any> = (props) => {
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
   const atViews = useMatch(`${ROUTE_PATHS.view}/*`)
-  const { getBlocksBoard, changeStatus, changePriority, moveTodo } = useTodoKanban()
+  const { getBlocksBoard } = useTodoKanban()
 
   const { goTo } = useRouting()
   const { push } = useNavigation()
@@ -98,8 +97,8 @@ const KanbanView: React.FC<any> = (props) => {
             blockField === 'entity'
               ? {}
               : {
-                  [blockField]: move.toColumnId
-                }
+                [blockField]: move.toColumnId
+              }
           )
 
           insertInNote(block.parent, block.id, content)
@@ -121,6 +120,7 @@ const KanbanView: React.FC<any> = (props) => {
           }
 
           const updated = moveBlockFromNode(move.fromColumnId, move.toColumnId, blockContent)
+
           if (updated) {
             const moveBlockRequest: MoveBlocksType = {
               toNodeId: move.toColumnId,
@@ -128,6 +128,7 @@ const KanbanView: React.FC<any> = (props) => {
               blockIds: [block.id],
               indexKey: Indexes.MAIN
             }
+
             moveBlocksInIndex(moveBlockRequest)
           }
           break
@@ -140,50 +141,69 @@ const KanbanView: React.FC<any> = (props) => {
 
     const noteId = block.parent
     const todoField = field?.split(SEPARATOR)?.at(-1)
-    const todo = useTodoStore.getState().getTodoOfNodeWithoutCreating(noteId, block.id)
 
-    if (todo) {
-      switch (todoField) {
-        case 'priority':
-          changePriority(todo, move.toColumnId)
-          break
-        case 'status':
-          changeStatus(todo, move.toColumnId)
-          break
-        case 'entity':
-          const updatedBlock = setInfoOfBlockInContent(noteId, {
-            blockId: block.id,
-            blockData: {
-              type: ELEMENT_PARAGRAPH
-            },
-            useBuffer: true
-          })
-          updateBlocks({
-            id: noteId,
-            contents: [updatedBlock]
-          })
-          break
-        case 'parent':
-          const hasPermission = !checkIsNoteReadOnly(move.toColumnId)
-          if (todo.content && hasPermission) {
-            const updatedBlock = todo.content?.at(0)
-            if (updatedBlock) {
-              const updated = moveBlockFromNode(move.fromColumnId, move.toColumnId, updatedBlock)
-              if (updated) {
-                const moveBlockRequest: MoveBlocksType = {
-                  toNodeId: move.toColumnId,
-                  fromNodeId: move.fromColumnId,
-                  blockIds: [updatedBlock.id],
-                  indexKey: Indexes.MAIN
-                }
-                moveTodo(todo.id, move.fromColumnId, move.toColumnId)
-                moveBlocksInIndex(moveBlockRequest)
-              }
-            }
-          } else {
-            toast('You do not have permission to move this block')
+    switch (todoField) {
+      case 'priority':
+        const blockWithNewPriority = setInfoOfBlockInContent(noteId, {
+          blockId: block.id,
+          properties: {
+            priority: move.toColumnId
           }
-      }
+        })
+        updateBlocks({
+          id: noteId,
+          contents: [blockWithNewPriority]
+        })
+        break
+      case 'status':
+        const blockWithNewStatus = setInfoOfBlockInContent(noteId, {
+          blockId: block.id,
+          properties: {
+            status: move.toColumnId
+          }
+        })
+        updateBlocks({
+          id: noteId,
+          contents: [blockWithNewStatus]
+        })
+        break
+      case 'entity':
+        const updatedBlock = setInfoOfBlockInContent(noteId, {
+          blockId: block.id,
+          blockData: {
+            type: SuperBlocks.CONTENT
+          },
+          useBuffer: true
+        })
+        updateBlocks({
+          id: noteId,
+          contents: [updatedBlock]
+        })
+        break
+      case 'parent':
+        const hasPermission = !checkIsNoteReadOnly(move.toColumnId)
+
+        if (!hasPermission) {
+          toast('You do not have permission to move this block')
+          return
+        }
+
+        const blockContent = getBlock(noteId, block.id)
+
+        if (blockContent) {
+          const updated = moveBlockFromNode(move.fromColumnId, move.toColumnId, blockContent)
+
+          if (updated) {
+            const moveBlockRequest: MoveBlocksType = {
+              toNodeId: move.toColumnId,
+              fromNodeId: move.fromColumnId,
+              blockIds: [block.id],
+              indexKey: Indexes.MAIN
+            }
+            // moveTodo(todo.id, move.fromColumnId, move.toColumnId)
+            moveBlocksInIndex(moveBlockRequest)
+          }
+        }
     }
   }
 
@@ -197,10 +217,10 @@ const KanbanView: React.FC<any> = (props) => {
 
     if (fromColumnId !== toColumnId) {
       switch (card.entity) {
-        case Entities.TASK:
+        case SuperBlocks.TASK:
           handleTaskEvents(card, groupBy, { fromColumnId, toColumnId })
           break
-        case Entities.CONTENT_BLOCK:
+        case SuperBlocks.CONTENT:
           handleBlockEvents(card, groupBy, { fromColumnId, toColumnId })
           break
       }
@@ -244,7 +264,6 @@ const KanbanView: React.FC<any> = (props) => {
       const columnId = get(selectedCard, groupBy) ?? 'Ungrouped'
       return column.id === columnId
     }) as KanbanBoardColumn
-    mog('selected column', { selectedColumn, selectedCard, groupBy, board })
 
     if (!selectedColumn) {
       selectFirst()
@@ -255,8 +274,6 @@ const KanbanView: React.FC<any> = (props) => {
     const selectedIndex = selectedColumn.cards.findIndex(
       (card) => card.id === selectedCard.id && card.parent === selectedCard.parent
     )
-
-    // mog('selected card', { selectedCard, selectedColumn, selectedColumnLength, selectedIndex, direction })
 
     switch (direction) {
       case 'up': {
@@ -270,9 +287,7 @@ const KanbanView: React.FC<any> = (props) => {
 
       case 'down': {
         const nextCard = selectedColumn.cards[(selectedIndex + 1) % selectedColumnLength]
-        mog('nextCard', { nextCard, selectedColumn, selectedColumnLength, selectedIndex })
         if (nextCard) {
-          // mog('selected card', { selectedCard, nextCard })
           setSelectedCard(nextCard)
         }
         break

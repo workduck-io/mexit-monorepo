@@ -18,7 +18,6 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
   getNameFromPath,
-  mog,
   RecentType,
   SEPARATOR,
   useDataStore,
@@ -277,7 +276,6 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
         to = `${toItem.data.path}${SEPARATOR}${getNameFromPath(from)}`
       }
     }
-    mog('onDragEnd', { source, destination, to, from, toItem, tree })
 
     draggedRef.current = null
 

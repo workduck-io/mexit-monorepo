@@ -15,6 +15,7 @@ export { useBufferStore }
 export const useEditorBuffer = () => {
   const add2Buffer = useBufferStore((s) => s.add)
   const clearBuffer = useBufferStore((s) => s.clear)
+  const clearBufferById = useBufferStore((s) => s.remove)
   const { isSharedNode } = useNodes()
   const { getNamespaceOfNodeid } = useNamespaces()
 
@@ -29,20 +30,27 @@ export const useEditorBuffer = () => {
 
   const saveAndClearBuffer = (explicitSave?: boolean) => {
     const buffer = useBufferStore.getState().buffer
+
     Object.entries(buffer)
       .map(([nodeid, val]) => {
         const content = getContent(nodeid)
-        const res = areEqual(content.content, val)
+        const isBufferSame = areEqual(content.content, val)
+
         const isShared = isSharedNode(nodeid)
         const namespace = getNamespaceOfNodeid(nodeid)
 
-        if (!res) {
-          saveEditorValueAndUpdateStores(nodeid, namespace?.id, val, { saveApi: true, isShared })
+        if (!isBufferSame) {
+          try {
+            saveEditorValueAndUpdateStores(nodeid, namespace?.id, val, { saveApi: true, isShared })
+            clearBufferById(nodeid)
+          } catch (err) {
+            console.error('Something went wrong in Buffer clear', err)
+          }
         }
-        return !res
+
+        return !isBufferSame
       })
       .reduce((acc, cur) => acc || cur, false)
-    clearBuffer()
   }
 
   const saveNoteBuffer = async (noteId: string): Promise<boolean> => {

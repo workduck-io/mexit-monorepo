@@ -145,7 +145,7 @@ export const MenuWrapper = styled.div<{ type?: 'modal' | 'default' }>`
   outline: 0;
   max-height: 300px;
   overflow-y: auto;
-  z-index: ${({ type }) => (type === 'modal' ? 101 : 11)};
+  z-index: ${({ type }) => (type === 'modal' ? 10001 : 11)};
   ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[0])}
 `
 

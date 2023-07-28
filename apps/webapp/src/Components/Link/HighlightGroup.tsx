@@ -15,6 +15,7 @@ import {
   Link,
   RecentType,
   useHighlightStore,
+  useLinkStore,
   useMetadataStore,
   useRecentsStore,
   userPreferenceStore as useUserPreferenceStore
@@ -80,7 +81,8 @@ export const SingleHighlightWithToggle = ({ highlight, link }: { highlight: High
   const highlightMap = getHighlightMap(highlight.entityId) ?? {}
 
   const handleAddToNote = async (noteId: string) => {
-    const content = getHighlightContent(highlight)
+    const link = useLinkStore.getState().links.find((link) => link.url === highlight?.properties?.sourceUrl)
+    const content = getHighlightContent(highlight, link)
     const highlightBlockMap = getHighlightBlockMap(noteId, content)
 
     try {

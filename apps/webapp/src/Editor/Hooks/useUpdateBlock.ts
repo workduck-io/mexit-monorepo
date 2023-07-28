@@ -1,12 +1,14 @@
 import { toast } from 'react-hot-toast'
 
-import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
+import { findNode, findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
-import { ELEMENT_PARAGRAPH, useContentStore } from '@mexit/core'
+import { ELEMENT_PARAGRAPH, useAuthStore, useContentStore } from '@mexit/core'
 import { parseToMarkdown } from '@mexit/shared'
 
 import { useBufferStore } from '../../Hooks/useEditorBuffer'
 import { useUpdater } from '../../Hooks/useUpdater'
+import { PropertiyFields } from '../Components/SuperBlock/SuperBlock.types'
+import { getNodeIdFromEditor } from '../Utils/helper'
 
 type BlockDataType = Record<string, any>
 
@@ -15,7 +17,7 @@ const useUpdateBlock = () => {
   const { updateFromContent } = useUpdater()
 
   /*
-    Update block's data in an Editor using element. 
+    Update block's data in an Editor using element.
 
     This is used when component isn't a part of Editor
   */
@@ -28,6 +30,74 @@ const useUpdateBlock = () => {
     }
   }
 
+  const changeSuperBlockType = (parentId: string, blockId: string, type: string) => {
+    const editor = getPlateEditorRef()
+    const updatedBy = useAuthStore.getState().userDetails?.id
+
+    if (editor) {
+      const noteId = getNodeIdFromEditor(parentId)
+      const nodeEntry = findNode(editor, { block: true, match: { id: blockId } })
+
+      if (nodeEntry) {
+        const [element, path] = nodeEntry as any
+
+        const metadata = element.metadata || {}
+        const properties = element.properties || {}
+        const entity = properties.entity || {}
+
+        setNodes(
+          editor,
+          {
+            metadata: {
+              ...metadata,
+              updatedBy,
+              updatedAt: Date.now()
+            },
+            type,
+            properties: {
+              ...properties,
+              entity: {
+                ...entity,
+                active: type
+              }
+            }
+          },
+          { at: path, mode: 'highest' }
+        )
+      }
+    }
+  }
+
+  const updateMetadataProperties = (element: any, blockData: BlockDataType, nodePath?: any) => {
+    const editor = getPlateEditorRef()
+    const updatedBy = useAuthStore.getState().userDetails?.id
+
+    if (editor) {
+      const path = nodePath ?? findNodePath(editor, element)?.slice(0, 1)
+
+      if (path) {
+        const metadata = element.metadata || {}
+        const properties = element.properties || {}
+
+        setNodes(
+          editor,
+          {
+            metadata: {
+              ...metadata,
+              updatedBy,
+              updatedAt: Date.now()
+            },
+            properties: {
+              ...properties,
+              ...blockData
+            }
+          },
+          { at: path, mode: 'highest' }
+        )
+      }
+    }
+  }
+
   const getNoteContent = (noteId: string) => {
     const bufferContent = useBufferStore.getState().getBuffer(noteId)
     const existingContent = useContentStore.getState().getContent(noteId)?.content
@@ -36,7 +106,7 @@ const useUpdateBlock = () => {
   }
 
   /*
-    Update block's data inside a Note. 
+    Update block's data inside a Note.
 
     Use this if you can't access editor directly. For eg, in Tasks view to update status of a task.
   */
@@ -44,8 +114,9 @@ const useUpdateBlock = () => {
     noteId: string,
     options: {
       blockId: string
-      blockData: BlockDataType
-      useBuffer: boolean
+      blockData?: any
+      properties?: Partial<PropertiyFields>
+      useBuffer?: boolean
     }
   ) => {
     const content = getNoteContent(noteId)
@@ -59,7 +130,11 @@ const useUpdateBlock = () => {
         if (block.id === options.blockId) {
           updatedBlock = {
             ...block,
-            ...options.blockData
+            ...(options.blockData ?? {}),
+            properties: {
+              ...(block.properties || {}),
+              ...(options.properties || {})
+            }
           }
 
           return updatedBlock
@@ -132,7 +207,9 @@ const useUpdateBlock = () => {
     addBlockInContent,
     getSelectionInMarkdown,
     moveBlockFromNode,
-    insertInNote
+    insertInNote,
+    changeSuperBlockType,
+    updateMetadataProperties
   }
 }
 

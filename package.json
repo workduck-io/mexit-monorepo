@@ -20,13 +20,13 @@
     "*.{ts,tsx}": "eslint --cache --fix"
   },
   "dependencies": {
-    "@workduck-io/mex-search": "0.0.9",
+    "@workduck-io/mex-search": "^0.0.10",
+    "broadcast-channel": "^5.1.0",
     "buffer": "^6.0.3",
     "idb": "^7.1.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-remove-scroll": "^2.5.5",
-    "broadcast-channel": "^5.1.0"
+    "react-remove-scroll": "^2.5.5"
   },
   "devDependencies": {
     "@changesets/cli": "^2.24.1",

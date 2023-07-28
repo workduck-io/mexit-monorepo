@@ -11,17 +11,20 @@ export const ViewBlockContainer = styled.div<{
   viewType?: ViewType
 }>`
   box-sizing: border-box;
-  padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
+  /* padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`}; */
 
   ${BodyFont}
 
-  width: ${({ sidebarExpanded, theme, viewType }) =>
+  ${({ sidebarExpanded, theme, viewType }) =>
     viewType !== ViewType.Kanban
-      ? '100%'
-      : css`calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
+      ? css`
+          width: 100%;
+        `
+      : css`
+          width: calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'});
+        `}
 
   margin: ${({ theme }) => theme.spacing.tiny} 0;
-  background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   border: 1px solid transparent;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   transition: width 0.5s ease-in-out;
@@ -32,10 +35,6 @@ export const ViewBlockContainer = styled.div<{
       background: ${theme.tokens.surfaces.s[4]};
       box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
     `};
-  :hover {
-    background: ${({ theme }) => theme.tokens.surfaces.s[4]};
-    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
-  }
 
   ${({ selected, theme }) =>
     selected &&

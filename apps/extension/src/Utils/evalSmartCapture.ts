@@ -1,20 +1,29 @@
 import { ELEMENT_H2 } from '@udecode/plate'
 
-import { ELEMENT_PARAGRAPH, SmartCaptureConfig as SmartCaptureConfigType, SmartCaptureLabel } from '@mexit/core'
+import {
+  createSuperBlockContent,
+  ELEMENT_PARAGRAPH,
+  NodeEditorContent,
+  SmartCaptureConfig as SmartCaptureConfigType,
+  SmartCaptureLabel,
+  SuperBlocks
+} from '@mexit/core'
 
 import { FormBuilder } from '../Types/Form'
 
 import { convert2DArrayToTable } from './tableUtils'
 
 export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
+  let content = [] as NodeEditorContent
+
   if (convertToTable) {
     const dataArray = formData.map((item) => {
       return [item.label, item.value]
     })
 
-    return [convert2DArrayToTable(dataArray)]
-  } else
-    return formData.map((item) => {
+    content = [convert2DArrayToTable(dataArray)]
+  } else {
+    content = formData.map((item) => {
       //TODO: Add cases for all types
       if (item.properties.type == ELEMENT_PARAGRAPH) {
         return {
@@ -41,6 +50,9 @@ export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
         }
       }
     })
+  }
+
+  return createSuperBlockContent(SuperBlocks.CAPTURE, content)
 }
 
 const extractData = (rule: SmartCaptureLabel) => {

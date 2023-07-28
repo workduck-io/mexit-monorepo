@@ -40,11 +40,12 @@ export const AddTagMenu = ({ tags, addTag, createTag, root, link }: AddTagMenuPr
         </StyledTag>
       }
       allowSearch
+      type="modal"
       onCreate={onCreateNewTag}
       searchPlaceholder={`Search for a tag`}
       root={root}
     >
-      {tags.map((t) => (
+      {tags?.map((t) => (
         <MenuItem
           key={`NewTagMenu-${t.value}`}
           icon={{ type: 'ICON', value: 'ri:hashtag' }}

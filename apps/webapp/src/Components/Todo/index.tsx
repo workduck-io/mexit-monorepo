@@ -10,7 +10,7 @@ import { getNodeIdFromEditor } from '../../Editor/Utils/helper'
 
 import { TodoBase } from './Todo'
 
-const Todo = (props: any) => {
+const Todo = (props) => {
   const { attributes, children, element } = props
 
   const rootProps = getRootProps(props)
@@ -21,7 +21,7 @@ const Todo = (props: any) => {
 
   const readOnly = useReadOnly()
   const editorId = usePlateId()
-  // const nodeid = useEditorStore((store) => store.node.nodeid)
+
   const nodeid = getNodeIdFromEditor(editorId)
 
   const showDelete = !hideDelete && !readOnly
@@ -30,9 +30,9 @@ const Todo = (props: any) => {
     const editor = getPlateEditorRef()
     const blockNode = getNodeEntries(editor, {
       at: [],
-      match: (node) => element.id === node.id,
-      block: true
+      match: (node) => element.id === node.id
     })
+
     try {
       const [_, path] = Array.from(blockNode)[0]
       deleteText(editor, { at: [path[0]] })
@@ -53,7 +53,6 @@ const Todo = (props: any) => {
       showOptions={selected && focused}
       todoid={element?.id}
       showDelete={showDelete}
-      showPriority
       parentNodeId={nodeid}
       controls={{
         onDeleteClick

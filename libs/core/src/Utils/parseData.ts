@@ -303,9 +303,10 @@ export const getMenuItem = (
   onSelect: any,
   disabled?: boolean,
   icon?: MIcon,
-  options?: Array<MenuListItemType>
+  options?: Array<MenuListItemType>,
+  id?: string
 ) => ({
-  id: label,
+  id: id ?? label,
   label,
   onSelect,
   icon,

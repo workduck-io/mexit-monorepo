@@ -1,98 +1,92 @@
-import {
-  directKeys,
-  DirectProperties,
-  directPropertyKeys,
-  ElementHighlightMetadata,
-  extractMetadata,
-  generateTempId,
-  mappedKeys,
-  useAuthStore
-} from '@mexit/core'
+import { useAuthStore } from '../Stores'
+import { NodeEditorContent } from '../Types'
 
+import { generateTempId } from './idGenerator'
+import { directKeys, DirectProperties, directPropertyKeys, mappedKeys } from './serializer'
+
+interface SerializedBlock {
+  id: string
+  type: string
+  children: SerializedBlock[]
+  properties?: any
+}
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace SerDesContent {
+  export const serialize = (content: NodeEditorContent) => {
+    const serializedContent = content.map((block) => {
+      if (Object.keys(serializeSpecial).includes(block.type)) {
+        return serializeSpecial[block.type](block)
+      }
+    })
+
+    return serializedContent
+  }
+}
 
 // From content to api
-export const serializeContent = (content: any[], nodeid: string, elementMetadata?: ElementHighlightMetadata) => {
+export const serializeContent = (content: any[]) => {
   return content.map((el) => {
     if (Object.keys(serializeSpecial).includes(el.type)) {
-      return serializeSpecial[el.type](el, nodeid)
+      return serializeSpecial[el.type](el)
     }
-    const nl: any = {}
+
+    const serializedBlock: SerializedBlock = {
+      id: el.id,
+      type: el.type,
+      children: undefined
+    }
+
     const directProperties: DirectProperties = {}
-
-    if (el.id) {
-      nl.id = el.id
-    } else {
-      nl.id = generateTempId()
-    }
-
-    if (elementMetadata) {
-      nl.elementMetadata = elementMetadata
-      if (el?.highlight) delete el['highlight']
-    } else if (el?.metadata) {
-      Object.keys(el.metadata).forEach((k) => {
-        nl[k] = el.metadata[k]
-      })
-    }
-
-    if (el.type) {
-      if (el.type !== 'paragraph') {
-        nl.elementType = el.type
-      }
-    }
 
     Object.keys(el).forEach((k) => {
       if (directPropertyKeys.includes(k)) {
         directProperties[k] = el[k]
       } else if (directKeys.includes(k)) {
-        nl[k] = el[k]
+        serializedBlock[k] = el[k]
       } else if (mappedKeys[k] !== undefined) {
-        nl[mappedKeys[k]] = el[k]
+        serializedBlock[mappedKeys[k]] = el[k]
       }
     })
 
-    const nlproperties = {
-      ...directProperties,
-      ...el.properties
-    }
-
-    if (Object.keys(nlproperties).length > 0) {
-      nl.properties = nlproperties
+    if (Object.keys(directProperties).length > 0) {
+      serializedBlock.properties = directProperties
     }
 
     if (el.children) {
-      nl.children = serializeContent(el.children, nodeid, elementMetadata)
+      serializedBlock.children = serializeContent(el.children)
     }
 
-    return nl
+    return serializedBlock
   })
 }
 
-export const serializeSpecial: { [elementType: string]: (element: any, nodeid: string) => any } = {
-  ilink: (el: any, nodeid: string) => {
+export const serializeSpecial: { [elementType: string]: (element: any) => any } = {
+  ilink: (el: any) => {
     const workspaceDetails = useAuthStore.getState().workspaceDetails
     if (el.blockId)
       return {
-        elementType: 'blockILink',
+        type: 'blockILink',
         blockID: el.blockId,
         blockAlias: el.blockValue,
         nodeID: el.value,
-        id: el.id ?? generateTempId(),
+        id: el.id,
         workspaceID: workspaceDetails.id
       }
     else
       return {
-        elementType: 'nodeILink',
+        type: 'nodeILink',
         nodeID: el.value,
-        id: el.id ?? generateTempId(),
+        id: el.id,
         workspaceID: workspaceDetails.id
       }
   },
-  a: (el: any, nodeid: string) => {
+  a: (el: any) => {
     return {
-      elementType: 'webLink',
+      type: 'webLink',
       url: el.url,
-      id: el.id ?? generateTempId(),
-      children: serializeContent(el.children ?? [], nodeid)
+      id: el.id,
+      children: serializeContent(el.children ?? [])
     }
   }
 }
@@ -134,17 +128,11 @@ export const deserializeContent = (sanatizedContent: any[]) => {
       const dEl = deserializeSpecial[el.elementType](el)
       return dEl
     }
-    const nl: any = {}
 
-    if (el.elementType !== 'paragraph' && el.elementType !== undefined) {
-      nl.type = el.elementType
+    const nl: any = {
+      type: el.type,
+      id: el.id
     }
-
-    if (el.id !== undefined) {
-      nl.id = el.id
-    }
-
-    nl.metadata = extractMetadata(el)
 
     // Properties
     if (el.properties) {

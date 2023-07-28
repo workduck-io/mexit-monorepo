@@ -1,12 +1,9 @@
 import {
   convertContentToRawText,
-  ELEMENTS_IN_OUTLINE,
   getTagsFromContent,
   getTitleFromContent,
   getTodosFromContent,
   HighlightAnalysis,
-  HIGHLIGHTED_ELEMENTS,
-  LIST_ELEMENTS,
   NodeEditorContent,
   SearchRepExtra,
   TodoType
@@ -56,62 +53,77 @@ const getOutline = (content: NodeEditorContent, options?: AnalysisOptions): Outl
   // console.log('getOutline', content)
   if (!content) return []
   const outline: OutlineItem[] = []
-  let curHighlighted = ''
-  let lastLevel = 1
-  content.forEach((item) => {
-    if (item && item.type) {
-      let title = ''
-      const extraKeys = options?.modifier ? Object.keys(options?.modifier) : []
+  const curHighlighted = ''
+  const lastLevel = 1
 
-      if (extraKeys.includes(item.type)) {
-        if (options?.modifier?.[item.type]) {
-          const blockKey = options?.modifier[item.type].keyToIndex
-          title = options?.modifier[item.type].replacements[item[blockKey]]
-        }
-      }
+  content.map((superBlock) => {
+    outline.push({
+      type: superBlock.type,
+      title:
+        superBlock.properties.title ??
+        convertContentToRawText(superBlock.children, ' ', {
+          extra: options?.modifier
+        }),
+      id: superBlock.id,
+      level: 1
+    })
 
-      // Headings
-      if (ELEMENTS_IN_OUTLINE.includes(item.type.toLowerCase())) {
-        title = convertContentToRawText(item.children, ' ', { extra: options?.modifier })
-        if (title.trim() !== '')
-          outline.push({
-            type: item.type,
-            title: title,
-            id: item.id,
-            level: ELEMENTS_IN_OUTLINE.indexOf(item.type) + 1
-          })
-        curHighlighted = ''
-        lastLevel = ELEMENTS_IN_OUTLINE.indexOf(item.type) + 1
-      } // Lists
-      else if (LIST_ELEMENTS.includes(item.type.toLowerCase())) {
-        if (item.children && item.children[0]) {
-          title = convertContentToRawText(item.children ? getSingle(item.children) : '', ' ', {
-            extra: options?.modifier
-          })
-          if (title.trim() !== '')
-            outline.push({
-              type: item.type,
-              title: title,
-              id: item.id,
-              level: lastLevel
-            })
-        }
-        curHighlighted = ''
-      } else if (HIGHLIGHTED_ELEMENTS.includes(item.type.toLowerCase())) {
-        if (curHighlighted !== item.type) {
-          title = convertContentToRawText(item.children, ' ', { extra: options?.modifier })
-          if (title.trim() !== '')
-            outline.push({
-              type: item.type,
-              title: title,
-              id: item.id,
-              level: lastLevel
-            })
-        }
-        curHighlighted = item.type
-      } else curHighlighted = ''
-    }
+    // blockContent.forEach((item) => {
+    //   if (item && item.type) {
+    //     let title = ''
+    //     const extraKeys = options?.modifier ? Object.keys(options?.modifier) : []
+
+    //     if (extraKeys.includes(item.type)) {
+    //       if (options?.modifier?.[item.type]) {
+    //         const blockKey = options?.modifier[item.type].keyToIndex
+    //         title = options?.modifier[item.type].replacements[item[blockKey]]
+    //       }
+    //     }
+
+    //     // Headings
+    //     if (ELEMENTS_IN_OUTLINE.includes(item.type.toLowerCase())) {
+    //       title = convertContentToRawText(item.children, ' ', { extra: options?.modifier })
+    //       if (title.trim() !== '')
+    //         outline.push({
+    //           type: item.type,
+    //           title: title,
+    //           id: item.id,
+    //           level: ELEMENTS_IN_OUTLINE.indexOf(item.type) + 1
+    //         })
+    //       curHighlighted = ''
+    //       lastLevel = ELEMENTS_IN_OUTLINE.indexOf(item.type) + 1
+    //     } // Lists
+    //     else if (LIST_ELEMENTS.includes(item.type.toLowerCase())) {
+    //       if (item.children && item.children[0]) {
+    //         title = convertContentToRawText(item.children ? getSingle(item.children) : '', ' ', {
+    //           extra: options?.modifier
+    //         })
+    //         if (title.trim() !== '')
+    //           outline.push({
+    //             type: item.type,
+    //             title: title,
+    //             id: item.id,
+    //             level: lastLevel
+    //           })
+    //       }
+    //       curHighlighted = ''
+    //     } else if (HIGHLIGHTED_ELEMENTS.includes(item.type.toLowerCase())) {
+    //       if (curHighlighted !== item.type) {
+    //         title = convertContentToRawText(item.children, ' ', { extra: options?.modifier })
+    //         if (title.trim() !== '')
+    //           outline.push({
+    //             type: item.type,
+    //             title: title,
+    //             id: item.id,
+    //             level: lastLevel
+    //           })
+    //       }
+    //       curHighlighted = item.type
+    //     } else curHighlighted = ''
+    //   }
+    // })
   })
+
   return outline
 }
 

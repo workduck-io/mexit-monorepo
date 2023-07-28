@@ -54,16 +54,18 @@ import { MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
-import { withBlockOptions } from '../Components/Blocks'
 import { PlateFloatingLink } from '../Components/FloatingLink'
 
-import { createBlockModifierPlugin } from './createBlockModifierPlugin'
 import { createBlurSelectionPlugin } from './createBlurSelection'
 import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { createILinkPlugin } from './createILinkPlugin'
 import { createInlineBlockPlugin } from './createInlineBlockPlugin'
 import { createMentionPlugin } from './createMentionsPlugin'
-import { createSectionSeparatorPlugin } from './createSectionSeparatorPlugin'
+import { createSmartCaptureSuperBlockPlugin } from './createSmartCaptureSuperBlockPlugin'
+import { createSuperBlockPlugin } from './createSuperBlock'
+import { createContentSuperBlockPlugin } from './createSuperContentBlock'
+import { createHighlightSuperBlockPlugin } from './createSuperHighlightPlugins'
+import { createTaskSuperBlockPlugin } from './createSuperTaskPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
@@ -102,14 +104,18 @@ export const linkPlugin = {
 
 export const generatePlugins = (options: PluginOptionType) => {
   const Plugins: PlatePlugin[] = [
-    // editor
+    // Super blocks
+    createSuperBlockPlugin(),
+    createContentSuperBlockPlugin(),
+    createTaskSuperBlockPlugin(),
+    createHighlightSuperBlockPlugin(),
+    createSmartCaptureSuperBlockPlugin(),
 
     // elements
     createParagraphPlugin(), // paragraph element
     createBlockquotePlugin(), // blockquote element
     createCodeBlockPlugin(), // code block element
     createHeadingPlugin(), // heading elements
-    createSectionSeparatorPlugin(),
 
     // Marks
     createBoldPlugin(), // bold mark
@@ -172,7 +178,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     createNodeIdPlugin(optionsCreateNodeIdPlugin),
 
     // Shows share link, comments and reactions attached to the block
-    options?.include?.blockModifier !== true ? undefined : createBlockModifierPlugin(),
+    // options?.include?.blockModifier !== true ? undefined : createBlockModifierPlugin(),
 
     // serialization / deseriailization
 
@@ -227,7 +233,7 @@ export const generatePlugins = (options: PluginOptionType) => {
 export const generateEditorPluginsWithComponents = (components: Record<string, any>, options?: PluginOptionType) => {
   const wrappedComponents = options?.exclude?.dnd
     ? components
-    : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
+    : withStyledDraggables(withStyledPlaceHolders(components))
 
   const plugins = createPlugins(generatePlugins(options), {
     components: wrappedComponents
@@ -242,7 +248,7 @@ export const useEditorPlugins = (components: Record<string, any>, options?: Plug
 
   const wrappedComponents = options?.exclude?.dnd
     ? components
-    : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
+    : withStyledDraggables(withStyledPlaceHolders(components))
 
   const plugins = createPlugins(
     generatePlugins({

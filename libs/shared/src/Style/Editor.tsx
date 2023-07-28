@@ -251,7 +251,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
   h3,
   h4,
   h5 {
-    margin: 2rem 0 1.3rem;
+    margin: 0.5rem 0 1rem;
     line-height: 1.3;
     font-weight: 600;
     color: ${({ theme }) => theme.tokens.text.heading};

@@ -5,9 +5,9 @@ import { CheckBoxWrapper, EditorStyles } from '@mexit/shared'
 import { ModalSection } from '../../../Style/Refactor'
 
 export const TaskEditorWrapper = styled.section<{ withMaxHeight?: boolean }>`
-  padding: ${({ theme }) => theme.spacing.medium};
+  /* padding: ${({ theme }) => theme.spacing.medium}; */
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background-color: ${({ theme }) => theme.tokens.surfaces.s[0]};
+  /* background-color: ${({ theme }) => theme.tokens.surfaces.s[0]}; */
   margin: ${({ theme }) => theme.spacing.large} 0;
   ${({ withMaxHeight }) => withMaxHeight && `height: 22vh;`}
   max-height: 24vh;

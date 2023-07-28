@@ -24,6 +24,7 @@ const AddToNotes = () => {
 
   const onSelect = (nodeId: string) => {
     const highlight = useLayoutStore.getState().drawer?.data as Highlight
+
     setDrawerState({
       type: DrawerType.LOADING,
       data: {

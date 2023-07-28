@@ -3,6 +3,7 @@ import {
   batchArray,
   DEFAULT_NAMESPACE,
   defaultContent,
+  deserializeContent,
   extractMetadata,
   GET_REQUEST_MINIMUM_GAP_IN_MS,
   getDefaultContent,
@@ -11,6 +12,7 @@ import {
   mog,
   NodeEditorContent,
   removeNulls,
+  serializeContent,
   useAuthStore,
   useContentStore,
   useMetadataStore,
@@ -18,7 +20,6 @@ import {
 } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
-import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
 import { useInternalLinks } from '../useInternalLinks'
@@ -66,7 +67,7 @@ export const useApi = () => {
       title: getTitleFromNoteId(noteID),
       referenceID: options?.parentNoteId,
       namespaceID: namespaceID,
-      data: serializeContent(content, noteID),
+      data: serializeContent(content),
       tags: getTagsFromContent(content)
     }
 
@@ -105,7 +106,7 @@ export const useApi = () => {
       title: getTitleFromNoteId(noteID),
       namespaceID: namespaceID,
       tags: getTagsFromContent(options.content),
-      data: serializeContent(options.content, noteID)
+      data: serializeContent(options.content)
     }
     mog('BulkCreateNodes', { reqData, noteID, namespaceID, options })
     setContent(noteID, options.content)
@@ -131,7 +132,7 @@ export const useApi = () => {
   const appendToNode = async (noteId: string, content: NodeEditorContent, options?: { isShared?: boolean }) => {
     const reqData = {
       type: 'ElementRequest',
-      elements: serializeContent(content, noteId)
+      elements: serializeContent(content)
     }
 
     // * TODO: Add append to Note for shared notes
@@ -179,7 +180,7 @@ export const useApi = () => {
       title: title || getTitleFromNoteId(noteID),
       namespaceID: namespaceID,
       tags: getTagsFromContent(content),
-      data: serializeContent(content ?? defaultContent.content, noteID)
+      data: serializeContent(content ?? defaultContent.content)
     }
 
     if (isShared) {
@@ -319,7 +320,7 @@ export const useApi = () => {
       type: 'SnippetRequest',
       title: snippetTitle,
       namespaceIdentifier: DEFAULT_NAMESPACE,
-      data: serializeContent(content ?? defaultContent.content, snippetId),
+      data: serializeContent(content ?? defaultContent.content),
       template: template ?? false
     }
 

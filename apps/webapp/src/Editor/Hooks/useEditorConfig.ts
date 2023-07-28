@@ -1,8 +1,11 @@
 import { useMemo } from 'react'
 
+import { getBlockAbove } from '@udecode/plate'
+
 import {
   apiURLs,
   ComboboxType,
+  ELEMENT_EXCALIDRAW,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
@@ -11,12 +14,11 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TAG,
-  ELEMENT_TODO_LI,
+  getDefaultContent,
   getMIcon,
-  mog,
   PromptRenderType,
   SEPARATOR,
-  TodoStatus,
+  SuperBlocks,
   useAuthStore,
   useDataStore,
   useEditorStore,
@@ -43,6 +45,8 @@ import { ComboboxKey } from '../Types/Combobox'
 import { ComboboxConfig, ComboConfigData } from '../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../Utils/helper'
 
+import useUpdateBlock from './useUpdateBlock'
+
 export const useEditorPluginConfig = (editorId: string, options?: PluginOptionType): ComboboxConfig => {
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
@@ -54,6 +58,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const { openReminderModal } = useOpenReminderModal()
   const { getSnippetConfigs } = useSnippets()
   const snippetConfigs = getSnippetConfigs()
+  const { updateMetadataProperties } = useUpdateBlock()
   const { params, location } = useRouting()
   const mentionable = useMentionStore((state) => state.mentionable)
   const invitedUsers = useMentionStore((state) => state.invitedUsers)
@@ -175,8 +180,22 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       },
       tag: {
         slateElementType: ELEMENT_TAG,
-        newItemHandler: (newItem) => {
+        newItemHandler: (newItem, parent, editor) => {
           addTag(newItem)
+
+          const node = getBlockAbove(editor, { block: true, mode: 'highest' })
+
+          if (node) {
+            const [element, path]: any = node
+
+            const tags = element.properties?.tags ?? []
+
+            updateMetadataProperties(
+              element,
+              { tags: [...tags.filter((t) => t.value !== newItem), { value: newItem }] },
+              path
+            )
+          }
           return newItem
         },
         renderElement: TagComboboxItem
@@ -190,7 +209,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         slateElementType: 'internal',
         newItemHandler: (path, openedNoteId?) => {
           const openedNode = useDataStore.getState().ilinks.find((l) => l.nodeid === openedNoteId)
-          mog('new item here is', { path, openedNoteId, openedNode })
           const note = createNewNote({
             path: path.startsWith(SEPARATOR) ? `${openedNode?.path}${path}` : path,
             parent: path.startsWith(SEPARATOR)
@@ -210,7 +228,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         ? {
             slateElementType: ELEMENT_MENTION,
             onItemInsert: (alias) => {
-              mog('Inserted new item', { alias })
               grantUserAccessOnMention(alias, nodeid)
             },
             newItemHandler: (newAlias) => {
@@ -226,7 +243,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         slateElementType: ELEMENT_ILINK,
         newItemHandler: (path, openedNoteId?) => {
           const openedNode = useDataStore.getState().ilinks.find((l) => l.nodeid === openedNoteId)
-          mog('new item here is', { path, openedNoteId, openedNode })
           const note = createNewNote({
             path: path.startsWith(SEPARATOR) ? `${openedNode?.path}${path}` : path,
             parent: path.startsWith(SEPARATOR)
@@ -258,13 +274,18 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         slateElementType: AI_RENDER_TYPE,
         command: 'ai'
       },
+      canvas: {
+        slateElementType: ELEMENT_EXCALIDRAW,
+        command: 'canvas'
+      },
       task: {
-        slateElementType: ELEMENT_TODO_LI,
+        slateElementType: SuperBlocks.TASK,
         command: 'task',
         getData: () => ({
-          type: ELEMENT_TODO_LI,
-          children: [{ text: '' }],
-          status: TodoStatus.todo
+          ...getDefaultContent(SuperBlocks.TASK),
+          properties: {
+            status: 'todo'
+          }
         })
       },
       table: {

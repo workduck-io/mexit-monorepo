@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components'
 import { MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { mog, NodeEditorContent , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+import { mog, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { FlexBetween } from '@mexit/shared'
 
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
@@ -60,7 +60,15 @@ const Form: React.FC<FormProps> = ({ page, config }) => {
 
     const convertToTable = useSputlitStore.getState().smartCaptureSaveType === 'tabular'
 
-    const blocks = formToBlocks(formData, convertToTable) as NodeEditorContent
+    const blocks = [
+      {
+        ...formToBlocks(formData, convertToTable),
+        properties: {
+          title: window.document.title,
+          url: window.location.href
+        }
+      }
+    ]
 
     try {
       if (blocks) {

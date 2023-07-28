@@ -102,6 +102,9 @@ export const EditorContainer = styled.div`
   overflow: hidden;
   height: 100%;
   width: 100%;
+  & > div {
+    max-width: 100%;
+  }
 `
 
 export const EditorPreviewControls = styled.div<{ hasTags?: boolean }>`

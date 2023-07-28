@@ -1,12 +1,15 @@
 import { uniq } from 'lodash'
 
-import { Highlight } from '../Types'
+import { Link } from '../Stores'
+import { Highlight, SUPER_BLOCK_PREFIX, SuperBlocks } from '../Types'
 import { NodeEditorContent, NodeMetadata } from '../Types/Editor'
 import { MIcon } from '../Types/Store'
 
-import { updateIds } from './dataTransform'
+import { createSuperBlockContent, updateIds } from './dataTransform'
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_LINK, ELEMENT_MENTION, ELEMENT_UL } from './editorElements'
-import { generateTempId } from './idGenerator'
+import { generateHighlightId, generateTempId } from './idGenerator'
+import { convertContentToRawText } from './parseData'
+import { getSlug } from './strings'
 
 const ELEMENT_TODO_LI = 'action_item'
 const ELEMENT_PARAGRAPH = 'p'
@@ -19,6 +22,12 @@ export const getTagsFromContent = (content: any[]): string[] => {
     if (n.type === 'tag' || n.type === ELEMENT_TAG) {
       tags.push(n.value)
     }
+
+    if (n.type?.startsWith(SUPER_BLOCK_PREFIX) && n.properties?.tags) {
+      const superBlockTags = n.properties.tags.map((t) => t.value)
+      tags.push(...superBlockTags)
+    }
+
     if (n.children && n.children.length > 0) {
       tags = tags.concat(getTagsFromContent(n.children))
     }
@@ -92,10 +101,11 @@ export const removeNulls = (obj) => {
 export const extractMetadata = (data: any, defaults?: { icon: MIcon }): NodeMetadata => {
   if (data) {
     const metadata: NodeMetadata = {
-      lastEditedBy: data.lastEditedBy,
+      updatedBy: data.lastEditedBy,
       updatedAt: data.updatedAt,
       createdBy: data.createdBy,
       createdAt: data.createdAt,
+      properties: data?.properties,
       elementMetadata: data?.elementMetadata,
       publicAccess: data?.publicAccess,
       iconUrl: data?.metadata?.iconUrl,
@@ -126,30 +136,41 @@ export const insertItemInArray = <T>(array: T[], items: Array<T>, index: number)
   ...array.slice(index)
 ]
 
-export const getHighlightContent = (highlight: Highlight) => {
+export const getHighlightContent = (highlight: Highlight, link?: Link) => {
   const blockContent = highlight.properties.content
-  if (blockContent)
-    return blockContent.map((block) => ({
-      ...updateIds(block),
-      metadata: {
-        elementMetadata: {
-          id: highlight.entityId,
-          type: 'highlightV1'
+  const titleOfBlock = getSlug(convertContentToRawText(blockContent))
+
+  const properties = {
+    entity: {
+      active: SuperBlocks.HIGHLIGHT,
+      values: {
+        [SuperBlocks.HIGHLIGHT]: {
+          id: generateHighlightId(),
+          parent: highlight.entityId
         }
       }
+    },
+    title: titleOfBlock,
+    url: highlight?.properties?.sourceUrl
+  }
+
+  if (blockContent) {
+    const content = blockContent.map((block) => ({
+      ...updateIds(block)
     }))
+
+    return [
+      {
+        ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, content),
+        properties
+      }
+    ]
+  }
 
   return [
     {
-      type: ELEMENT_PARAGRAPH,
-      id: generateTempId(),
-      metadata: {
-        elementMetadata: {
-          id: highlight.entityId,
-          type: 'highlightV1'
-        }
-      },
-      children: [{ text: highlight.properties?.saveableRange?.text ?? '' }]
+      ...createSuperBlockContent(SuperBlocks.HIGHLIGHT, [{ text: highlight.properties?.saveableRange?.text ?? '' }]),
+      properties
     }
   ]
 }

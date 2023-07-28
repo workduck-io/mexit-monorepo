@@ -3,7 +3,7 @@ import { get } from 'lodash'
 
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { SEPARATOR, UserAccessTable } from '@mexit/core'
+import { getSuperBlockFields, SEPARATOR, UserAccessTable } from '@mexit/core'
 
 import { getSortFunction, sortGroup } from './sort'
 
@@ -17,6 +17,10 @@ export const keysToExcludeInGrouping = [
   'caption',
   'url',
   'updatedAt',
+  'title',
+  'active',
+  'entity',
+  'value',
   'lastEditedBy',
   'tags',
   'text',
@@ -29,6 +33,10 @@ export const keysToExcludeInSorting = [
   'caption',
   'updatedBy',
   'lastEditedBy',
+  'title',
+  'active',
+  'entity',
+  'value',
   'tags',
   'parent',
   'type'
@@ -53,7 +61,6 @@ type KeyFrequencyMapType = Record<string, number>
 
 export const getKeyFrequencyMap = (data: Record<string, any>[]): KeyFrequencyMapType => {
   const keyFrequencyMap: KeyFrequencyMapType = {}
-
   const iterateObject = (obj: Record<string, any>, keyPrefix = '') => {
     Object.keys(obj).forEach((objKey) => {
       const key = keyPrefix ? `${keyPrefix}.${objKey}` : objKey
@@ -95,7 +102,8 @@ export const groupItems = (
   const groupedValues = {}
 
   items.forEach((item) => {
-    const value = get(item, options.groupBy) ?? 'Ungrouped'
+    const superBlock = getSuperBlockFields(item)
+    const value = get(superBlock, options.groupBy) ?? 'Ungrouped'
 
     if (!groupedValues[value]) {
       groupedValues[value] = []

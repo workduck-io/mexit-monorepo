@@ -1,6 +1,5 @@
 import { API, useSmartCaptureStore } from '@mexit/core'
 
-
 export const useSmartCapture = () => {
   const setConfig = useSmartCaptureStore((s) => s.setSmartCaptureList)
 

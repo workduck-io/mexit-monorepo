@@ -1,4 +1,4 @@
-import { Margin } from '@mexit/shared'
+import { Margin, ProfileImage } from '@mexit/shared'
 
 import {
   ShareAlias,
@@ -12,7 +12,6 @@ import {
   TableContainer
 } from '../../../Components/Mentions/styles'
 import { DeletionWarning } from '../../../Components/Modals/DeleteSpaceModal/styled'
-import { ProfileImage } from '../../../Components/User/ProfileImage'
 import { MembersContainer, SmallHeading } from '../styled'
 
 const Members = ({ members }) => {

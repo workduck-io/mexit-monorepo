@@ -4,11 +4,10 @@ import { Icon } from '@iconify/react'
 import { debounce } from 'lodash'
 
 import { MIcon, Reaction as ReactionType, UserReaction } from '@mexit/core'
-import { IconDisplay, Tooltip } from '@mexit/shared'
+import { IconDisplay, ProfileImage, Tooltip } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { reactionsWithCount } from '../../Hooks/useReactions'
-import { ProfileImage } from '../User/ProfileImage'
 
 import {
   CompressedReactionGroup,
@@ -103,7 +102,6 @@ export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: R
     if (details === null && !fetchingDetails) {
       setFetchingDetails(true)
       getReactionDetails().then((res) => {
-        // mog('got reaction details', { res })
         setDetails(res)
       })
     }

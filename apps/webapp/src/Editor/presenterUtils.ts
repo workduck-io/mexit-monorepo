@@ -13,6 +13,7 @@ export const splitToSlides = (content: NodeEditorContent): NodeEditorContent[][]
           acc[currentSlideIdx] = [...currentSlide, []]
           return acc
         }
+
         acc[currentSlideIdx][currectSectionIdx] = [...currentSlide[currectSectionIdx], val]
 
         return acc

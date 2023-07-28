@@ -115,14 +115,15 @@ export const DefaultMIcons = {
   SPACE: getMIcon('ICON', 'heroicons-outline:view-grid'),
   ARCHIVE: getMIcon('ICON', 'ri:archive-line'),
   COPY: getMIcon('ICON', 'ri:file-copy-line'),
-  DELETE: getMIcon('ICON', 'ri:delete-bin-5-line'),
+  SAVE: getMIcon('ICON', 'ri:save-line'),
+  DELETE: getMIcon('ICON', 'mingcute:delete-line'),
   MOVE: getMIcon('ICON', 'ri:anticlockwise-2-fill'),
   SEND: getMIcon('ICON', 'ph:arrow-bend-up-right-bold'),
   EDIT: getMIcon('ICON', 'ri:pencil-fill'),
   ADD: getMIcon('ICON', 'ic:round-plus'),
   CLEAR: getMIcon('ICON', 'ic:round-clear'),
   REMINDER: getMIcon('ICON', 'ri:timer-flash-line'),
-  TEXT: getMIcon('ICON', 'ri:paragraph'),
+  TEXT: getMIcon('ICON', 'mingcute:text-fill'),
   GROUPBY: getMIcon('ICON', 'fluent:group-list-20-filled'),
   SELECT: getMIcon('ICON', 'bxs:select-multiple'),
   IMAGE: getMIcon('ICON', 'bx:image'),
@@ -133,7 +134,8 @@ export const DefaultMIcons = {
   WORKSPACE: getMIcon('ICON', 'icon-park-solid:app-switch'),
   PEOPLE: getMIcon('ICON', 'bi:people'),
   NOTIFICATION: getMIcon('ICON', 'bx:notification'),
-  CALENDAR: getMIcon('ICON', 'mdi:calendar')
+  CALENDAR: getMIcon('ICON', 'mdi:calendar'),
+  MENU: getMIcon('ICON', 'solar:menu-dots-bold')
 }
 
 export const ForwardlinkIcon = {
@@ -172,4 +174,5 @@ export const addIconsToIconify = () => {
   addIcon('mex:task-todo', TaskTodoIcon)
   addIcon('mex:task-progress', TaskProgressIcon)
   addIcon('mex:task-complete', TaskCompleteIcon)
+  addIcon('mex:task-backlog', TaskCompleteIcon)
 }

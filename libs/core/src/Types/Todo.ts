@@ -21,6 +21,36 @@ export enum TodoStatus {
   completed = 'completed'
 }
 
+export enum TaskStatusType {
+  backlog = 'backlog',
+  todo = 'todo',
+  inProgress = 'in-progress',
+  completed = 'completed'
+}
+
+export const TaskStatus = {
+  [TaskStatusType.backlog]: {
+    id: TaskStatusType.backlog,
+    label: 'Backlog',
+    icon: 'fluent:border-none-24-filled'
+  },
+  [TaskStatusType.todo]: {
+    id: TaskStatusType.todo,
+    label: 'Todo',
+    icon: 'mex:task-todo'
+  },
+  [TaskStatusType.inProgress]: {
+    id: TaskStatusType.inProgress,
+    label: 'In progress',
+    icon: 'mex:task-progress'
+  },
+  [TaskStatusType.completed]: {
+    id: TaskStatusType.completed,
+    label: 'Completed',
+    icon: 'mex:task-complete'
+  }
+}
+
 export const TodoRanks: Record<PriorityType, number> = {
   noPriority: 0,
   low: 1,
@@ -40,7 +70,7 @@ export type TodoType = {
   id: string
   nodeid: string
   content: NodeEditorContent
-  metadata: {
+  properties?: {
     status: TodoStatus
     priority: PriorityType
   }
@@ -79,24 +109,24 @@ export const getPrevStatus = (status: TodoStatus): TodoStatus => {
 // * Get priority data from PriorityType
 export const Priority: Record<keyof typeof PriorityType, PriorityDataType> = {
   noPriority: {
-    title: 'No Priority',
+    title: 'No priority',
     shortcut: {
       category: 'action',
       keystrokes: '$mod+4',
       title: 'No priority'
     },
-    icon: 'ph:cell-signal-none-fill',
+    icon: 'ep:semi-select',
     type: PriorityType.noPriority
   },
-  low: {
-    title: 'Low',
+  high: {
+    title: 'High',
     shortcut: {
       category: 'action',
-      keystrokes: '$mod+3',
-      title: 'Low priority'
+      keystrokes: '$mod+1',
+      title: 'Highest priority'
     },
-    icon: 'ph:cell-signal-low-fill',
-    type: PriorityType.low
+    icon: 'ph:cell-signal-full-fill',
+    type: PriorityType.high
   },
   medium: {
     title: 'Medium',
@@ -108,14 +138,14 @@ export const Priority: Record<keyof typeof PriorityType, PriorityDataType> = {
     icon: 'ph:cell-signal-medium-fill',
     type: PriorityType.medium
   },
-  high: {
-    title: 'High',
+  low: {
+    title: 'Low',
     shortcut: {
       category: 'action',
-      keystrokes: '$mod+1',
-      title: 'Highest priority'
+      keystrokes: '$mod+3',
+      title: 'Low priority'
     },
-    icon: 'ph:cell-signal-full-fill',
-    type: PriorityType.high
+    icon: 'ph:cell-signal-low-fill',
+    type: PriorityType.low
   }
 }

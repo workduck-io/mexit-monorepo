@@ -29,6 +29,7 @@ export const FILTER_ID_PREFIX = 'FILTER'
 export const COMMENT_ID_PREFIX = 'COMMENT'
 export const REACTION_ID_PREFIX = 'REACTION'
 export const HIGHLIGHT_ID_PREFIX = 'HIGHLIGHT'
+export const CONTENT_ID_PREFIX = 'CONTENT'
 const MESSAGE_ID_PREFIX = 'MESSAGE'
 
 export const HASH_SEPARATOR = '#'
@@ -52,6 +53,7 @@ export const generateCommentId = () => `${COMMENT_ID_PREFIX}${ID_SEPARATOR}${sho
 export const generateReactionId = () => `${REACTION_ID_PREFIX}${ID_SEPARATOR}${shortId()}`
 export const generateHighlightId = () => `${HIGHLIGHT_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
 export const generateMessageId = () => `${MESSAGE_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
+export const generateContentId = () => `${CONTENT_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
 
 export const cleanString = (str: string) =>
   str?.startsWith(`${DRAFT_PREFIX}${SEPARATOR}`) ? str.replace(`${DRAFT_PREFIX}${SEPARATOR}`, '') : str

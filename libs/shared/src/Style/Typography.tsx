@@ -44,6 +44,13 @@ export const TextElement = styled.span<{ size?: 'small' | 'medium' | 'large' }>`
   line-height: normal !important;
 `
 
+export const Text = styled.div`
+  color: ${({ theme }) => theme.tokens.text.default};
+  opacity: 0.9;
+  font-size: 14px;
+  line-height: 1.58;
+`
+
 export const Description = styled.div<{ size?: 'small' | 'medium' | 'large' }>`
   font-size: ${({ size = 'medium' }) => {
     switch (size) {
