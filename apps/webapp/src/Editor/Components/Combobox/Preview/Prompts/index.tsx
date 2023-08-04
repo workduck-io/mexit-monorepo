@@ -112,7 +112,14 @@ const PromptPreview: React.FC<PromptPreviewProps> = ({ promptId }) => {
 
           //TODO: This is where the streaming lambda has to be used
           API.prompt
-            .generateResult({ promptId })
+            .generateResult(
+              { promptId },
+              {
+                headers: {
+                  'Access-Control-Allow-Origin': '*' // Required for CORS support to work
+                }
+              }
+            )
             .then((res) => {
               if (res) {
                 const result = [res.content]
