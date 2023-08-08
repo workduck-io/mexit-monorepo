@@ -5,13 +5,14 @@ import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
-import { ToolbarTooltip } from '@workduck-io/mex-components'
+import { Button, ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getMenuItem, MIcon } from '@mexit/core'
 import {
   DefaultMIcons,
   GenericFlex,
+  Group,
   IconDisplay,
   InsertMenu,
   Menu,
@@ -120,7 +121,7 @@ const CreateNewMenu = () => {
       values={
         <GenericFlex>
           <IconDisplay icon={DefaultMIcons.ADD} size={24} />
-          Add New
+          Add
         </GenericFlex>
       }
     >
@@ -208,10 +209,10 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
 
   const viewOptions = useMemo(() => {
     return [
-      getMenuItem('Update View', () => handleUpdateView(), isDefault, DefaultMIcons.EDIT),
-      getMenuItem('Clone View', () => handleCloneView(), currentFilters.length === 0, DefaultMIcons.COPY),
+      getMenuItem('Edit', () => handleUpdateView(), isDefault, DefaultMIcons.EDIT),
+      getMenuItem('Clone', () => handleCloneView(), currentFilters.length === 0, DefaultMIcons.COPY),
       getMenuItem('Save As', () => handleSaveAsView(), currentFilters.length === 0, DefaultMIcons.SAVE),
-      getMenuItem('Delete View', () => onDeleteView(), isDefault || currentFilters.length === 0, DefaultMIcons.DELETE)
+      getMenuItem('Delete', () => onDeleteView(), isDefault || currentFilters.length === 0, DefaultMIcons.DELETE)
     ]
   }, [isDefault, currentFilters])
 
@@ -239,7 +240,15 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
           )}
         </TaskHeaderTitleSection>
 
-        <CreateNewMenu />
+        <Group>
+          <Button>
+            <Group>
+              <IconDisplay icon={DefaultMIcons.SHARE} />
+              Share
+            </Group>
+          </Button>
+          <CreateNewMenu />
+        </Group>
       </StyledTaskHeader>
     </>
   )

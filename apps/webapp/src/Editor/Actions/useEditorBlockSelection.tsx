@@ -93,7 +93,7 @@ export const useEditorBlockSelection = () => {
     if (content) {
       const blockIndex = content.findIndex((block) => block.id === blockId)
 
-      if (blockIndex) {
+      if (blockIndex >= 0) {
         const path = [blockIndex]
 
         removeNodes(editor, {

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { addProperty, mog, NodeEditorContent } from '@mexit/core'
+import { addProperty, NodeEditorContent } from '@mexit/core'
 import { AIPreview, useAIOptions } from '@mexit/shared'
 
 import { generateEditorPluginsWithComponents } from '../Editor/plugins'
@@ -20,7 +20,6 @@ const AIPreviewContainer = () => {
         title: document.title
       })
     )
-    mog('CONTENT IS', { content, blockWithSource })
 
     appendAndSave({ nodeid: nodeId, content: blockWithSource })
   }

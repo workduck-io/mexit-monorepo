@@ -56,7 +56,7 @@ import { SelectionToNodeInput } from './components/SelectionToNode'
 import { SelectionToSnippetInput } from './components/SelectionToSnippet'
 
 const BallonMarkToolbarButtons = () => {
-  const [isOptionOpen, setIsOptionOpen] = React.useState<string | null>(null)
+  const [isOptionOpen, setIsOptionOpen] = React.useState<string | null>('Font Modifiers')
 
   const theme = useTheme()
   const editor = usePlateEditorRef()
