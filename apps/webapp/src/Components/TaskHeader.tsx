@@ -4,11 +4,12 @@ import { toast } from 'react-hot-toast'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
+import { useTheme } from 'styled-components'
 
 import { Button, ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getMenuItem, MIcon } from '@mexit/core'
+import { getMenuItem, MIcon, useShareModalStore } from '@mexit/core'
 import {
   DefaultMIcons,
   GenericFlex,
@@ -21,7 +22,8 @@ import {
   TaskHeader as StyledTaskHeader,
   TaskHeaderTitleSection,
   TaskViewHeaderWrapper,
-  TaskViewTitle
+  TaskViewTitle,
+  Tooltip
 } from '@mexit/shared'
 
 import { useViewFilters } from '../Hooks/todo/useTodoFilters'
@@ -134,9 +136,11 @@ const CreateNewMenu = () => {
 
 const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
   const [deleting, setDeleting] = useState(false)
+  const theme = useTheme()
 
   const { deleteView, getView } = useViews()
   const currentView = useViewStore((store) => store.currentView)
+  const openPublishModal = useShareModalStore((store) => store.openModal)
   const views = useViewStore((store) => store.views)
 
   const view = useMemo(() => {
@@ -181,6 +185,10 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
         sortType
       }
     })
+  }
+
+  const handleOpenPublish = () => {
+    openPublishModal('publish', 'view', view?.id)
   }
 
   const handleCloneView = () => {
@@ -228,6 +236,11 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
                 <Icon icon={stackLine} />
                 <span>{view?.title}</span>
                 {view?.id && !isDefault && <ViewChangeStatus viewId={view?.id} />}
+                {!view.public && (
+                  <Tooltip content="Public">
+                    <IconDisplay opacity={0.6} color={theme.tokens.colors.fade} size={20} icon={DefaultMIcons.PUBLIC} />
+                  </Tooltip>
+                )}
                 <InsertMenu
                   key={`${isDefault}-${currentFilters.length === 0}`}
                   allowSearch={false}
@@ -241,7 +254,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
         </TaskHeaderTitleSection>
 
         <Group>
-          <Button>
+          <Button onClick={handleOpenPublish}>
             <Group>
               <IconDisplay icon={DefaultMIcons.SHARE} />
               Share

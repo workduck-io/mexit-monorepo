@@ -93,13 +93,11 @@ export const useRefactor = () => {
   }
 
   const execRefactorAsync = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
-    mog('REFACTOR: FROM < TO', { from, to })
+    // mog('REFACTOR: FROM < TO', { from, to })
     const nodeID = getNodeidFromPath(from.path, from.namespaceID)
     const uniquePath = useDataStore
       .getState()
       .checkValidILink({ notePath: to.path, namespace: to.namespaceID, showAlert: false })
-
-    mog('UNIQU', { uniquePath })
 
     const res = await refactorHierarchy(
       { path: from.path.split('.').join('#'), namespaceID: from.namespaceID },

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { Indexes, SearchResult } from '@workduck-io/mex-search'
 
-import { useContentStore } from '@mexit/core'
+import { mog, useContentStore } from '@mexit/core'
 import { groupItems, keysToExcludeInGrouping, keysToExcludeInSorting, useQuery } from '@mexit/shared'
 
 import { useViewFilterStore } from './todo/useTodoFilters'
@@ -49,7 +49,9 @@ const useViewResults = (path: string) => {
     if (query.length) {
       queryIndex(Indexes.MAIN, query).then((queryResult) => {
         if (queryResult) {
-          console.log('QUIERY RESULT', queryResult)
+          mog('QUERY RESULT', {
+            queryResult
+          })
           setResults(queryResult)
         }
       })

@@ -20,6 +20,7 @@ export interface View {
   sortType?: SortType
   entities?: Array<any>
   groupBy?: string
+  public?: boolean
 
   globalJoin: GlobalFilterJoin
 }

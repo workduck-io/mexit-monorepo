@@ -5,6 +5,7 @@ import arrowLeftSLine from '@iconify/icons-ri/arrow-down-s-line'
 
 import {
   DefaultMIcons,
+  FlexBetween,
   Group,
   IconDisplay,
   ItemContent,
@@ -104,10 +105,13 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
             <StyledTreeSwitcher />
           )}
           <ItemContent>
-            <ItemTitle>
-              <IconDisplay className="defaultIcon" size={18} icon={DefaultMIcons.VIEW} />
-              <ItemTitleText>{value.properties.label}</ItemTitleText>
-            </ItemTitle>
+            <FlexBetween>
+              <ItemTitle>
+                <IconDisplay className="defaultIcon" size={18} icon={DefaultMIcons.VIEW} />
+                <ItemTitleText>{value.properties.label}</ItemTitleText>
+              </ItemTitle>
+              {value.properties.rightIcon && <IconDisplay opacity={0.5} icon={value.properties.rightIcon} />}
+            </FlexBetween>
           </ItemContent>
         </Group>
       </TreeListItem>

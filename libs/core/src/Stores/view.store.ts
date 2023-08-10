@@ -32,6 +32,21 @@ const viewStoreConfig = (set, get) => ({
   updateView: (view: View) => {
     const existing = get().views
     set({ views: [...existing.filter((v) => v.id !== view.id), view] })
+  },
+  publishView: (id: string, isPublic?: boolean) => {
+    const existing = get().views
+
+    set({
+      views: existing.map((v) => {
+        if (v.id === id) {
+          return {
+            ...v,
+            public: isPublic
+          }
+        }
+        return v
+      })
+    })
   }
 })
 

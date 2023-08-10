@@ -103,6 +103,7 @@ export const DefaultMIcons = {
   NOTE: getMIcon('ICON', 'gg:file-document'),
   SNIPPET: getMIcon('ICON', 'ri:quill-pen-line'),
   SHARED_NOTE: getMIcon('ICON', 'mex:shared-note'),
+  PUBLIC: getMIcon('ICON', 'material-symbols:public'),
   TASK: getMIcon('ICON', 'mex:task-progress'),
   VIEW: getMIcon('ICON', 'ri:stack-line'),
   TEMPLATE: getMIcon('ICON', 'ri:magic-line'),

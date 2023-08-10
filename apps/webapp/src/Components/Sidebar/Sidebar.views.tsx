@@ -9,6 +9,7 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { fuzzySearch, getParentEntity, useLayoutStore, useTreeStore } from '@mexit/core'
 import {
+  DefaultMIcons,
   EmptyMessage,
   FilteredItemsWrapper,
   IconDisplay,
@@ -56,7 +57,8 @@ const SidebarViewTree = ({ defaultItems, onClick, onContextMenu }) => {
           parentId: parent,
           properties: {
             label: view.title,
-            path: view.path
+            path: view.path,
+            rightIcon: view.public ? DefaultMIcons.PUBLIC : undefined
           },
           depth: 0,
           index: 0,

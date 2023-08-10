@@ -6,7 +6,6 @@ import styled, { useTheme } from 'styled-components'
 import {
   API_BASE_URLS,
   convertContentToRawText,
-  DefaultMIcons,
   mog,
   RecentType,
   useAuthStore,
@@ -18,6 +17,7 @@ import {
 } from '@mexit/core'
 import {
   CopyButton,
+  DefaultMIcons,
   GenericFlex,
   IconDisplay,
   MexIcon,
@@ -165,7 +165,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
             </HeadingFlex>
             <GenericFlex>
               {isNodePublic ? (
-                <MexIcon height={16} width={16} icon="material-symbols:public" onClick={onNotePublic} />
+                <MexIcon height={16} width={16} icon={DefaultMIcons.PUBLIC} onClick={onNotePublic} />
               ) : (
                 <MexIcon height={16} width={16} icon="material-symbols:public-off-rounded" onClick={onNotePublic} />
               )}

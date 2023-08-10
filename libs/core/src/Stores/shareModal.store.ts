@@ -3,7 +3,7 @@ import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
 // The invite mode is only when the editor is open and used to open on new combobox invite
-type ShareModalMode = 'invite' | 'permission'
+type ShareModalMode = 'invite' | 'permission' | 'publish'
 
 // To denote what has changed
 // Alias changes should not require a network call
@@ -33,6 +33,8 @@ interface ShareModalData {
 
   // Used only for share permissions of namespace
   namespaceid?: string
+  id?: string
+  share?: boolean
 
   fromEditor?: boolean
   // When sharing to a preexisting user from a mention
@@ -57,9 +59,18 @@ const shareModalConfig = (set, get) => ({
       open: true,
       data: {
         nodeid: context === 'note' ? id : undefined,
-        namespaceid: context === 'space' ? id : undefined
+        namespaceid: context === 'space' ? id : undefined,
+        id: context === 'view' ? id : undefined
       }
     }),
+  updateData: (data: Partial<ShareModalData>) => {
+    const updatedData = {
+      ...get().data,
+      ...data
+    }
+
+    set({ data: updatedData })
+  },
   closeModal: () => {
     set({
       open: false,
