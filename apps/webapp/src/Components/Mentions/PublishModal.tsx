@@ -16,20 +16,6 @@ export const PublishModal = ({ id }) => {
     closeModal()
   }
 
-  const handleOnShareToggle = async () => {
-    if (!id) return
-
-    if (view.public)
-      updateShareModalData({
-        share: false
-      })
-    else {
-      updateShareModalData({
-        share: true
-      })
-    }
-  }
-
   return (
     <Container>
       <Center>

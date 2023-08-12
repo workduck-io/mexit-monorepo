@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet, useParams } from 'react-router-dom'
 
@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { useBlockStore, useContentStore, useDataStore, useLayoutStore, useSnippetStore } from '@mexit/core'
+import { useBlockStore, useLayoutStore } from '@mexit/core'
 import { StyledEditor } from '@mexit/shared'
 
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
@@ -14,7 +14,6 @@ import EditorHeader from '../Components/Editor/EditorHeader'
 import Presenter from '../Components/Presenter'
 import useEditorActions from '../Hooks/useEditorActions'
 import { useAnalysis } from '../Stores/useAnalysis'
-import { initSearchIndex } from '../Workers/controller'
 
 export const EditorViewWrapper = styled.div`
   display: flex;
@@ -29,27 +28,15 @@ export const EditorViewWrapper = styled.div`
 `
 
 const EditorView = () => {
-  const [first, setFirst] = useState(true)
   useAnalysis()
   const noteId = useParams()?.nodeId
   const { resetEditor } = useEditorActions()
-  const { ilinks, archive, sharedNodes } = useDataStore()
 
   const infobar = useLayoutStore((store) => store.infobar)
-  const contents = useContentStore((state) => state.contents)
-  const snippets = useSnippetStore((state) => state.snippets)
   const focusMode = useLayoutStore((s) => s.focusMode)
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
   const toggleFocusMode = useLayoutStore((s) => s.toggleFocusMode)
-
-  useEffect(() => {
-    if (!first) {
-      initSearchIndex({ ilinks, archive, contents, snippets, sharedNodes })
-    } else {
-      setFirst(false)
-    }
-  }, [ilinks, archive, contents, snippets]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (focusMode.on) {

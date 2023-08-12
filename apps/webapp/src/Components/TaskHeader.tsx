@@ -6,10 +6,11 @@ import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 import { useTheme } from 'styled-components'
 
-import { Button, ToolbarTooltip } from '@workduck-io/mex-components'
+// import { S3FileDeleteClient } from '@workduck-io/dwindle'
+import { ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getMenuItem, MIcon, useShareModalStore } from '@mexit/core'
+import { getMenuItem, MIcon, useAuthStore, useShareModalStore } from '@mexit/core'
 import {
   DefaultMIcons,
   GenericFlex,
@@ -17,6 +18,7 @@ import {
   IconDisplay,
   InsertMenu,
   Menu,
+  MenuButton,
   MenuItem,
   PrimaryText,
   TaskHeader as StyledTaskHeader,
@@ -134,6 +136,36 @@ const CreateNewMenu = () => {
   )
 }
 
+const PublishMenu = ({ id, isPublic }) => {
+  const removeViewSnapshotFromCache = useViewStore((store) => store.removeViewSnapshot)
+  const updateShareModalData = useShareModalStore((store) => store.updateData)
+
+  const handleViewUnpublish = () => {
+    const workspace = useAuthStore.getState().getWorkspaceId()
+    const viewSnapshotKey = `${workspace}/${id}`
+    // S3FileDeleteClient({ fileName: viewSnapshotKey, public: true }).then((res) => {
+    //   removeViewSnapshotFromCache(viewSnapshotKey)
+    // })
+  }
+
+  const handlePublish = async () => {
+    if (!id) return
+
+    if (isPublic)
+      updateShareModalData({
+        id,
+        share: true
+      })
+  }
+
+  const options = useMemo(() => {
+    if (isPublic) return null
+    return [getMenuItem('Unpublish', () => handleViewUnpublish(), false)]
+  }, [isPublic])
+
+  return <MenuButton defaultValue={isPublic ? 'Re-publish' : 'Publish'} onClick={handlePublish} items={options} />
+}
+
 const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
   const [deleting, setDeleting] = useState(false)
   const theme = useTheme()
@@ -187,10 +219,6 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
     })
   }
 
-  const handleOpenPublish = () => {
-    openPublishModal('publish', 'view', view?.id)
-  }
-
   const handleCloneView = () => {
     const { id, filters, ...properties } = view
     openTaskViewModal({
@@ -236,7 +264,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
                 <Icon icon={stackLine} />
                 <span>{view?.title}</span>
                 {view?.id && !isDefault && <ViewChangeStatus viewId={view?.id} />}
-                {!view.public && (
+                {view.public && (
                   <Tooltip content="Public">
                     <IconDisplay opacity={0.6} color={theme.tokens.colors.fade} size={20} icon={DefaultMIcons.PUBLIC} />
                   </Tooltip>
@@ -254,12 +282,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
         </TaskHeaderTitleSection>
 
         <Group>
-          <Button onClick={handleOpenPublish}>
-            <Group>
-              <IconDisplay icon={DefaultMIcons.SHARE} />
-              Share
-            </Group>
-          </Button>
+          <PublishMenu id={view.id} isPublic={view.public} />
           <CreateNewMenu />
         </Group>
       </StyledTaskHeader>

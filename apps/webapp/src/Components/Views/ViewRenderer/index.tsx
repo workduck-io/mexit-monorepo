@@ -25,9 +25,10 @@ export type GroupedResult = {
   items: SearchResult[]
 }
 
-const ViewTypeRenderer: React.FC<ViewRendererProps> = (props) => {
-  const results = useViewResults(props?.view?.path)
-  const viewType = useViewFilterStore((s) => s.viewType)
+const ViewSectionRenderer: React.FC<ViewRendererProps> = (props) => {
+  const items = useViewResults(props?.view?.path)
+  const type = useViewFilterStore((s) => s.viewType)
+
   const isPublishable = useShareModalStore((store) => store.data.share)
   const publishCurrentView = useShareModalStore((store) => store.updateData)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
@@ -36,6 +37,7 @@ const ViewTypeRenderer: React.FC<ViewRendererProps> = (props) => {
   const { publishViewAPI } = useViewAPI()
 
   useEffect(() => {
+    console.log('IS PUBLiSHABLE', { isPublishable })
     if (isPublishable) {
       const viewId = useShareModalStore.getState().data.id
       const view = useViewStore.getState().views.find((v) => v.id === viewId)
@@ -43,9 +45,10 @@ const ViewTypeRenderer: React.FC<ViewRendererProps> = (props) => {
       publishViewAPI(view, true)
         .then(() => {
           const workspace = getWorkspaceId()
+          const snapshotKey = `${workspace}/${viewId}`
 
-          S3FileUploadClient(JSON.stringify(results), {
-            fileName: `${workspace}/${viewId}`,
+          S3FileUploadClient(JSON.stringify(items), {
+            fileName: snapshotKey,
             public: true
           })
             .then((res) => {
@@ -65,28 +68,26 @@ const ViewTypeRenderer: React.FC<ViewRendererProps> = (props) => {
             share: false
           })
         })
-    } else {
-      const viewId = useShareModalStore.getState().data.id
-      const view = useViewStore.getState().views.find((v) => v.id === viewId)
-      publishViewAPI(view, false).then(() => {
-        updatePublishView(viewId, false)
-      })
     }
   }, [isPublishable])
 
-  switch (viewType) {
+  return <ViewTypeRenderer type={type} items={items} />
+}
+
+export const ViewTypeRenderer = ({ type, items, ...props }) => {
+  switch (type) {
     case ViewType.Kanban:
-      return <KanbanView results={results} {...props} />
+      return <KanbanView results={items} {...props} />
     case ViewType.List:
     default:
-      return <ListView results={results} {...props} />
+      return <ListView results={items} {...props} />
   }
 }
 
 const ViewRenderer: React.FC<ViewRendererProps> = (props) => {
   return (
     <ErrorBoundary fallbackRender={() => <></>}>
-      <ViewTypeRenderer {...props} />
+      <ViewSectionRenderer {...props} />
     </ErrorBoundary>
   )
 }
