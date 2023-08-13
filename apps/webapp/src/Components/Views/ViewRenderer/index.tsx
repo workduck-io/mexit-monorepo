@@ -37,7 +37,6 @@ const ViewSectionRenderer: React.FC<ViewRendererProps> = (props) => {
   const { publishViewAPI } = useViewAPI()
 
   useEffect(() => {
-    console.log('IS PUBLiSHABLE', { isPublishable })
     if (isPublishable) {
       const viewId = useShareModalStore.getState().data.id
       const view = useViewStore.getState().views.find((v) => v.id === viewId)

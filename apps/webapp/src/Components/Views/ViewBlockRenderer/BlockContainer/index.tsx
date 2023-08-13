@@ -99,16 +99,16 @@ const ResultGroup: React.FC<{ label: string; children: any; count: number; isOpe
     setIsOpen(!isOpen)
   }
 
-  if (!group) return
-
   return (
     <StyledResultGroup>
       <GroupHeader padding isOpen={!!isOpen} onClick={handleToggleAccordion}>
-        <Group>
-          <IconDisplay size={14} icon={group.icon} color={theme.tokens.colors.primary.default} />
-          <span>{group.label}</span>
-          <Count>{count}</Count>
-        </Group>
+        {group && (
+          <Group>
+            <IconDisplay size={14} icon={group.icon} color={theme.tokens.colors.primary.default} />
+            <span>{group.label}</span>
+            <Count>{count}</Count>
+          </Group>
+        )}
         <Chevron
           isOpen={isOpen}
           $noHover

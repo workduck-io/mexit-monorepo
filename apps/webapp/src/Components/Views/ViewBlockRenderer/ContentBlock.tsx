@@ -12,6 +12,7 @@ import ContentSuperBlock from '../../../Editor/Components/SuperBlock/ContentSupe
 import SmartCaptureSuperBlock from '../../../Editor/Components/SuperBlock/SmartCaptureSuperBlock'
 import { PropertiyFields } from '../../../Editor/Components/SuperBlock/SuperBlock.types'
 import useUpdateBlock from '../../../Editor/Hooks/useUpdateBlock'
+import { ROUTE_PATHS } from '../../../Hooks/useRouting'
 import { useSearch } from '../../../Hooks/useSearch'
 import { getBlock } from '../../../Utils/parseData'
 
@@ -120,8 +121,9 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
 
   const handleToggleAccordion = (ev) => {
     setIsOpen(!isOpen)
+    const currentPath = window.location.pathname
 
-    if (ev.detail === 2) {
+    if (ev.detail === 2 && !currentPath.startsWith(ROUTE_PATHS.editor)) {
       toggleModal(ModalsType.previewNote, { noteId: block.parent, blockId: block.id })
     }
   }
