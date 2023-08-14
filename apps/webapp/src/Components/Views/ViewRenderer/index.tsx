@@ -28,6 +28,7 @@ export type GroupedResult = {
 const ViewSectionRenderer: React.FC<ViewRendererProps> = (props) => {
   const items = useViewResults(props?.view?.path)
   const type = useViewFilterStore((s) => s.viewType)
+  const groupBy = useViewFilterStore((s) => s.groupBy)
 
   const isPublishable = useShareModalStore((store) => store.data.share)
   const publishCurrentView = useShareModalStore((store) => store.updateData)
@@ -46,10 +47,19 @@ const ViewSectionRenderer: React.FC<ViewRendererProps> = (props) => {
           const workspace = getWorkspaceId()
           const snapshotKey = `${workspace}/${viewId}`
 
-          S3FileUploadClient(JSON.stringify(items), {
-            fileName: snapshotKey,
-            public: true
-          })
+          S3FileUploadClient(
+            JSON.stringify({
+              view: {
+                groupBy: view.groupBy,
+                viewType: view.viewType
+              },
+              items
+            }),
+            {
+              fileName: snapshotKey,
+              public: true
+            }
+          )
             .then((res) => {
               updatePublishView(viewId, true)
             })
@@ -70,7 +80,7 @@ const ViewSectionRenderer: React.FC<ViewRendererProps> = (props) => {
     }
   }, [isPublishable])
 
-  return <ViewTypeRenderer type={type} items={items} />
+  return <ViewTypeRenderer type={type} items={items} groupBy={groupBy} />
 }
 
 export const ViewTypeRenderer = ({ type, items, ...props }) => {

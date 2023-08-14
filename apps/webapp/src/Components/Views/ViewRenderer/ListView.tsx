@@ -13,7 +13,7 @@ import { ROUTE_PATHS } from '../../../Hooks/useRouting'
 import ViewBlockRenderer from '../ViewBlockRenderer'
 import ResultGroup from '../ViewBlockRenderer/BlockContainer'
 
-const ListView: React.FC<{ results: Record<string, any> }> = ({ results }) => {
+const ListView: React.FC<{ results: Record<string, any>; groupBy?: string }> = ({ results, groupBy }) => {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
 
   const atViews = useMatch(`${ROUTE_PATHS.view}/*`)
@@ -118,7 +118,7 @@ const ListView: React.FC<{ results: Record<string, any> }> = ({ results }) => {
     return (
       <TaskListWrapper>
         {Object.entries(results)?.map(([group, items]: [string, Array<SearchResult>]) => (
-          <ResultGroup key={group} label={group} count={items.length}>
+          <ResultGroup key={group} label={group} count={items.length} groupBy={groupBy}>
             {items.map((block, i) => (
               <ViewBlockRenderer
                 key={`${block?.id}-${block?.parent}-${i}`}

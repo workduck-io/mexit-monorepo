@@ -33,7 +33,7 @@ import { useViewStore } from '../../../Stores/useViewStore'
 import { Chip, InlineBlockText, StyledViewBlock } from '../../Styles/InlineBlock'
 
 const ViewSnapshotRenderer = ({ viewId, workspaceId }) => {
-  const [viewResultSnapshot, setViewResultSnapshot] = useState(null)
+  const [viewResultSnapshot, setViewResultSnapshot] = useState<{ view: any; items: any[] }>(null)
   const addInViewSnapshotCache = useViewStore((store) => store.addViewSnapshot)
 
   const downloadSnapshot = async (file: string) => {
@@ -44,8 +44,9 @@ const ViewSnapshotRenderer = ({ viewId, workspaceId }) => {
       const data = JSON.parse(transformedString ?? '')
 
       if (data) {
+        const snapshotName = `${workspaceId}/${viewId}`
         setViewResultSnapshot(data)
-        addInViewSnapshotCache(viewId, data)
+        addInViewSnapshotCache(snapshotName, data)
       }
     }
   }
@@ -62,7 +63,14 @@ const ViewSnapshotRenderer = ({ viewId, workspaceId }) => {
     }
   }, [viewId])
 
-  if (viewResultSnapshot) return <ViewTypeRenderer items={viewResultSnapshot} type={ViewType.List} />
+  if (viewResultSnapshot)
+    return (
+      <ViewTypeRenderer
+        items={viewResultSnapshot?.items}
+        type={ViewType.List}
+        groupBy={viewResultSnapshot?.view?.groupBy}
+      />
+    )
 
   return <></>
 }
@@ -119,7 +127,7 @@ const ViewBlock = (props: any) => {
                 </GroupHeader>
               </GenericFlex>
             )}
-            {view ? (
+            {!view ? (
               <StyledTasksKanbanBlock>
                 <ViewContainer viewId={viewid} withFilters={false} />
               </StyledTasksKanbanBlock>

@@ -140,9 +140,12 @@ const PublishMenu = ({ id, isPublic }) => {
   const removeViewSnapshotFromCache = useViewStore((store) => store.removeViewSnapshot)
   const updateShareModalData = useShareModalStore((store) => store.updateData)
 
+  const { isDefaultView } = useViews()
+
   const handleViewUnpublish = () => {
     const workspace = useAuthStore.getState().getWorkspaceId()
     const viewSnapshotKey = `${workspace}/${id}`
+
     // S3FileDeleteClient({ fileName: viewSnapshotKey, public: true }).then((res) => {
     //   removeViewSnapshotFromCache(viewSnapshotKey)
     // })
@@ -159,9 +162,11 @@ const PublishMenu = ({ id, isPublic }) => {
   }
 
   const options = useMemo(() => {
-    if (isPublic) return null
-    return [getMenuItem('Unpublish', () => handleViewUnpublish(), false)]
+    if (!isPublic) return null
+    return [getMenuItem('Unpublish', () => handleViewUnpublish(), DefaultMIcons.CLEAR, false)]
   }, [isPublic])
+
+  if (isDefaultView(id)) return
 
   return <MenuButton defaultValue={isPublic ? 'Re-publish' : 'Publish'} onClick={handlePublish} items={options} />
 }
@@ -172,7 +177,6 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
 
   const { deleteView, getView } = useViews()
   const currentView = useViewStore((store) => store.currentView)
-  const openPublishModal = useShareModalStore((store) => store.openModal)
   const views = useViewStore((store) => store.views)
 
   const view = useMemo(() => {
@@ -264,7 +268,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
                 <Icon icon={stackLine} />
                 <span>{view?.title}</span>
                 {view?.id && !isDefault && <ViewChangeStatus viewId={view?.id} />}
-                {view.public && (
+                {view?.public && (
                   <Tooltip content="Public">
                     <IconDisplay opacity={0.6} color={theme.tokens.colors.fade} size={20} icon={DefaultMIcons.PUBLIC} />
                   </Tooltip>
@@ -282,7 +286,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
         </TaskHeaderTitleSection>
 
         <Group>
-          <PublishMenu id={view.id} isPublic={view.public} />
+          <PublishMenu id={view?.id} isPublic={view?.public} />
           <CreateNewMenu />
         </Group>
       </StyledTaskHeader>
