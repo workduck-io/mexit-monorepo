@@ -34,6 +34,7 @@ const ViewSectionRenderer: React.FC<ViewRendererProps> = (props) => {
   const publishCurrentView = useShareModalStore((store) => store.updateData)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const updatePublishView = useViewStore((store) => store.publishView)
+  const addViewSnapshot = useViewStore((store) => store.addViewSnapshot)
 
   const { publishViewAPI } = useViewAPI()
 
@@ -46,22 +47,21 @@ const ViewSectionRenderer: React.FC<ViewRendererProps> = (props) => {
         .then(() => {
           const workspace = getWorkspaceId()
           const snapshotKey = `${workspace}/${viewId}`
+          const viewSnapshot = {
+            view: {
+              groupBy: view.groupBy,
+              viewType: view.viewType
+            },
+            items
+          }
 
-          S3FileUploadClient(
-            JSON.stringify({
-              view: {
-                groupBy: view.groupBy,
-                viewType: view.viewType
-              },
-              items
-            }),
-            {
-              fileName: snapshotKey,
-              public: true
-            }
-          )
+          S3FileUploadClient(JSON.stringify(viewSnapshot), {
+            fileName: snapshotKey,
+            public: true
+          })
             .then((res) => {
               updatePublishView(viewId, true)
+              addViewSnapshot(snapshotKey, viewSnapshot)
             })
             .catch((err) => {
               toast('Something went wrong while publishing the view')

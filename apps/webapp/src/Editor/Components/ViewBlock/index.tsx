@@ -8,7 +8,7 @@ import { useTheme } from 'styled-components'
 
 import { S3FileDownloadClient } from '@workduck-io/dwindle'
 
-import { ViewType } from '@mexit/core'
+import { mog, ViewType } from '@mexit/core'
 import {
   GenericFlex,
   Group,
@@ -79,6 +79,8 @@ const ViewBlock = (props: any) => {
   const viewid = props.element.value
   const workspace = props.element.workspace
 
+  mog('View', { viewid, workspace, e: props.element })
+
   const { goTo } = useRouting()
   const theme = useTheme()
   const { getView, getViewNamedPath } = useViews()
@@ -127,7 +129,7 @@ const ViewBlock = (props: any) => {
                 </GroupHeader>
               </GenericFlex>
             )}
-            {!view ? (
+            {view ? (
               <StyledTasksKanbanBlock>
                 <ViewContainer viewId={viewid} withFilters={false} />
               </StyledTasksKanbanBlock>

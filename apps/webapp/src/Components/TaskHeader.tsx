@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 import { useTheme } from 'styled-components'
 
-// import { S3FileDeleteClient } from '@workduck-io/dwindle'
+import { S3FileDeleteClient } from '@workduck-io/dwindle'
 import { ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -139,6 +139,7 @@ const CreateNewMenu = () => {
 const PublishMenu = ({ id, isPublic }) => {
   const removeViewSnapshotFromCache = useViewStore((store) => store.removeViewSnapshot)
   const updateShareModalData = useShareModalStore((store) => store.updateData)
+  const unPublishView = useViewStore((store) => store.publishView)
 
   const { isDefaultView } = useViews()
 
@@ -146,9 +147,10 @@ const PublishMenu = ({ id, isPublic }) => {
     const workspace = useAuthStore.getState().getWorkspaceId()
     const viewSnapshotKey = `${workspace}/${id}`
 
-    // S3FileDeleteClient({ fileName: viewSnapshotKey, public: true }).then((res) => {
-    //   removeViewSnapshotFromCache(viewSnapshotKey)
-    // })
+    S3FileDeleteClient({ fileName: viewSnapshotKey, public: true }).then((res) => {
+      removeViewSnapshotFromCache(viewSnapshotKey)
+      unPublishView(id, false)
+    })
   }
 
   const handlePublish = async () => {
@@ -163,7 +165,7 @@ const PublishMenu = ({ id, isPublic }) => {
 
   const options = useMemo(() => {
     if (!isPublic) return null
-    return [getMenuItem('Unpublish', () => handleViewUnpublish(), DefaultMIcons.CLEAR, false)]
+    return [getMenuItem('Unpublish', () => handleViewUnpublish(), false, DefaultMIcons.CLEAR)]
   }, [isPublic])
 
   if (isDefaultView(id)) return
