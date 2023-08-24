@@ -3,7 +3,14 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
-import { compareVersions, mog, useAppStore, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+import {
+  compareVersions,
+  emitter,
+  mog,
+  propertyChangeHandler,
+  useAppStore,
+  userPreferenceStore as useUserPreferenceStore
+} from '@mexit/core'
 import { Notification } from '@mexit/shared'
 
 import { version as packageJsonVersion } from '../package.json'
@@ -50,8 +57,8 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 const App = () => {
   const setVersion = useAppStore((store) => store.setVersion)
   const { forceLogout } = useForceLogout()
-
   useEffect(() => {
+    emitter.on('propertyChanged', propertyChangeHandler)
     async function forceLogoutAndSetVersion() {
       const persistedVersion = useAppStore.getState()?.version
       mog('PersistedVersion | PackageJSONVersion', { persistedVersion, packageJsonVersion })

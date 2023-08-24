@@ -24,6 +24,7 @@
     "@workduck-io/mex-search": "^0.0.10",
     "broadcast-channel": "^5.1.0",
     "buffer": "^6.0.3",
+    "emittery": "^1.0.1",
     "idb": "^7.1.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",

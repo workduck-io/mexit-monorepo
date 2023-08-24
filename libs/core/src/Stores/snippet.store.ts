@@ -7,6 +7,7 @@ export interface Snippet {
   title: string
   icon?: MIcon
   content?: NodeEditorContent
+  metadata?: any
   template?: boolean
 }
 

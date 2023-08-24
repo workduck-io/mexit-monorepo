@@ -6,8 +6,6 @@ import { TaskCard, Text } from '@mexit/shared'
 import { PropertiyFields } from '../../Editor/Components/SuperBlock/SuperBlock.types'
 import TaskSuperBlock from '../../Editor/Components/SuperBlock/TaskSuperBlock'
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
-import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
-import { usePermissions } from '../../Hooks/usePermissions'
 import { useSearch } from '../../Hooks/useSearch'
 
 interface RenderTaskProps {
@@ -39,13 +37,11 @@ interface RenderTaskProps {
 
 export const RenderBoardTask = React.memo<RenderTaskProps>(
   ({ id, todoid, block, nodeid, staticBoard, refreshCallback, selectedCardId }: RenderTaskProps) => {
-    const { changeStatus, changePriority, getPureContent } = useTodoKanban()
     const documentUpdated = useContentStore((s) => s.docUpdated)
     const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
     const ref = React.useRef<HTMLDivElement>(null)
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid, documentUpdated])
-    const { accessWhenShared } = usePermissions()
     const toggleModal = useModalStore((store) => store.toggleOpen)
 
     useEffect(() => {
@@ -69,19 +65,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
       }
     }, [selectedCardId])
 
-    const controls = useMemo(
-      () => ({
-        onChangePriority: (todoId: string, priority) => {
-          changePriority(todo, priority)
-          if (refreshCallback) refreshCallback()
-        },
-        onChangeStatus: (todoId: string, status) => {
-          changeStatus(todo, status)
-          if (refreshCallback) refreshCallback()
-        }
-      }),
-      []
-    )
+    
 
     const { setInfoOfBlockInContent } = useUpdateBlock()
     const { updateBlocks } = useSearch()

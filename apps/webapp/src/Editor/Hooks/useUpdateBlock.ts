@@ -2,7 +2,7 @@ import { toast } from 'react-hot-toast'
 
 import { findNode, findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
-import { ELEMENT_PARAGRAPH, useAuthStore, useContentStore } from '@mexit/core'
+import { ELEMENT_PARAGRAPH, emitter, useAuthStore, useContentStore } from '@mexit/core'
 import { parseToMarkdown } from '@mexit/shared'
 
 import { useBufferStore } from '../../Hooks/useEditorBuffer'
@@ -78,7 +78,11 @@ const useUpdateBlock = () => {
       if (path) {
         const metadata = element.metadata || {}
         const properties = element.properties || {}
-
+        emitter.emit('propertyChanged', {
+          oldData: { ...properties, blockId: element.id },
+          newData: blockData,
+          nodeId: getNodeIdFromEditor(editor.id)
+        })
         setNodes(
           editor,
           {
