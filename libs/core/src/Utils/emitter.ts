@@ -3,6 +3,7 @@ import Emittery from 'emittery'
 import { useMetadataStore, useSnippetStore } from '../Stores'
 
 import { evaluateDecisionTree } from './decisionTree'
+import { generateTempId } from './idGenerator'
 import { mog } from './mog'
 
 export class EmitterX {
@@ -147,10 +148,18 @@ const propertyChangeHandler = (callback?) => (data) => {
         const condition = templateData.metadata.conditions[item.properties.properties.conditionId]
         return {
           ...condition,
-          action: { noteId: data.nodeId, block: item, type: condition.action }
+          action: { noteId: data.nodeId, block: transformTemplateBlockForInsert(item), type: condition.action }
         }
       })
   })
   if (callback) callback(result)
   mog('Property Change Handler Result', { result })
+}
+
+const transformTemplateBlockForInsert = (block) => {
+  return {
+    ...block,
+    id: generateTempId(),
+    properties: block.properties.properties
+  }
 }
