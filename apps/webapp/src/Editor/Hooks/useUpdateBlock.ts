@@ -78,11 +78,6 @@ const useUpdateBlock = () => {
       if (path) {
         const metadata = element.metadata || {}
         const properties = element.properties || {}
-        emitter.emit('propertyChanged', {
-          oldData: { ...properties, blockId: element.id },
-          newData: blockData,
-          nodeId: getNodeIdFromEditor(editor.id)
-        })
         setNodes(
           editor,
           {
@@ -98,6 +93,9 @@ const useUpdateBlock = () => {
           },
           { at: path, mode: 'highest' }
         )
+        if (!blockData.title)
+          //TODO: Add config to ignore certain fields
+          emitter.emitPropertyChange(properties, blockData, getNodeIdFromEditor(editor.id), element.id) //Replace element id with templateBlockId from properties
       }
     }
   }

@@ -2,56 +2,36 @@ import Emittery from 'emittery'
 
 import { useMetadataStore, useSnippetStore } from '../Stores'
 
+import { evaluateDecisionTree } from './decisionTree'
 import { mog } from './mog'
 
-export const emitter = new Emittery()
+export class EmitterX {
+  private emitter: Emittery
 
-export type Condition = {
-  field: string
-  oldValue: any
-  newValue: any
-  blockId: string
-  action: any
-}
-
-export interface DecisionTreeConfig {
-  conditions: Condition[]
-}
-
-export function evaluateDecisionTree(
-  oldData: Record<string, any>,
-  newData: Record<string, any>,
-  config: DecisionTreeConfig
-): string | undefined {
-  const conditions = config.conditions
-
-  for (const condition of conditions) {
-    // if (condition.blockId !== oldData['blockId']) return undefined
-    const field = condition.field
-    const oldValueCondition = condition.oldValue
-    const newValueCondition = condition.newValue
-    const action = condition.action
-
-    const oldFieldValue = oldData[field]
-    const newFieldValue = newData[field]
-    // Evaluate the conditions based on old and new values
-    const oldConditionMet = evaluateCondition(oldFieldValue, oldValueCondition)
-    const newConditionMet = evaluateCondition(newFieldValue, newValueCondition)
-
-    // If both old and new conditions are met, perform the action
-    if (oldConditionMet && newConditionMet) {
-      // Perform the desired action
-      return action
-    }
+  constructor() {
+    this.emitter = new Emittery()
   }
-  return undefined
+
+  emitPropertyChange = (currentProperties, newProperty, nodeId: string, templateBlockId: string) => {
+    mog('Property Change Handler Event', {
+      oldData: { ...currentProperties, blockId: templateBlockId },
+      newData: newProperty,
+      nodeId
+    })
+
+    return this.emitter.emit('propertyChanged', {
+      oldData: { ...currentProperties, blockId: templateBlockId },
+      newData: newProperty,
+      nodeId
+    })
+  }
+
+  handlePropertyChange = (callback?: (result: any[]) => void) => {
+    return this.emitter.on('propertyChanged', propertyChangeHandler(callback))
+  }
 }
 
-function evaluateCondition(value: any, condition: string): boolean {
-  // Implement your condition evaluation logic here
-  // For example, check if value meets a certain condition
-  return value === condition
-}
+export const emitter = new EmitterX()
 
 export const TestTemplateData = {
   id: 'SNIPPET_QjUmXpbyftyxgwU3YdBni',
@@ -85,6 +65,7 @@ export const TestTemplateData = {
       id: 'TEMP_bThtV',
       properties: {
         properties: {
+          conditionId: 'CONDITION_1',
           title: 'Untitled',
           entity: {
             active: 'super-block-task'
@@ -147,29 +128,29 @@ export const TestTemplateData = {
         oldValue: 'low',
         newValue: 'high',
         action: 'APPEND',
-        blockId: 'TEMP_bThtV'
+        blockId: 'TEMP_qPhYW'
       }
     }
   }
 }
 
-export function propertyChangeHandler(data) {
+const propertyChangeHandler = (callback?) => (data) => {
   const nodeMetadata = useMetadataStore.getState().metadata.notes[data.nodeId]
-  nodeMetadata.templateId = 'SNIPPET_QjUmXpbyftyxgwU3YdBni'
+  nodeMetadata.templateId = 'SNIPPET_QjUmXpbyftyxgwU3YdBni' //Just for testing
   if (!nodeMetadata.templateId) return
-  const templateData = useSnippetStore.getState().snippets[nodeMetadata.templateId]
-  mog('Property Change Template', { templateData })
+  const templateData = TestTemplateData || useSnippetStore.getState().snippets[nodeMetadata.templateId]
   if (!templateData) return
   const result = evaluateDecisionTree(data.oldData, data.newData, {
     conditions: templateData.content
-      .filter((item) => item.properties.properties.conditionId)
+      .filter((item) => item.properties?.properties.conditionId)
       .map((item) => {
         const condition = templateData.metadata.conditions[item.properties.properties.conditionId]
         return {
           ...condition,
-          action: { block: item, type: condition.action }
+          action: { noteId: data.nodeId, block: item, type: condition.action }
         }
       })
   })
+  if (callback) callback(result)
   mog('Property Change Handler Result', { result })
 }
