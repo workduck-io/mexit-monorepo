@@ -115,6 +115,34 @@ export const TestTemplateData = {
           ]
         }
       ]
+    },
+    {
+      type: 'super-block-task',
+      id: 'TEMP_Ri9A8',
+      properties: {
+        properties: {
+          conditionId: 'CONDITION_2',
+          title: 'New thing appeared',
+          entity: {
+            active: 'super-block-task'
+          },
+          status: 'todo',
+          priority: 'low'
+        }
+      },
+      children: [
+        {
+          type: 'p',
+          id: 'TEMP_4Mez1',
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_7q7R2',
+              text: 'This is a task dependent on conditional task 2'
+            }
+          ]
+        }
+      ]
     }
   ],
   metadata: {
@@ -130,6 +158,13 @@ export const TestTemplateData = {
         newValue: 'high',
         action: 'APPEND',
         blockId: 'TEMP_qPhYW'
+      },
+      CONDITION_2: {
+        field: 'priority',
+        oldValue: 'low',
+        newValue: 'medium',
+        action: 'APPEND',
+        blockId: 'TEMP_Ri9A7'
       }
     }
   }

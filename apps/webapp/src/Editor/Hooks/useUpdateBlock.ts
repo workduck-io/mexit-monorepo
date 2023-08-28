@@ -95,7 +95,12 @@ const useUpdateBlock = () => {
         )
         if (!blockData.title)
           //TODO: Add config to ignore certain fields
-          emitter.emitPropertyChange(properties, blockData, getNodeIdFromEditor(editor.id), element.id) //Replace element id with templateBlockId from properties
+          emitter.emitPropertyChange(
+            properties,
+            blockData,
+            getNodeIdFromEditor(editor.id),
+            properties.templateBlockId || element.id
+          ) //Replace element id with templateBlockId from properties
       }
     }
   }
