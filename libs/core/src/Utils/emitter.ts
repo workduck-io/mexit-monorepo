@@ -27,7 +27,7 @@ export class EmitterX {
     })
   }
 
-  handlePropertyChange = (callback?: (result: any[]) => void) => {
+  handlePropertyChange = (callback?: (result: any[]) => Promise<void>) => {
     return this.emitter.on('propertyChanged', propertyChangeHandler(callback))
   }
 }
@@ -153,7 +153,6 @@ const propertyChangeHandler = (callback?) => (data) => {
       })
   })
   if (callback) callback(result)
-  mog('Property Change Handler Result', { result })
 }
 
 const transformTemplateBlockForInsert = (block) => {
