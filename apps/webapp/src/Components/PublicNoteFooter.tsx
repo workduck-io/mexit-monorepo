@@ -6,9 +6,8 @@ import styled from 'styled-components'
 import { SecondaryButton } from '@workduck-io/mex-components'
 
 import { usePublicNodeStore } from '@mexit/core'
-import { MexIcon, PrimaryText } from '@mexit/shared'
+import { getTitleFromPath, MexIcon, PrimaryText } from '@mexit/shared'
 
-import { getTitleFromPath } from '../Hooks/useLinks'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 
 const PublicNoteFooterContainer = styled.section`

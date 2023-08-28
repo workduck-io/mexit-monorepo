@@ -45,6 +45,9 @@ interface SputlitStore {
   smartCaptureSaveType?: SmartCaptureSaveType
   toggleSmartCaptureSaveType: () => void
 
+  captureProfile?: boolean
+  setCaptureProfile: (capture: boolean) => void
+
   // * Current Active action item from `items`
   activeItem?: ListItemType | MexitAction
   setActiveItem: (item?: ListItemType | MexitAction) => void
@@ -67,6 +70,9 @@ export const useSputlitStore = create<SputlitStore>(
       const search = get().search
       set({ search: { ...search, type } })
     },
+
+    captureProfile: false,
+    setCaptureProfile: (capture) => set({ captureProfile: capture }),
 
     smartCaptureSaveType: 'basic',
     toggleSmartCaptureSaveType: () => {

@@ -1,9 +1,9 @@
 import create from 'zustand'
 
 import { useDataStore, useEditorStore } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
 import { useEditorBuffer } from './useEditorBuffer'
-import { useLinks } from './useLinks'
 import useLoad from './useLoad'
 import { useNamespaces } from './useNamespaces'
 

@@ -4,12 +4,10 @@ import message2Line from '@iconify/icons-ri/message-2-line'
 import { Icon } from '@iconify/react'
 import { nanoid } from 'nanoid'
 
-import { generateCommentId, MIcon, useAuthStore, useEditorStore, UserReaction } from '@mexit/core'
-import { DefaultMIcons, IconDisplay, Popover } from '@mexit/shared'
+import { generateCommentId, getNodeIdFromEditor, MIcon, useAuthStore, useEditorStore, UserReaction } from '@mexit/core'
+import { DefaultMIcons, IconDisplay, Popover, reactionsWithCount, useReactions } from '@mexit/shared'
 
-import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
 import { useComments } from '../../../Hooks/useComments'
-import { reactionsWithCount, useReactions } from '../../../Hooks/useReactions'
 import { CommentsComponent } from '../../CommentsAndReactions/Comments'
 import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
 
@@ -44,41 +42,6 @@ export const BlockInfo: React.FC<IBlockInfo> = ({ id, parent, onDelete, isSelect
 
   const { getCommentsOfBlock, addComment, deleteComment } = useComments()
   const { getReactionsOfBlock, getReactionDetails, addReaction, deleteReaction } = useReactions()
-
-  /*
-    Uncomment this to use SOURCE URL
-  // Whether to show source info
-  const showSource = useMemo(() => {
-    if (analysis?.displayBlocksWithHighlight) {
-      if (analysis?.displayBlocksWithHighlight?.includes(element?.id)) {
-        return true
-      }
-    }
-
-    return isUrl(element?.blockMeta?.origin)
-  }, [analysis?.displayBlocksWithHighlight, element?.id])
-
-  // Does the element have sourceUrl
-  const hasAssociatedHighlight = useMemo(
-    () => element?.type === SuperBlocks.HIGHLIGHT && element?.metadata?.entityId,
-    [element]
-  )
-
-  // Source url
-  const sourceURL = useMemo(() => {
-    if (hasAssociatedHighlight) {
-      // Extract the source from the highlight entity
-      const highlightId = element?.metadata?.entityId
-      const highlight = getHighlight(highlightId)
-      return highlight?.properties?.sourceUrl
-    } else if (isUrl(element?.blockMeta?.origin)) {
-      return element?.blockMeta?.origin
-    }
-  }, [element, hasAssociatedHighlight])
-
-  const icon = sourceURL && getIconType(sourceURL)
-
-  */
 
   // Comments of the block
   const { comments } = useMemo(() => {

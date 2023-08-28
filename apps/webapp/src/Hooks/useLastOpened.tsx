@@ -2,10 +2,14 @@ import { useCallback } from 'react'
 
 import { debounce } from 'lodash'
 
-import { getInitialNode, LastOpenedData, LastOpenedState, NodeType , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
-
-import { useLinks } from './useLinks'
-import { useNodes } from './useNodes'
+import {
+  getInitialNode,
+  LastOpenedData,
+  LastOpenedState,
+  NodeType,
+  userPreferenceStore as useUserPreferenceStore
+} from '@mexit/core'
+import { useLinks, useNodes } from '@mexit/shared'
 
 const DEBOUNCE_TIME = 3000
 

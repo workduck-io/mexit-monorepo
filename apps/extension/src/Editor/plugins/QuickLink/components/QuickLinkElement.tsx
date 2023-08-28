@@ -4,10 +4,9 @@ import { moveSelection, useEditorRef } from '@udecode/plate'
 import { useFocused, useReadOnly, useSelected } from 'slate-react'
 
 import { API_BASE_URLS, mog } from '@mexit/core'
-import { ILinkElementProps, SILink, SILinkRoot } from '@mexit/shared'
+import { ILinkElementProps, SILink, SILinkRoot, useLinks } from '@mexit/shared'
 
 import EditorPreview from '../../../../Components/Editor/EditorPreview'
-import { useLinks } from '../../../../Hooks/useLinks'
 import { getBlock } from '../../../../Utils/parseData'
 import { useHotkeys } from '../../../hooks/useHotKeys'
 

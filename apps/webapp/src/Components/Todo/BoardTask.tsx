@@ -1,10 +1,8 @@
 import React, { useEffect, useMemo } from 'react'
 
 import { ModalsType, mog, PriorityType, useContentStore, useModalStore, useTodoStore, ViewType } from '@mexit/core'
-import { TaskCard, Text } from '@mexit/shared'
+import { PropertiyFields, TaskCard, TaskSuperBlock, Text } from '@mexit/shared'
 
-import { PropertiyFields } from '../../Editor/Components/SuperBlock/SuperBlock.types'
-import TaskSuperBlock from '../../Editor/Components/SuperBlock/TaskSuperBlock'
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useSearch } from '../../Hooks/useSearch'
 

@@ -12,11 +12,11 @@ import {
   useHighlightStore,
   WORKSPACE_HEADER
 } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
 import { useLinkURLs } from '../Hooks/useURLs'
 
 import { useInternalLinks } from './useInternalLinks'
-import { useLinks } from './useLinks'
 import { isReadonly, usePermissions } from './usePermissions'
 
 export const useHighlights = () => {

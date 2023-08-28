@@ -16,10 +16,10 @@ import {
   MexIcon,
   SidebarListFilter,
   SnippetCards,
+  useLinks,
   useQuery
 } from '@mexit/shared'
 
-import { useLinks } from '../../Hooks/useLinks'
 import { wSearchIndexWithRanking } from '../../Sync/invokeOnWorker'
 
 import { NodeCard } from './NodeCard'

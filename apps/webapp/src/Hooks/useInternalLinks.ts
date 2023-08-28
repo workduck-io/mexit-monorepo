@@ -1,6 +1,5 @@
 import { API, generateNodeUID, getAllParentPaths, getNodeIcon, ILink, mog, SEPARATOR, useDataStore } from '@mexit/core'
-
-import { getNodeidFromPathAndLinks } from './useLinks'
+import { getNodeidFromPathAndLinks } from '@mexit/shared'
 
 const appendToText = (text: string, textToAppend: string, separator = SEPARATOR) => {
   if (!text) return textToAppend

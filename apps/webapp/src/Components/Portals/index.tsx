@@ -8,8 +8,8 @@ import { useTheme } from 'styled-components'
 import { LoadingButton } from '@workduck-io/mex-components'
 
 import { mog, usePortalStore } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
-import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { usePortals } from '../../Hooks/usePortals'
 import { GlobalSectionContainer, GlobalSectionHeader } from '../../Style/GlobalSection'

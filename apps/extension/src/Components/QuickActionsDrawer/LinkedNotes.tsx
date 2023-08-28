@@ -1,10 +1,18 @@
 import { useMemo, useState } from 'react'
 
 import { API_BASE_URLS, useLayoutStore, useMetadataStore } from '@mexit/core'
-import { DrawerHeader, FadeSpan, Group, HighlightNote, HighlightNotes, IconDisplay } from '@mexit/shared'
+import {
+  DrawerHeader,
+  FadeSpan,
+  getTitleFromPath,
+  Group,
+  HighlightNote,
+  HighlightNotes,
+  IconDisplay,
+  useLinks
+} from '@mexit/shared'
 
 import { useHighlights } from '../../Hooks/useHighlights'
-import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 
 import { QuickActionsDrawerContainer } from './styled'
 

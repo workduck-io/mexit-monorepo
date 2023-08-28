@@ -1,9 +1,9 @@
 import { PlatePlugin } from '@udecode/plate-core'
 
 import { SuperBlocks } from '@mexit/core'
+import { ContentSuperBlock } from '@mexit/shared'
 
-import ContentSuperBlock from '../Components/SuperBlock/ContentSuperBlock'
-import { withSuperBlockElement } from '../Components/SuperBlock/withSuperBlockElement'
+import { withSuperBlockElement } from './withSuperBlockElement'
 
 /**
  * Enables support for Super Block - CONTENT.

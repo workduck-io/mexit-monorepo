@@ -26,13 +26,12 @@ import {
   useMentionStore,
   useSnippetStore
 } from '@mexit/core'
-import { useQuery } from '@mexit/shared'
+import { useLinks, useQuery } from '@mexit/shared'
 
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { wAddDoc, wRemoveDoc, wSearchIndexWithRanking, wUpdateDoc, wUpdateOrAppendBlocks } from '../Sync/invokeOnWorker'
 import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 
-import { useLinks } from './useLinks'
 import { useQuickLinks } from './useQuickLinks'
 
 export const useSearchExtra = () => {

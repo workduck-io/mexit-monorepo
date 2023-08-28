@@ -3,10 +3,9 @@ import { useEffect } from 'react'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { useDataStore, useEditorStore, useHelpStore } from '@mexit/core'
-import { blurEditableElement, isOnEditableElement } from '@mexit/shared'
+import { blurEditableElement, getNodeidFromPathAndLinks, isOnEditableElement } from '@mexit/shared'
 
 import { useKeyListener } from './useChangeShortcutListener'
-import { getNodeidFromPathAndLinks } from './useLinks'
 import useLoad from './useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from './useRouting'
 

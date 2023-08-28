@@ -11,14 +11,15 @@ import {
   permissionOptions,
   useAuthStore,
   useEditorStore,
-useMentionStore , userPreferenceStore as useUserPreferenceStore,  useShareModalStore
- } from '@mexit/core'
-import { mergeAccess, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
+  useMentionStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useShareModalStore
+} from '@mexit/core'
+import { mergeAccess, SelectWrapper, StyledCreatatbleSelect, useLinks } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
-import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { getEmailStart } from '../../Utils/constants'
 import InputBox from '../InputBox'

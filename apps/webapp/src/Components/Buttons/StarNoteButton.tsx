@@ -4,9 +4,9 @@ import starLine from '@iconify/icons-ri/star-line'
 import { Icon } from '@iconify/react'
 
 import { useDataStore, useEditorStore } from '@mexit/core'
+import { getTitleFromPath, useLinks } from '@mexit/shared'
 
 import { useBookmarks } from '../../Hooks/useBookmarks'
-import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { SStarNoteButton } from '../Sidebar/Sidebar.style'
 
 const StarNoteButton = () => {

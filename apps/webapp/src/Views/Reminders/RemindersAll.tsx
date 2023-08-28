@@ -35,14 +35,14 @@ import {
   TaskHeaderIcon,
   TaskHeaderTitleSection,
   TaskViewHeaderWrapper,
-  TaskViewTitle
+  TaskViewTitle,
+  useLinks
 } from '@mexit/shared'
 
 import { useCreateReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import { useReminderAPI } from '../../Hooks/API/useReminderAPI'
 import { reminderFilterFunctions } from '../../Hooks/useFilterFunctions'
 import { FilterStore } from '../../Hooks/useFilters'
-import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
 import { useViewStore } from '../../Stores/useViewStore'
 import SearchFilters from '../SearchFilters'

@@ -16,6 +16,7 @@ import {
   ELEMENT_TAG,
   getDefaultContent,
   getMIcon,
+  getNodeIdFromEditor,
   PromptRenderType,
   SEPARATOR,
   SuperBlocks,
@@ -43,7 +44,6 @@ import { AI_RENDER_TYPE, CategoryType, QuickLinkType } from '../constants'
 import { PluginOptionType } from '../Plugins'
 import { ComboboxKey } from '../Types/Combobox'
 import { ComboboxConfig, ComboConfigData } from '../Types/MultiCombobox'
-import { getNodeIdFromEditor } from '../Utils/helper'
 
 import useUpdateBlock from './useUpdateBlock'
 

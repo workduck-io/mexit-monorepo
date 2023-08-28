@@ -2,11 +2,10 @@ import React, { useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
 
 import { API_BASE_URLS, mog, useHighlightStore } from '@mexit/core'
-import { copyTextToClipboard } from '@mexit/shared'
+import { copyTextToClipboard, useLinks } from '@mexit/shared'
 
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useHighlights } from '../../Hooks/useHighlights'
-import { useLinks } from '../../Hooks/useLinks'
 import { VisualState } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 

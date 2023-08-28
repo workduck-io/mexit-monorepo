@@ -3,8 +3,8 @@ import { PlatePlugin, WithOverride } from '@udecode/plate-core'
 import { Range } from 'slate'
 
 import { ELEMENT_ILINK, mog, useEditorStore } from '@mexit/core'
+import { getPathFromNodeIdHookless } from '@mexit/shared'
 
-import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import { ComboboxKey } from '../Types/Combobox'
 
 /**

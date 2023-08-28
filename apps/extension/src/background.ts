@@ -64,6 +64,15 @@ const handleResponseCallback = (tabId: number, response: any) => {
   }
 }
 
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.url) {
+    chrome.tabs.sendMessage(tabId, {
+      type: 'url-change',
+      url: changeInfo.url
+    })
+  }
+})
+
 chrome.commands.onCommand.addListener((command) => {
   chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
     const tabId = tabs[0].id

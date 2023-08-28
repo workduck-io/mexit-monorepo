@@ -4,10 +4,7 @@ import { Icon } from '@iconify/react'
 import { debounce } from 'lodash'
 
 import { MIcon, Reaction as ReactionType, UserReaction } from '@mexit/core'
-import { IconDisplay, ProfileImage, Tooltip } from '@mexit/shared'
-
-import { useMentions } from '../../Hooks/useMentions'
-import { reactionsWithCount } from '../../Hooks/useReactions'
+import { IconDisplay, ProfileImage, reactionsWithCount, Tooltip, useMentionsHook } from '@mexit/shared'
 
 import {
   CompressedReactionGroup,
@@ -26,7 +23,7 @@ interface UserReactionRowProps {
 
 const UserReactionRow = ({ userReaction }: UserReactionRowProps) => {
   const { reactions, userId } = userReaction
-  const { getUserFromUserid } = useMentions()
+  const { getUserFromUserid } = useMentionsHook()
 
   const user = useMemo(() => {
     const u = getUserFromUserid(userId)

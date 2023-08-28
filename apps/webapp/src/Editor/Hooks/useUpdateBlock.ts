@@ -1,14 +1,18 @@
 import { toast } from 'react-hot-toast'
 
-import { findNode, findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
+import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
-import { ELEMENT_PARAGRAPH, emitter, useAuthStore, useContentStore } from '@mexit/core'
-import { parseToMarkdown } from '@mexit/shared'
+import {
+  ELEMENT_PARAGRAPH,
+  emitter,
+  getNodeIdFromEditor,
+  useAuthStore,
+  useBufferStore,
+  useContentStore
+} from '@mexit/core'
+import { parseToMarkdown, PropertiyFields } from '@mexit/shared'
 
-import { useBufferStore } from '../../Hooks/useEditorBuffer'
 import { useUpdater } from '../../Hooks/useUpdater'
-import { PropertiyFields } from '../Components/SuperBlock/SuperBlock.types'
-import { getNodeIdFromEditor } from '../Utils/helper'
 
 type BlockDataType = Record<string, any>
 
@@ -27,44 +31,6 @@ const useUpdateBlock = () => {
     if (editor) {
       const path = findNodePath(editor, blockElement)
       setNodes(editor, blockData, { at: path })
-    }
-  }
-
-  const changeSuperBlockType = (parentId: string, blockId: string, type: string) => {
-    const editor = getPlateEditorRef()
-    const updatedBy = useAuthStore.getState().userDetails?.id
-
-    if (editor) {
-      const noteId = getNodeIdFromEditor(parentId)
-      const nodeEntry = findNode(editor, { block: true, match: { id: blockId } })
-
-      if (nodeEntry) {
-        const [element, path] = nodeEntry as any
-
-        const metadata = element.metadata || {}
-        const properties = element.properties || {}
-        const entity = properties.entity || {}
-
-        setNodes(
-          editor,
-          {
-            metadata: {
-              ...metadata,
-              updatedBy,
-              updatedAt: Date.now()
-            },
-            type,
-            properties: {
-              ...properties,
-              entity: {
-                ...entity,
-                active: type
-              }
-            }
-          },
-          { at: path, mode: 'highest' }
-        )
-      }
     }
   }
 
@@ -215,7 +181,6 @@ const useUpdateBlock = () => {
     getSelectionInMarkdown,
     moveBlockFromNode,
     insertInNote,
-    changeSuperBlockType,
     updateMetadataProperties
   }
 }

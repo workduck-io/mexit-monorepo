@@ -1,6 +1,5 @@
 import { ILink, NodeLink } from '@mexit/core'
-
-import { useLinks } from './useLinks'
+import { useLinks } from '@mexit/shared'
 
 interface NamespaceChangedPaths {
   removedPaths: ILink[]

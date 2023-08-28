@@ -22,7 +22,7 @@ interface IconDisplayProps {
 }
 
 const resolveIconURL = (value: string) => {
-  if (chrome && chrome.runtime) return chrome.runtime.getURL(value)
+  if (chrome && chrome.runtime && !value?.startsWith('http')) return chrome.runtime.getURL(value)
 
   return value
 }

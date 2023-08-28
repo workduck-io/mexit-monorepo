@@ -3,11 +3,10 @@ import { useMemo } from 'react'
 import { createPlateEditor, deserializeMd, focusEditor, getPlateEditorRef, insertNodes } from '@udecode/plate'
 
 import { AIEvent, createSuperBlockContent, generateTempId, SuperBlocks, useEditorStore } from '@mexit/core'
-import { InsertMenu } from '@mexit/shared'
+import { InsertMenu, Plateless } from '@mexit/shared'
 
 import components from '../../Editor/Components/EditorPreviewComponents'
 import { generateEditorPluginsWithComponents } from '../../Editor/Plugins'
-import Plateless from '../Editor/Plateless'
 
 import { MessageBubble } from './styled'
 

@@ -9,8 +9,7 @@ import {
   useDataStore,
   useHighlightStore
 } from '@mexit/core'
-
-import { useLinks } from './useLinks'
+import { useLinks } from '@mexit/shared'
 
 const joinNewRes = (acc: boolean, curRes: boolean, join: FilterJoin) => {
   if (join === 'all') {

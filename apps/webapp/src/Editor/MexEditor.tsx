@@ -6,9 +6,9 @@ import { Plate, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate
 import { EditableProps } from 'slate-react/dist/components/editable'
 
 import { useBlockHighlightStore, useMultipleEditors } from '@mexit/core'
+import { useFocusBlock } from '@mexit/shared'
 
 import { useGlobalListener } from '../Hooks/useGlobalListener'
-import { useFocusBlock } from '../Stores/useFocusBlock'
 
 import { useComboboxConfig } from './Components/Combobox/config'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'

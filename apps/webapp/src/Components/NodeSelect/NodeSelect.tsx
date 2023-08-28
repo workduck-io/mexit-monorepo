@@ -42,10 +42,10 @@ import {
   SuggestionDesc,
   SuggestionError,
   SuggestionText,
-  SuggestionTextWrapper
+  SuggestionTextWrapper,
+  useLinks
 } from '@mexit/shared'
 
-import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useSearchExtra } from '../../Hooks/useSearch'
 import { StyledNamespaceSelectComponents } from '../../Style/Select'

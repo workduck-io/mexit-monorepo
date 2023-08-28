@@ -1,9 +1,7 @@
 import { generateTag, getTagsFromContent, TagsCache, useDataStore } from '@mexit/core'
+import { useLinks, useNodes } from '@mexit/shared'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
-
-import { useLinks } from './useLinks'
-import { useNodes } from './useNodes'
 
 /**
   Tags req

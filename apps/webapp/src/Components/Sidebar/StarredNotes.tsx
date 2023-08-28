@@ -5,10 +5,9 @@ import Tippy, { useSingleton } from '@tippyjs/react'
 import styled from 'styled-components'
 
 import { useDataStore, useEditorStore } from '@mexit/core'
-import { getMIcon } from '@mexit/shared'
+import { getMIcon, getTitleFromPath, useLinks } from '@mexit/shared'
 
 import { useBookmarks } from '../../Hooks/useBookmarks'
-import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import StarNoteButton from '../Buttons/StarNoteButton'

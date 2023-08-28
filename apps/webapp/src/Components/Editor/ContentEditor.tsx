@@ -9,6 +9,7 @@ import { tinykeys } from '@workduck-io/tinykeys'
 import {
   getContent,
   useBlockStore,
+  useBufferStore,
   useContentStore,
   useDataStore,
   useEditorStore,
@@ -17,18 +18,17 @@ import {
   useLayoutStore,
   useModalStore
 } from '@mexit/core'
-import { EditorWrapper, isOnEditableElement } from '@mexit/shared'
+import { EditorWrapper, isOnEditableElement, useReactions } from '@mexit/shared'
 
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useComments } from '../../Hooks/useComments'
-import { useBufferStore, useEditorBuffer } from '../../Hooks/useEditorBuffer'
+import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLastOpened } from '../../Hooks/useLastOpened'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
-import { useReactions } from '../../Hooks/useReactions'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'
 import { areEqual } from '../../Utils/hash'
 

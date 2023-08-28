@@ -12,17 +12,18 @@ import {
   useDataStore,
   useMentionStore
 } from '@mexit/core'
+import { useNodes } from '@mexit/shared'
 
 import { useNamespaceApi } from './API/useNamespaceAPI'
-import { useNodes } from './useNodes'
 
 export const useNamespaces = () => {
-  const { createNewNamespace } = useNamespaceApi()
   const { getNode, getNodeType } = useNodes()
   const addNamespace = useDataStore((s) => s.addNamespace)
   const addSpace = useDataStore((s) => s.addSpace)
   const updateNamespace = useDataStore((s) => s.updateNamespace)
+
   const {
+    createNewNamespace,
     changeNamespaceName: chageNamespaceNameApi,
     changeNamespaceIcon: changeNamespaceIconApi,
     makeNamespacePublic: makePublicApi,
@@ -193,6 +194,7 @@ export const useNamespaces = () => {
           }
         : n
     )
+
     useDataStore.setState({ namespaces: newNamespaces })
 
     const res = await changeNamespaceIconApi(id, name, icon)

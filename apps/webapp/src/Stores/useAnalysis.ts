@@ -2,13 +2,12 @@ import { useEffect } from 'react'
 
 import create from 'zustand'
 
-import { getContent, HighlightAnalysis, TodoType, useEditorStore, useTodoStore } from '@mexit/core'
+import { getContent, HighlightAnalysis, TodoType, useBufferStore, useEditorStore, useTodoStore } from '@mexit/core'
 
-import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
+import { useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { useSearchExtra } from '../Hooks/useSearch'
 import { areEqual } from '../Utils/hash'
 import { analyseContent, AnalysisOptions } from '../Workers/controller'
-
 
 export interface OutlineItem {
   id: string

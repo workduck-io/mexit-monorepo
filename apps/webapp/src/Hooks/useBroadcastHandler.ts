@@ -11,8 +11,8 @@ import {
   useTimestampStore,
   useViewStore
 } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
-import { useLinks } from './useLinks'
 import { useNamespaces } from './useNamespaces'
 import { RefactorResponse, useRefactor } from './useRefactor'
 import { useSnippets } from './useSnippets'

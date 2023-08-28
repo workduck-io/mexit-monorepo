@@ -1,10 +1,10 @@
 import Modal from 'react-modal'
 
 import { ContextMenuActionType, useBlockStore } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
 import { QuickLink, WrappedNodeSelect } from '../../../Components/NodeSelect/NodeSelect'
 import { useCreateNewNote } from '../../../Hooks/useCreateNewNote'
-import { useLinks } from '../../../Hooks/useLinks'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useDataSaverFromContent } from '../../../Hooks/useSave'
 import { useEditorBlockSelection } from '../../Actions/useEditorBlockSelection'

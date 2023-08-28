@@ -8,11 +8,18 @@ import { useTheme } from 'styled-components'
 import { LoadingButton, Title } from '@workduck-io/mex-components'
 
 import { API, ModalsType, Snippet, useMetadataStore, useModalStore, useSnippetStore } from '@mexit/core'
-import { ButtonFields, DefaultMIcons, FlexBetween, MexIcon, TemplateContainer } from '@mexit/shared'
+import {
+  ButtonFields,
+  DefaultMIcons,
+  FlexBetween,
+  getTitleFromPath,
+  MexIcon,
+  TemplateContainer,
+  useLinks
+} from '@mexit/shared'
 
 import { defaultContent } from '../../Data/baseData'
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
-import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { PrimaryText } from '../EditorInfobar/BlockInfobar'
 import { InviteFormWrapper, InviteWrapper } from '../Mentions/styles'
 import SidebarList from '../Sidebar/SidebarList'

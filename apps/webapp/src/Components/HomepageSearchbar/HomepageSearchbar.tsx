@@ -3,11 +3,10 @@ import React, { useEffect, useMemo } from 'react'
 import { Indexes, SearchResult } from '@workduck-io/mex-search'
 
 import { NodeType, useContentStore, useDataStore, useEditorStore, useRecentsStore } from '@mexit/core'
-import { HomepageSearchContainer, useQuery } from '@mexit/shared'
+import { HomepageSearchContainer, useNodes, useQuery } from '@mexit/shared'
 
 import { useFilters } from '../../Hooks/useFilters'
 import useLoad from '../../Hooks/useLoad'
-import { useNodes } from '../../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSearch } from '../../Hooks/useSearch'
 import { useViewFilters } from '../../Hooks/useViewFilters'

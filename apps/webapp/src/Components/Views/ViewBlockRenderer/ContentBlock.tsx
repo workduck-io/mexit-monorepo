@@ -5,12 +5,9 @@ import styled, { css, useTheme } from 'styled-components'
 import { SearchResult } from '@workduck-io/mex-search'
 
 import { ModalsType, SuperBlocks, useModalStore } from '@mexit/core'
-import { Group, MexIcon } from '@mexit/shared'
+import { ContentSuperBlock, Group, MexIcon, PropertiyFields, SmartCaptureSuperBlock } from '@mexit/shared'
 
 import { SearchBlockIcons } from '../../../Editor/Components/Blocks/BlockIcons'
-import ContentSuperBlock from '../../../Editor/Components/SuperBlock/ContentSuperBlock'
-import SmartCaptureSuperBlock from '../../../Editor/Components/SuperBlock/SmartCaptureSuperBlock'
-import { PropertiyFields } from '../../../Editor/Components/SuperBlock/SuperBlock.types'
 import useUpdateBlock from '../../../Editor/Hooks/useUpdateBlock'
 import { ROUTE_PATHS } from '../../../Hooks/useRouting'
 import { useSearch } from '../../../Hooks/useSearch'

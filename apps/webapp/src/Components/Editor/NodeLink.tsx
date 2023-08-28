@@ -2,14 +2,12 @@ import React, { useEffect } from 'react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { DefaultMIcons, NodeType, useMetadataStore,useMultipleEditors  } from '@mexit/core'
-import { IconDisplay, SharedNodeIcon } from '@mexit/shared'
+import { DefaultMIcons, NodeType, useMetadataStore, useMultipleEditors } from '@mexit/core'
+import { IconDisplay, SharedNodeIcon, useLinks, useNodes } from '@mexit/shared'
 
 import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
 // import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
-import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
-import { useNodes } from '../../Hooks/useNodes'
 // import { useOnMouseClick } from '../../Hooks/useOnMouseClick'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { NodeLinkStyled, NodeLinkTitleWrapper, NodeLinkWrapper } from '../../Style/Backlinks'

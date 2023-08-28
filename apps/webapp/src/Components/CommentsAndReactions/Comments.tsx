@@ -14,13 +14,11 @@ import {
   NodeEditorContent,
   useAuthStore
 } from '@mexit/core'
-import { ComboboxShortcuts, ProfileImage, RelativeTime, ShortcutText } from '@mexit/shared'
+import { ComboboxShortcuts, Plateless, ProfileImage, RelativeTime, ShortcutText, useMentionsHook } from '@mexit/shared'
 
-import { useMentions } from '../../Hooks/useMentions'
 import { areEqual } from '../../Utils/hash'
 import { CommentEditor } from '../CommentEditor'
 import { CommentEditorWrapper } from '../CommentEditor/styled'
-import Plateless from '../Editor/Plateless'
 
 import {
   CommentActions,
@@ -48,7 +46,7 @@ interface CommentProps {
 }
 
 export const Comment = ({ comment, onDeleteComment }: CommentProps) => {
-  const { getUserFromUserid } = useMentions()
+  const { getUserFromUserid } = useMentionsHook()
   // const { deleteComment } = useComments()
   const currentUserDetails = useAuthStore((state) => state.userDetails)
 

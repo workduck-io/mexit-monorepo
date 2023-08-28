@@ -1,16 +1,14 @@
 import create from 'zustand'
 
 import { getContent, mog, NodeEditorContent, useBufferStore, useSnippetStore } from '@mexit/core'
+import { useNodes } from '@mexit/shared'
 
 import { areEqual } from '../Utils/hash'
 
 import { useApi } from './API/useNodeAPI'
 import { useNamespaces } from './useNamespaces'
-import { useNodes } from './useNodes'
 import { useDataSaverFromContent } from './useSave'
 import { useSnippets } from './useSnippets'
-
-export { useBufferStore }
 
 export const useEditorBuffer = () => {
   const add2Buffer = useBufferStore((s) => s.add)

@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-// import { EditorStyles } from '@mexit/shared'
-
 export const CommentEditorWrapper = styled.section`
   width: 100%;
   padding: ${({ theme }) => theme.spacing.small};

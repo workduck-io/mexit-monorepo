@@ -1,9 +1,8 @@
 import React from 'react'
 
 import { capitalize } from '@mexit/core'
-import { BacklinksHelp, ForwardlinksHelp,InfoWidgetWrapper, Note } from '@mexit/shared'
+import { BacklinksHelp, ForwardlinksHelp, InfoWidgetWrapper, Note, useLinks } from '@mexit/shared'
 
-import { useLinks } from '../../Hooks/useLinks'
 import Collapse from '../../Layout/Collapse'
 import NodeLink from '../Editor/NodeLink'
 

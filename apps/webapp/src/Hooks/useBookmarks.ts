@@ -1,8 +1,7 @@
 import { useAuth } from '@workduck-io/dwindle'
 
 import { API, useAuthStore, useDataStore } from '@mexit/core'
-
-import { useLinks } from './useLinks'
+import { useLinks } from '@mexit/shared'
 
 /**
  * Has been repurposed into starred notes

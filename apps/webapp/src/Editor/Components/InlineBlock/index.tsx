@@ -5,10 +5,8 @@ import { useSelected } from 'slate-react'
 import styled from 'styled-components'
 
 import { NodeType, useContentStore } from '@mexit/core'
-import { RootElement, SharedNodeIcon } from '@mexit/shared'
+import { RootElement, SharedNodeIcon, useLinks, useNodes } from '@mexit/shared'
 
-import { useLinks } from '../../../Hooks/useLinks'
-import { useNodes } from '../../../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { getBlock } from '../../../Utils/parseData'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'

@@ -16,11 +16,11 @@ import {
   userPreferenceStore as useUserPreferenceStore,
   useShareModalStore
 } from '@mexit/core'
-import { StyledCreatatbleSelect } from '@mexit/shared'
+import { getAccessValue, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
-import { getAccessValue, useMentions } from '../../Hooks/useMentions'
+import { useMentions } from '../../Hooks/useMentions'
 import { ModalControls, ModalHeader } from '../../Style/Refactor'
 
 import {

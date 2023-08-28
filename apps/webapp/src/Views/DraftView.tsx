@@ -32,6 +32,7 @@ import {
   IconDisplay,
   MainHeader,
   PageContainer,
+  Plateless,
   Result,
   ResultCardFooter,
   ResultHeader,
@@ -42,7 +43,6 @@ import {
   Title
 } from '@mexit/shared'
 
-import Plateless from '../Components/Editor/Plateless'
 import { TagsRelatedTiny } from '../Components/Editor/TagsRelated'
 import HomepageSearchbar from '../Components/HomepageSearchbar/HomepageSearchbar'
 import LinkComponent from '../Components/Link'

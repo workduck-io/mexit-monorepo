@@ -58,6 +58,22 @@ export const CREATE_NEW_SNIPPET: ListItemType = {
   }
 }
 
+export const SmartCaptureAction = {
+  id: 'ACTION_9x34kgj23j4234ojin',
+  title: 'Smart Capture',
+  category: QuickLinkType.action,
+  icon: getMIcon('ICON', 'fluent:screen-search-24-filled'),
+  description: 'Smartly captures any useful data from the current page',
+  type: ActionType.MAGICAL,
+  shortcut: {
+    pick: {
+      title: 'to pick',
+      category: 'action',
+      keystrokes: 'Enter'
+    }
+  }
+}
+
 export const initActions: Array<ListItemType> = [
   {
     id: 'ACTION_LHQhtM9eA3avcNvy8RYgS',
@@ -75,21 +91,7 @@ export const initActions: Array<ListItemType> = [
     },
     extras: { base_url: `${API_BASE_URLS.actions}/shortener` }
   },
-  {
-    id: 'ACTION_9x34kgj23j4234ojin',
-    title: 'Smart Capture',
-    category: QuickLinkType.action,
-    icon: getMIcon('ICON', 'fluent:screen-search-24-filled'),
-    description: 'Smartly captures any useful data from the current page',
-    type: ActionType.MAGICAL,
-    shortcut: {
-      pick: {
-        title: 'to pick',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    }
-  },
+  SmartCaptureAction,
   {
     id: 'ACTION_1',
     title: 'Take Screenshot',

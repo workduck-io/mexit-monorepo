@@ -20,9 +20,9 @@ import {
   useReminderStore,
   useTodoStore
 } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
 import { useReminderAPI } from './API/useReminderAPI'
-import { useLinks } from './useLinks'
 
 export const useReminders = () => {
   const reminders = useReminderStore((state) => state.reminders)

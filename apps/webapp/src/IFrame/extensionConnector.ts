@@ -20,7 +20,8 @@ import {
   startRequestsWorkerService,
   startSearchWorker,
   updateDoc,
-  updateOrAppendBlocks} from '../Workers/controller'
+  updateOrAppendBlocks
+} from '../Workers/controller'
 
 import { broadCastMessage } from './channels'
 import { initializeExtension } from './initializeExtension'
@@ -62,6 +63,7 @@ export const webExtensionConnector = async () => {
   })
 
   mog('CONNECTION TO EXTENSION', { host })
+
   host.promise
     .then((extension) => {
       mog('[IFRAME ---- EXTENSION]', { extension, location: window.location.href })

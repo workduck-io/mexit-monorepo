@@ -1,6 +1,6 @@
 import { getTodosFromContent, NodeEditorContent, useContentStore, useMetadataStore, useTodoStore } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
-import { useLinks } from './useLinks'
 import { useSearch } from './useSearch'
 import { useTags } from './useTags'
 

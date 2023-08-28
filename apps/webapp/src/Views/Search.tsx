@@ -34,6 +34,7 @@ import {
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
   Title,
+  useNodes,
   useQuery
 } from '@mexit/shared'
 
@@ -43,7 +44,6 @@ import Metadata from '../Components/EditorInfobar/Metadata'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useFilters } from '../Hooks/useFilters'
 import useLoad from '../Hooks/useLoad'
-import { useNodes } from '../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useTags } from '../Hooks/useTags'

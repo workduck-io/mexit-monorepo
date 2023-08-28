@@ -13,12 +13,12 @@ import {
   useEditorStore,
   useMetadataStore
 } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
 import { updateILink } from '../Workers/controller'
 
 import { useHierarchy } from './useHierarchy'
 import { useLastOpened } from './useLastOpened'
-import { useLinks } from './useLinks'
 import useLoad from './useLoad'
 import { useNamespaces } from './useNamespaces'
 import { useNavigation } from './useNavigation'

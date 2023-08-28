@@ -7,9 +7,7 @@ import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { ContextMenuType, NodeEditorContent, useBlockHighlightStore, useLayoutStore } from '@mexit/core'
-import { EditorStyles, TodoContainer } from '@mexit/shared'
-
-import { useFocusBlock } from '../Stores/useFocusBlock'
+import { EditorStyles, TodoContainer, useFocusBlock } from '@mexit/shared'
 
 import components, { editorPreviewComponents } from './Components/EditorPreviewComponents'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'

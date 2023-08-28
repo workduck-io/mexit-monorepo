@@ -20,19 +20,20 @@ import {
   copyTextToClipboard,
   DefaultMIcons,
   GenericFlex,
+  getAccessValue,
   IconDisplay,
   mergeAccess,
   ProfileImage,
   StyledCreatatbleSelect,
-  Text
+  Text,
+  useNodes
 } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useFetchShareData } from '../../Hooks/useFetchShareData'
-import { getAccessValue, useMentions } from '../../Hooks/useMentions'
+import { useMentions } from '../../Hooks/useMentions'
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { useNodes } from '../../Hooks/useNodes'
 import { getUserAccess, usePermissions } from '../../Hooks/usePermissions'
 import { ModalActions, ModalFooter } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'

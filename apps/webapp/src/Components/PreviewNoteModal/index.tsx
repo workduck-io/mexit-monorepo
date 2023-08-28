@@ -13,6 +13,7 @@ import {
   ModalsType,
   NodeEditorContent,
   NodeType,
+  useBufferStore,
   useContentStore,
   useMetadataStore,
   useModalStore
@@ -24,13 +25,13 @@ import {
   IconDisplay,
   PreviewActionHeader,
   sharedAccessIcon,
-  Tooltip
+  Tooltip,
+  useLinks,
+  useNodes
 } from '@mexit/shared'
 
-import { useBufferStore, useEditorBuffer } from '../../Hooks/useEditorBuffer'
-import { useLinks } from '../../Hooks/useLinks'
+import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { useNodes } from '../../Hooks/useNodes'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useTags } from '../../Hooks/useTags'

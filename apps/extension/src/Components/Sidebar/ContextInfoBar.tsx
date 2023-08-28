@@ -36,6 +36,7 @@ import { getElementById } from '../../Utils/cs-utils'
 import { GenericCard } from './GenericCard'
 import { HighlightGroups } from './HighlightGroup'
 import SidebarSection from './SidebarSection'
+import { SmartCaptureSection } from './SmartCaptureSection'
 import { EventCard, EventHeading, Timestamp } from './styled'
 
 // TODO: add links to onboarding tutorials later
@@ -263,8 +264,9 @@ const Highlights = () => {
 export function ContextInfoBar() {
   return (
     <SnippetCards fullHeight>
-      <UpcomingEvents />
-      <Highlights />
+      <SmartCaptureSection />
+      {/* <UpcomingEvents />
+      <Highlights /> */}
     </SnippetCards>
   )
 }

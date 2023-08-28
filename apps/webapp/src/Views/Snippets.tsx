@@ -33,6 +33,7 @@ import {
   IconDisplay,
   ItemTag,
   MainHeader,
+  Plateless,
   PreviewDescription,
   Result,
   ResultDesc,
@@ -49,7 +50,6 @@ import {
   useQuery
 } from '@mexit/shared'
 
-import Plateless from '../Components/Editor/Plateless'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useApi } from '../Hooks/API/useNodeAPI'
 import usePrompts from '../Hooks/usePrompts'

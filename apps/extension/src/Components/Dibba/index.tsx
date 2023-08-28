@@ -16,7 +16,8 @@ import {
   useAuthStore,
   useContentStore,
   useLinkStore,
-  useMetadataStore, useSnippetStore
+  useMetadataStore,
+  useSnippetStore
 } from '@mexit/core'
 import {
   ActionTitle,
@@ -25,6 +26,7 @@ import {
   ComboboxShortcuts,
   ComboSeperator,
   DefaultMIcons,
+  getPathFromNodeIdHookless,
   IconDisplay,
   ItemCenterWrapper,
   ItemDesc,
@@ -34,7 +36,6 @@ import {
 } from '@mexit/shared'
 
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
-import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { getDibbaText } from '../../Utils/getDibbaText'

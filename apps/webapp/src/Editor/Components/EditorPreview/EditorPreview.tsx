@@ -14,6 +14,7 @@ import {
   BannerType,
   getNameFromPath,
   NodeEditorContent,
+  useBufferStore,
   useContentStore,
   useDataStore,
   useMetadataStore,
@@ -28,13 +29,13 @@ import {
   IconDisplay,
   NestedFloating,
   PreviewActionHeader,
-  Tooltip
+  Tooltip,
+  useLinks
 } from '@mexit/shared'
 
 import Banner from '../../../Components/Editor/Banner'
 import { TagsRelatedTiny } from '../../../Components/Editor/TagsRelated'
-import { useBufferStore, useEditorBuffer } from '../../../Hooks/useEditorBuffer'
-import { useLinks } from '../../../Hooks/useLinks'
+import { useEditorBuffer } from '../../../Hooks/useEditorBuffer'
 import useLoad from '../../../Hooks/useLoad'
 import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'

@@ -1,9 +1,9 @@
 import { PlatePlugin } from '@udecode/plate-core'
 
 import { SuperBlocks } from '@mexit/core'
+import { HighlightSuperBlock } from '@mexit/shared'
 
-import HighlightSuperBlock from '../Components/SuperBlock/HighlightSuperBlock'
-import { withSuperBlockElement } from '../Components/SuperBlock/withSuperBlockElement'
+import { withSuperBlockElement } from './withSuperBlockElement'
 
 /**
  * Enables support for Super Block - HIGHLIGHT.

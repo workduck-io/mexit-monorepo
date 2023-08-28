@@ -23,6 +23,7 @@ import {
 import {
   DefaultMIcons,
   getMIcon,
+  getTitleFromPath,
   Group,
   HighlightCollapsedToggle,
   HighlightCount,
@@ -30,13 +31,13 @@ import {
   HighlightGroupToggleButton,
   HighlightText,
   InsertMenu,
-  SingleHighlightWrapper
+  SingleHighlightWrapper,
+  useLinks
 } from '@mexit/shared'
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useHighlights } from '../../Hooks/useHighlights'
-import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import useLoad from '../../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 

@@ -1,7 +1,5 @@
 import { deepEqual } from 'fast-equals'
 
-import { NODE_ID_PREFIX, SNIPPET_PREFIX } from '@mexit/core'
-
 export const withoutDelimiter = (text: string, delimiter = '.') => {
   const key = text
     .split(delimiter)
@@ -10,25 +8,6 @@ export const withoutDelimiter = (text: string, delimiter = '.') => {
 
   if (text?.startsWith(delimiter) && key.length > 0) return { key: `.${key}`, isChild: true }
   return { key, isChild: false }
-}
-
-export const getNodeIdFromEditor = (editorId: string) => {
-  /*
-   * Find substring of form NODE_{} in editorid
-   */
-  const nodeReg = new RegExp(`${NODE_ID_PREFIX}_[A-Za-z0-9]+`)
-  const nodeIdReg = editorId.match(nodeReg)
-  // mog('nodeId', { nodeIdReg, editorId })
-  if (nodeIdReg) {
-    return nodeIdReg[0]
-  }
-
-  const snippetReg = new RegExp(`${SNIPPET_PREFIX}_[A-Za-z0-9]+`)
-  const snippetnodeidReg = editorId.match(snippetReg)
-  // mog('nodeId', { snippetReg, snippetnodeidReg })
-  if (snippetnodeidReg) {
-    return snippetnodeidReg[0]
-  }
 }
 
 export const removeNulls = (obj: any): any => {

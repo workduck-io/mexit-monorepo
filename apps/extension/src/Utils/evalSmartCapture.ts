@@ -3,6 +3,7 @@ import { ELEMENT_H2 } from '@udecode/plate'
 import {
   createSuperBlockContent,
   ELEMENT_PARAGRAPH,
+  mog,
   NodeEditorContent,
   SmartCaptureConfig as SmartCaptureConfigType,
   SmartCaptureLabel,
@@ -57,7 +58,7 @@ export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
 
 const extractData = (rule: SmartCaptureLabel) => {
   const ele = document.evaluate(rule.path, document, null, XPathResult.ANY_TYPE, null).iterateNext()
-
+  mog('RULE', { rule, ele })
   if (ele !== null) {
     return {
       id: rule.id,

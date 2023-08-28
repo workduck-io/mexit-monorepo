@@ -1,6 +1,5 @@
 import { APIComment, Comment, mog, useAuthStore, useCommentStore } from '@mexit/core'
-
-import { useCommentAPI } from './API/useCommentAndReactionAPI'
+import { useCommentAPI } from '@mexit/shared'
 
 export const useComments = () => {
   const commentAPI = useCommentAPI()

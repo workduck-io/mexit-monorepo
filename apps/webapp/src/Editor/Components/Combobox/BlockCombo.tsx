@@ -14,6 +14,7 @@ import {
   ComboboxItemTitle,
   ComboboxShortcuts,
   ComboSeperator,
+  getPathFromNodeIdHookless,
   ItemDesc,
   ItemsContainer,
   MexIcon,
@@ -23,7 +24,6 @@ import {
 } from '@mexit/shared'
 
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
-import { getPathFromNodeIdHookless } from '../../../Hooks/useLinks'
 import { useSearch } from '../../../Hooks/useSearch'
 import { KEYBOARD_KEYS } from '../../constants'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'

@@ -5,7 +5,7 @@ import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId } from '@udec
 import { getRootProps } from '@udecode/plate-styled-components'
 import { useReadOnly } from 'slate-react'
 
-import { getNodeIdFromEditor } from '../../../Editor/utils/helper'
+import { getNodeIdFromEditor } from '@mexit/core'
 
 import { TodoBase } from './Todo'
 

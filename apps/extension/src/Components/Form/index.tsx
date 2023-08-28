@@ -1,25 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { useTheme } from 'styled-components'
-
-import { MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { mog, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
-import { FlexBetween } from '@mexit/shared'
 
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { FormBuilder } from '../../Types/Form'
 import { formToBlocks } from '../../Utils/evalSmartCapture'
-import { Title } from '../Action/styled'
 import { Dialog } from '../Floating/Dialog'
 import NoteSelector from '../Floating/NoteSelector'
-import { Controls } from '../Renderers/Screenshot/Screenshot.style'
 
-import Field from './Field'
-import { ExcludeFormFieldsContainer, StyledForm, StyledRowItem, UserPreferedFieldsContainer } from './styled'
+import { ExludedFormFields, UserPreferedFields } from './Sections'
+import { StyledForm } from './styled'
 
 interface FormProps {
   config: FormBuilder
@@ -114,60 +108,6 @@ const Form: React.FC<FormProps> = ({ page, config }) => {
         />
       </StyledForm>
     </>
-  )
-}
-
-const ExludedFormFields = ({ page, register, fields }) => {
-  const removeFromExcludedFields = useUserPreferenceStore((s) => s.removeExcludedSmartCaptureField)
-  const theme = useTheme()
-
-  const onRemoveField = (id: string) => {
-    removeFromExcludedFields(page, id)
-  }
-
-  if (fields?.length > 0)
-    return (
-      <ExcludeFormFieldsContainer>
-        <Controls>
-          <MexIcon icon="ph:textbox-fill" height={20} width={20} color={theme.tokens.colors.primary.default} />
-          <Title>Additional Fields</Title>
-        </Controls>
-        {fields.map((field) => {
-          return (
-            <StyledRowItem>
-              <FlexBetween>
-                <label>{field.label}</label>
-                <MexIcon icon="akar-icons:plus" onClick={() => onRemoveField(field.id)} />
-              </FlexBetween>
-              <Field item={field} register={register} />
-            </StyledRowItem>
-          )
-        })}
-      </ExcludeFormFieldsContainer>
-    )
-}
-
-const UserPreferedFields = ({ page, fields, register }) => {
-  const excludeFieldFromForm = useUserPreferenceStore((s) => s.excludeSmartCaptureField)
-
-  const onAddField = (id: string) => {
-    excludeFieldFromForm(page, id)
-  }
-
-  return (
-    <UserPreferedFieldsContainer>
-      {fields.map((field) => {
-        return (
-          <StyledRowItem>
-            <FlexBetween>
-              <label>{field.label}</label>
-              <MexIcon icon="clarity:window-close-line" onClick={() => onAddField(field.id)} />
-            </FlexBetween>
-            <Field item={field} register={register} />
-          </StyledRowItem>
-        )
-      })}
-    </UserPreferedFieldsContainer>
   )
 }
 

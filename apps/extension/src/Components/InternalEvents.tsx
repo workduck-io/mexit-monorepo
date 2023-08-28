@@ -6,7 +6,14 @@ import * as Sentry from '@sentry/react'
 import mixpanel from 'mixpanel-browser'
 import Highlighter from 'web-highlighter'
 
-import { API_BASE_URLS, FloatingElementType, useFloatingStore, useHighlightStore, useHistoryStore } from '@mexit/core'
+import {
+  API_BASE_URLS,
+  FloatingElementType,
+  mog,
+  useFloatingStore,
+  useHighlightStore,
+  useHistoryStore
+} from '@mexit/core'
 import { addIconsToIconify, getScrollbarWidth, isInputField } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
@@ -53,6 +60,7 @@ type Timeout = ReturnType<typeof setTimeout>
 function useToggleHandler() {
   const { visualState, setVisualState } = useSputlitContext()
   const setSelection = useSputlitStore((s) => s.setSelection)
+  const setCaptureProfile = useSputlitStore((s) => s.setCaptureProfile)
   const { previewMode, setPreviewMode } = useEditorStore()
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
   const resetSputlitState = useSputlitStore((s) => s.reset)
@@ -119,6 +127,10 @@ function useToggleHandler() {
             setVisualState(VisualState.animatingOut)
           }
           sendResponse(true)
+          break
+        case 'url-change':
+          mog('CAPTURED', { request })
+          setCaptureProfile(request.url)
           break
         case 'open-ai-tools':
           handleOpenAIPreview(highlighter)

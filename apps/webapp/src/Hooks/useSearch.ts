@@ -16,6 +16,7 @@ import {
   useDataStore,
   useMentionStore
 } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
 import {
   addDoc,
@@ -28,8 +29,6 @@ import {
   updateDoc,
   updateOrAppendBlocks
 } from '../Workers/controller'
-
-import { useLinks } from './useLinks'
 
 export const useSearchExtra = () => {
   const ilinks = useDataStore((s) => s.ilinks)

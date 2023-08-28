@@ -1,8 +1,7 @@
 import { useAuth } from '@workduck-io/dwindle'
 
 import { API, ILink, mog, useDataStore } from '@mexit/core'
-
-import { getTitleFromPath } from './useLinks'
+import { getTitleFromPath } from '@mexit/shared'
 
 const useArchive = () => {
   const setArchive = useDataStore((state) => state.setArchive)

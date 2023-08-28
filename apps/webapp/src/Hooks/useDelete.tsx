@@ -12,9 +12,9 @@ import {
   useHistoryStore,
   useRecentsStore
 } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
 import useArchive from './useArchive'
-import { useLinks } from './useLinks'
 import { useSearch } from './useSearch'
 
 export const useDelete = () => {

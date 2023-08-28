@@ -9,10 +9,9 @@ import { useTheme } from 'styled-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { defaultContent, fuzzySearch, ILink, useLayoutStore } from '@mexit/core'
-import { Input, isOnEditableElement, MexIcon, SidebarListFilter } from '@mexit/shared'
+import { getTitleFromPath, Input, isOnEditableElement, MexIcon, SidebarListFilter } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
-import { getTitleFromPath } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { getPartialTreeFromLinks, getTreeFromLinks } from '../../Hooks/useTreeFromLinks'

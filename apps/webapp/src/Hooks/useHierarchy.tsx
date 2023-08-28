@@ -1,7 +1,7 @@
 import { getDefaultContent, HASH_SEPARATOR, mog, NodeEditorContent, SEPARATOR, useDataStore } from '@mexit/core'
+import { getNodeidFromPathAndLinks } from '@mexit/shared'
 
 import { useApi } from './API/useNodeAPI'
-import { getNodeidFromPathAndLinks } from './useLinks'
 
 const appendToText = (text: string, textToAppend: string, separator = SEPARATOR) => {
   if (!text) return textToAppend

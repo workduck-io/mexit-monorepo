@@ -31,11 +31,11 @@ import {
   SingleHighlightWrapper,
   SnippetContentPreview,
   StickyHeader,
+  useLinks,
   VerticalSeperator
 } from '@mexit/shared'
 
 import { useHighlights } from '../../Hooks/useHighlights'
-import { useLinks } from '../../Hooks/useLinks'
 
 import { NodeCardHeader } from './NodeCard'
 import { DomainWithHighlight } from './styled'

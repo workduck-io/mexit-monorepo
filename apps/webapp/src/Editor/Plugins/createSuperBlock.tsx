@@ -14,9 +14,7 @@ import {
 } from '@udecode/plate'
 import { debounce } from 'lodash'
 
-import { createSuperBlockContent, mog, SuperBlocks } from '@mexit/core'
-
-import { getNodeIdFromEditor } from '../Utils/helper'
+import { createSuperBlockContent, getNodeIdFromEditor, mog, SuperBlocks } from '@mexit/core'
 
 export const SUPER_BLOCK_PLUGIN_KEY = 'plugin-super-block'
 

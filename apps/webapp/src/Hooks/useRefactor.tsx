@@ -1,8 +1,8 @@
 import { getUniquePath, ILink, isMatch, mog, NodeLink, RefactorPath, useDataStore } from '@mexit/core'
+import { useLinks } from '@mexit/shared'
 
 import { useApi } from './API/useNodeAPI'
 import { useEditorBuffer } from './useEditorBuffer'
-import { useLinks } from './useLinks'
 
 interface NamespaceChangedPaths {
   removedPaths: ILink[]

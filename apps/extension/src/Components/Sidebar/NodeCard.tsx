@@ -19,6 +19,7 @@ import {
   CopyButton,
   DefaultMIcons,
   GenericFlex,
+  getTitleFromPath,
   IconDisplay,
   MexIcon,
   PrimaryText,
@@ -26,7 +27,6 @@ import {
   SnippetContentPreview
 } from '@mexit/shared'
 
-import { getTitleFromPath } from '../../Hooks/useLinks'
 import { useNodes } from '../../Hooks/useNodes'
 import SnippetPreview from '../Editor/SnippetPreview'
 

@@ -15,13 +15,13 @@ import {
   ResultHeader,
   Results,
   ResultTitle,
-  SearchPreviewWrapper
+  SearchPreviewWrapper,
+  useLinks
 } from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'
 import { defaultContent } from '../Data/baseData'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
-import { useLinks } from '../Hooks/useLinks'
 import useLoad from '../Hooks/useLoad'
 import { useNamespaces } from '../Hooks/useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'

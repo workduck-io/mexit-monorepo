@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { extractMetadata, mog, usePublicNodeStore } from '@mexit/core'
+import { getTitleFromPath } from '@mexit/shared'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
 import PublicDataInfobar from '../Components/Infobar/PublicNodeInfobar'
@@ -11,7 +12,6 @@ import Presenter from '../Components/Presenter'
 import SplashScreen from '../Components/SplashScreen'
 import { defaultContent } from '../Data/baseData'
 import { useApi } from '../Hooks/API/useNodeAPI'
-import { getTitleFromPath } from '../Hooks/useLinks'
 
 const PublicEditorWrapper = styled.div`
   display: flex;

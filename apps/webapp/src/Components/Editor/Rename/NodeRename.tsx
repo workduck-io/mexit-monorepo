@@ -20,12 +20,11 @@ import {
   useHelpStore,
   useRenameStore
 } from '@mexit/core'
-import { Input, isOnEditableElement } from '@mexit/shared'
+import { Input, isOnEditableElement, useNodes } from '@mexit/shared'
 
 import { useKeyListener } from '../../../Hooks/useChangeShortcutListener'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useNavigation } from '../../../Hooks/useNavigation'
-import { useNodes } from '../../../Hooks/useNodes'
 import { usePermissions } from '../../../Hooks/usePermissions'
 import { useRefactor } from '../../../Hooks/useRefactor'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'

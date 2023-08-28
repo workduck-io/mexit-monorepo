@@ -18,15 +18,13 @@ import {
   useMetadataStore,
   useTodoStore
 } from '@mexit/core'
-import { DefaultMIcons } from '@mexit/shared'
+import { DefaultMIcons, useLinks, useNodes } from '@mexit/shared'
 
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
 import { useInternalLinks } from '../useInternalLinks'
 import { useLastOpened } from '../useLastOpened'
-import { useLinks } from '../useLinks'
 import { useNamespaces } from '../useNamespaces'
-import { useNodes } from '../useNodes'
 import { useSnippets } from '../useSnippets'
 import { useUpdater } from '../useUpdater'
 

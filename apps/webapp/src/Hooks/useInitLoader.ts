@@ -20,6 +20,7 @@ import {
   useStore,
   withTimeout
 } from '@mexit/core'
+import { useNodes } from '@mexit/shared'
 
 import { useAuthentication } from '../Stores/useAuth'
 import {
@@ -39,7 +40,6 @@ import { useUserService } from './API/useUserAPI'
 import { useViewAPI } from './API/useViewsAPI'
 import { useFetchShareData } from './useFetchShareData'
 import { useHighlightSync } from './useHighlights'
-import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
 import { useSmartCapture } from './useSmartCapture'
 import { useUserPreferences } from './useSyncUserPreferences'

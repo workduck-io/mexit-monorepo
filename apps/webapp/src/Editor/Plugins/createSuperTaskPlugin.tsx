@@ -1,9 +1,9 @@
 import { PlatePlugin } from '@udecode/plate-core'
 
 import { SuperBlocks } from '@mexit/core'
+import { TaskSuperBlock } from '@mexit/shared'
 
-import TaskSuperBlock from '../Components/SuperBlock/TaskSuperBlock'
-import { withSuperBlockElement } from '../Components/SuperBlock/withSuperBlockElement'
+import { withSuperBlockElement } from './withSuperBlockElement'
 
 /**
  * Enables support for Super Block - Task.

@@ -7,7 +7,7 @@ import { MIcon } from '../Types/Store'
 
 import { createSuperBlockContent, updateIds } from './dataTransform'
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_LINK, ELEMENT_MENTION, ELEMENT_UL } from './editorElements'
-import { generateHighlightId, generateTempId } from './idGenerator'
+import { generateHighlightId, generateTempId, NODE_ID_PREFIX, SNIPPET_PREFIX } from './idGenerator'
 import { convertContentToRawText } from './parseData'
 import { getSlug } from './strings'
 
@@ -76,6 +76,25 @@ export const insertId = (content: any[]) => {
       id: generateTempId()
     }
   })
+}
+
+export const getNodeIdFromEditor = (editorId: string) => {
+  /*
+   * Find substring of form NODE_{} in editorid
+   */
+  const nodeReg = new RegExp(`${NODE_ID_PREFIX}_[A-Za-z0-9]+`)
+  const nodeIdReg = editorId.match(nodeReg)
+  // mog('nodeId', { nodeIdReg, editorId })
+  if (nodeIdReg) {
+    return nodeIdReg[0]
+  }
+
+  const snippetReg = new RegExp(`${SNIPPET_PREFIX}_[A-Za-z0-9]+`)
+  const snippetnodeidReg = editorId.match(snippetReg)
+  // mog('nodeId', { snippetReg, snippetnodeidReg })
+  if (snippetnodeidReg) {
+    return snippetnodeidReg[0]
+  }
 }
 
 // Removes existing element IDs

@@ -21,11 +21,10 @@ import {
   useRecentsStore,
   withoutContinuousDelimiter
 } from '@mexit/core'
-import { IconDisplay, Loading, WDLogo } from '@mexit/shared'
+import { IconDisplay, Loading, useLinks, WDLogo } from '@mexit/shared'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorStore } from '../../Hooks/useEditorStore'
-import { useLinks } from '../../Hooks/useLinks'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSearch } from '../../Hooks/useSearch'
 import { useSearchProps } from '../../Hooks/useSearchProps'
