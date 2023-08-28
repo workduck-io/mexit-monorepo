@@ -155,10 +155,10 @@ const propertyChangeHandler = (callback?) => (data) => {
   if (callback) callback(result)
 }
 
-const transformTemplateBlockForInsert = (block) => {
+export const transformTemplateBlockForInsert = (block) => {
   return {
     ...block,
     id: generateTempId(),
-    properties: block.properties.properties
+    properties: { ...block.properties.properties, templateBlockId: block.id }
   }
 }
