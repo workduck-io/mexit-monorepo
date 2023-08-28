@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -40,7 +40,7 @@ export const CorporateBS = () => {
         setCorpBS(data.phrase)
       })
       .catch((error) => {
-        console.log(error)
+        console.error(error)
       })
   }, [])
 

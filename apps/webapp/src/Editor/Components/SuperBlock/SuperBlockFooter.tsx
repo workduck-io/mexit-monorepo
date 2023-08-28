@@ -4,7 +4,7 @@ import { useTheme } from 'styled-components'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { et, generateTag, getMIcon, Tag, useDataStore } from '@mexit/core'
+import { et, generateTag, getMIcon, mog, Tag, useDataStore } from '@mexit/core'
 import { AddTagMenu, Group, TagsLabel } from '@mexit/shared'
 
 import { Section } from './SuperBlock.styled'
@@ -55,7 +55,7 @@ const BlockTags = ({ name, value, isSelected, onChange, isReadOnly }: BlockTagsP
   }
 
   const addTagFilter = (tag: string) => {
-    console.log('addTagFilter', tag)
+    mog('addTagFilter', { tag })
   }
 
   return (

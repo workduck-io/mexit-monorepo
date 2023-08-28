@@ -18,14 +18,14 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
   getNameFromPath,
+  mog,
   RecentType,
   SEPARATOR,
   useDataStore,
   useEditorStore,
   useRecentsStore,
   userPreferenceStore as useUserPreferenceStore,
-  useTreeStore
-} from '@mexit/core'
+  useTreeStore} from '@mexit/core'
 import {
   isOnEditableElement,
   StyledTreeItemSwitcher,
@@ -181,7 +181,7 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
     if (publicNamespaceMatch) {
       goTo(`${ROUTE_PATHS.namespaceShare}/${publicNamespaceMatch.params.namespaceid}/node`, NavigationType.push, nodeId)
     } else {
-      console.log('goToNodeId', { nodeId })
+      mog('goToNodeId', { nodeId })
       push(nodeId)
       goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
       addRecent(RecentType.notes, nodeId)

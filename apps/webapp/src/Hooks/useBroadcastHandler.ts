@@ -60,7 +60,6 @@ const useBroadcastHandler = () => {
     },
     'NOTE-DELETE': (data) => {
       // TODO: archive any node and it's children
-      console.log('NOTE-DELETE', data)
     },
     'NAMESPACE-CREATE': (data) => {
       addNamespace(data.payload)
@@ -96,7 +95,7 @@ const useBroadcastHandler = () => {
       // TODO: update user details I don't know where
     },
     'WORKSPACE-UPDATE': (data) => {
-      console.log('WORKSPACE-UPDATE', { data })
+      //TODO
     }
   }
 

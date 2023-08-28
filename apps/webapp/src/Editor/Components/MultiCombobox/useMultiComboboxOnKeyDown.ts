@@ -214,8 +214,6 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
           InsertedElement = { ...InsertedElement, ...item.additional }
         }
 
-        console.log('ITEM IS', { item })
-
         insertNodes<TElement>(editor, InsertedElement)
 
         // move the selection after the ilink element

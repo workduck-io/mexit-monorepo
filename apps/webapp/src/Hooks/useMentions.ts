@@ -1,6 +1,6 @@
 import {
   AccessLevel,
-  addAccessToUser, 
+  addAccessToUser,
   DefaultPermission,
   emptyAccessTable,
   InvitedUser,
@@ -11,7 +11,8 @@ import {
   useAuthStore,
   useDataStore,
   useMentionStore,
-  useUserCacheStore} from '@mexit/core'
+  useUserCacheStore
+} from '@mexit/core'
 import { mergeAccess } from '@mexit/shared'
 
 import { useNodeShareAPI } from './API/useNodeShareAPI'
@@ -74,7 +75,7 @@ export const useMentions = () => {
           return newMentioned
         })
         .catch((e) => {
-          console.log('Granting permission to user failed', { e })
+          console.error('Granting permission to user failed', { e })
           return undefined
         })
       return res

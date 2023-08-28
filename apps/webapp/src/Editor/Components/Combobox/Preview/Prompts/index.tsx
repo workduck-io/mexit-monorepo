@@ -75,7 +75,7 @@ const PromptPreview: React.FC<PromptPreviewProps> = ({ promptId }) => {
       try {
         focusEditor(getPlateEditorRef())
       } catch (err) {
-        console.log('Unable to focus editor')
+        console.error('Unable to focus editor')
       }
     }
   }
