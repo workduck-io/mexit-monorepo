@@ -8,7 +8,7 @@ import { useTheme } from 'styled-components'
 
 import { S3FileDownloadClient } from '@workduck-io/dwindle'
 
-import { mog, ViewType } from '@mexit/core'
+import { ViewType } from '@mexit/core'
 import {
   GenericFlex,
   Group,
@@ -40,8 +40,7 @@ const ViewSnapshotRenderer = ({ viewId, workspaceId }) => {
     const res = await S3FileDownloadClient({ fileName: file, public: true })
 
     if (res) {
-      const transformedString = await res.transformToString()
-      const data = JSON.parse(transformedString ?? '')
+      const data = JSON.parse(res)
 
       if (data) {
         const snapshotName = `${workspaceId}/${viewId}`
@@ -79,8 +78,6 @@ const ViewBlock = (props: any) => {
   const viewid = props.element.value
   const workspace = props.element.workspace
 
-  mog('View', { viewid, workspace, e: props.element })
-
   const { goTo } = useRouting()
   const theme = useTheme()
   const { getView, getViewNamedPath } = useViews()
@@ -109,7 +106,7 @@ const ViewBlock = (props: any) => {
               <Icon icon={stackLine} />
               <InlineBlockText>{title}</InlineBlockText>
             </Group>
-            <Chip onClick={openView}>Open</Chip>
+            {view && <Chip onClick={openView}>Open</Chip>}
           </GroupHeader>
           <ParentFilters currentViewId={viewid} noMargin />
           <StyledViewBlockPreview>

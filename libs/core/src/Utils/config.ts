@@ -67,6 +67,7 @@ type BaseURLs =
   | 'MEXIT_LINK_SHORTENER_URL_BASE'
   | 'MEXIT_AUTH_URL_BASE'
   | 'GOOGLE_CAL_BASE'
+  | 'MEXIT_PUBLIC_LAMBDA_URL'
 
 const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
   [STAGE.prod]: {
@@ -76,7 +77,8 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io',
     MEXIT_LINK_SHORTENER_URL_BASE: 'https://url.workduck.io',
     MEXIT_AUTH_URL_BASE: 'https://workduck.auth.us-east-1.amazoncognito.com',
-    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
+    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars',
+    MEXIT_PUBLIC_LAMBDA_URL: 'https://gtlz637qnj.execute-api.us-east-1.amazonaws.com/getPublicUrl'
   },
   [STAGE.staging]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws.workduck.io',
@@ -85,7 +87,8 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io',
     MEXIT_LINK_SHORTENER_URL_BASE: 'https://url.workduck.io',
     MEXIT_AUTH_URL_BASE: 'https://workduck.auth.us-east-1.amazoncognito.com',
-    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
+    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars',
+    MEXIT_PUBLIC_LAMBDA_URL: 'https://gtlz637qnj.execute-api.us-east-1.amazonaws.com/getPublicUrl'
   },
   [STAGE.test]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io',
@@ -94,7 +97,8 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io',
     MEXIT_LINK_SHORTENER_URL_BASE: 'https://url-test.workduck.io',
     MEXIT_AUTH_URL_BASE: 'https://workduck-testing.auth.us-east-1.amazoncognito.com',
-    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
+    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars',
+    MEXIT_PUBLIC_LAMBDA_URL: 'https://gtlz637qnj.execute-api.us-east-1.amazonaws.com/getPublicUrl'
   },
   [STAGE.local]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io',
@@ -103,7 +107,8 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
     MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io',
     MEXIT_LINK_SHORTENER_URL_BASE: 'https://url-test.workduck.io',
     MEXIT_AUTH_URL_BASE: 'https://workduck-testing.auth.us-east-1.amazoncognito.com',
-    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars'
+    GOOGLE_CAL_BASE: 'https://www.googleapis.com/calendar/v3/calendars',
+    MEXIT_PUBLIC_LAMBDA_URL: 'https://gtlz637qnj.execute-api.us-east-1.amazonaws.com/getPublicUrl'
   }
 }
 
