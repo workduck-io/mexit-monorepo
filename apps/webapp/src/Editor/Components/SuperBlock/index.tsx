@@ -36,6 +36,7 @@ export const SuperBlock: React.FC<{
     value,
     metadata,
     onChange,
+    onDelete,
     ...containerProps
   } = props
 
@@ -69,7 +70,7 @@ export const SuperBlock: React.FC<{
         isSelected={isHovered || props.$isSelected}
         isFocused={isHovered || props.$isActive}
         isReadOnly={props.$isReadOnly}
-        onDelete={props.onDelete}
+        onDelete={onDelete}
         LeftHeaderRenderer={LeftHeaderRenderer}
       />
       {children}

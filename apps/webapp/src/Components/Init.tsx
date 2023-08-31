@@ -14,6 +14,7 @@ const Init = () => {
   const { initCognito } = useAuth()
   useEffect(() => {
     API.init()
+
     const initUserAndApp = () => {
       initCognito(
         {
@@ -22,7 +23,8 @@ const Init = () => {
         },
         {
           identityPoolID: config.cognito.IDENTITY_POOL_ID,
-          CDN_BASE_URL: API_BASE_URLS.cdn
+          CDN_BASE_URL: API_BASE_URLS.cdn,
+          publicS3LambdaUrl: config.baseURLs.MEXIT_PUBLIC_LAMBDA_URL
         }
       )
 

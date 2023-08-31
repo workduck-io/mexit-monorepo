@@ -10,7 +10,8 @@ const randomUser = (s: string) => ({
     note: {
       NODE_3WMXYjqUi8afVQwyG96df: 'READ' as const
     },
-    space: {}
+    space: {},
+    view: {}
   }
 })
 
@@ -18,7 +19,7 @@ const inviteUser = (s: string) => ({
   type: 'invite' as const,
   alias: s,
   email: `${s}@gmail.com`,
-  access: { note: {}, space: {} }
+  access: { note: {}, space: {}, view: {} }
 })
 
 const randomUsers = ['alice', 'bob', 'charlie', 'dave', 'xypnox']

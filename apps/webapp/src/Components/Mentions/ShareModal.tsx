@@ -20,9 +20,19 @@ const ShareModal = () => {
       onRequestClose={closeModal}
       isOpen={open}
     >
-      {mode === 'invite' ? <InviteModalContent /> : <PermissionModalContent />}
+      <ShareModalMode mode={mode} />
     </Modal>
   )
+}
+
+const ShareModalMode = ({ mode }) => {
+  const data = useShareModalStore((store) => store.data)
+  switch (mode) {
+    case 'invite':
+      return <InviteModalContent />
+    default:
+      return <PermissionModalContent />
+  }
 }
 
 export default ShareModal

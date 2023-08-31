@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import styled from 'styled-components'
 
-import { AppInitStatus, IS_DEV, useAuthStore , useLayoutStore } from '@mexit/core'
+import { AppInitStatus, IS_DEV, useAuthStore, useLayoutStore } from '@mexit/core'
 import { GridWrapper, linkTooltip, navTooltip } from '@mexit/shared'
 
 import { useShortcutListener } from '../Hooks/useShortcutListener'

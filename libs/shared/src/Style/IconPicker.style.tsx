@@ -26,6 +26,7 @@ export const IconWrapper = styled.div<{
   isLoading?: boolean
   color?: string
   cursor?: boolean
+  opacity?: number
 }>`
   display: flex;
   align-items: center;
@@ -38,6 +39,12 @@ export const IconWrapper = styled.div<{
       :hover {
         cursor: pointer;
       }
+    `}
+
+  ${({ opacity }) =>
+    opacity &&
+    css`
+      opacity: ${opacity};
     `}
 
   ${({ size, theme, type }) => {

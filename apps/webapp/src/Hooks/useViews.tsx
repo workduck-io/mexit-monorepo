@@ -67,6 +67,10 @@ export const useViews = () => {
     return filters
   }
 
+  const isDefaultView = (id: string) => {
+    return id === 'tasks' || id === 'personal'
+  }
+
   const getView = (id: string): View | undefined => {
     switch (id) {
       case 'tasks':
@@ -136,5 +140,5 @@ export const useViews = () => {
     removeViewStore(viewid)
   }
 
-  return { getView, getViewNamedPath, addView, updateView, deleteView, getParentViewFilters }
+  return { getView, isDefaultView, getViewNamedPath, addView, updateView, deleteView, getParentViewFilters }
 }

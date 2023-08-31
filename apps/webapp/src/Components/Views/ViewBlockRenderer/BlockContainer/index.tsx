@@ -5,7 +5,6 @@ import styled, { css, useTheme } from 'styled-components'
 
 import { Group, IconDisplay, MexIcon } from '@mexit/shared'
 
-import { useViewFilterStore } from '../../../../Hooks/todo/useTodoFilters'
 import useGroupHelper from '../../../../Hooks/useGroupHelper'
 
 const StyledResultGroup = styled.div`
@@ -75,10 +74,11 @@ const Count = styled.span`
   color: ${({ theme }) => theme.tokens.text.fade};
   opacity: 0.5;
 `
-const ResultGroup: React.FC<{ label: string; children: any; count: number; isOpen?: boolean }> = ({
+const ResultGroup: React.FC<{ label: string; children: any; count: number; isOpen?: boolean; groupBy?: string }> = ({
   label,
   children,
   count,
+  groupBy,
   isOpen: defaultOpenState = true
 }) => {
   const ref = useRef(null)
@@ -86,8 +86,6 @@ const ResultGroup: React.FC<{ label: string; children: any; count: number; isOpe
   const { getResultGroup } = useGroupHelper()
   const [isOpen, setIsOpen] = useState(defaultOpenState)
   const [group, setGroup] = useState(null)
-
-  const groupBy = useViewFilterStore((store) => store.groupBy)
 
   useEffect(() => {
     getResultGroup(label, groupBy).then((res) => {
@@ -99,16 +97,16 @@ const ResultGroup: React.FC<{ label: string; children: any; count: number; isOpe
     setIsOpen(!isOpen)
   }
 
-  if (!group) return
-
   return (
     <StyledResultGroup>
       <GroupHeader padding isOpen={!!isOpen} onClick={handleToggleAccordion}>
-        <Group>
-          <IconDisplay size={14} icon={group.icon} color={theme.tokens.colors.primary.default} />
-          <span>{group.label}</span>
-          <Count>{count}</Count>
-        </Group>
+        {group && (
+          <Group>
+            <IconDisplay size={14} icon={group.icon} color={theme.tokens.colors.primary.default} />
+            <span>{group.label}</span>
+            <Count>{count}</Count>
+          </Group>
+        )}
         <Chevron
           isOpen={isOpen}
           $noHover

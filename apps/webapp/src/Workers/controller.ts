@@ -13,7 +13,8 @@ import {
   Snippets,
   SocketMessage,
   useAuthStore,
-  withTimeout} from '@mexit/core'
+  withTimeout
+} from '@mexit/core'
 
 import { WorkerRequestType } from '../Utils/worker'
 
@@ -184,6 +185,7 @@ export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
     if (!searchWorker) {
       await startSearchWorker()
     }
+
     await searchWorker.init(fileData)
   } catch (error) {
     mog('InitSearchWorkerError', { error })

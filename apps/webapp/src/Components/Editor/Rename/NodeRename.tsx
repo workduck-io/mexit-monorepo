@@ -7,7 +7,19 @@ import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNameFromPath, getParentFromPath, isClash, isMatch, isReserved, mog, SEPARATOR, useDataStore, useEditorStore, useHelpStore, useRenameStore } from '@mexit/core'
+import {
+  getNameFromPath,
+  getParentFromPath,
+  isClash,
+  isMatch,
+  isReserved,
+  mog,
+  SEPARATOR,
+  useDataStore,
+  useEditorStore,
+  useHelpStore,
+  useRenameStore
+} from '@mexit/core'
 import { Input, isOnEditableElement } from '@mexit/shared'
 
 import { useKeyListener } from '../../../Hooks/useChangeShortcutListener'
@@ -17,7 +29,6 @@ import { useNodes } from '../../../Hooks/useNodes'
 import { usePermissions } from '../../../Hooks/usePermissions'
 import { useRefactor } from '../../../Hooks/useRefactor'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
-import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
 
 import { TitleStatic, Wrapper } from './NodeRename.style'
 
@@ -92,25 +103,21 @@ const NodeRenameOnlyTitle = () => {
     }
   }, [shortcuts])
 
+  const handleRename = () => {
+    const to = getTo(newTitle)
+
+    if (isMatch(to, nodeFrom)) {
+      // toast('Note itself cannot be used')
+      return
+    }
+
+    onRename()
+  }
+
   const handleSubmit: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-
-      const to = getTo(newTitle)
-
-      if (isMatch(to, nodeFrom)) {
-        // toast('Note itself cannot be used')
-        return
-      }
-
-      // if (e.shiftKey) {
-      //   // mog('Opening refactor')
-
-      //   prefillRefactorModal(nodeFrom, to)
-      // } else {
-      // mog('Renaming')
-      onRename()
-      // }
+      handleRename()
     } else if (e.key === 'Escape') reset()
   }
 
@@ -124,11 +131,10 @@ const NodeRenameOnlyTitle = () => {
 
   const onRenameClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
-    onRename()
+    handleRename()
   }
 
   const onRename = async () => {
-    // console.log('renaming', {})
     if (newTitle === getNameFromPath(nodeFrom) || isClashed || newTitle.indexOf(SEPARATOR) !== -1) {
       reset()
       if (isClashed && newTitle !== getNameFromPath(nodeFrom)) toast.error('Note with same title already exists')
@@ -150,16 +156,17 @@ const NodeRenameOnlyTitle = () => {
 
       updateBaseNode()
 
-      const path = useEditorStore.getState().node.id
+      // const path = useEditorStore.getState().node.id
 
-      setEditable(false)
+      // setEditable(false)
 
-      if (doesLinkRemain(nodeId, refactored)) {
-        push(nodeId)
-      } else if (refactored.length > 0) {
-        const nodeid = refactored[0].nodeid
-        push(nodeid, { savePrev: false })
-      }
+      // if (doesLinkRemain(nodeId, refactored)) {
+      //   push(nodeId)
+      // } else if (refactored.length > 0) {
+      //   const nodeid = refactored[0].nodeid
+      //   push(nodeid, { savePrev: false })
+      // }
+
       reset()
 
       const editorRef = getPlateEditorRef()
@@ -217,7 +224,6 @@ const NodeRenameOnlyTitle = () => {
           name="NodeRenameTitleSelect"
           onKeyDown={handleSubmit}
           onChange={(e) => handleTitleChange(e)}
-          onBlur={() => onRename()}
           error={(getNameFromPath(nodeFrom) !== newTitle && isClashed) || newTitle.indexOf(SEPARATOR) !== -1}
           autoFocus
           defaultValue={newTitle}

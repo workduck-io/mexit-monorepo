@@ -23,6 +23,7 @@ import {
   getSlug,
   NODE_ID_PREFIX,
   PromptRenderType,
+  useAuthStore,
   useComboboxStore,
   usePromptStore
 } from '@mexit/core'
@@ -181,16 +182,21 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
           }
           if (comboType.onItemInsert && tab !== true) comboType.onItemInsert(item.text)
         } else if (itemType === QuickLinkType.taskView) {
+          const workspace = useAuthStore.getState().getWorkspaceId()
+
           InsertedElement = {
             ...InsertedElement,
             type: ELEMENT_TASK_VIEW_LINK,
-            value: item.key
+            value: item.key,
+            workspace
           }
+
           if (tab === true) {
             InsertedElement = {
               ...InsertedElement,
               type: ELEMENT_TASK_VIEW_BLOCK,
-              value: item.key
+              value: item.key,
+              workspace
             }
           }
         } else {

@@ -43,7 +43,8 @@ const Outline = ({ staticOutline, editorId }: OutlineProps) => {
           <OutlineWrapper>
             {outline.map((outlineItem) => {
               const icon = EntitiesInfo[outlineItem.type]?.icon
-              const isHeading = ELEMENTS_IN_OUTLINE.includes(outlineItem.type.toLowerCase())
+              const isHeading = ELEMENTS_IN_OUTLINE.includes(outlineItem?.type?.toLowerCase())
+
               return (
                 <OutlineItemRender
                   key={`OutlineItemFor_${outlineItem.id}`}

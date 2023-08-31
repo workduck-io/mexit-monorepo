@@ -34,7 +34,6 @@ import {
 } from '@mexit/shared'
 
 import useUpdateBlock from '../../../Editor/Hooks/useUpdateBlock'
-import { useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
 import { KanbanBoardColumn, useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
 import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
 import useGroupHelper from '../../../Hooks/useGroupHelper'
@@ -53,23 +52,21 @@ import ViewBlockRenderer from '../ViewBlockRenderer'
 
 const KanbanView: React.FC<any> = (props) => {
   const [selectedCard, setSelectedCard] = React.useState<SearchResult | null>(null)
-  const groupBy = useViewFilterStore((s) => s.groupBy)
 
   const isModalOpen = useModalStore((store) => store.open)
   const sidebar = useLayoutStore((store) => store.sidebar)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
   const atViews = useMatch(`${ROUTE_PATHS.view}/*`)
-  const { getBlocksBoard } = useTodoKanban()
 
   const { goTo } = useRouting()
   const { push } = useNavigation()
+  const { accessWhenShared } = usePermissions()
+  const { getBlocksBoard } = useTodoKanban()
+  const { enableShortcutHandler } = useEnableShortcutHandler()
   const { moveBlocksInIndex, updateBlocks, removeDocument } = useSearch()
   const appendTodos = useTodoStore((store) => store.appendTodos)
-
   const { moveBlockFromNode, insertInNote, setInfoOfBlockInContent } = useUpdateBlock()
-  const { accessWhenShared } = usePermissions()
-  const { enableShortcutHandler } = useEnableShortcutHandler()
   const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
 
   const board = useMemo(() => {
@@ -97,8 +94,8 @@ const KanbanView: React.FC<any> = (props) => {
             blockField === 'entity'
               ? {}
               : {
-                [blockField]: move.toColumnId
-              }
+                  [blockField]: move.toColumnId
+                }
           )
 
           insertInNote(block.parent, block.id, content)
@@ -218,10 +215,10 @@ const KanbanView: React.FC<any> = (props) => {
     if (fromColumnId !== toColumnId) {
       switch (card.entity) {
         case SuperBlocks.TASK:
-          handleTaskEvents(card, groupBy, { fromColumnId, toColumnId })
+          handleTaskEvents(card, props.groupBy, { fromColumnId, toColumnId })
           break
         case SuperBlocks.CONTENT:
-          handleBlockEvents(card, groupBy, { fromColumnId, toColumnId })
+          handleBlockEvents(card, props.groupBy, { fromColumnId, toColumnId })
           break
       }
     }
@@ -261,7 +258,7 @@ const KanbanView: React.FC<any> = (props) => {
     }
 
     const selectedColumn = board.columns.find((column) => {
-      const columnId = get(selectedCard, groupBy) ?? 'Ungrouped'
+      const columnId = get(selectedCard, props.groupBy) ?? 'Ungrouped'
       return column.id === columnId
     }) as KanbanBoardColumn
 
@@ -401,7 +398,7 @@ const KanbanView: React.FC<any> = (props) => {
     const { getResultGroup } = useGroupHelper()
 
     useEffect(() => {
-      getResultGroup(props.id, groupBy).then((res) => {
+      getResultGroup(props.id, props.groupBy).then((res) => {
         setGroup(res)
       })
     }, [])

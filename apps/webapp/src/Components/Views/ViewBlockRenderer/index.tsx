@@ -49,7 +49,7 @@ const ViewBlockRenderer: React.FC<ViewBlockRendererProps> = ({
       viewType={viewType}
       staticBoard={staticBoard}
       id={block?.id}
-      sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
+      sidebarExpanded={sidebar?.show && sidebar?.expanded && !overlaySidebar}
     >
       <BlockRenderer block={block} type={block?.entity} selectedBlockId={selectedBlockId} />
     </ViewBlockContainer>

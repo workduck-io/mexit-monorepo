@@ -4,23 +4,28 @@ import { toast } from 'react-hot-toast'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
+import { useTheme } from 'styled-components'
 
+import { S3FileDeleteClient } from '@workduck-io/dwindle'
 import { ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getMenuItem, MIcon } from '@mexit/core'
+import { getMenuItem, MIcon, useAuthStore, useShareModalStore } from '@mexit/core'
 import {
   DefaultMIcons,
   GenericFlex,
+  Group,
   IconDisplay,
   InsertMenu,
   Menu,
+  MenuButton,
   MenuItem,
   PrimaryText,
   TaskHeader as StyledTaskHeader,
   TaskHeaderTitleSection,
   TaskViewHeaderWrapper,
-  TaskViewTitle
+  TaskViewTitle,
+  Tooltip
 } from '@mexit/shared'
 
 import { useViewFilters } from '../Hooks/todo/useTodoFilters'
@@ -120,7 +125,7 @@ const CreateNewMenu = () => {
       values={
         <GenericFlex>
           <IconDisplay icon={DefaultMIcons.ADD} size={24} />
-          Add New
+          Add
         </GenericFlex>
       }
     >
@@ -131,8 +136,46 @@ const CreateNewMenu = () => {
   )
 }
 
+const PublishMenu = ({ id, isPublic }) => {
+  const removeViewSnapshotFromCache = useViewStore((store) => store.removeViewSnapshot)
+  const updateShareModalData = useShareModalStore((store) => store.updateData)
+  const unPublishView = useViewStore((store) => store.publishView)
+
+  const { isDefaultView } = useViews()
+
+  const handleViewUnpublish = () => {
+    const workspace = useAuthStore.getState().getWorkspaceId()
+    const viewSnapshotKey = `${workspace}/${id}`
+
+    S3FileDeleteClient({ fileName: viewSnapshotKey, public: true }).then((res) => {
+      removeViewSnapshotFromCache(viewSnapshotKey)
+      unPublishView(id, false)
+    })
+  }
+
+  const handlePublish = async () => {
+    if (!id) return
+
+    if (isPublic)
+      updateShareModalData({
+        id,
+        share: true
+      })
+  }
+
+  const options = useMemo(() => {
+    if (!isPublic) return null
+    return [getMenuItem('Unpublish', () => handleViewUnpublish(), false, DefaultMIcons.CLEAR)]
+  }, [isPublic])
+
+  if (isDefaultView(id)) return
+
+  return <MenuButton defaultValue={isPublic ? 'Re-publish' : 'Publish'} onClick={handlePublish} items={options} />
+}
+
 const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
   const [deleting, setDeleting] = useState(false)
+  const theme = useTheme()
 
   const { deleteView, getView } = useViews()
   const currentView = useViewStore((store) => store.currentView)
@@ -208,10 +251,10 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
 
   const viewOptions = useMemo(() => {
     return [
-      getMenuItem('Update View', () => handleUpdateView(), isDefault, DefaultMIcons.EDIT),
-      getMenuItem('Clone View', () => handleCloneView(), currentFilters.length === 0, DefaultMIcons.COPY),
+      getMenuItem('Edit', () => handleUpdateView(), isDefault, DefaultMIcons.EDIT),
+      getMenuItem('Clone', () => handleCloneView(), currentFilters.length === 0, DefaultMIcons.COPY),
       getMenuItem('Save As', () => handleSaveAsView(), currentFilters.length === 0, DefaultMIcons.SAVE),
-      getMenuItem('Delete View', () => onDeleteView(), isDefault || currentFilters.length === 0, DefaultMIcons.DELETE)
+      getMenuItem('Delete', () => onDeleteView(), isDefault || currentFilters.length === 0, DefaultMIcons.DELETE)
     ]
   }, [isDefault, currentFilters])
 
@@ -227,6 +270,11 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
                 <Icon icon={stackLine} />
                 <span>{view?.title}</span>
                 {view?.id && !isDefault && <ViewChangeStatus viewId={view?.id} />}
+                {view?.public && (
+                  <Tooltip content="Public">
+                    <IconDisplay opacity={0.6} color={theme.tokens.colors.fade} size={20} icon={DefaultMIcons.PUBLIC} />
+                  </Tooltip>
+                )}
                 <InsertMenu
                   key={`${isDefault}-${currentFilters.length === 0}`}
                   allowSearch={false}
@@ -239,7 +287,10 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
           )}
         </TaskHeaderTitleSection>
 
-        <CreateNewMenu />
+        <Group>
+          <PublishMenu id={view?.id} isPublic={view?.public} />
+          <CreateNewMenu />
+        </Group>
       </StyledTaskHeader>
     </>
   )

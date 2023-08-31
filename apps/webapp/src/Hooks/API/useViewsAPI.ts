@@ -19,6 +19,15 @@ export const useViewAPI = () => {
     return res
   }
 
+  const publishViewAPI = async (view: View, status = true) => {
+    if (view) {
+      const res = await saveView({ ...view, public: status })
+      return res
+    }
+
+    throw new Error('View not found')
+  }
+
   const saveView = async (view: View) => {
     const { id: entityId, filters, path, ...properties } = view
     const parent = getParentEntity(path)?.parent
@@ -104,6 +113,7 @@ export const useViewAPI = () => {
   }
 
   return {
+    publishViewAPI,
     getView,
     saveView,
     getAllViews,

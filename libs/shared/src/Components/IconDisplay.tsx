@@ -16,6 +16,7 @@ interface IconDisplayProps {
   className?: string
   isLoading?: boolean
   color?: string
+  opacity?: number
   onClick?: any
   cursor?: boolean
 }

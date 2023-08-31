@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { nicePromise, ShareContext, useDataStore , useMetadataStore } from '@mexit/core'
+import { nicePromise, ShareContext, useDataStore, useMetadataStore } from '@mexit/core'
 import { copyTextToClipboard, ShareToggle } from '@mexit/shared'
 
 import { useApi } from '../../Hooks/API/useNodeAPI'
@@ -28,7 +28,7 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
   const { makeNotePrivate, makeNotePublic } = useApi()
 
   const getPublicUrl = useCallback(
-    (context: 'note' | 'space', id: string) => {
+    (context: ShareContext, id: string) => {
       if (context === 'note') return getNoteCopyUrl(id)
       return getSpaceCopyUrl(id)
     },

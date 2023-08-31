@@ -4,10 +4,18 @@ import Modal from 'react-modal'
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
 
-import { DisplayShortcut,PrimaryButton } from '@workduck-io/mex-components'
+import { DisplayShortcut, PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { isMatch, isReserved, useDataStore, useEditorStore, useHelpStore, useRefactorStore , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+import {
+  isMatch,
+  isReserved,
+  useDataStore,
+  useEditorStore,
+  useHelpStore,
+  useRefactorStore,
+  userPreferenceStore as useUserPreferenceStore
+} from '@mexit/core'
 
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
@@ -39,10 +47,12 @@ const Refactor = () => {
   const handleFromChange = (quickLink: QuickLink) => {
     const newValue = quickLink.value
     const newNS = quickLink.namespace ?? namespaces[0].id
+
     if (newValue && newNS) {
       setFrom({ path: newValue, namespaceID: newNS })
     }
   }
+
   const handleToChange = (quickLink: QuickLink) => {
     const newValue = quickLink.value
     const newNS = quickLink.namespace ?? currentSpace ?? namespaces[0].id

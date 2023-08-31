@@ -5,6 +5,7 @@ import { createStore } from '../Utils/storeCreator'
 
 const getDefaultViewStoreState = () => ({
   views: [] as View[],
+  viewSnapshot: {} as Record<string, any>,
   currentView: undefined
 })
 
@@ -32,6 +33,29 @@ const viewStoreConfig = (set, get) => ({
   updateView: (view: View) => {
     const existing = get().views
     set({ views: [...existing.filter((v) => v.id !== view.id), view] })
+  },
+  addViewSnapshot: (id: string, snapshot: any) => {
+    set({ viewSnapshot: { ...get().viewSnapshot, [id]: snapshot } })
+  },
+  removeViewSnapshot: (id: string) => {
+    const { [id]: _, ...restSnapshots } = get().viewSnapshot
+
+    set({ viewSnapshot: restSnapshots })
+  },
+  publishView: (id: string, isPublic?: boolean) => {
+    const existing = get().views
+
+    set({
+      views: existing.map((v) => {
+        if (v.id === id) {
+          return {
+            ...v,
+            public: isPublic
+          }
+        }
+        return v
+      })
+    })
   }
 })
 

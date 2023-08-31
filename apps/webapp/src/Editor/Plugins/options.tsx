@@ -34,6 +34,7 @@ import {
   isElement,
   isSelectionAtBlockStart,
   isType,
+  KEYS_HEADING,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
@@ -296,6 +297,16 @@ export const optionsExitBreakPlugin = {
       {
         hotkey: 'mod+shift+enter',
         before: true
+      },
+      {
+        hotkey: 'enter',
+        level: 1,
+        query: {
+          relative: true,
+          allow: KEYS_HEADING,
+          start: true,
+          end: true
+        }
       }
     ] as ExitBreakRule[]
   }

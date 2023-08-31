@@ -72,7 +72,7 @@ export const PermissionModalContent = () => {
   const { changeUserPermission, revokeUserAccess } = useNodeShareAPI()
   const { revokeNamespaceShare, updateNamespaceShare } = useNamespaceApi()
   const { getSharedUsersForNamespace, getNamespace, getSpaceCopyUrl, getNamespaceOfNodeid } = useNamespaces()
-  const { getSharedUsersOfNodeOfSpace, getInvitedUsers, applyChangesMentionable } = useMentions()
+  const { getSharedUsersOfNodeOfSpace, applyChangesMentionable } = useMentions()
 
   const nodeid = useMemo(() => modalData?.nodeid ?? node?.nodeid, [modalData.nodeid, node])
 

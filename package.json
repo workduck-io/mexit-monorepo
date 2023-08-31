@@ -20,6 +20,7 @@
     "*.{ts,tsx}": "eslint --cache --fix"
   },
   "dependencies": {
+    "@workduck-io/dwindle": "^0.2.2",
     "@workduck-io/mex-search": "^0.0.10",
     "broadcast-channel": "^5.1.0",
     "buffer": "^6.0.3",

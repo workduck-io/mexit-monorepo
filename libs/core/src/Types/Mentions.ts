@@ -49,7 +49,7 @@ export interface Mentionable extends IUser {
   name: string
 }
 
-export type ShareContext = 'note' | 'space'
+export type ShareContext = 'note' | 'space' | 'view'
 
 export interface MentionData {
   mentionable: Mentionable[]
@@ -58,5 +58,6 @@ export interface MentionData {
 
 export const emptyAccessTable: UserAccessTable = {
   note: {},
-  space: {}
+  space: {},
+  view: {}
 }
