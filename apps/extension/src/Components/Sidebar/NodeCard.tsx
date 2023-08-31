@@ -165,7 +165,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
             </HeadingFlex>
             <GenericFlex>
               {isNodePublic ? (
-                <MexIcon height={16} width={16} icon={DefaultMIcons.PUBLIC} onClick={onNotePublic} />
+                <MexIcon height={16} width={16} icon={DefaultMIcons.PUBLIC.value} onClick={onNotePublic} />
               ) : (
                 <MexIcon height={16} width={16} icon="material-symbols:public-off-rounded" onClick={onNotePublic} />
               )}

@@ -5,7 +5,6 @@ import { useShareModalStore } from '@mexit/core'
 
 import { InviteModalContent } from './InviteModal'
 import { PermissionModalContent } from './PermissionModal'
-import { PublishModal } from './PublishModal'
 
 const ShareModal = () => {
   const open = useShareModalStore((store) => store.open)
@@ -31,8 +30,6 @@ const ShareModalMode = ({ mode }) => {
   switch (mode) {
     case 'invite':
       return <InviteModalContent />
-    case 'publish':
-      return <PublishModal id={data.id} />
     default:
       return <PermissionModalContent />
   }
