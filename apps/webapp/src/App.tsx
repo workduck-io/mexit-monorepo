@@ -3,15 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
-import {
-  compareVersions,
-  emitter,
-  mog,
-  useAppStore,
-  useBufferStore,
-  useContentStore,
-  userPreferenceStore as useUserPreferenceStore
-} from '@mexit/core'
+import { compareVersions, emitter, mog, useAppStore, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { Notification } from '@mexit/shared'
 
 import { version as packageJsonVersion } from '../package.json'
@@ -21,11 +13,10 @@ import FloatingButton from './Components/FloatingButton'
 import Init from './Components/Init'
 import Main from './Components/Main'
 import Modals from './Components/Modals'
-import useUpdateBlock from './Editor/Hooks/useUpdateBlock'
-import { useApi } from './Hooks/API/useNodeAPI'
 import { createViewFilterStore, ViewFilterProvider } from './Hooks/todo/useTodoFilters'
 import { useForceLogout } from './Stores/useAuth'
 import GlobalStyle from './Style/GlobalStyle'
+import { emitterHandler } from './Utils/emitterHandler'
 import Switch from './Switch'
 
 const FORCE_LOGOUT_VERSION = '0.23.9'
@@ -59,29 +50,10 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const App = () => {
   const setVersion = useAppStore((store) => store.setVersion)
-  const { appendToNode } = useApi()
-  const { addBlockInContent } = useUpdateBlock()
-  const clearBuffer = useBufferStore((s) => s.remove)
-  const setInternalUpdate = useContentStore((s) => s.setInternalUpdate)
+
   const { forceLogout } = useForceLogout()
   useEffect(() => {
-    emitter.handlePropertyChange(async (result) => {
-      mog('Callback Property Handler Result', { result })
-
-      if (result && result.length && result[0]?.noteId)
-        appendToNode(
-          result[0]?.noteId,
-          result.map((item) => item.block)
-        ).then(() => {
-          //TODO: Generic handler for property update events
-          addBlockInContent(
-            result[0]?.noteId,
-            result.map((item) => item.block)
-          )
-          clearBuffer(result[0]?.noteId)
-          setInternalUpdate(true)
-        })
-    })
+    emitter.handlePropertyChange(emitterHandler)
     async function forceLogoutAndSetVersion() {
       const persistedVersion = useAppStore.getState()?.version
       mog('PersistedVersion | PackageJSONVersion', { persistedVersion, packageJsonVersion })

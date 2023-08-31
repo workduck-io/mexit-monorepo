@@ -1,14 +1,18 @@
-import { useCallback } from 'react'
-import ReactFlow, { Background, Controls, MiniMap, addEdge, useEdgesState, useNodesState } from 'reactflow'
-
-import CustomBlock from './CustomBlock'
-import { edges as initialEdges, nodes as initialNodes } from './dummyData'
-
 import 'reactflow/dist/style.css'
 import './overview.css'
 
+import { useCallback } from 'react'
+import ReactFlow, { addEdge, Background, Controls, MiniMap, useEdgesState, useNodesState } from 'reactflow'
+
+import { CEdge, CNode } from './CustomBlock'
+import { edges as initialEdges, nodes as initialNodes } from './dummyData'
+
 const nodeTypes = {
-  custom: CustomBlock
+  custom: CNode
+}
+
+const edgeTypes = {
+  custom: CEdge
 }
 
 const minimapStyle = {
@@ -24,26 +28,26 @@ const OverviewFlow = () => {
 
   // we are using a bit of a shortcut here to adjust the edge type
   // this could also be done with a custom edge for example
-  const edgesWithUpdatedTypes = edges.map((edge) => {
-    if (edge.sourceHandle) {
-      const edgeType = nodes.find((node) => node.type === 'custom').data.selects[edge.sourceHandle]
-      edge.type = edgeType
-    }
+  //   const edgesWithUpdatedTypes = edges.map((edge) => {
+  //     if (edge.sourceHandle) {
+  //       const edgeType = nodes.find((node) => node.type === 'custom').data.selects[edge.sourceHandle]
+  //       edge.type = edgeType
+  //     }
 
-    return edge
-  })
+  //     return edge
+  //   })
 
   return (
     <ReactFlow
       nodes={nodes}
-      edges={edgesWithUpdatedTypes}
+      edges={edges}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       onInit={onInit}
       fitView
-      attributionPosition="top-right"
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
     >
       <MiniMap style={minimapStyle} zoomable pannable />
       <Controls />

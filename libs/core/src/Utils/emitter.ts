@@ -44,7 +44,7 @@ export const TestTemplateData = {
       id: 'TEMP_eWez4',
       properties: {
         properties: {
-          title: 'Untitled'
+          title: 'COntent go stonks'
         }
       },
       children: [
@@ -66,8 +66,7 @@ export const TestTemplateData = {
       id: 'TEMP_bThtV',
       properties: {
         properties: {
-          conditionId: 'CONDITION_1',
-          title: 'Untitled',
+          title: 'First condition block',
           entity: {
             active: 'super-block-task'
           },
@@ -94,7 +93,7 @@ export const TestTemplateData = {
       properties: {
         properties: {
           conditionId: 'CONDITION_1',
-          title: 'Untitled',
+          title: 'Random condition',
           entity: {
             active: 'super-block-task'
           },
@@ -157,12 +156,12 @@ export const TestTemplateData = {
         oldValue: 'low',
         newValue: 'high',
         action: 'APPEND',
-        blockId: 'TEMP_qPhYW'
+        blockId: 'TEMP_bThtV'
       },
       CONDITION_2: {
-        field: 'priority',
-        oldValue: 'low',
-        newValue: 'medium',
+        field: 'status',
+        oldValue: 'todo',
+        newValue: 'completed',
         action: 'APPEND',
         blockId: 'TEMP_Ri9A7'
       }

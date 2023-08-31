@@ -1,12 +1,12 @@
-import React from 'react'
 import { useMatch } from 'react-router-dom'
 
-import { useLayoutStore } from '@mexit/core'
+import { mog, useLayoutStore } from '@mexit/core'
 import { RHSideNav } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
 import { useSidebarTransition } from '../Sidebar/Transition'
+import OverviewFlow from '../Template/TemplateFlow'
 
 import InfoBar from '.'
 
@@ -15,10 +15,13 @@ const RHSidebarContent = () => {
   const isEditor = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
   const isArchiveEditor = useMatch(`${ROUTE_PATHS.archive}/:nodeid`)
   const isArchive = useMatch(ROUTE_PATHS.archive)
+  const isSnippet = useMatch(`${ROUTE_PATHS.snippet}/:snippetid`)
 
+  mog('I am here', { isSnippet })
   if (!sidebar.show) return <></>
 
   if (isEditor) return <InfoBar />
+  if (isSnippet) return <OverviewFlow />
 
   if (isArchive || isArchiveEditor) return <></>
 

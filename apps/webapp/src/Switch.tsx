@@ -232,8 +232,7 @@ export const Switch = ({ children }) => {
       if (location.pathname.startsWith(ROUTE_PATHS.snippets)) {
         // mog('Showing Sidebar', { location })
         // fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
-        showSidebar()
-        hideRHSidebar()
+        showAllSidebars()
       } else if (location.pathname.startsWith(ROUTE_PATHS.node)) {
         // fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
         // mog('Showing Sidebar', { location })

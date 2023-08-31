@@ -1,5 +1,5 @@
 import { diskIndex, indexNames } from '../Data/search'
-import { MenuListItemType, MIcon } from '../Types'
+import { MenuListItemType,MIcon } from '../Types'
 import { BlockType, NodeEditorContent } from '../Types/Editor'
 import { GenericSearchData, PersistentData, SearchRepExtra } from '../Types/Search'
 
@@ -300,7 +300,7 @@ export const getBlocks = (content: NodeEditorContent): Record<string, any> | und
 
 export const getMenuItem = (
   label: string,
-  onSelect: any,
+  onSelect?: any,
   disabled?: boolean,
   icon?: MIcon,
   options?: Array<MenuListItemType>,

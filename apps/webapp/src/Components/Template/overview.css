@@ -9,7 +9,7 @@
 
 .react-flow__node-custom .react-flow__handle {
   top: 24px;
-  right: -15px;
+  /* right: -15px; */
   width: 6px;
   height: 10px;
   border-radius: 2px;
@@ -47,15 +47,4 @@
 
 .custom-node__body {
   padding: 10px;
-}
-
-.custom-node__select {
-  position: relative;
-  margin-bottom: 10px;
-}
-
-.custom-node__select select {
-  width: 100%;
-  margin-top: 5px;
-  font-size: 10px;
 }
