@@ -1,5 +1,17 @@
 # mexit-webapp
 
+## 0.24.0
+
+### Minor Changes
+
+- b2573b37: Super Blocks in Mexit
+- 8afd0206: Realtime updates and optimized initialization
+
+### Patch Changes
+
+- dc3bd707: Unified search and the Draftview into Homepage.
+- d694bcc7: View Snapshots in Public
+
 ## 0.23.10
 
 ### Patch Changes
