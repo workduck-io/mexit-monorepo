@@ -117,6 +117,34 @@ export const TestTemplateData = {
     },
     {
       type: 'super-block-task',
+      id: 'TEMP_Ri9B1',
+      properties: {
+        properties: {
+          conditionId: 'CONDITION_1',
+          title: 'Random condition based on 1',
+          entity: {
+            active: 'super-block-task'
+          },
+          status: 'todo',
+          priority: 'medium'
+        }
+      },
+      children: [
+        {
+          type: 'p',
+          id: 'TEMP_4Mezq',
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_7q7RE',
+              text: 'This is a conditional task group block'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      type: 'super-block-task',
       id: 'TEMP_Ri9A8',
       properties: {
         properties: {
