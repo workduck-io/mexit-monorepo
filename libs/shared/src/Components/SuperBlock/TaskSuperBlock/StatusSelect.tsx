@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getMenuItem, getMIcon, TaskStatus } from '@mexit/core'
+import { getElementById, getMenuItem, getMIcon, TaskStatus } from '@mexit/core'
 
 import { InsertMenu } from '../../InsertMenu'
 
@@ -17,6 +17,7 @@ export const StatusSelect = ({ name, value, shortcut = undefined, onChange }) =>
       type="modal"
       shortcut={shortcut}
       title="Status"
+      root={getElementById('ext-side-nav')}
       selected={value}
       onClick={handleOnClick}
       icon={getMIcon('ICON', TaskStatus[value] ?? TaskStatus['in-progress'].icon)}

@@ -15,14 +15,26 @@ import {
   getBlockMetadata,
   getDefaultContent,
   mog,
+  NodeContent,
   NodeEditorContent,
+  SuperBlocks,
   updateIds,
   useBlockStore,
   useContentStore,
   useEditorStore
 } from '@mexit/core'
 
-import { defaultContent } from '../../Data/baseData'
+export const defaultContent: NodeContent = {
+  type: 'init',
+  content: [
+    {
+      id: generateTempId(),
+      type: SuperBlocks.CONTENT,
+      children: [{ type: ELEMENT_PARAGRAPH, id: generateTempId(), children: [{ text: '' }] }]
+    }
+  ],
+  version: -1
+}
 
 export const useEditorBlockSelection = () => {
   const blocksFromStore = useBlockStore((store) => store.blocks)

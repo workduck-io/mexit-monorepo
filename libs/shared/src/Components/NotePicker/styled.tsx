@@ -6,16 +6,24 @@ import { ScrollStyles } from '../../Style/Helpers'
 import { BodyFont } from '../../Style/Search'
 import { DRAWER_HEIGHT_STATES } from '../Drawer/styled'
 
-export const NoteItemsWrapper = styled.div`
+export const NoteItemsWrapper = styled.div<{ border?: boolean; height?: string }>`
   max-height: 20rem;
-  height: calc(${DRAWER_HEIGHT_STATES.NORMAL} - 7em);
   display: flex;
   flex-direction: column;
+  ${({ height }) =>
+    height ??
+    css`
+   calc(${DRAWER_HEIGHT_STATES.NORMAL} - 7em)
+   `};
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  border: 2px solid ${({ theme }) => theme.tokens.surfaces.separator};
+  ${({ border = true }) =>
+    border &&
+    css`
+      border: 2px solid ${({ theme }) => theme.tokens.surfaces.separator};
+    `}
   ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[2])};
   padding: ${({ theme }) => theme.spacing.small} 0;
 `

@@ -1,4 +1,4 @@
-import { DRAFT_NODE,DRAFT_PREFIX, SEPARATOR } from './idGenerator'
+import { DRAFT_NODE, DRAFT_PREFIX, PROFILE_PREFIX, SEPARATOR } from './idGenerator'
 import { getCurrentTimeString } from './time'
 
 export const getNewDraftKey = (): string => {
@@ -6,6 +6,10 @@ export const getNewDraftKey = (): string => {
   const currentTime: string = getCurrentTimeString('PPpp')
 
   return `${DRAFT_PREFIX}${SEPARATOR}${currentTime}`
+}
+
+export const getProfileNoteKey = (title: string) => {
+  return `${PROFILE_PREFIX}${SEPARATOR}${title}`
 }
 
 export const getUntitledDraftKey = (): string => {

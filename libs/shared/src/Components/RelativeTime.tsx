@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { toLocaleString } from '@mexit/core'
 
 import { useRelativeTime } from '../Hooks/useRelativeTime'
+import { Ellipsis } from '../Style/NodeSelect.style'
 
 interface RelativeTimeProps {
   dateNum: number
@@ -15,7 +16,9 @@ interface RelativeTimeProps {
   prefix?: string
 }
 
-export const Relative = styled.div``
+export const Relative = styled.div`
+  ${Ellipsis}
+`
 
 export const RelativeTime = ({ dateNum, prefix, tippy = true, tippyProps, refreshMs }: RelativeTimeProps) => {
   const [date, setDate] = useState(new Date(dateNum))
@@ -41,7 +44,7 @@ export const RelativeTime = ({ dateNum, prefix, tippy = true, tippyProps, refres
         content={tooltip}
         {...tippyProps}
       >
-        <Relative>{relTime}</Relative>
+        <Relative id="mexit-time">{relTime}</Relative>
       </Tippy>
     )
 

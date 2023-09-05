@@ -133,7 +133,7 @@ export const EditorBreadcrumbs = styled.div<{ isVisible?: boolean }>`
   ${({ isVisible }) => FadeInOut(isVisible, '0.5', '0.5')}
 `
 
-export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolean }>`
+export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolean; withPadding?: boolean }>`
   ${({ readOnly }) =>
     readOnly &&
     css`
@@ -147,9 +147,13 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
   /* font-family: 'Inter', sans-serif; */
   /* font-weight: 400; */
 
-  line-height: 1.75;
-  width: 100%;
-  padding: 0 ${({ theme }) => theme.spacing.medium};
+  ${({ withPadding = true }) =>
+    withPadding &&
+    css`
+      line-height: 1.75;
+      width: 100%;
+      padding: 0 ${({ theme }) => theme.spacing.medium};
+    `}
 
   .slate-Draggable {
     > div {

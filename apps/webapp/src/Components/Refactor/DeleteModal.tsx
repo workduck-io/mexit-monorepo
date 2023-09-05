@@ -131,6 +131,7 @@ const Delete = () => {
   const handleDelete = async () => {
     if (del && !isReserved(del.path)) {
       const res = await execArchive(del.path, del.namespaceID)
+
       if (res) {
         goTo(ROUTE_PATHS.node, NavigationType.replace, res.toLoad)
       }

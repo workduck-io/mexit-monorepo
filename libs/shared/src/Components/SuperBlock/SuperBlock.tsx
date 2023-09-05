@@ -25,7 +25,7 @@ export const SuperBlock: React.FC<{
   onDelete?: () => void
 
   // * Required Components To Render Header And Footer of SuperBlocks
-  FooterRightComponent?: ReactElement
+  FooterRightComponent?: any
   LeftHeaderRenderer: ReactElement
 }> = (props) => {
   const {

@@ -52,7 +52,7 @@ export const ProjectIconMex: React.FC<{
         e.currentTarget.onerror = null
         e.currentTarget.src = DEFAULT_IMAGE_URL
       }}
-      style={{ margin: margin ?? '0' }}
+      style={{ margin: margin ?? '0', opacity: 1 }}
       src={icon}
       height={size ? size : 24}
       width={size ? size : 24}

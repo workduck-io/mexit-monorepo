@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import { useDebounce } from 'use-debounce'
 
-import { getMenuItem, MIcon, superBlockFieldValidator, SuperBlocks } from '@mexit/core'
+import { getElementById, getMenuItem, MIcon, superBlockFieldValidator, SuperBlocks } from '@mexit/core'
 
 import { useFocusBlock } from '../../Hooks/useFocusBlock'
+import { FadeText } from '../../Style/fade'
 import { Group } from '../../Style/Layouts'
 import { EntitiesInfo } from '../../Types/SearchEntities'
 import { changeSuperBlockType } from '../../Utils/superblocks'
@@ -88,7 +89,12 @@ const BlockTitleInfo = ({ title, type, value, isReadOnly, onFocusBlock, onChange
 
   return (
     <Group>
-      <Select items={convertableItems} isReadOnly={isReadOnly} defaultValue={EntitiesInfo[type] as any} />
+      <Select
+        root={getElementById('ext-side-nav')}
+        items={convertableItems}
+        isReadOnly={isReadOnly}
+        defaultValue={EntitiesInfo[type] as any}
+      />
       <span>|</span>
       <BlockTitleRename key={title} isReadOnly={isReadOnly} onChange={onChange} onEnter={onFocusBlock} title={title} />
     </Group>
@@ -106,7 +112,8 @@ const SuperBlockTitle: React.FC<SuperBlockTitleInfoProps> = ({
   onChange
 }) => {
   const title = value?.[name]
-  const blockSourceUrl = superBlockFieldValidator(type, 'url') ? value?.url : undefined
+
+  const blockSourceUrl = superBlockFieldValidator(type, 'url') ? value['url'] : undefined
 
   const { focusBlock } = useFocusBlock()
 
@@ -120,16 +127,24 @@ const SuperBlockTitle: React.FC<SuperBlockTitleInfoProps> = ({
 
   return (
     <Group>
-      {blockSourceUrl ? <Source source={blockSourceUrl} /> : <IconDisplay icon={icon} size={14} />}
-      <BlockTitleInfo
-        isReadOnly={isReadOnly}
-        onFocusBlock={handleFocusBlock}
-        onSwitchType={handleOnTypeSwitch}
-        title={title}
-        value={value}
-        type={type}
-        onChange={onChange}
-      />
+      {blockSourceUrl ? (
+        <Source key={blockSourceUrl} source={blockSourceUrl} />
+      ) : (
+        <FadeText>
+          <IconDisplay icon={icon} size={14} />
+        </FadeText>
+      )}
+      <FadeText>
+        <BlockTitleInfo
+          isReadOnly={isReadOnly}
+          onFocusBlock={handleFocusBlock}
+          onSwitchType={handleOnTypeSwitch}
+          title={title}
+          value={value}
+          type={type}
+          onChange={onChange}
+        />
+      </FadeText>
     </Group>
   )
 }

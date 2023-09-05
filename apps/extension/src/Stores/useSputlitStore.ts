@@ -12,6 +12,8 @@ export type SearchType = {
 
 export type SmartCaptureSaveType = 'basic' | 'tabular'
 
+export type CaptureDataType = { source: string; page: string; data: Array<any> }
+
 interface SputlitStore {
   // * Search Query
   search: SearchType
@@ -39,8 +41,8 @@ interface SputlitStore {
   child?: any
   setChild: (child?: any) => void
 
-  smartCaptureFormData?: any
-  setSmartCaptureFormData: (data: any) => void
+  smartCaptureFormData?: CaptureDataType
+  setSmartCaptureFormData: (data: CaptureDataType) => void
 
   smartCaptureSaveType?: SmartCaptureSaveType
   toggleSmartCaptureSaveType: () => void

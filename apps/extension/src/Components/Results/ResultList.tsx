@@ -4,7 +4,7 @@ import { useVirtual } from 'react-virtual'
 import { findIndex, groupBy } from 'lodash'
 
 import { ActionType, QuickLinkType } from '@mexit/core'
-import { PrimaryText } from '@mexit/shared'
+import { ListContainer, ListItemContainer, PrimaryText } from '@mexit/shared'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorStore } from '../../Hooks/useEditorStore'
@@ -13,7 +13,7 @@ import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Action from '../Action'
 
-import { List, ListItem, Subtitle } from './styled'
+import { Subtitle } from './styled'
 
 const ResultList = ({ results }: { results: Array<any> }) => {
   const parentRef = useRef(null)
@@ -132,7 +132,7 @@ const ResultList = ({ results }: { results: Array<any> }) => {
   }
 
   return (
-    <List ref={parentRef}>
+    <ListContainer ref={parentRef}>
       <div style={{ height: rowVirtualizer.totalSize }}>
         {rowVirtualizer.virtualItems.map((virtualRow) => {
           const item = results[virtualRow.index]
@@ -145,7 +145,12 @@ const ResultList = ({ results }: { results: Array<any> }) => {
           const active = virtualRow.index === activeIndex
 
           return (
-            <ListItem key={virtualRow.index} ref={virtualRow.measureRef} start={virtualRow.start} {...handlers}>
+            <ListItemContainer
+              key={virtualRow.index}
+              ref={virtualRow.measureRef}
+              start={virtualRow.start}
+              {...handlers}
+            >
               {item.category !== lastItem?.category && (
                 <Subtitle key={item.category}>
                   <span>{item.category}</span>
@@ -159,11 +164,11 @@ const ResultList = ({ results }: { results: Array<any> }) => {
                 </Subtitle>
               )}
               <Action action={item} active={active} />
-            </ListItem>
+            </ListItemContainer>
           )
         })}
       </div>
-    </List>
+    </ListContainer>
   )
 }
 

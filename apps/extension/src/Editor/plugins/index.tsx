@@ -46,7 +46,17 @@ import {
 import { useAuth } from '@workduck-io/dwindle'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { TableWrapper, useUploadToCDN } from '@mexit/shared'
+import {
+  createAISuperBlockPlugin,
+  createContentSuperBlockPlugin,
+  createHighlightSuperBlockPlugin,
+  createMeetSuperBlockPlugin,
+  createSmartCaptureSuperBlockPlugin,
+  createSuperBlockPlugin,
+  createTaskSuperBlockPlugin,
+  TableWrapper,
+  useUploadToCDN
+} from '@mexit/shared'
 
 import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { createTagPlugin } from './createTagPlugin'
@@ -77,6 +87,13 @@ export type PluginOptionType = {
 export const generatePlugins = (options: PluginOptionType) => {
   const Plugins: PlatePlugin[] = [
     // editor
+    createSuperBlockPlugin(),
+    createContentSuperBlockPlugin(),
+    createTaskSuperBlockPlugin(),
+    createHighlightSuperBlockPlugin(),
+    createSmartCaptureSuperBlockPlugin(),
+    createMeetSuperBlockPlugin(),
+    createAISuperBlockPlugin(),
 
     // elements
     createParagraphPlugin(), // paragraph element
@@ -154,14 +171,10 @@ export const generatePlugins = (options: PluginOptionType) => {
     // Media and link embed
     createMediaEmbedPlugin(),
     // Custom Plugins
-    // createBlurSelectionPlugin() ,
 
     // Comboboxes
     createTagPlugin(), // Tags
     createQuickLinkPlugin(), // Internal Links ILinks
-
-    // // For Inline Blocks
-    // createInlineBlockPlugin(),
 
     createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin),
     createHighlightTextPlugin()

@@ -50,7 +50,18 @@ import {
 import { useAuth } from '@workduck-io/dwindle'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@mexit/shared'
+import {
+  createContentSuperBlockPlugin,
+  createHighlightSuperBlockPlugin,
+  createMeetSuperBlockPlugin,
+  createSmartCaptureSuperBlockPlugin,
+  createSuperBlockPlugin,
+  createTaskSuperBlockPlugin,
+  MediaIFrame,
+  parseRestMediaUrls,
+  TableWrapper,
+  useUploadToCDN
+} from '@mexit/shared'
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
@@ -61,11 +72,6 @@ import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { createILinkPlugin } from './createILinkPlugin'
 import { createInlineBlockPlugin } from './createInlineBlockPlugin'
 import { createMentionPlugin } from './createMentionsPlugin'
-import { createSmartCaptureSuperBlockPlugin } from './createSmartCaptureSuperBlockPlugin'
-import { createSuperBlockPlugin } from './createSuperBlock'
-import { createContentSuperBlockPlugin } from './createSuperContentBlock'
-import { createHighlightSuperBlockPlugin } from './createSuperHighlightPlugins'
-import { createTaskSuperBlockPlugin } from './createSuperTaskPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
@@ -110,6 +116,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     createTaskSuperBlockPlugin(),
     createHighlightSuperBlockPlugin(),
     createSmartCaptureSuperBlockPlugin(),
+    createMeetSuperBlockPlugin(),
 
     // elements
     createParagraphPlugin(), // paragraph element

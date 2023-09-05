@@ -10,6 +10,7 @@ import {
   getHighlightBlockMap,
   getHighlightContent,
   Highlight,
+  mog,
   NodeProperties,
   RecentType,
   SaveableRange,
@@ -91,7 +92,7 @@ export function useSaveChanges() {
       capturedContent
     )
 
-    const nodeContent = getHighlightContent(highlight)
+    const nodeContent = highlight ? getHighlightContent(highlight) : capturedContent
 
     addRecent(RecentType.notes, node.nodeid)
     setpreferenceModifiedAtAndLastOpened(Date.now(), useRecentsStore.getState().lastOpened)
@@ -119,7 +120,7 @@ export function useSaveChanges() {
     }
   }
 
-  const saveNode = async ({ node, content, notify, reqData }) => {
+  const saveNode = async ({ node, content, notify, reqData = {} }) => {
     const parentILink = getParentILink(node.path)
     const isRoot = node.path.split(SEPARATOR).length === 1
     const isSingle = !!parentILink || isRoot
@@ -142,6 +143,8 @@ export function useSaveChanges() {
         ...(reqData ?? {})
       }
     }
+
+    mog('SAVING NODE', { saveNodeRequest })
 
     const response = await chrome.runtime.sendMessage(saveNodeRequest)
 

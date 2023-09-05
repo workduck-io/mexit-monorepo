@@ -156,7 +156,7 @@ export const insertItemInArray = <T>(array: T[], items: Array<T>, index: number)
 ]
 
 export const getHighlightContent = (highlight: Highlight, link?: Link) => {
-  const blockContent = highlight.properties.content
+  const blockContent = highlight?.properties?.content
   const titleOfBlock = getSlug(convertContentToRawText(blockContent))
 
   const properties = {

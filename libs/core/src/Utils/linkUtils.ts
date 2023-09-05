@@ -63,8 +63,8 @@ export const getListItemFromLink = (link: Link, workspaceID: string) => {
 }
 
 // * Get Favicon url
-export const getFavicon = (source: string) => {
-  return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${source}&SIZE=64`
+export const getFavicon = (source: string, size = 64) => {
+  return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${source}&size=${size}`
 }
 
 export const extractLinksFromData = (data: any): Link[] => {

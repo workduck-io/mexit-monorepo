@@ -3,7 +3,9 @@ export enum SuperBlocks {
   MEDIA = 'super-block-media',
   TASK = 'super-block-task',
   HIGHLIGHT = 'super-block-highlight',
-  CAPTURE = 'super-block-capture'
+  CAPTURE = 'super-block-capture',
+  MEET = 'super-block-meet',
+  AI = 'super-block-ai'
 }
 
 export const SUPER_BLOCK_PREFIX = 'super-block-'

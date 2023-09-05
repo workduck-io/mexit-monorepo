@@ -7,6 +7,7 @@ import {
   customStyles,
   EditorBalloonStyles,
   GridWrapper,
+  MainFont,
   normalize,
   ThinScrollbar,
   TippyBalloonStyles
@@ -44,7 +45,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   html {
-    font-size: 16px;
+    ${MainFont}
   }
 
 

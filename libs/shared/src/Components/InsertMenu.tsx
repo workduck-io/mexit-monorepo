@@ -14,6 +14,7 @@ interface InsertMenuProps {
   onClick?: any
   items?: Array<Partial<MenuListItemType>>
   title?: string
+  id?: string
   icon?: MIcon
   root?: any
   allowSearch?: boolean
@@ -38,6 +39,7 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({
   icon,
   name,
   type,
+  id,
   placeholder,
   shortcut
 }) => {
@@ -79,6 +81,7 @@ export const InsertMenu: React.FC<InsertMenuProps> = ({
       allowSearch={allowSearch}
       noBackground
       type={type}
+      id={id}
       noPadding
       searchPlaceholder={placeholder ?? 'Search for a Note...'}
       root={root}

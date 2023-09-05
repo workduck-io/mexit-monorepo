@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { PrimaryText, Scroll, ScrollStyles } from '@mexit/shared'
+import { PrimaryText, ScrollStyles } from '@mexit/shared'
 
 export const StyledResults = styled.div<{ isScreenshot?: boolean }>`
   overflow: hidden auto;
@@ -14,25 +14,6 @@ export const StyledResults = styled.div<{ isScreenshot?: boolean }>`
       min-height: 300px;
     `};
   ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[4])}
-`
-
-export const List = styled.div`
-  width: 100%;
-  overflow: auto;
-  position: relative;
-  scroll-behavior: smooth;
-
-  max-height: 300px;
-  ${Scroll}
-`
-
-export const ListItem = styled.div<{ start: number }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateY(${(props) => props.start}px);
-  width: 100%;
-  cursor: pointer;
 `
 
 export const Subtitle = styled.div`

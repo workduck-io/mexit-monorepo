@@ -47,7 +47,8 @@ export const handleCaptureRequest = ({ subType, data }) => {
         title: data.title,
         data: serializeContent(contentWithSuperBlocks),
         referenceID: data.referenceID,
-        namespaceID: data.namespaceID
+        namespaceID: data.namespaceID,
+        templateUsed: data.templateUsed
       }
 
       return client
@@ -77,6 +78,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
         data: serializeContent(contentWithSuperBlocks),
         // TODO: replace this with DEFAULT_NAMESPACE constant (added in another PR)
         namespaceID: data.namespaceID,
+        templateUsed: data.templateUsed,
         tags: []
       }
 

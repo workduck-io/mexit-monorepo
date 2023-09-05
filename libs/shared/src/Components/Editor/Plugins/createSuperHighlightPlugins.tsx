@@ -1,27 +1,28 @@
 import { PlatePlugin } from '@udecode/plate-core'
 
 import { SuperBlocks } from '@mexit/core'
-import { TaskSuperBlock } from '@mexit/shared'
+
+import { HighlightSuperBlock } from '../../SuperBlock'
 
 import { withSuperBlockElement } from './withSuperBlockElement'
 
 /**
- * Enables support for Super Block - Task.
+ * Enables support for Super Block - HIGHLIGHT.
  */
-export const createTaskSuperBlockPlugin = (): PlatePlugin => ({
-  key: SuperBlocks.TASK,
+export const createHighlightSuperBlockPlugin = (): PlatePlugin => ({
+  key: SuperBlocks.HIGHLIGHT,
   isElement: true,
   deserializeHtml: {
     getNode: (el: HTMLElement, node) => {
-      if (node.type !== SuperBlocks.TASK) return
+      if (node['type'] !== SuperBlocks.HIGHLIGHT) return
 
       return {
-        type: SuperBlocks.TASK,
+        type: SuperBlocks.HIGHLIGHT,
         status: el.getAttribute('data-slate-value')
       }
     }
   },
-  component: withSuperBlockElement(TaskSuperBlock),
+  component: withSuperBlockElement(HighlightSuperBlock),
   isInline: false,
   isVoid: false
 })

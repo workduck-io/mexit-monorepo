@@ -113,7 +113,6 @@ export const useNamespaceApi = () => {
     const namespace = await API.namespace
       .get(id)
       .then((d: any) => {
-        mog('namespaces specific', { data: d, id })
         // return d?.nodeHierarchy
 
         return {

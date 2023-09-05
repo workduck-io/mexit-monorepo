@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { useTheme } from 'styled-components'
 
-import { getMenuItem, Priority, PriorityDataType, PriorityType } from '@mexit/core'
+import { getElementById, getMenuItem, Priority, PriorityDataType, PriorityType } from '@mexit/core'
 
 import { MexIcon } from '../../../Style/Layouts'
 import { TodoActionButton } from '../../../Style/Todo.style'
@@ -64,6 +64,7 @@ const PrioritySelect = ({
       allowSearch
       placeholder="Set priority..."
       shortcut={shortcut}
+      root={getElementById('ext-side-nav')}
       title="Priority"
       type="modal"
       selected={value}

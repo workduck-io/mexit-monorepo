@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { getPlateEditorRef, removeBlocksAndFocus } from '@udecode/plate'
 import { useFocused, useSelected } from 'slate-react'
 
-import { getMenuItem, PriorityDataType, TaskStatusType, useUserCacheStore } from '@mexit/core'
+import { getElementById, getMenuItem, PriorityDataType, TaskStatusType, useUserCacheStore } from '@mexit/core'
 
 import { Group } from '../../../Style/Layouts'
 import { DefaultMIcons, getMIcon } from '../../Icons'
@@ -57,6 +57,7 @@ export const TaskSuperBlockFooter = ({ value, onChange }) => {
         isMenu
         allowSearch
         name="assignee"
+        root={getElementById('ext-side-nav')}
         type="modal"
         // shortcut="KeyA"
         placeholder="Assign to..."

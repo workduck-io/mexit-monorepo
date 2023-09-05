@@ -50,8 +50,6 @@ export const MentionTooltip = styled.div<{ spotlight?: boolean }>`
   /* max-width: 320px; */
   overflow-y: auto;
   ${CardShadow}
-  background: ${({ theme }) => theme.tokens.surfaces.s[2]} !important;
-  color: ${({ theme }) => theme.editor.elements.mention.default} !important;
 
   & > img,
   & > svg {

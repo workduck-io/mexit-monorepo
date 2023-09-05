@@ -10,7 +10,8 @@ import {
   useDataStore,
   useEditorStore,
   useHistoryStore,
-  useRecentsStore
+  useRecentsStore,
+  useSmartCaptureStore
 } from '@mexit/core'
 import { useLinks } from '@mexit/shared'
 
@@ -21,6 +22,7 @@ export const useDelete = () => {
   const ilinks = useDataStore((state) => state.ilinks)
 
   const setILinks = useDataStore((state) => state.setIlinks)
+  const removeFromCache = useSmartCaptureStore((store) => store.removeFromCache)
   const setBaseNodeId = useDataStore((state) => state.setBaseNodeId)
   const addInArchive = useDataStore((store) => store.addInArchive)
 
@@ -99,6 +101,7 @@ export const useDelete = () => {
         const { path, nodeid } = item
         const content = getContent(nodeid)
 
+        removeFromCache(nodeid)
         await removeDocument(Indexes.MAIN, nodeid)
         await updateDocument({ indexKey: Indexes.ARCHIVE, id: nodeid, contents: content.content, title: path })
       })

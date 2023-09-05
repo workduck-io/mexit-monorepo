@@ -4,7 +4,7 @@ import { useTheme } from 'styled-components'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { et, generateTag, getMIcon, mog, Tag, useDataStore } from '@mexit/core'
+import { et, generateTag, getElementById, getMIcon, mog, Tag, useDataStore } from '@mexit/core'
 
 import { Group } from '../../Style/Layouts'
 import { AddTagMenu } from '../AddTagMenu'
@@ -23,7 +23,15 @@ interface BlockTagsProps {
 const TagMenu = ({ onCreate, onAdd }) => {
   const allTags = useDataStore((store) => store.tags)
 
-  return <AddTagMenu key={allTags?.length} createTag={onCreate} tags={allTags} addTag={onAdd} />
+  return (
+    <AddTagMenu
+      root={getElementById('ext-side-nav')}
+      key={allTags?.length}
+      createTag={onCreate}
+      tags={allTags}
+      addTag={onAdd}
+    />
+  )
 }
 
 const BlockTags = ({ name, value, isSelected, onChange, isReadOnly }: BlockTagsProps) => {
@@ -62,7 +70,7 @@ const BlockTags = ({ name, value, isSelected, onChange, isReadOnly }: BlockTagsP
   }
 
   return (
-    <Group contentEditable={false}>
+    <Group contentEditable={false} id="mexit-tag-container">
       {tags.length > 0 && (
         <TagsLabel
           tags={tags}

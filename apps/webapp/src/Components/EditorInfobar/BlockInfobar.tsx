@@ -7,9 +7,8 @@ import styled, { useTheme } from 'styled-components'
 import { Button } from '@workduck-io/mex-components'
 
 import { ContextMenuActionType, useBlockStore } from '@mexit/core'
-import { MexIcon } from '@mexit/shared'
+import { MexIcon, useEditorBlockSelection } from '@mexit/shared'
 
-import { useEditorBlockSelection } from '../../Editor/Actions/useEditorBlockSelection'
 import { ButtonWrapper } from '../../Style/Settings'
 
 export const PrimaryText = styled.span`

@@ -146,6 +146,11 @@ interface Props {
    * Menu Type
    */
   type?: 'default' | 'modal'
+
+  /**
+   * id of the menu
+   */
+  id?: string
 }
 
 export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonElement>>(
@@ -344,6 +349,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
     return (
       <FloatingNode id={nodeId}>
         <RootMenuWrapper
+          id={props.id}
           noHover={noHover}
           border={border}
           $noPadding={noPadding}

@@ -19,67 +19,13 @@ import { optionsCreateNodeIdPlugin } from '../../Editor/Plugins/options'
 
 const generateCommentPlugins = () => {
   return [
-    // elements
     createParagraphPlugin(), // paragraph element
-
     createLinkPlugin(), // Link
-
-    // Marks
     createBoldPlugin(), // bold mark
     createItalicPlugin(), // italic mark
     createUnderlinePlugin(), // underline mark
     createStrikethroughPlugin(), // strikethrough mark
     createNodeIdPlugin(optionsCreateNodeIdPlugin)
-
-    // createHighlightPlugin(), // highlight mark
-    // createTodoListPlugin(),
-    //
-    // createImagePlugin({
-    //   options: {
-    //     uploadImage
-    //   }
-    // }), // Image
-    // createBlockModifierPlugin(),
-
-    // serialization / deseriailization
-
-    // Convert pasted markdown to contents of the editor
-    // createDeserializeMDPlugin(),
-
-    // Media and link embed
-    // createMediaEmbedPlugin({
-    //   isInline: true,
-    //   options: {
-    //     transformUrl: parseIframeUrl,
-    //     rules: [
-    //       {
-    //         parser: parseTwitterUrl,
-    //         component: MediaEmbedTweet
-    //       },
-    //       {
-    //         parser: parseVideoUrl,
-    //         component: MediaEmbedVideo
-    //       },
-    //       {
-    //         parser: parseRestMediaUrls,
-    //         component: MediaIFrame
-    //       }
-    //     ]
-    //   }
-    // })
-
-    // Single line for the editor
-    // createSingleLinePlugin()
-
-    // Custom Plugins
-    // createTodoPlugin(),
-    // createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin)
-
-    // Comboboxes
-    // createTagPlugin(), // Tags
-    // createMentionPlugin(), // Mentions
-    // createILinkPlugin(), // Internal Links ILinks
-    // createInlineBlockPlugin(),
   ]
 }
 
@@ -95,10 +41,6 @@ export const getComponents = () =>
         }
       }
     })
-    // [ELEMENT_TAG]: TagElement as any,
-    // [ELEMENT_MENTION]: MentionElement as any,
-    // [ELEMENT_ILINK]: QuickLinkElement as any,
-    // [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any
   })
 
 export const getCommentPlugins = () => {

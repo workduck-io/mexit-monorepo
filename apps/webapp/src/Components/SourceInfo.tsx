@@ -17,7 +17,7 @@ export const Source: React.FC<{ source: string }> = ({ source }) => {
   }
 
   return (
-    <StyledSource id="source-icon" $isVisible={true} contentEditable={false} onClick={onClick}>
+    <StyledSource id="source-icon" $isVisible contentEditable={false} onClick={onClick}>
       <Tippy
         delay={100}
         interactiveDebounce={100}

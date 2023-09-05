@@ -1,15 +1,14 @@
-import { useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import message2Line from '@iconify/icons-ri/message-2-line'
 import { Icon } from '@iconify/react'
 import { nanoid } from 'nanoid'
 
 import { generateCommentId, getNodeIdFromEditor, MIcon, useAuthStore, useEditorStore, UserReaction } from '@mexit/core'
-import { DefaultMIcons, IconDisplay, Popover, reactionsWithCount, useReactions } from '@mexit/shared'
+import { DefaultMIcons, IconDisplay, Popover, reactionsWithCount, useComments, useReactions } from '@mexit/shared'
 
-import { useComments } from '../../../Hooks/useComments'
-import { CommentsComponent } from '../../CommentsAndReactions/Comments'
-import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
+import { CommentsComponent } from '../../../Components/CommentsAndReactions/Comments'
+import { BlockReaction, Reactions } from '../../../Components/CommentsAndReactions/Reactions'
 
 import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
 

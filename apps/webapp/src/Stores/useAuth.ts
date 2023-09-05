@@ -112,7 +112,8 @@ export const useAuthentication = () => {
   }
 
   const logout = async () => {
-    await backup()
+    // * TODO: Revert this !!!!
+    // await backup()
     await signOut()
     try {
       await terminateAllWorkers()
@@ -239,39 +240,39 @@ export const useInitializeAfterAuth = () => {
       const { userDetails, workspaceDetails } = registerUser
         ? await registerNewUser(loginData)
         : await API.user
-          .getCurrent()
-          .then(async (res) => {
-            if (res) {
-              if (isGoogle && res.activeWorkspace === undefined) {
-                forceRefreshToken = true
-                return await registerNewUser(loginData)
-              } else if (res.activeWorkspace) {
-                const name = res.name ?? res.metadata?.name ?? res.properties?.name
-                const userDetails = {
-                  email: email,
-                  alias: res.alias ?? res.metadata?.alias ?? res.properties?.alias ?? name,
-                  id: res.id,
-                  name,
-                  roles: res.roles ?? res.metadata?.roles ?? []
-                }
+            .getCurrent()
+            .then(async (res) => {
+              if (res) {
+                if (isGoogle && res.activeWorkspace === undefined) {
+                  forceRefreshToken = true
+                  return await registerNewUser(loginData)
+                } else if (res.activeWorkspace) {
+                  const name = res.name ?? res.metadata?.name ?? res.properties?.name
+                  const userDetails = {
+                    email: email,
+                    alias: res.alias ?? res.metadata?.alias ?? res.properties?.alias ?? name,
+                    id: res.id,
+                    name,
+                    roles: res.roles ?? res.metadata?.roles ?? []
+                  }
 
-                const workspaceDetails = {
-                  id: res.activeWorkspace,
-                  icon: res.icon ?? DefaultMIcons.WORKSPACE,
-                  name: 'Test Workspace'
-                }
+                  const workspaceDetails = {
+                    id: res.activeWorkspace,
+                    icon: res.icon ?? DefaultMIcons.WORKSPACE,
+                    name: 'Test Workspace'
+                  }
 
-                return { workspaceDetails, userDetails }
-              } else {
-                throw new Error('Could Not Fetch User Records')
+                  return { workspaceDetails, userDetails }
+                } else {
+                  throw new Error('Could Not Fetch User Records')
+                }
               }
-            }
-          })
-          .catch((error) => {
-            if (error.status === 404) {
-              return registerNewUser(loginData)
-            }
-          })
+            })
+            .catch((error) => {
+              if (error.status === 404) {
+                return registerNewUser(loginData)
+              }
+            })
 
       addUser({
         id: userDetails.id,

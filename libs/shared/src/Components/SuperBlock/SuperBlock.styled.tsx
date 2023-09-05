@@ -32,7 +32,7 @@ export const RenameInput = styled(Input)<{ length?: number; disabled?: boolean }
   margin: 0;
   min-width: 10ch;
   width: ${({ length }) => `${length}ch`};
-  max-width: 40ch;
+  max-width: max(40ch, 40%);
   text-overflow: ellipsis;
   margin: 0 !important;
 
@@ -92,9 +92,32 @@ export const Section = styled.section<{ padding?: string; margin?: string; $widt
             #label {
               display: none;
             }
-            flex-direction: column;
+            padding-bottom: ${({ theme }) => theme.spacing.small};
+            gap: ${({ theme }) => theme.spacing.large};
+
+            #mexit-time {
+              color: ${({ theme }) => theme.tokens.colors.primary};
+            }
+
+            #mexit-stage-actions {
+              width: 100%;
+              padding: 0;
+
+              #label {
+                display: inline;
+              }
+
+              button {
+                width: 100%;
+              }
+            }
+
+            /* flex-direction: column-reverse; */
             align-items: flex-start;
-            gap: ${({ theme }) => theme.spacing.medium};
+
+            #mexit-tag-container {
+              align-self: flex-start;
+            }
           `
         : css`
             #label {

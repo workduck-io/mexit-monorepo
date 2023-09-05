@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { BodyFont, EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
+import { BodyFont, EditorStyles, TodoContainer } from '@mexit/shared'
 
 import { useMemoizedPlugins } from '../Editor/plugins'
 
@@ -16,6 +16,7 @@ interface EditorPreviewRendererProps {
   /**
    * Block that will be focused on render
    */
+  flex?: boolean
   blockId?: string
   readOnly?: boolean
   noMouseEvents?: boolean
@@ -23,17 +24,23 @@ interface EditorPreviewRendererProps {
   plugins?: PlatePlugin[]
 }
 
-const PreviewStyles = styled(EditorStyles)<{ noMouseEvents: boolean }>`
+const PreviewStyles = styled(EditorStyles)<{ noMouseEvents: boolean; readOnly?: boolean }>`
   ${({ noMouseEvents }) => noMouseEvents && 'pointer-events: none;'};
+
   ${BodyFont}
   overflow-y: auto;
-  ${TodoContainer}, button,
+
+  ${({ readOnly = false }) =>
+    readOnly &&
+    css`
+      ${TodoContainer}, button,
   input,
   textarea,
   select,
   option {
-    pointer-events: none;
-  }
+        pointer-events: none;
+      }
+    `}
 `
 
 const EditorPreviewRenderer = ({
@@ -42,6 +49,7 @@ const EditorPreviewRenderer = ({
   blockId,
   readOnly = false,
   noStyle,
+  flex,
   noMouseEvents,
   onDoubleClick
 }: EditorPreviewRendererProps) => {
@@ -64,6 +72,7 @@ const EditorPreviewRenderer = ({
   const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
 
   // useEditorChange(editorId, content)
+  return <Plate id={editorId} editableProps={editableProps} value={content} plugins={plugins} />
 
   return (
     <PreviewStyles
@@ -74,9 +83,8 @@ const EditorPreviewRenderer = ({
         }
       }}
     >
-      <FadeContainer fade={blockId !== undefined}>
-        <Plate id={editorId} editableProps={editableProps} value={content} plugins={plugins} />
-      </FadeContainer>
+      {/* <FadeContainer flex={flex} fade={blockId !== undefined}> */}
+      {/* </FadeContainer> */}
     </PreviewStyles>
   )
 }

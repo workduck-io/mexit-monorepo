@@ -1,7 +1,8 @@
 import { PlatePlugin } from '@udecode/plate-core'
 
 import { SuperBlocks } from '@mexit/core'
-import { SmartCaptureSuperBlock } from '@mexit/shared'
+
+import { SmartCaptureSuperBlock } from '../../SuperBlock'
 
 import { withSuperBlockElement } from './withSuperBlockElement'
 
@@ -13,5 +14,5 @@ export const createSmartCaptureSuperBlockPlugin = (): PlatePlugin => ({
   isElement: true,
   component: withSuperBlockElement(SmartCaptureSuperBlock),
   isInline: false,
-  isVoid: false
+  isVoid: true
 })

@@ -42,7 +42,7 @@ const SuperBlockHeader: React.FC<ISuperBlockHeaderProps> = (props) => {
   return (
     <Section margin={`0 0 ${theme.spacing.medium}`} contentEditable={false}>
       <Group>
-        <FadeText>{LeftHeaderRenderer && LeftHeaderRenderer}</FadeText>
+        {LeftHeaderRenderer && LeftHeaderRenderer}
 
         {updatedAt && (
           <>

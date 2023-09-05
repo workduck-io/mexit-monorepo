@@ -8,6 +8,7 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
   getContent,
+  mog,
   useBlockStore,
   useBufferStore,
   useContentStore,
@@ -18,12 +19,12 @@ import {
   useLayoutStore,
   useModalStore
 } from '@mexit/core'
-import { EditorWrapper, isOnEditableElement, useReactions } from '@mexit/shared'
+import { ContactCard, EditorWrapper, isOnEditableElement, useComments, useReactions } from '@mexit/shared'
 
+import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
-import { useComments } from '../../Hooks/useComments'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLastOpened } from '../../Hooks/useLastOpened'
 import useLayout from '../../Hooks/useLayout'
@@ -168,6 +169,7 @@ const ContentEditor = () => {
 
   return (
     <EditorWrapper comboboxOpen={isComboOpen} isUserEditing={isUserEditing} ref={editorWrapperRef}>
+      {/* <Contact /> */}
       <Editor
         onAutoSave={onAutoSave}
         onFocusClick={onFocusClick}
@@ -180,6 +182,36 @@ const ContentEditor = () => {
         autoFocus={false}
       />
     </EditorWrapper>
+  )
+}
+
+const Contact = () => {
+  const hasHydradet = useContentStore((s) => s._hasHydrated)
+  const contact = {
+    title: 'Rowan Cheung',
+    description: 'Product Engineer @Workduck | Software Engineer',
+    imgUrl:
+      'https://media.licdn.com/dms/image/C5603AQGFXMOPPPxQ3A/profile-displayphoto-shrink_200_200/0/1639791541710?e=1698883200&v=beta&t=MS_tSfj4Yygtz1ZvdYgNmCLDWXEykhtrh7dHurSVPK8'
+  }
+  // const noteId = useSmartCaptureStore.getState().smartCaptureCache[contact.title]
+  const content = useMemo(() => getContent('NODE_J64NmY6NDrqHymxJ8NDwJ'), [hasHydradet])
+
+  return (
+    <ContactCard
+      contact={contact}
+      onTemplateSelect={(template) => {
+        mog('Template selected', { template })
+      }}
+    >
+      {
+        <EditorPreviewRenderer
+          noStyle
+          readOnly={false}
+          content={content?.content}
+          editorId={'NODE_J64NmY6NDrqHymxJ8NDwJ-hello'}
+        />
+      }
+    </ContactCard>
   )
 }
 

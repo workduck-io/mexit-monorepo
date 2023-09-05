@@ -78,17 +78,6 @@ export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: R
     })
   }
 
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     setSparkle(null)
-  //   }, 2000)
-  //   return () => clearTimeout(timeout)
-  // }, [sparkle])
-
-  // if (reactions.length > 0) {
-  //   mog('BlockReactions', { BlockReactions, reactions })
-  // }
-
   const onHover = useCallback(() => {
     // mog('onHover we shall fetch details')
     if (!getReactionDetails) {

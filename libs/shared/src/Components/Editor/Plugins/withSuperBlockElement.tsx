@@ -1,12 +1,11 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 
 import { Value } from '@udecode/plate'
 import { useFocused, useReadOnly, useSelected } from 'slate-react'
 
-import { MetadataFields, PropertiyFields, SuperBlockElementProps, SuperBlockProps } from '@mexit/shared'
-
-import { useEditorBlockSelection } from '../Actions/useEditorBlockSelection'
-import useUpdateBlock from '../Hooks/useUpdateBlock'
+import { useEditorBlockSelection } from '../../../Hooks/useEditorBlockSelection'
+import { useUpdateBlockHook } from '../../../Hooks/useUpdateBlock'
+import { MetadataFields, PropertiyFields, SuperBlockElementProps, SuperBlockProps } from '../../SuperBlock'
 
 export const withSuperBlockElement = (Component: FC<SuperBlockProps>) => {
   const SuperBlockElement = <V extends Value>(props: SuperBlockElementProps<V>) => {
@@ -16,7 +15,7 @@ export const withSuperBlockElement = (Component: FC<SuperBlockProps>) => {
     const isBlockActive = useFocused()
     const isBlockSelected = useSelected()
 
-    const { updateMetadataProperties } = useUpdateBlock()
+    const { updateMetadataProperties } = useUpdateBlockHook()
     const { deleteParentBlock } = useEditorBlockSelection()
 
     const handleOnChange = (properties: Partial<PropertiyFields>) => {

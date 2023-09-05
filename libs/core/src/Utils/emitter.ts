@@ -40,6 +40,26 @@ export const TestTemplateData = {
 
   content: [
     {
+      type: 'super-block-ai',
+      id: 'TEMP_eWez4',
+      properties: {
+        title: 'message'
+      },
+      children: [
+        {
+          type: 'p',
+          id: 'TEMP_7eVbG',
+          children: [
+            {
+              type: 'p',
+              id: 'defaultValue',
+              text: 'This is a test template'
+            }
+          ]
+        }
+      ]
+    },
+    {
       type: 'super-block-content',
       id: 'TEMP_eWez4',
       properties: {
@@ -205,9 +225,9 @@ const propertyChangeHandler = (callback?) => (data) => {
   if (!templateData) return
   const result = evaluateDecisionTree(data.oldData, data.newData, {
     conditions: templateData.content
-      .filter((item) => item.properties?.properties.conditionId)
+      .filter((item) => item.properties?.conditionId)
       .map((item) => {
-        const condition = templateData.metadata.conditions[item.properties.properties.conditionId]
+        const condition = templateData.metadata.conditions[item.properties?.conditionId]
         return {
           ...condition,
           action: { noteId: data.nodeId, block: transformTemplateBlockForInsert(item), type: condition.action }

@@ -4271,6 +4271,26 @@
     process "^0.11.10"
     qs "^6.10.3"
 
+"@workduck-io/dwindle@^0.2.2":
+  version "0.2.2"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.2.2/de7e7b4bc4a71ac6abe5849af50944e8585cbbad#de7e7b4bc4a71ac6abe5849af50944e8585cbbad"
+  integrity sha512-STrsOB5ABGjA3x2475f+KDYgC148wWx5JJrfmyJaqxw2Ih/thFx9ZKcF1snNKIQgmD3XKyA4JOW/eSj5+fTpjg==
+  dependencies:
+    "@aws-sdk/client-cognito-identity" "^3.17.0"
+    "@aws-sdk/client-s3" "^3.17.0"
+    "@aws-sdk/credential-provider-cognito-identity" "^3.17.0"
+    "@aws-sdk/s3-request-presigner" "^3.17.0"
+    "@aws-sdk/util-endpoints" "^3.192.0"
+    "@types/jsonwebtoken" "^8.5.5"
+    amazon-cognito-identity-js "^5.2.0"
+    buffer "^6.0.3"
+    cross-fetch "^3.1.4"
+    jsonwebtoken "^9.0.0"
+    jwt-decode "^3.1.2"
+    nanoid "^4.0.0"
+    process "^0.11.10"
+    qs "^6.10.3"
+
 "@workduck-io/flexsearch@0.7.22":
   version "0.7.22"
   resolved "https://npm.pkg.github.com/download/@workduck-io/flexsearch/0.7.22/968178df34cab6b6df5489f73ed86ff0b9e97123#968178df34cab6b6df5489f73ed86ff0b9e97123"

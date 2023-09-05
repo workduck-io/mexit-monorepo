@@ -242,6 +242,7 @@ export function useActionExecutor() {
 
                 setSmartCaptureFormData({ source: strippedURL, page: captureConfig.base, data: data })
                 setActiveItem(item)
+                return data
               } catch (err) {
                 console.error('err:', err)
               } finally {

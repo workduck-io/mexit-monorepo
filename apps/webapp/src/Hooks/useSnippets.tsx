@@ -34,16 +34,18 @@ export const useSnippets = () => {
   const getSnippetConfigs = (): { [key: string]: SlashCommandConfig } => {
     const snippets = useSnippetStore.getState().snippets ?? {}
 
-    return Object.values(snippets).reduce((prev, cur) => {
-      const snipCommand = getSnippetCommand(cur.title)
-      return {
-        ...prev,
-        [snipCommand]: {
-          slateElementType: '__SPECIAL__SNIPPETS',
-          command: snipCommand
+    return Object.values(snippets)
+      .filter((snip) => !snip.template)
+      .reduce((prev, cur) => {
+        const snipCommand = getSnippetCommand(cur.title)
+        return {
+          ...prev,
+          [snipCommand]: {
+            slateElementType: '__SPECIAL__SNIPPETS',
+            command: snipCommand
+          }
         }
-      }
-    }, {})
+      }, {})
   }
 
   const updateSlashCommands = (snippets: Snippet[]) => {

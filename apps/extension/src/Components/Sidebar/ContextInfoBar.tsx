@@ -32,21 +32,21 @@ import {
 
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { getElementById } from '../../Utils/cs-utils'
+import ContactSmartCaptureSection from '../ContactSection'
 
 import { GenericCard } from './GenericCard'
 import { HighlightGroups } from './HighlightGroup'
 import SidebarSection from './SidebarSection'
-import { SmartCaptureSection } from './SmartCaptureSection'
 import { EventCard, EventHeading, Timestamp } from './styled'
 
 // TODO: add links to onboarding tutorials later
 // and maybe a check if the user doesn't want to see a card again
 const basicOnboarding = [
-  {
-    icon: 'ri:link-m',
-    title: 'Shorten URLs and Tag them',
-    description: 'Create shortcuts for important URLs and tag them to organize'
-  },
+  // {
+  //   icon: 'ri:link-m',
+  //   title: 'Shorten URLs and Tag them',
+  //   description: 'Create shortcuts for important URLs and tag them to organize'
+  // },
   {
     icon: 'ri:edit-2-line',
     title: 'Highlight Content',
@@ -264,9 +264,9 @@ const Highlights = () => {
 export function ContextInfoBar() {
   return (
     <SnippetCards fullHeight>
-      <SmartCaptureSection />
-      {/* <UpcomingEvents />
-      <Highlights /> */}
+      <ContactSmartCaptureSection />
+      <UpcomingEvents />
+      {/* <Highlights /> */}
     </SnippetCards>
   )
 }

@@ -207,53 +207,6 @@ export const addBaseVersionIfNeeded = (d: any): any => {
   return { ...d, version: '0.0.0' }
 }
 
-// TODO: See what these do and uncomment and add later
-// export const requiresTransform = (d: any): boolean => {
-//   // console.log(d.version, app.getVersion())
-//   if (d.version) {
-//     if (d.version !== app.getVersion()) return true
-//     return false
-//   }
-//   return true
-// }
-
-// export const applyTransforms = (d: any, transforms: DataTransformation[]): { data: any; toWrite: boolean } => {
-//   // const fromTransformIndex = transforms.map(t => t.version)
-
-//   // Only apply transforms that are a version up of the data
-//   const toApplyTransform = transforms
-//     .filter((t) => semver.gt(t.version, addBaseVersionIfNeeded(d).version, true))
-//     .sort((a, b) => semver.compareLoose(a.version, b.version))
-
-//   const transformedData = toApplyTransform.reduce((pd, t) => {
-//     if (t.type === 'KeysTransformation') {
-//       return applyKeysTransform(pd, t)
-//     } else if (t.type === 'CustomTransformation') {
-//       return t.custom ? t.custom(pd) : pd
-//     }
-//   }, d)
-
-//   const transformedDataWithDefaultTransforms = DefaultTransforms.reduce((pd, t) => {
-//     if (t.type === 'KeysTransformation') {
-//       return applyKeysTransform(pd, t)
-//     } else if (t.type === 'CustomTransformation') {
-//       return t.custom ? t.custom(pd) : pd
-//     }
-//   }, transformedData)
-
-//   console.log('BigBrainDataTransform', { v: transformedData.version, toApplyTransform, transforms })
-
-//   return { data: transformedDataWithDefaultTransforms, toWrite: toApplyTransform.length > 0 }
-// }
-
-// export const clearLocalStorage = (fileDataVersion: string, currVersion: string) => {
-//   const compareFileDataVersion = semver.compare(fileDataVersion, ForceLogutVersion)
-//   const compareCurrentVersion = semver.compare(currVersion, ForceLogutVersion)
-
-//   if (compareFileDataVersion <= 0 && compareCurrentVersion > 0) return true
-//   return false
-// }
-
 export const createSuperBlockContent = (type: SuperBlocks, content: NodeEditorContent) => {
   return {
     id: generateTempId(),

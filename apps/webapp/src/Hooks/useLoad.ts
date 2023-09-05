@@ -23,12 +23,11 @@ import {
   userPreferenceStore as useUserPreferenceStore,
   useTreeStore
 } from '@mexit/core'
-import { getLinkFromNodeIdHookless, useReactions } from '@mexit/shared'
+import { getLinkFromNodeIdHookless, useComments, useReactions } from '@mexit/shared'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 
 import { useApi } from './API/useNodeAPI'
-import { useComments } from './useComments'
 import { useEditorBuffer } from './useEditorBuffer'
 import { useFetchShareData } from './useFetchShareData'
 import { useLastOpened } from './useLastOpened'

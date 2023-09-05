@@ -72,6 +72,7 @@ export interface SuperBlockProps {
 
   FooterRightComponent?: ReactElement
 
+  onDelete?: () => void
   onChange?: (propertiesToUpdate: Partial<PropertiyFields>) => void
 }
 

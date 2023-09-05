@@ -21,6 +21,11 @@ export const EntitiesInfo: Partial<Record<string, SearchEntityType>> = {
     label: 'Capture',
     icon: DefaultMIcons.HIGHLIGHT
   },
+  [SuperBlocks.MEET]: {
+    id: 'meet',
+    label: 'Meet',
+    icon: DefaultMIcons.CALENDAR
+  },
   [SuperBlocks.CAPTURE]: {
     id: 'smartCaptures',
     label: 'Contact',

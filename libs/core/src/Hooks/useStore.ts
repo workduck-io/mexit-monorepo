@@ -53,9 +53,8 @@ export const useStore = () => {
 
   const restoreFromS3 = async (): Promise<string> => {
     const workspaceId = getWorkspaceIdFromStorage()
-    const backup = await BackupStorage.fetchFromS3(workspaceId).then((string) => {
-      const parsedData = JSON.parse(string)
-      return parsedData
+    const backup = await BackupStorage.fetchFromS3(workspaceId).then((str) => {
+      return JSON.parse(str)
     })
     const timestampStore: string = backup.find((item) => item.key === 'mexit-timestamp-webapp')?.value
 

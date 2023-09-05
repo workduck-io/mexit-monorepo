@@ -1,1 +1,7 @@
 export * from './Capture'
+export * from './createSmartCaptureSuperBlockPlugin'
+export * from './createSuperBlock'
+export * from './createSuperContentBlock'
+export * from './createSuperHighlightPlugins'
+export * from './createSuperTaskPlugin'
+export * from './withSuperBlockElement'

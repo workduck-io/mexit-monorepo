@@ -1,6 +1,7 @@
 export interface SmartCaptureLabel {
   id: string
   name: string
+  field?: string
   path: string
   properties?: any
 }

@@ -31,6 +31,8 @@ import { createHighlightPlugin } from '@udecode/plate-highlight'
 import { ELEMENT_ILINK, ELEMENT_TAG, ELEMENT_TODO_LI } from '@mexit/core'
 import {
   createBlurSelectionPlugin,
+  createSuperBlockPlugin,
+  createTaskSuperBlockPlugin,
   MediaEmbedElement,
   MediaIFrame,
   parseRestMediaUrls,
@@ -43,8 +45,6 @@ import TagElement from '../../../Editor/Components/Tags/TagElement'
 import { createILinkPlugin } from '../../../Editor/Plugins/createILinkPlugin'
 import { createInlineBlockPlugin } from '../../../Editor/Plugins/createInlineBlockPlugin'
 import { createMentionPlugin } from '../../../Editor/Plugins/createMentionsPlugin'
-import { createSuperBlockPlugin } from '../../../Editor/Plugins/createSuperBlock'
-import { createTaskSuperBlockPlugin } from '../../../Editor/Plugins/createSuperTaskPlugin'
 import { createTagPlugin } from '../../../Editor/Plugins/createTagPlugin'
 import { createTodoPlugin } from '../../../Editor/Plugins/createTodoPlugin'
 import { optionsCreateNodeIdPlugin, optionsSelectOnBackspacePlugin } from '../../../Editor/Plugins/options'
