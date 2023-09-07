@@ -35,7 +35,7 @@ const TemplateModal = () => {
 
   const node = getILinkFromNodeid(nodeid)
   const snippets = useSnippetStore((state) => state.snippets) ?? {}
-  const templates = Object.values(snippets).filter((item) => item?.template)
+  const templates = Object.values<Snippet>(snippets).filter((item) => item?.template)
   const updateMetadataInStore = useMetadataStore((s) => s.updateMetadata)
 
   const [currentTemplate, setCurrentTemplate] = useState<Snippet>()

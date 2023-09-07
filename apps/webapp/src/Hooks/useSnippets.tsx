@@ -34,7 +34,7 @@ export const useSnippets = () => {
   const getSnippetConfigs = (): { [key: string]: SlashCommandConfig } => {
     const snippets = useSnippetStore.getState().snippets ?? {}
 
-    return Object.values(snippets)
+    return Object.values<Snippet>(snippets)
       .filter((snip) => !snip.template)
       .reduce((prev, cur) => {
         const snipCommand = getSnippetCommand(cur.title)
@@ -62,7 +62,7 @@ export const useSnippets = () => {
   // Replacer that will provide new fresh and different content each time
   const getSnippetContent = (command: string) => {
     const snippets = useSnippetStore.getState().snippets ?? {}
-    const snippet = Object.values(snippets).filter((c) => getSnippetCommand(c.title) === command)
+    const snippet = Object.values<Snippet>(snippets).filter((c) => getSnippetCommand(c.title) === command)
 
     if (snippet.length > 0) return snippet[0].content
     return undefined
@@ -89,7 +89,7 @@ export const useSnippets = () => {
     const newSnippets = { ...(Array.isArray(existingSnippets) ? {} : existingSnippets), ...snippets }
 
     updateSnippetsInStore(newSnippets)
-    const snippetsArr = Object.values(newSnippets)
+    const snippetsArr = Object.values<Snippet>(newSnippets)
     updateSlashCommands(snippetsArr)
 
     snippetsArr.forEach(async (snippet) => {

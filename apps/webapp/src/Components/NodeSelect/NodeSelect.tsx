@@ -21,6 +21,7 @@ import {
   SEPARATOR,
   SHARED_NAMESPACE,
   SingleNamespace,
+  Snippet,
   useContentStore,
   useDataStore,
   useMetadataStore,
@@ -223,7 +224,7 @@ function NodeSelect({
 
     if (!showAll) return mLinks
 
-    const mSnippets = Object.values(snippets).map((s) =>
+    const mSnippets = Object.values<Snippet>(snippets).map((s) =>
       makeQuickLink(s.title, { nodeid: s.id, type: QuickLinkType.snippet, icon: s.icon })
     )
 
@@ -248,7 +249,7 @@ function NodeSelect({
 
   const lastOpenedItems = Array.from(lastOpened?.notes)
     .reverse()
-    .map((nodeid) => {
+    .map((nodeid: string) => {
       const path = getPathFromNodeid(nodeid)
       const namespaceId = useDataStore.getState().ilinks.find((i) => i.nodeid === nodeid)?.namespace
       return makeQuickLink(path, { nodeid, namespace: namespaceId })
@@ -263,7 +264,7 @@ function NodeSelect({
   const getNewItems = (inputValue: string) => {
     if (inputValue !== '' && inputValue !== undefined) {
       // mog('getNewItems', { inputValue, quickLinks })
-      const newItems = fuzzySearch(quickLinks, inputValue, (item) => item.text)
+      const newItems = fuzzySearch(quickLinks, inputValue, (item: any) => item.text)
 
       if (
         !isClash(

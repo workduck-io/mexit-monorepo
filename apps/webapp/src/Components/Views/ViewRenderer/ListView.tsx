@@ -33,7 +33,7 @@ const ListView: React.FC<{ results: Record<string, any>; groupBy?: string }> = (
 
   const selectNewCard = useCallback(
     (direction: 'up' | 'down') => {
-      const list = Object.values(results).flat(1) as SearchResult[]
+      const list = Object.values<SearchResult>(results).flat(1)
 
       const selectedIndex = list.findIndex((card) => card.id === selectedCardId)
       if (!selectedCardId) {

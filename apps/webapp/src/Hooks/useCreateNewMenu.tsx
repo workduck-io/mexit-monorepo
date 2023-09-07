@@ -11,14 +11,14 @@ import {
   isReservedNamespace,
   MIcon,
   ModalsType,
+  Snippet,
   useDataStore,
   useLayoutStore,
   useMetadataStore,
   useModalStore,
   userPreferenceStore as useUserPreferenceStore,
   useShareModalStore,
-  useSnippetStore
-} from '@mexit/core'
+  useSnippetStore} from '@mexit/core'
 import { DefaultMIcons, getMIcon, InteractiveToast, useAIOptions } from '@mexit/shared'
 
 import { useDeleteStore } from '../Components/Refactor/DeleteModal'
@@ -232,7 +232,9 @@ export const useCreateNewMenu = () => {
     const noteMetadata = useMetadataStore.getState().metadata.notes?.[item.data?.nodeid]
 
     const snippets = useSnippetStore.getState().snippets ?? {}
-    const templates = Object.values(snippets).filter((item) => item.template && item.id === noteMetadata?.templateID)
+    const templates = Object.values<Snippet>(snippets).filter(
+      (item) => item.template && item.id === noteMetadata?.templateID
+    )
 
     const hasTemplate = templates.length !== 0
 

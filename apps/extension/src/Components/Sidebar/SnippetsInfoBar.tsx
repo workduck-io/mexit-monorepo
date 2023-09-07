@@ -40,7 +40,7 @@ import SnippetCard from './SnippetCard'
 
 export const SnippetsInfoBar = () => {
   const [search, setSearch] = useState('')
-  const snippets = useSnippetStore((state) => Object.values(state.snippets ?? {}))
+  const snippets = useSnippetStore((state) => Object.values<Snippet>(state.snippets ?? {}))
   const getSnippet = useSnippets().getSnippet
   const inputRef = useRef<HTMLInputElement>(null)
   const [searchedSnippets, setSearchedSnippets] = useState<Snippet[]>(snippets)

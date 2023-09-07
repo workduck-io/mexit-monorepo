@@ -13,6 +13,7 @@ import {
   NodeEditorContent,
   QuickLinkType,
   SEPARATOR,
+  Snippet,
   useAuthStore,
   useContentStore,
   useLinkStore,
@@ -71,12 +72,12 @@ export default function Dibba() {
   const metadata = useMetadataStore((s) => s.metadata)
   const linkCaptures = useLinkStore((store) => store.links.filter((i) => i.alias))
   const getContent = useContentStore((store) => store.getContent)
-  const snippets = useSnippetStore((s) => Object.values(s.snippets ?? {}))
+  const snippets = useSnippetStore((s) => Object.values<Snippet>(s.snippets ?? {}))
 
   const pointerMoved = usePointerMovedSinceMount()
 
   const publicNotes = useMemo(() => {
-    const publicN = Object.entries(metadata.notes).filter(([noteId, note]) => note.publicAccess)
+    const publicN = Object.entries<any>(metadata.notes).filter(([noteId, note]) => note.publicAccess)
     return publicN.map(([noteId, note]) => {
       const _content = getContent(noteId)
 

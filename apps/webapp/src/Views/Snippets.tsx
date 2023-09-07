@@ -19,14 +19,14 @@ import {
   getDefaultContent,
   mog,
   RecentType,
+  Snippet,
   SNIPPET_PREFIX,
   useDescriptionStore,
   usePromptStore,
   useRecentsStore,
   userPreferenceStore as useUserPreferenceStore,
   useSnippetStore,
-  ViewType
-} from '@mexit/core'
+  ViewType} from '@mexit/core'
 import {
   DefaultMIcons,
   Group,
@@ -66,7 +66,7 @@ export type SnippetsProps = {
 }
 
 const Snippets = () => {
-  const snippets = useSnippetStore((store) => Object.values(store.snippets ?? {}))
+  const snippets = useSnippetStore((store) => Object.values<Snippet>(store.snippets ?? {}))
   const { addSnippet, deleteSnippet, getSnippet, getSnippets, updateSnippet } = useSnippets()
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
@@ -83,7 +83,7 @@ const Snippets = () => {
 
   const initialItems: Partial<SearchResult>[] = useMemo(
     () => [
-      ...Object.values(snippets).map((snippet) => ({
+      ...Object.values<Snippet>(snippets).map((snippet) => ({
         parent: snippet.id,
         text: convertContentToRawText(snippet.content)
       })),
@@ -315,7 +315,7 @@ const Snippets = () => {
     async function getInitialSnippets() {
       // language
       const snippets = getSnippets()
-      const unfetchedSnippets = Object.values(snippets).filter((snippet) => snippet?.content?.length === 0)
+      const unfetchedSnippets = Object.values<Snippet>(snippets).filter((snippet) => snippet?.content?.length === 0)
       const ids = batchArray(unfetchedSnippets, 10)
 
       if (ids && ids.length > 0) {
