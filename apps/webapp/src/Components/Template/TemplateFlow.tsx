@@ -4,10 +4,12 @@ import './overview.css'
 import { useCallback } from 'react'
 import ReactFlow, { addEdge, Controls, MiniMap, Panel, useEdgesState, useNodesState } from 'reactflow'
 
-import { generateConditionId, mog,TestTemplateData } from '@mexit/core'
+import { generateConditionId, mog, useSnippetStore } from '@mexit/core'
+
+import { useSnippetBuffer } from '../../Hooks/useEditorBuffer'
 
 import { CEdge, CNode } from './CustomBlock'
-import { edges as initialEdges, nodes as initialNodes } from './templateTransformers'
+import { transformTemplateToEdges, transformTemplateToNodes } from './templateTransformers'
 
 const nodeTypes = {
   custom: CNode
@@ -24,8 +26,19 @@ const minimapStyle = {
 const onInit = (reactFlowInstance) => console.log('flow loaded:', reactFlowInstance)
 
 const OverviewFlow = () => {
+  const snippetId = useSnippetStore((store) => store.editor.snippet?.id)
+  const { addOrUpdateValBuffer } = useSnippetBuffer()
+
+  const snippet = useSnippetStore((store) => store.snippets[snippetId])
+  const metadata = snippet?.metadata ?? {}
+
+  const initialEdges = transformTemplateToEdges(snippet, metadata)
+  const initialNodes = transformTemplateToNodes(snippet)
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+  mog('SNIPPET', { snippet, snippetId, nodes })
+
   const onConnect = useCallback(
     (params) =>
       setEdges((eds) => {
@@ -54,15 +67,16 @@ const OverviewFlow = () => {
   )
 
   const saveFlow = () => {
-    const tempContent = TestTemplateData.content
-    const tempMetadata = TestTemplateData.metadata
+    const tempContent = snippet?.content
+    const tempMetadata = metadata ?? {}
 
     edges.map((edge) => {
       tempMetadata.conditions = { ...tempMetadata.conditions, [edge.data.conditionId]: edge.data.condition }
       const blockIndex = tempContent.findIndex((val) => val.id === edge.target)
-      tempContent[blockIndex].properties.properties.conditionId = edge.data.conditionId
+      tempContent[blockIndex].properties.conditionId = edge.data.conditionId
     })
-    mog('Updated Template Data', { tempMetadata, tempContent })
+
+    addOrUpdateValBuffer(snippetId, tempContent)
   }
 
   // we are using a bit of a shortcut here to adjust the edge type

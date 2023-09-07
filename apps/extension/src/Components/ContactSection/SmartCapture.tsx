@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import {
   addProperty,
   createNodeWithUid,
@@ -5,9 +7,9 @@ import {
   getDefaultContent,
   getProfileNoteKey,
   SuperBlocks,
-  TestTemplateData,
-  updateIds,
-  useSmartCaptureStore
+  transformTemplateBlockForInsert,
+  useSmartCaptureStore,
+  useSnippetStore
 } from '@mexit/core'
 import { ContactCard } from '@mexit/shared'
 
@@ -21,10 +23,12 @@ import EditorPreviewRenderer from '../EditorPreviewRenderer'
  */
 
 const Contact = ({ details, onSave }) => {
-  const contact = details?.reduce((acc, curr) => {
-    if (curr.field) acc[curr.field] = curr.value
-    return acc
-  }, {})
+  const contact = useMemo(() => {
+    return details?.reduce((acc, curr) => {
+      if (curr.field) acc[curr.field] = curr.value
+      return acc
+    }, {})
+  }, [details])
 
   const noteId = useSmartCaptureStore.getState().smartCaptureCache[contact.title]
   const content = getContent(noteId)
@@ -49,8 +53,7 @@ export const SmartCapture = () => {
   }
 
   const handleOnSave = async (templateId: string, title: string) => {
-    // const template = useSnippetStore.getState().snippets[templateId]
-    const template = TestTemplateData
+    const template = useSnippetStore.getState().snippets['SNIPPET_RXTxL49AxbawhK3RwkGr6']
     const defaultNamespace = getDefaultNamespace()
 
     if (template) {
@@ -59,7 +62,7 @@ export const SmartCapture = () => {
       const node = createNodeWithUid(notePath, defaultNamespace?.id)
       const templateContent = template.content
         .filter((block) => !block.properties?.conditionId)
-        .map((block) => updateIds(block))
+        .map(transformTemplateBlockForInsert)
 
       const captureBlock = addProperty(getDefaultContent(SuperBlocks.CAPTURE), {
         template: {
@@ -81,7 +84,7 @@ export const SmartCapture = () => {
         content: profileContent,
         notify: false,
         reqData: {
-          templateUsed: templateId
+          usedTemplateID: templateId
         }
       }).then((res) => {
         const id = data.data?.find((f) => f.field === 'title')?.value

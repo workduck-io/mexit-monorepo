@@ -27,7 +27,7 @@ const resolveIconURL = (value: string) => {
   return value
 }
 
-const IconItem = ({ type, value }) => {
+const IconItem: React.FC<{ type: string; value: string; size?: number }> = ({ type, value, size }) => {
   switch (type) {
     case 'EMOJI':
       return <span>{value}</span>
@@ -45,8 +45,8 @@ const IconItem = ({ type, value }) => {
             e.currentTarget.src = DEFAULT_IMAGE_URL
             e.currentTarget.style.display = 'block'
             e.currentTarget.style.borderRadius = '8px'
-            e.currentTarget.style.height = '32px'
-            e.currentTarget.style.width = '32px'
+            e.currentTarget.style.height = `${size}32px`
+            e.currentTarget.style.width = `${size}32px`
           }}
         />
       )
@@ -60,12 +60,12 @@ const IconItem = ({ type, value }) => {
   }
 }
 
-export const IconDisplay = ({ icon, ...rest }: IconDisplayProps) => {
+export const IconDisplay = ({ icon, size, ...rest }: IconDisplayProps) => {
   if (!icon) return null
 
   return (
-    <IconWrapper {...rest} type={icon.type}>
-      <IconItem {...icon} />
+    <IconWrapper {...rest} size={size} type={icon.type}>
+      <IconItem {...icon} size={size} />
     </IconWrapper>
   )
 }

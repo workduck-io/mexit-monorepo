@@ -1,6 +1,6 @@
 import { useMatch } from 'react-router-dom'
 
-import { mog, useLayoutStore } from '@mexit/core'
+import { useLayoutStore } from '@mexit/core'
 import { RHSideNav } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
@@ -17,7 +17,6 @@ const RHSidebarContent = () => {
   const isArchive = useMatch(ROUTE_PATHS.archive)
   const isSnippet = useMatch(`${ROUTE_PATHS.snippet}/:snippetid`)
 
-  mog('I am here', { isSnippet })
   if (!sidebar.show) return <></>
 
   if (isEditor) return <InfoBar />

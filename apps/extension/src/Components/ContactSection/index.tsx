@@ -25,9 +25,15 @@ const ContactSmartCaptureSection = () => {
     // * Extracts the contact data from the current page
 
     try {
-      const data = execute(SmartCaptureAction)
-      if (data) setShow(true)
-      setIsLoading(false)
+      const data = execute(SmartCaptureAction, false, false)
+
+      if (data) {
+        setShow(true)
+        setIsLoading(false)
+      } else {
+        setShow(false)
+        setIsLoading(true)
+      }
     } catch (err) {
       setIsLoading(true)
       setShow(false)

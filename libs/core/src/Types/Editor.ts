@@ -31,6 +31,7 @@ export interface NodeMetadata {
   createdBy: string
   createdAt: number
   updatedBy: string
+  usedTemplateID?: string
   updatedAt: number
   icon?: MIcon | undefined
 

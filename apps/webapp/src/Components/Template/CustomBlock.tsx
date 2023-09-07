@@ -136,7 +136,7 @@ export function CEdge({
               isMenu
               onClick={onSelect('OLD')}
               selected={data.condition.oldValue}
-              items={PropertyValues[data.condition.field].map((item) => getMenuItem(item))}
+              items={PropertyValues[data.condition.field]?.map((item) => getMenuItem(item))}
             />
             <IconDisplay icon={DefaultMIcons.ADD} />
             <InsertMenu

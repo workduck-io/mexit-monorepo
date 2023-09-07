@@ -16,7 +16,7 @@ import Modals from './Components/Modals'
 import { createViewFilterStore, ViewFilterProvider } from './Hooks/todo/useTodoFilters'
 import { useForceLogout } from './Stores/useAuth'
 import GlobalStyle from './Style/GlobalStyle'
-import { emitterHandler } from './Utils/emitterHandler'
+import { useEmitterHandler } from './Utils/emitterHandler'
 import Switch from './Switch'
 
 const FORCE_LOGOUT_VERSION = '0.23.9'
@@ -50,10 +50,12 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const App = () => {
   const setVersion = useAppStore((store) => store.setVersion)
+  const { emitterHandler } = useEmitterHandler()
 
   const { forceLogout } = useForceLogout()
   useEffect(() => {
     emitter.handlePropertyChange(emitterHandler)
+
     async function forceLogoutAndSetVersion() {
       const persistedVersion = useAppStore.getState()?.version
       mog('PersistedVersion | PackageJSONVersion', { persistedVersion, packageJsonVersion })

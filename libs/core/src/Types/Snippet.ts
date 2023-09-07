@@ -18,8 +18,8 @@ export interface SnippetStoreState {
   initSnippets: (snippets: Snippet[]) => void
   addSnippet: (snippets: Snippet) => void
   updateSnippet: (id: string, snippets: Snippet) => void
-  updateSnippetContent: (id: string, content: any[], isTemplate?: boolean) => void
-  updateSnippetContentAndTitle: (id: string, content: any[], title: string, isTemplate?: boolean) => void
+  updateSnippetContent: (id: string, content: any[], template?: boolean) => void
+  updateSnippetContentAndTitle: (id: string, content: any[], title: string, template?: boolean) => void
   deleteSnippet: (id: string) => void
 
   editor: SnippetEditorStore

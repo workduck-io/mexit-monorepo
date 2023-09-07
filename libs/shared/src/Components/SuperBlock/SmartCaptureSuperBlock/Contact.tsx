@@ -27,7 +27,7 @@ const TemplateSelector = ({ onClick }) => {
     <ContactTemplateContainer>
       <NoteItemsWrapper height="fit-content" border={false}>
         {templates.map((template) => (
-          <NoteItem onClick={() => onTemplateSelect(template)}>
+          <NoteItem onClick={() => onTemplateSelect('SNIPPET_RXTxL49AxbawhK3RwkGr6')}>
             <IconDisplay size={16} icon={DefaultMIcons.TEMPLATE} />
             <FadeText>Save as</FadeText> {template}
           </NoteItem>
@@ -49,10 +49,12 @@ export const ContactCard: React.FC<ContactCardProps> = ({ contact, onTemplateSel
 
   if (noteId && children && showOnExtension) return React.cloneElement(children, { editorId: noteId })
 
+  const icon = getMIcon('URL', contact?.imgUrl ?? '')
+
   return (
     <StyledContactCard showAsBlock={false} contentEditable={false}>
       <ContactContainer>
-        <IconDisplay size={96} icon={getMIcon('URL', contact?.imgUrl ?? '')} />
+        <IconDisplay size={96} icon={icon} />
         <MentionTooltipContent>
           <Username>{contact?.title}</Username>
           {contact?.description && <TooltipAlias>{contact.description}</TooltipAlias>}

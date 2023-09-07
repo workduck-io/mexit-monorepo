@@ -14,20 +14,27 @@ export class EmitterX {
   }
 
   emitPropertyChange = (currentProperties, newProperty, nodeId: string, templateBlockId: string) => {
-    mog('Property Change Handler Event', {
-      oldData: { ...currentProperties, blockId: templateBlockId },
-      newData: newProperty,
-      nodeId
-    })
-
-    return this.emitter.emit('propertyChanged', {
-      oldData: { ...currentProperties, blockId: templateBlockId },
-      newData: newProperty,
-      nodeId
-    })
+    return this.emitter
+      .emit('propertyChanged', {
+        oldData: { ...currentProperties, blockId: templateBlockId },
+        newData: newProperty,
+        nodeId
+      })
+      .then((d) => {
+        mog('Property Change Handler Event', {
+          oldData: { ...currentProperties, blockId: templateBlockId },
+          newData: newProperty,
+          nodeId,
+          d
+        })
+      })
+      .catch((err) => {
+        console.log('HELLO', err)
+      })
   }
 
   handlePropertyChange = (callback?: (result: any[]) => Promise<void>) => {
+    mog('Listening for property change', { a: 1 })
     return this.emitter.on('propertyChanged', propertyChangeHandler(callback))
   }
 }
@@ -63,9 +70,7 @@ export const TestTemplateData = {
       type: 'super-block-content',
       id: 'TEMP_eWez4',
       properties: {
-        properties: {
-          title: 'COntent go stonks'
-        }
+        title: 'COntent go stonks'
       },
       children: [
         {
@@ -85,13 +90,11 @@ export const TestTemplateData = {
       type: 'super-block-task',
       id: 'TEMP_bThtV',
       properties: {
-        properties: {
-          title: 'First condition block',
-          entity: {
-            active: 'super-block-task'
-          },
-          priority: 'medium'
-        }
+        title: 'First condition block',
+        entity: {
+          active: 'super-block-task'
+        },
+        priority: 'medium'
       },
       children: [
         {
@@ -111,15 +114,13 @@ export const TestTemplateData = {
       type: 'super-block-task',
       id: 'TEMP_Ri9A7',
       properties: {
-        properties: {
-          conditionId: 'CONDITION_1',
-          title: 'Random condition',
-          entity: {
-            active: 'super-block-task'
-          },
-          status: 'todo',
-          priority: 'low'
-        }
+        conditionId: 'CONDITION_1',
+        title: 'Random condition',
+        entity: {
+          active: 'super-block-task'
+        },
+        status: 'todo',
+        priority: 'low'
       },
       children: [
         {
@@ -139,15 +140,13 @@ export const TestTemplateData = {
       type: 'super-block-task',
       id: 'TEMP_Ri9B1',
       properties: {
-        properties: {
-          conditionId: 'CONDITION_1',
-          title: 'Random condition based on 1',
-          entity: {
-            active: 'super-block-task'
-          },
-          status: 'todo',
-          priority: 'medium'
-        }
+        conditionId: 'CONDITION_1',
+        title: 'Random condition based on 1',
+        entity: {
+          active: 'super-block-task'
+        },
+        status: 'todo',
+        priority: 'medium'
       },
       children: [
         {
@@ -167,15 +166,13 @@ export const TestTemplateData = {
       type: 'super-block-task',
       id: 'TEMP_Ri9A8',
       properties: {
-        properties: {
-          conditionId: 'CONDITION_2',
-          title: 'New thing appeared',
-          entity: {
-            active: 'super-block-task'
-          },
-          status: 'todo',
-          priority: 'low'
-        }
+        conditionId: 'CONDITION_2',
+        title: 'New thing appeared',
+        entity: {
+          active: 'super-block-task'
+        },
+        status: 'todo',
+        priority: 'low'
       },
       children: [
         {
@@ -219,21 +216,26 @@ export const TestTemplateData = {
 
 const propertyChangeHandler = (callback?) => (data) => {
   const nodeMetadata = useMetadataStore.getState().metadata.notes[data.nodeId]
-  nodeMetadata.templateId = 'SNIPPET_QjUmXpbyftyxgwU3YdBni' //Just for testing
-  if (!nodeMetadata.templateId) return
-  const templateData = TestTemplateData || useSnippetStore.getState().snippets[nodeMetadata.templateId]
+  nodeMetadata.usedTemplateID = 'SNIPPET_wNfTU6ywm4fYFAi6mtKAX' //Just for testing
+
+  if (!nodeMetadata.usedTemplateID) return
+  const templateData = useSnippetStore.getState().snippets[nodeMetadata.usedTemplateID]
+  mog("Node's metadata", { templateData })
+
   if (!templateData) return
+
   const result = evaluateDecisionTree(data.oldData, data.newData, {
     conditions: templateData.content
-      .filter((item) => item.properties?.conditionId)
+      .filter((item) => item.properties?.properties?.conditionId)
       .map((item) => {
-        const condition = templateData.metadata.conditions[item.properties?.conditionId]
+        const condition = templateData.metadata.conditions[item.properties?.properties?.conditionId]
         return {
           ...condition,
           action: { noteId: data.nodeId, block: transformTemplateBlockForInsert(item), type: condition.action }
         }
       })
   })
+
   if (callback) callback(result)
 }
 
@@ -241,6 +243,6 @@ export const transformTemplateBlockForInsert = (block) => {
   return {
     ...block,
     id: generateTempId(),
-    properties: { ...block.properties.properties, templateBlockId: block.id }
+    properties: { ...block.properties, templateBlockId: block.id }
   }
 }

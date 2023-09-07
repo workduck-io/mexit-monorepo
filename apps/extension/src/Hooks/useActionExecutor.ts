@@ -68,7 +68,7 @@ export function useActionExecutor() {
   const links = useLinkStore((s) => s.links)
   const { saveLink } = useLinkURLs()
 
-  function execute(item: MexitAction | ListItemType, metaKeyPressed?: boolean) {
+  function execute(item: MexitAction | ListItemType, metaKeyPressed?: boolean, notify = true) {
     const search = useSputlitStore.getState().search
     const activeItem = useSputlitStore.getState().activeItem
 
@@ -235,7 +235,7 @@ export function useActionExecutor() {
             const strippedURL = window.location.origin + window.location.pathname
             const captureConfig = getMatchingConfig(strippedURL)
 
-            if (!captureConfig) toast.error('No data available for extracting')
+            if (!captureConfig && notify) toast.error('No data available for extracting')
             else {
               try {
                 const data = evaluateConfig(captureConfig)

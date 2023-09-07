@@ -14,9 +14,10 @@ const ContactActions: React.FC<ContactActionProps> = ({ value, onChange }) => {
   const stages = useMemo(() => {
     return [
       getMenuItem('Outreach', () => undefined, false, undefined, undefined, 'stage-1'),
-      getMenuItem('Demo', () => undefined, false, undefined, undefined, 'stage-2'),
-      getMenuItem('Negotiation', () => undefined, false, undefined, undefined, 'stage-3'),
-      getMenuItem('Closed', () => undefined, false, undefined, undefined, 'stage-4')
+      getMenuItem('Interested', () => undefined, false, undefined, undefined, 'stage-2'),
+      getMenuItem('Follow Up', () => undefined, false, undefined, undefined, 'stage-3'),
+      getMenuItem('Demo', () => undefined, false, undefined, undefined, 'stage-4'),
+      getMenuItem('Success', () => undefined, false, undefined, undefined, 'stage-5')
     ]
   }, [])
 

@@ -1,7 +1,5 @@
 import { Edge, MarkerType, Node, Position } from 'reactflow'
 
-import { mog, TestTemplateData } from '@mexit/core'
-
 export const transformTemplateToNodes = (template): Node[] => {
   return template.content.map((block, i) => {
     return {
@@ -10,24 +8,24 @@ export const transformTemplateToNodes = (template): Node[] => {
       type: 'custom',
       targetPosition: Position.Left,
       sourcePosition: Position.Right,
-      data: { ...block.properties.properties, type: block.type }
+      data: { ...block.properties, type: block.type }
     }
   })
 }
 
-export const nodes = transformTemplateToNodes(TestTemplateData)
-
-mog('EDGE DETS NODE', { nodes })
-
-export const transformTemplateToEdges = (template): Edge[] => {
+export const transformTemplateToEdges = (template, metadata): Edge[] => {
   return template.content
     .map((block, i) => {
-      const conditionId = block.properties.properties.conditionId
+      const conditionId = block.properties?.conditionId
       if (!conditionId) return
-      const condition = TestTemplateData.metadata.conditions[conditionId]
+
+      const condition = metadata.conditions?.[conditionId]
+
+      if (!condition) return
+
       return {
         id: `${condition.blockId}-${block.id}`,
-        source: TestTemplateData.metadata.conditions[conditionId].blockId,
+        source: metadata.conditions[conditionId].blockId,
         target: block.id,
         data: { conditionId, condition },
         sourceHandle: condition.field,
@@ -41,6 +39,3 @@ export const transformTemplateToEdges = (template): Edge[] => {
     })
     .filter((item) => !!item)
 }
-export const edges = transformTemplateToEdges(TestTemplateData)
-
-mog('EDGE DETS', { edges })

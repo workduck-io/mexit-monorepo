@@ -36,14 +36,14 @@ const snippetStoreConfig = (set, get) => ({
     set({ snippets: { ...existingSnippets, [snippet.id]: snippet } })
   },
 
-  updateSnippetContent: (id: string, content: any[], isTemplate?: boolean) => {
+  updateSnippetContent: (id: string, content: any[], template?: boolean) => {
     const snippets = get().snippets
-    set({ snippets: { ...snippets, [id]: { ...(snippets[id] ?? {}), content, isTemplate } } })
+    set({ snippets: { ...snippets, [id]: { ...(snippets[id] ?? {}), content, template } } })
   },
 
-  updateSnippetContentAndTitle: (id: string, content: any[], title: string, isTemplate?: boolean) => {
+  updateSnippetContentAndTitle: (id: string, content: any[], title: string, template?: boolean) => {
     const snippets = get().snippets
-    set({ snippets: { ...snippets, [id]: { ...(snippets[id] ?? {}), content, title, isTemplate } } })
+    set({ snippets: { ...snippets, [id]: { ...(snippets[id] ?? {}), content, title, template } } })
   },
 
   clear: () => {

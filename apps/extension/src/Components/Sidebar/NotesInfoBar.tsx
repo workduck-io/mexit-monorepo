@@ -92,7 +92,7 @@ export const NotesInfoBar = () => {
           <MexIcon $noHover height={20} width={20} icon={searchLine} margin="0.6rem 0" />
           <Input
             autoFocus
-            fontSize="1rem"
+            fontSize="14px"
             placeholder={'Type to search...'}
             onChange={debounce((e) => onSearchChange(e), 250)}
             ref={inputRef}

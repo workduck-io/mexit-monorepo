@@ -33,7 +33,8 @@ export const StyledTab = styled.div.attrs({
 }>`
   display: inline-flex;
   justify-content: center;
-  /* border-radius: ${({ theme }) => theme.borderRadius.small}; */
+  border-top-left-radius: ${({ theme }) => theme.borderRadius.large};
+  border-top-right-radius: ${({ theme }) => theme.borderRadius.large};
   padding: ${({ theme }) => theme.spacing.small} ${({ theme }) => theme.spacing.tiny};
   z-index: 1;
   flex: 1;
@@ -46,6 +47,7 @@ export const StyledTab = styled.div.attrs({
       }
 
       opacity: 0.9;
+      color: ${({ theme }) => theme.tokens.text.fade};
     `}
 
   ${({ selected }) =>

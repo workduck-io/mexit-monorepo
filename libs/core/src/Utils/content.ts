@@ -129,6 +129,7 @@ export const extractMetadata = (data: any, defaults?: { icon: MIcon }): NodeMeta
       publicAccess: data?.publicAccess,
       iconUrl: data?.metadata?.iconUrl,
       templateID: data?.metadata?.templateID,
+      usedTemplateID: data?.metadata?.usedTemplateID,
       icon: data?.metadata?.icon ?? defaults?.icon,
       title: data?.title
     }

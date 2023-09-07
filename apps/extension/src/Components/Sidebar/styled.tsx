@@ -3,7 +3,7 @@ import { animated } from 'react-spring'
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
-import { BodyFont, GenericFlex, RHSideNav } from '@mexit/shared'
+import { BodyFont, Group, RHSideNav } from '@mexit/shared'
 
 export const ExtSideNav = styled(RHSideNav)`
   position: fixed;
@@ -30,6 +30,10 @@ export const StyledSidebarSection = styled.section<{ scrollable?: boolean }>`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  padding: ${({ theme }) => theme.spacing.medium};
+  border-radius: ${({ theme }) => theme.borderRadius.large};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  gap: ${({ theme }) => theme.spacing.small};
 
   ${({ scrollable }) =>
     scrollable &&
@@ -45,8 +49,8 @@ export const SectionHeading = styled.div`
 
   padding: ${({ theme }) => theme.spacing.small} 0;
 
-  ${GenericFlex} {
-    ${BodyFont}
+  ${Group} {
+    font-size: 12px;
     font-weight: 600;
     opacity: 0.4;
     line-height: 1.5rem;

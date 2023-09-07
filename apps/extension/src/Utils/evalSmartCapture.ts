@@ -68,7 +68,7 @@ const extractData = (rule: SmartCaptureLabel) => {
   }
 }
 
-export const evaluateConfig = (config: SmartCaptureConfigType) => {
+export const evaluateConfig = (config: SmartCaptureConfigType = {} as SmartCaptureConfigType) => {
   const formData: FormBuilder = []
   formData.push(
     {
@@ -91,11 +91,13 @@ export const evaluateConfig = (config: SmartCaptureConfigType) => {
       }
     }
   )
+
   for (const rule of config.labels) {
     const data = extractData(rule)
     if (data) {
       formData.push(data)
     }
   }
+
   return formData
 }
