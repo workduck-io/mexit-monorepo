@@ -1,20 +1,13 @@
 import { memo } from 'react'
-import {
-  BaseEdge,
-  Edge,
-  EdgeLabelRenderer,
-  EdgeProps,
-  getSmoothStepPath,
-  Handle,
-  Position,
-  useReactFlow,
-  useStoreApi
-} from 'reactflow'
+import { Edge, EdgeProps, getSmoothStepPath, Handle, Position, useReactFlow, useStoreApi } from 'react-flow-renderer'
 
 import styled, { useTheme } from 'styled-components'
 
 import { getMenuItem } from '@mexit/core'
 import { DefaultMIcons, FlexBetween, IconDisplay, InsertMenu } from '@mexit/shared'
+
+import BaseEdge from './BaseEdge'
+import EdgeLabelRenderer from './EdgeLabelRenderer'
 
 const FlowNode = styled.div`
   background: ${({ theme }) => theme.tokens.surfaces.modal};
@@ -110,7 +103,7 @@ export function CEdge({
 
   return (
     <>
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} centerX={+labelX} centerY={+labelY} />
       <EdgeLabelRenderer>
         <div
           style={{

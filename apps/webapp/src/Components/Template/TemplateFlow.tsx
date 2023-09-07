@@ -1,8 +1,8 @@
-import 'reactflow/dist/style.css'
+import 'react-flow-renderer/dist/style.css'
 import './overview.css'
 
 import { useCallback } from 'react'
-import ReactFlow, { addEdge, Controls, MiniMap, Panel, useEdgesState, useNodesState } from 'reactflow'
+import ReactFlow, { addEdge, Controls, MiniMap, useEdgesState, useNodesState } from 'react-flow-renderer'
 
 import { generateConditionId, mog, useSnippetStore } from '@mexit/core'
 
@@ -69,13 +69,14 @@ const OverviewFlow = () => {
   const saveFlow = () => {
     const tempContent = snippet?.content
     const tempMetadata = metadata ?? {}
+    console.log('SAVEFLWO TRIGGER')
 
     edges.map((edge) => {
       tempMetadata.conditions = { ...tempMetadata.conditions, [edge.data.conditionId]: edge.data.condition }
       const blockIndex = tempContent.findIndex((val) => val.id === edge.target)
       tempContent[blockIndex].properties.conditionId = edge.data.conditionId
     })
-
+    console.log({ edges })
     addOrUpdateValBuffer(snippetId, tempContent)
   }
 
@@ -103,11 +104,9 @@ const OverviewFlow = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
       >
-        <MiniMap onClick={saveFlow} style={minimapStyle} zoomable pannable />
+        <MiniMap onClick={saveFlow} style={minimapStyle} />
         <Controls />
-        <Panel position="top-right">
-          <button onClick={saveFlow}>Save</button>
-        </Panel>
+        <button onClick={saveFlow}>Save</button>
       </ReactFlow>
     </>
   )

@@ -79,7 +79,6 @@
     "react-select": "^4.3.1",
     "react-spring": "^9.4.3",
     "react-use-websocket": "^4.2.0",
-    "reactflow": "^11.8.3",
     "reveal.js": "^4.4.0",
     "semver": "^7.3.8",
     "slate": "^0.78.0",
