@@ -306,12 +306,14 @@ export const useApi = () => {
     snippetId,
     snippetTitle,
     content,
-    template
+    template,
+    metadata
   }: {
     snippetId: string
     snippetTitle: string
     content: any[]
     template?: boolean
+    metadata?: any
   }) => {
     const reqData = {
       id: snippetId,
@@ -319,7 +321,8 @@ export const useApi = () => {
       title: snippetTitle,
       namespaceIdentifier: DEFAULT_NAMESPACE,
       data: serializeContent(content ?? defaultContent.content),
-      template: template ?? false
+      template: template ?? false,
+      metadata
     }
 
     const data = await API.snippet

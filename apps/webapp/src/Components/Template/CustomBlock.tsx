@@ -1,13 +1,25 @@
 import { memo } from 'react'
-import { Edge, EdgeProps, getSmoothStepPath, Handle, Position, useReactFlow, useStoreApi } from 'react-flow-renderer'
 
 import styled, { useTheme } from 'styled-components'
 
-import { getMenuItem } from '@mexit/core'
+import {
+  Edge,
+  EdgeLabelRenderer,
+  EdgeProps,
+  getBezierEdgeCenter,
+  getBezierPath,
+  Handle,
+  Position,
+  useReactFlow,
+  useStoreApi
+} from '@workduck-io/react-flow'
+
+import { getMenuItem, useSnippetStore } from '@mexit/core'
 import { DefaultMIcons, FlexBetween, IconDisplay, InsertMenu } from '@mexit/shared'
 
+import { useSnippetBuffer } from '../../Hooks/useEditorBuffer'
+
 import BaseEdge from './BaseEdge'
-import EdgeLabelRenderer from './EdgeLabelRenderer'
 
 const FlowNode = styled.div`
   background: ${({ theme }) => theme.tokens.surfaces.modal};
@@ -66,7 +78,33 @@ export function CEdge({
   style = {},
   markerEnd
 }: EdgeProps) {
-  const [edgePath, labelX, labelY] = getSmoothStepPath({
+  // const edgePath = getBezierPath({
+  //   sourceX,
+  //   sourceY,
+  //   sourcePosition,
+  //   targetX,
+  //   targetY,
+  //   targetPosition
+  // })
+  // const [labelX, labelY] = getBezierEdgeCenter({
+  //   sourceX,
+  //   sourceY,
+  //   sourcePosition,
+  //   targetX,
+  //   targetY,
+  //   targetPosition
+  // })
+
+  const edgePath = getBezierPath({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition
+  })
+
+  const [labelX, labelY] = getBezierEdgeCenter({
     sourceX,
     sourceY,
     sourcePosition,
@@ -76,6 +114,7 @@ export function CEdge({
   })
 
   const { setEdges } = useReactFlow()
+  const { addOrUpdateValBuffer } = useSnippetBuffer()
   const store = useStoreApi()
 
   const PropertyValues = {
@@ -83,35 +122,49 @@ export function CEdge({
     status: ['todo', 'pending', 'completed']
   }
 
+  const saveFlow = (edges: any) => {
+    const snippet = useSnippetStore.getState().editor.snippet
+
+    const tempContent = snippet?.content
+    const tempMetadata = snippet.metadata ?? {}
+
+    edges.map((edge) => {
+      tempMetadata.conditions = { ...tempMetadata.conditions, [edge.data.conditionId]: edge.data.condition }
+      const blockIndex = tempContent.findIndex((val) => val.id === edge.target)
+      tempContent[blockIndex].properties.conditionId = edge.data.conditionId
+    })
+
+    addOrUpdateValBuffer(snippet.id, tempContent, tempMetadata)
+  }
+
   const onSelect = (valueType: 'OLD' | 'NEW') => (event: string) => {
     const { edges } = store.getState()
-    setEdges(
-      Array.from(edges.values()).map((edge: Edge) => {
-        if (edge.id === id) {
-          edge.data = {
-            ...edge.data,
-            condition: { ...edge.data.condition, [valueType === 'OLD' ? 'oldValue' : 'newValue']: event }
-          }
+    const newEdges = Array.from(edges.values()).map((edge: Edge) => {
+      if (edge.id === id) {
+        edge.data = {
+          ...edge.data,
+          condition: { ...edge.data.condition, [valueType === 'OLD' ? 'oldValue' : 'newValue']: event }
         }
+      }
 
-        return edge
-      })
-    )
+      return edge
+    })
+
+    setEdges(newEdges)
+    saveFlow(newEdges)
   }
 
   const theme = useTheme()
 
   return (
     <>
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} centerX={+labelX} centerY={+labelY} />
+      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} centerX={labelX} centerY={labelY} />
       <EdgeLabelRenderer>
         <div
           style={{
             position: 'absolute',
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
             fontSize: 12,
-            // everything inside EdgeLabelRenderer has no pointer events by default
-            // if you have an interactive element, set pointer-events: all
             pointerEvents: 'all'
           }}
           className="nodrag nopan"

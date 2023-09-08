@@ -73,8 +73,8 @@ export const useEditorBuffer = () => {
 }
 
 interface SnippetBufferStore {
-  buffer: Record<string, { content: NodeEditorContent; title: string; template?: boolean }>
-  add: (nodeid: string, val: NodeEditorContent) => void
+  buffer: Record<string, { content: NodeEditorContent; metadata?: any; title: string; template?: boolean }>
+  add: (nodeid: string, val: NodeEditorContent, metadata?: any) => void
   addTitle: (nodeid: string, title: string) => void
   toggleTemplate: (nodeid: string, template: boolean) => void
   addAll: (nodeid: string, val: NodeEditorContent, title: string) => void
@@ -84,9 +84,9 @@ interface SnippetBufferStore {
 
 export const useSnippetBufferStore = create<SnippetBufferStore>((set, get) => ({
   buffer: {},
-  add: (nodeid, val) => {
+  add: (nodeid, val, metadata) => {
     const prev = get().buffer[nodeid]
-    set({ buffer: { ...get().buffer, [nodeid]: { ...prev, content: val } } })
+    set({ buffer: { ...get().buffer, [nodeid]: { ...prev, content: val, metadata } } })
   },
   addTitle: (nodeid, title) => {
     const prev = get().buffer[nodeid]
@@ -116,8 +116,8 @@ export const useSnippetBuffer = () => {
   // const { saveData } = useSaveData()
   const { updateSnippet: updateSnippetIndex, getSnippet } = useSnippets()
 
-  const addOrUpdateValBuffer = (snippetId: string, val: NodeEditorContent) => {
-    add2Buffer(snippetId, val)
+  const addOrUpdateValBuffer = (snippetId: string, val: NodeEditorContent, metadata?: any) => {
+    add2Buffer(snippetId, val, metadata)
   }
 
   const getBuffer = () => useSnippetBufferStore.getState().buffer
@@ -133,7 +133,8 @@ export const useSnippetBuffer = () => {
             snippetId,
             snippetTitle: val.title ?? snippet.title,
             content: val?.content ?? snippet?.content,
-            template: val?.template ?? snippet?.template ?? false
+            template: val?.template ?? snippet?.template ?? false,
+            metadata: val?.metadata ?? snippet?.metadata ?? {}
           })
           // mog('snipppet', { snippetId, val, buffer, snippet })
           if (snippet)

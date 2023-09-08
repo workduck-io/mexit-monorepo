@@ -4284,6 +4284,20 @@
     lodash "^4.17.21"
     nanoid "^4.0.0"
 
+"@workduck-io/react-flow@^10.3.17":
+  version "10.3.17"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/react-flow/10.3.17/f59315c6f3a812cab7b0cd1e9642569ba618af54#f59315c6f3a812cab7b0cd1e9642569ba618af54"
+  integrity sha512-8sX1yc+PcjOwdMwcFRzztwV3PxLIJ71PswPPS6B9S68aXuulfFCscoHcyVh83Rzfs1by9ptbP1Cyjq2L+FCEIA==
+  dependencies:
+    "@babel/runtime" "^7.18.9"
+    "@types/d3" "^7.4.0"
+    "@types/resize-observer-browser" "^0.1.7"
+    classcat "^5.0.3"
+    d3-drag "^3.0.0"
+    d3-selection "^3.0.0"
+    d3-zoom "^3.0.0"
+    zustand "^3.7.2"
+
 "@workduck-io/reconnecting-websocket@^4.4.1":
   version "4.4.1"
   resolved "https://npm.pkg.github.com/download/@workduck-io/reconnecting-websocket/4.4.1/6b17d2a1522201c850bfd381f99effb201dc624e#6b17d2a1522201c850bfd381f99effb201dc624e"
@@ -9258,25 +9272,6 @@ react-fast-compare@^3.0.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.1.tgz#53933d9e14f364281d6cba24bfed7a4afb808b5f"
   integrity sha512-xTYf9zFim2pEif/Fw16dBiXpe0hoy5PxcD8+OwBnTtNLfIm3g6WxhKNurY+6OmdH1u6Ta/W/Vl6vjbYP1MFnDg==
-
-react-flow-renderer@^10.3.17:
-  version "10.3.17"
-  resolved "https://registry.yarnpkg.com/react-flow-renderer/-/react-flow-renderer-10.3.17.tgz#06d6ecef5559ba5d3e64d2c8dcb74c43071d62b1"
-  integrity sha512-bywiqVErlh5kCDqw3x0an5Ur3mT9j9CwJsDwmhmz4i1IgYM1a0SPqqEhClvjX+s5pU4nHjmVaGXWK96pwsiGcQ==
-  dependencies:
-    "@babel/runtime" "^7.18.9"
-    "@types/d3" "^7.4.0"
-    "@types/resize-observer-browser" "^0.1.7"
-    classcat "^5.0.3"
-    d3-drag "^3.0.0"
-    d3-selection "^3.0.0"
-    d3-zoom "^3.0.0"
-    zustand "^3.7.2"
-
-react-flow@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/react-flow/-/react-flow-1.0.3.tgz#2b009ce8e445bb2ea3d6ca4fe41f316c5e0c2cf3"
-  integrity sha512-Rx4Oqqbe9y7NyrUGzCrmtNvuGuMJBVjfIeMFuwbtbMc9f22sUSmxMjIA0c8r6Z7iMtB1zOWoGkTgfpmmpH9ReQ==
 
 react-hook-form@^7.37.0:
   version "7.43.8"

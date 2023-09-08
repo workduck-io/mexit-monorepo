@@ -1,6 +1,4 @@
-import type { BaseEdgeProps } from 'react-flow-renderer'
-
-import EdgeText from './EdgeText'
+import { type BaseEdgeProps, EdgeText } from '@workduck-io/react-flow'
 
 const isNumeric = (n: any): n is number => !isNaN(n) && isFinite(n)
 

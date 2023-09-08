@@ -1,10 +1,13 @@
-import 'react-flow-renderer/dist/style.css'
+import '@workduck-io/react-flow/dist/style.css'
 import './overview.css'
 
-import { useCallback } from 'react'
-import ReactFlow, { addEdge, Controls, MiniMap, useEdgesState, useNodesState } from 'react-flow-renderer'
+import { useCallback, useEffect, useMemo } from 'react'
 
-import { generateConditionId, mog, useSnippetStore } from '@mexit/core'
+import styled from 'styled-components'
+
+import ReactFlow, { addEdge, Controls, MiniMap, useEdgesState, useNodesState } from '@workduck-io/react-flow'
+
+import { generateConditionId, useSnippetStore } from '@mexit/core'
 
 import { useSnippetBuffer } from '../../Hooks/useEditorBuffer'
 
@@ -23,6 +26,13 @@ const minimapStyle = {
   height: 120
 }
 
+const EdgeContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+`
+
 const onInit = (reactFlowInstance) => console.log('flow loaded:', reactFlowInstance)
 
 const OverviewFlow = () => {
@@ -32,12 +42,16 @@ const OverviewFlow = () => {
   const snippet = useSnippetStore((store) => store.snippets[snippetId])
   const metadata = snippet?.metadata ?? {}
 
-  const initialEdges = transformTemplateToEdges(snippet, metadata)
-  const initialNodes = transformTemplateToNodes(snippet)
+  const initialEdges = useMemo(() => transformTemplateToEdges(snippet, metadata), [snippetId])
+  const initialNodes = useMemo(() => transformTemplateToNodes(snippet), [snippetId])
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-  mog('SNIPPET', { snippet, snippetId, nodes })
+
+  useEffect(() => {
+    setNodes(initialNodes)
+    setEdges(initialEdges)
+  }, [snippetId])
 
   const onConnect = useCallback(
     (connection) =>
@@ -67,20 +81,6 @@ const OverviewFlow = () => {
     []
   )
 
-  const saveFlow = () => {
-    const tempContent = snippet?.content
-    const tempMetadata = metadata ?? {}
-    console.log('SAVEFLWO TRIGGER')
-
-    edges.map((edge) => {
-      tempMetadata.conditions = { ...tempMetadata.conditions, [edge.data.conditionId]: edge.data.condition }
-      const blockIndex = tempContent.findIndex((val) => val.id === edge.target)
-      tempContent[blockIndex].properties.conditionId = edge.data.conditionId
-    })
-    console.log({ edges })
-    addOrUpdateValBuffer(snippetId, tempContent)
-  }
-
   // we are using a bit of a shortcut here to adjust the edge type
   // this could also be done with a custom edge for example
   //   const edgesWithUpdatedTypes = edges.map((edge) => {
@@ -105,9 +105,8 @@ const OverviewFlow = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
       >
-        <MiniMap onClick={saveFlow} style={minimapStyle} />
+        <MiniMap style={minimapStyle} />
         <Controls />
-        <button onClick={saveFlow}>Save</button>
       </ReactFlow>
     </>
   )
