@@ -1,9 +1,7 @@
 import { Edge, MarkerType, Node, Position } from 'react-flow-renderer'
 
-import { TestTemplateData } from '@mexit/core'
-
 export const transformTemplateToNodes = (template): Node[] => {
-  return TestTemplateData.content.map((block, i) => {
+  return template.content.map((block, i) => {
     return {
       id: block.id,
       position: { x: 100, y: 400 * i },
@@ -16,7 +14,7 @@ export const transformTemplateToNodes = (template): Node[] => {
 }
 
 export const transformTemplateToEdges = (template, metadata): Edge[] => {
-  return TestTemplateData.content
+  return template.content
     .map((block, i) => {
       const conditionId = block.properties?.conditionId
       if (!conditionId) return

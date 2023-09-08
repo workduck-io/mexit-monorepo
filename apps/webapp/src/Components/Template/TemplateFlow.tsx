@@ -40,18 +40,19 @@ const OverviewFlow = () => {
   mog('SNIPPET', { snippet, snippetId, nodes })
 
   const onConnect = useCallback(
-    (params) =>
+    (connection) =>
       setEdges((eds) => {
         const condition = {
-          field: params.sourceHandle,
+          field: connection.sourceHandle,
           oldValue: undefined,
           newValue: undefined,
           action: 'APPEND',
-          blockId: params.source
+          blockId: connection.source
         }
+
         return addEdge(
           {
-            ...params,
+            ...connection,
             type: 'custom',
             markerEnd: { type: 'arrowclosed' },
             animated: true,
