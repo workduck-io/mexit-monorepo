@@ -1,15 +1,15 @@
 import produce, { setAutoFreeze } from 'immer'
 import pipe from 'ramda/es/pipe'
-import create, { State, StateCreator } from 'zustand'
+import { create, State, StateCreator } from 'zustand'
 import { combine } from 'zustand/middleware'
 
 export const immer =
-  <T extends State>(config: StateCreator<T, (fn: (draft: T) => void) => void>): StateCreator<T> =>
+  <T>(config: StateCreator<T, (fn: (draft: T) => void) => void>): StateCreator<T> =>
   (set, get, api) =>
     config((fn) => set(produce(fn) as (state: T) => T), get, api)
 
 export const immerMutable =
-  <T extends State>(config: StateCreator<T, (fn: (draft: T) => void) => void>): StateCreator<T> =>
+  <T>(config: StateCreator<T, (fn: (draft: T) => void) => void>): StateCreator<T> =>
   (set, get, api) =>
     config(
       (fn) => {

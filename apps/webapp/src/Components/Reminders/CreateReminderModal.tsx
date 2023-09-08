@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 
 import { startOfToday } from 'date-fns'
-import create from 'zustand'
+import {create} from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 
@@ -66,7 +66,7 @@ export const initModal = {
   associated: undefined
 }
 
-export const useCreateReminderModal = create<CreateReminderModalState>((set) => ({
+export const useCreateReminderModal = create<CreateReminderModalState>()((set) => ({
   open: false,
   focus: false,
   modalValue: initModal,

@@ -1,4 +1,4 @@
-import create from 'zustand'
+import {create} from 'zustand'
 
 import {
   Filter,
@@ -57,7 +57,7 @@ export interface FilterStore {
   setViewType?: (viewType: ViewType) => void
 }
 
-export const useFilterStoreBase = create<FilterStore>((set) => ({
+export const useFilterStoreBase = create<FilterStore>()((set) => ({
   filters: [],
   currentFilters: [],
   indexes: ['node', 'shared'],

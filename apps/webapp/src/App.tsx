@@ -13,7 +13,7 @@ import FloatingButton from './Components/FloatingButton'
 import Init from './Components/Init'
 import Main from './Components/Main'
 import Modals from './Components/Modals'
-import { createViewFilterStore, ViewFilterProvider } from './Hooks/todo/useTodoFilters'
+import { ViewFilterProvider } from './Hooks/todo/useTodoFilters'
 import { useForceLogout } from './Stores/useAuth'
 import GlobalStyle from './Style/GlobalStyle'
 import { useEmitterHandler } from './Utils/emitterHandler'
@@ -24,9 +24,12 @@ const FORCE_LOGOUT_VERSION = '0.23.9'
 const AutoThemeSwitch = () => {
   const theme = useUserPreferenceStore((state) => state.theme)
   const hasHydrated = useUserPreferenceStore((s) => s._hasHydrated)
+
   const { preferences, changeTheme } = useThemeContext()
 
   useEffect(() => {
+    console.log('DATA Hydrated', hasHydrated)
+
     if (theme && hasHydrated) {
       if (theme !== preferences) {
         changeTheme(theme.themeId, theme.mode)
@@ -40,7 +43,7 @@ const AutoThemeSwitch = () => {
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Provider legacySupport={false}>
-      <ViewFilterProvider createStore={createViewFilterStore}>
+      <ViewFilterProvider>
         <AutoThemeSwitch />
         {children}
       </ViewFilterProvider>

@@ -5,7 +5,7 @@ import Board from '@asseinfo/react-kanban'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import { Icon } from '@iconify/react'
-import create from 'zustand'
+import { create } from 'zustand'
 
 import { PrimaryButton } from '@workduck-io/mex-components'
 
@@ -57,7 +57,7 @@ interface AllReminderFilterStore extends FilterStore {
   resetCurrentFilters: () => void
 }
 
-export const useReminderFilter = create<AllReminderFilterStore>((set, get) => ({
+export const useReminderFilter = create<AllReminderFilterStore>()((set, get) => ({
   board: { columns: [] },
   setBoard: (board: ReminderBoard) => set({ board }),
   currentFilters: [],

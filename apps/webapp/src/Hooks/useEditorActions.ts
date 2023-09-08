@@ -1,4 +1,4 @@
-import create from 'zustand'
+import {create} from 'zustand'
 
 import { useDataStore, useEditorStore } from '@mexit/core'
 import { useLinks } from '@mexit/shared'
@@ -15,7 +15,7 @@ interface ErrorState {
   setErrorState: (curNode: string, alreadyErrored: boolean) => void
 }
 
-export const useEditorErrorStore = create<ErrorState>((set, get) => ({
+export const useEditorErrorStore = create<ErrorState>()((set, get) => ({
   prevNode: '',
   alreadyErrored: false,
   setPrevNode: (prevNode: string) => set({ prevNode }),

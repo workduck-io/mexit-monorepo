@@ -1,5 +1,3 @@
-import { State } from 'zustand'
-
 export interface LinkCapture {
   short: string
   long: string
@@ -8,7 +6,7 @@ export interface LinkCapture {
   shortenedURL: string
 }
 
-export interface LinkCaptureStore extends State {
+export interface LinkCaptureStore {
   linkCaptures: LinkCapture[]
   setLinkCaptures: (l: LinkCapture[]) => void
   addLinkCapture: (l: LinkCapture) => void

@@ -1,16 +1,21 @@
-import create from 'zustand'
-import createContext from 'zustand/context'
+import { createContext, useContext } from 'react'
+
+import { createStore, useStore } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
-import { Filter, Filters, GlobalFilterJoin, mog, SuperBlocks, View, ViewType } from '@mexit/core'
+import { Filter, Filters, GlobalFilterJoin, mog,SuperBlocks, View, ViewType } from '@mexit/core'
 import { SearchEntityType } from '@mexit/shared'
 
-import { FilterStore } from '../useFilters'
+const MyContext = createContext(undefined)
 
-export const { Provider: ViewFilterProvider, useStore: useViewFilterStore } = createContext<FilterStore>()
+export const ViewFilterProvider = ({ children }) => (
+  <MyContext.Provider value={viewFilterStore}>{children}</MyContext.Provider>
+)
 
-export const createViewFilterStore = () =>
-  create<FilterStore>(
+export const useViewFilterStore = (selector) => useStore(useContext(MyContext), selector) as any
+
+export const viewFilterStore = () =>
+  createStore()(
     devtools(
       (set) => ({
         filters: [],

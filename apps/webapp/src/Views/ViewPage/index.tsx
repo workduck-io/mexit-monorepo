@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 
 import { ViewContainer } from '../../Components/Views'
-import { createViewFilterStore, ViewFilterProvider } from '../../Hooks/todo/useTodoFilters'
+import { ViewFilterProvider, viewFilterStore } from '../../Hooks/todo/useTodoFilters'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
 
@@ -21,7 +21,7 @@ const ViewPage = () => {
   }, [])
 
   return (
-    <ViewFilterProvider createStore={createViewFilterStore}>
+    <ViewFilterProvider createStore={viewFilterStore}>
       <ViewContainer viewId={viewId} />
     </ViewFilterProvider>
   )

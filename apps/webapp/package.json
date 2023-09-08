@@ -87,8 +87,7 @@
     "slate-hyperscript": "^0.77.0",
     "slate-react": "^0.79.0",
     "styled-components": "^5.3.3",
-    "use-debounce": "^7.0.1",
-    "zustand": "^3.7.2"
+    "use-debounce": "^7.0.1"
   },
   "devDependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import create from 'zustand'
+import { create } from 'zustand'
 
 import { getContent, HighlightAnalysis, TodoType, useBufferStore, useEditorStore, useTodoStore } from '@mexit/core'
 
@@ -29,7 +29,7 @@ interface AnalysisStore {
   setAnalysis: (analysis: NodeAnalysis) => void
 }
 
-export const useAnalysisStore = create<AnalysisStore>((set, get) => ({
+export const useAnalysisStore = create<AnalysisStore>()((set, get) => ({
   analysis: {
     nodeid: undefined,
     tags: [],

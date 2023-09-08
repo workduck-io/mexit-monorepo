@@ -12,7 +12,7 @@ import { FeatureFlags, NodeEditorContent, useContentStore } from '@mexit/core'
 import { FeatureFlag } from '@mexit/shared'
 
 import { splitToSlides } from '../../Editor/presenterUtils'
-import { createViewFilterStore, ViewFilterProvider } from '../../Hooks/todo/useTodoFilters'
+import { ViewFilterProvider, viewFilterStore } from '../../Hooks/todo/useTodoFilters'
 import Editor from '../Editor/Editor'
 
 import { PresenterContainer } from './styled'
@@ -79,7 +79,7 @@ const Presenter = () => {
               <section key={idx}>
                 {slideContent?.map((sectionContent, idxN) => (
                   <section key={`${idx}_${idxN}`}>
-                    <ViewFilterProvider createStore={createViewFilterStore}>
+                    <ViewFilterProvider createStore={viewFilterStore}>
                       <Editor
                         // includeBlockInfo={true}
                         content={sectionContent}

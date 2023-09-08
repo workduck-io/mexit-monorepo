@@ -22,6 +22,8 @@ import {
 import { useBroadcastAPI } from './useBroadcastAPI'
 
 export const useInitLoader = () => {
+  console.log('DATA Hydrated')
+
   const isAuthenticated = useAuthStore((store) => store.authenticated)
   const iframeAdded = useInitStore((store) => store.iframeAdded)
   //   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
@@ -57,6 +59,15 @@ export const useInitLoader = () => {
   }
 
   useEffect(() => {
+    console.log({
+      isAuthenticated,
+      snippetHydrated,
+      dataStoreHydrated,
+      contentStoreHydrated,
+      linksStoreHydrated,
+      highlightStoreHydrated,
+      iframeAdded
+    })
     if (
       isAuthenticated &&
       snippetHydrated &&

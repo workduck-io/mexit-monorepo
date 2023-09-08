@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import Modal from 'react-modal'
 
-import create from 'zustand'
+import {create} from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
@@ -81,7 +81,7 @@ const getInitialState = () => ({
   }
 })
 
-export const useTaskViewModalStore = create<TaskViewModalState>((set) => {
+export const useTaskViewModalStore = create<TaskViewModalState>()((set) => {
   return {
     ...getInitialState(),
     openModal: (args) => set({ ...args, open: true }),

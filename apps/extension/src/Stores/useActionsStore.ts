@@ -1,16 +1,16 @@
-import create, { State } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 import { initActions, MexitAction } from '@mexit/core'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
-interface ActionsStore extends State {
+interface ActionsStore {
   actions: MexitAction[]
   addAction: (action: MexitAction) => void
 }
 
-export const useActionsStore = create<ActionsStore>(
+export const useActionsStore = create<ActionsStore>()(
   persist(
     (set, get) => ({
       actions: initActions,
@@ -20,6 +20,6 @@ export const useActionsStore = create<ActionsStore>(
         })
       }
     }),
-    { name: 'mexit-actions', getStorage: () => asyncLocalStorage }
+    { name: 'mexit-actions', storage: createJSONStorage(() => asyncLocalStorage) }
   )
 )

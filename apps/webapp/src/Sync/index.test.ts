@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 
 import { BroadcastSyncedChannel } from '@mexit/core'
 
@@ -10,7 +10,7 @@ export const testStoreSync = () => {
     setUpdates: (val: string) => void
   }
 
-  const useExtensionStore = create<ExtensionStore>((set, get) => ({
+  const useExtensionStore = create<ExtensionStore>()((set, get) => ({
     updates: "Hey I'm Iframe Store",
     setUpdates: (val) => set({ updates: val })
   }))

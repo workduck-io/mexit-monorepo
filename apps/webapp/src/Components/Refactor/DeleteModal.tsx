@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom'
 import archiveLine from '@iconify/icons-ri/archive-line'
 import { Icon } from '@iconify/react'
 import { useTheme } from 'styled-components'
-import create from 'zustand'
+import {create} from 'zustand'
 
 import { Button, DisplayShortcut, PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
@@ -34,7 +34,7 @@ interface DeleteStoreState {
   setDelAndRefactored: (del: RefactorPath, mR: string[]) => void
 }
 
-export const useDeleteStore = create<DeleteStoreState>((set) => ({
+export const useDeleteStore = create<DeleteStoreState>()((set) => ({
   open: false,
   mockRefactored: [],
   del: undefined,

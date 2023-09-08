@@ -1,5 +1,3 @@
-import { State } from 'zustand'
-
 import { MIcon } from './Store'
 
 export interface LoginFormData {
@@ -80,7 +78,7 @@ export enum AppInitStatus {
   SWITCH
 }
 
-export interface AuthStoreState extends State {
+export interface AuthStoreState {
   isForgottenPassword: boolean
   authenticated: boolean
   registered: boolean

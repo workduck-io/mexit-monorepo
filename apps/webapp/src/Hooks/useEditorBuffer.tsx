@@ -1,4 +1,4 @@
-import create from 'zustand'
+import {create} from 'zustand'
 
 import { getContent, mog, NodeEditorContent, useBufferStore, useSnippetStore } from '@mexit/core'
 import { useNodes } from '@mexit/shared'
@@ -82,7 +82,7 @@ interface SnippetBufferStore {
   clear: () => void
 }
 
-export const useSnippetBufferStore = create<SnippetBufferStore>((set, get) => ({
+export const useSnippetBufferStore = create<SnippetBufferStore>()((set, get) => ({
   buffer: {},
   add: (nodeid, val) => {
     const prev = get().buffer[nodeid]

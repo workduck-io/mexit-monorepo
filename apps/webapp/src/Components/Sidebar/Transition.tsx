@@ -18,7 +18,7 @@ export const useSidebarTransition = () => {
   const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
 
   const sidebarStyle = useMemo(() => {
-    const showSidebar = sidebar.show && sidebar.expanded
+    const showSidebar = sidebar?.show && sidebar.expanded
     const firstColumnWidth = `${showSidebar ? '276px' : '0px'}`
     if (!overlaySidebar) {
       const style = {
@@ -36,7 +36,7 @@ export const useSidebarTransition = () => {
   const springProps = useSpring(sidebarStyle)
 
   const rhSidebarStyle = useMemo(() => {
-    const showRHSidebar = rhSidebar.show && rhSidebar.expanded
+    const showRHSidebar = rhSidebar?.show && rhSidebar.expanded
     const visibleEndColumnWidth = '400px'
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
     if (!overlaySidebar) {
@@ -54,8 +54,8 @@ export const useSidebarTransition = () => {
   const rhSidebarSpringProps = useSpring(rhSidebarStyle)
 
   const { style: gridStyle, endColumnWidth } = useMemo(() => {
-    const showSidebar = sidebar.show && sidebar.expanded
-    const showRHSidebar = rhSidebar.show && rhSidebar.expanded
+    const showSidebar = sidebar?.show && sidebar.expanded
+    const showRHSidebar = rhSidebar?.show && rhSidebar.expanded
     const firstColumnWidth = `${showSidebar ? sidebarExpandedWidth : sidebarCollapsedWidth}`
     const visibleEndColumnWidth = '400px'
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
@@ -75,14 +75,14 @@ export const useSidebarTransition = () => {
     }
   }, [sidebar, rhSidebar, overlaySidebar, theme])
 
-  const gridSpringProps = useSpring({ to: gridStyle, immediate: !sidebar.show && !rhSidebar.show })
+  const gridSpringProps = useSpring({ to: gridStyle, immediate: !sidebar?.show && !rhSidebar?.show })
 
   const switchWrapperStyle = useMemo(() => {
     const style = {
       width: `calc(100% - ${sidebarExpandedWidth} - ${theme.additional.hasBlocks ? '3rem' : '0px'})`
     }
 
-    if (!sidebar.expanded || !sidebar.show) {
+    if (!sidebar?.expanded || !sidebar?.show) {
       style.width = `calc(100% - ${sidebarCollapsedWidth} - ${theme.additional.hasBlocks ? '3rem' : '0px'})`
     }
     return style

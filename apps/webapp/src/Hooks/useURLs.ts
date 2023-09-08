@@ -1,4 +1,4 @@
-import create from 'zustand'
+import {create} from 'zustand'
 
 import {
   API,
@@ -124,7 +124,7 @@ export const useLinkURLs = () => {
   }
 }
 
-export const useURLsFilterStore = create<FilterStore>((set) => ({
+export const useURLsFilterStore = create<FilterStore>()((set) => ({
   currentFilters: [],
   setCurrentFilters: (filters: Filter[]) => set({ currentFilters: filters }),
   globalJoin: 'all',

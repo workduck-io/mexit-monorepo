@@ -1,7 +1,7 @@
 /* Dwindle Internal Store for Auth */
 
 import { CognitoUser, ICognitoUserPoolData } from 'amazon-cognito-identity-js'
-import create from 'zustand'
+import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
@@ -32,7 +32,7 @@ export interface InternalAuthStoreState {
   setAllStore: (data: any) => void
 }
 
-const useInternalAuthStore = create<InternalAuthStoreState>(
+const useInternalAuthStore = create<InternalAuthStoreState>()(
   devtools(
     persist(
       (set, get) => ({
