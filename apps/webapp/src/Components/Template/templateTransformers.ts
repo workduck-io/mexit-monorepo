@@ -1,4 +1,4 @@
-import { Edge, MarkerType, Node, Position } from 'react-flow-renderer'
+import { Edge, MarkerType, Node, Position } from '@workduck-io/react-flow'
 
 export const transformTemplateToNodes = (template): Node[] => {
   return template.content.map((block, i) => {

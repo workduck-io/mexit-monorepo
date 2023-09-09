@@ -7,14 +7,14 @@ import {
   EdgeLabelRenderer,
   EdgeProps,
   getBezierEdgeCenter,
-  getBezierPath,
+  getSmoothStepPath,
   Handle,
   Position,
   useReactFlow,
   useStoreApi
 } from '@workduck-io/react-flow'
 
-import { getMenuItem, useSnippetStore } from '@mexit/core'
+import { getMenuItem, usePropertyValueStore, useSnippetStore } from '@mexit/core'
 import { DefaultMIcons, FlexBetween, IconDisplay, InsertMenu } from '@mexit/shared'
 
 import { useSnippetBuffer } from '../../Hooks/useEditorBuffer'
@@ -78,24 +78,7 @@ export function CEdge({
   style = {},
   markerEnd
 }: EdgeProps) {
-  // const edgePath = getBezierPath({
-  //   sourceX,
-  //   sourceY,
-  //   sourcePosition,
-  //   targetX,
-  //   targetY,
-  //   targetPosition
-  // })
-  // const [labelX, labelY] = getBezierEdgeCenter({
-  //   sourceX,
-  //   sourceY,
-  //   sourcePosition,
-  //   targetX,
-  //   targetY,
-  //   targetPosition
-  // })
-
-  const edgePath = getBezierPath({
+  const edgePath = getSmoothStepPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -117,10 +100,7 @@ export function CEdge({
   const { addOrUpdateValBuffer } = useSnippetBuffer()
   const store = useStoreApi()
 
-  const PropertyValues = {
-    priority: ['low', 'medium', 'high'],
-    status: ['todo', 'pending', 'completed']
-  }
+  const PropertyValues = usePropertyValueStore((store) => store.propertyValues)
 
   const saveFlow = (edges: any) => {
     const snippet = useSnippetStore.getState().editor.snippet
@@ -146,10 +126,15 @@ export function CEdge({
           condition: { ...edge.data.condition, [valueType === 'OLD' ? 'oldValue' : 'newValue']: event }
         }
       }
-
       return edge
     })
+    setEdges(newEdges)
+    saveFlow(newEdges)
+  }
 
+  const onDelete = () => {
+    const { edges } = store.getState()
+    const newEdges = Array.from(edges.values()).filter((e) => e.id !== id)
     setEdges(newEdges)
     saveFlow(newEdges)
   }
@@ -195,6 +180,7 @@ export function CEdge({
                 .filter((item) => item !== data.oldValue)
                 .map((item) => getMenuItem(item))}
             />
+            <IconDisplay onClick={onDelete} icon={DefaultMIcons.DELETE} />
           </FlexBetween>
         </div>
       </EdgeLabelRenderer>

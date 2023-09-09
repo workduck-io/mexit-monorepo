@@ -59,6 +59,7 @@ export enum StoreIdentifier {
   MODAL = 'modal',
   PORTAL = 'portal',
   PUBLICNODES = 'public-nodes',
+  PROPERTYVALUE = 'property-value',
   REFACTOR = 'refactor',
   RENAME = 'rename',
   ROUTE = 'route-store',

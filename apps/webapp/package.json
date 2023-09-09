@@ -43,6 +43,7 @@
     "chrono-node": "^2.3.8",
     "color-scheme": "^1.0.1",
     "compress.js": "^1.2.2",
+    "dagre": "^0.8.5",
     "date-fns": "^2.28.0",
     "dayjs": "^1.10.8",
     "downshift": "^6.1.7",

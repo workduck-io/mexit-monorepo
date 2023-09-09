@@ -3,13 +3,11 @@ import './overview.css'
 
 import { useCallback, useEffect, useMemo } from 'react'
 
-import styled from 'styled-components'
+import dagre from 'dagre'
 
 import ReactFlow, { addEdge, Controls, MiniMap, useEdgesState, useNodesState } from '@workduck-io/react-flow'
 
 import { generateConditionId, useSnippetStore } from '@mexit/core'
-
-import { useSnippetBuffer } from '../../Hooks/useEditorBuffer'
 
 import { CEdge, CNode } from './CustomBlock'
 import { transformTemplateToEdges, transformTemplateToNodes } from './templateTransformers'
@@ -26,24 +24,55 @@ const minimapStyle = {
   height: 120
 }
 
-const EdgeContainer = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-`
+const dagreGraph = new dagre.graphlib.Graph()
+dagreGraph.setDefaultEdgeLabel(() => ({}))
+
+const nodeWidth = 0
+const nodeHeight = 0
+
+const getLayoutedElements = (nodes, edges, direction = 'LR') => {
+  const isHorizontal = direction === 'LR'
+  dagreGraph.setGraph({ rankdir: direction, nodesep: 500, edgesep: 20, ranksep: 500, minlen: 2 })
+
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight })
+  })
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target)
+  })
+
+  dagre.layout(dagreGraph)
+
+  nodes.forEach((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id)
+    node.targetPosition = isHorizontal ? 'left' : 'top'
+    node.sourcePosition = isHorizontal ? 'right' : 'bottom'
+
+    // We are shifting the dagre node position (anchor=center center) to the top left
+    // so it matches the React Flow node anchor point (top left).
+    node.position = {
+      x: nodeWithPosition.x + (Math.random() * 6 - 3) * 25,
+      y: nodeWithPosition.y
+    }
+
+    return node
+  })
+
+  return { initialNodes: nodes, initialEdges: edges }
+}
 
 const onInit = (reactFlowInstance) => console.log('flow loaded:', reactFlowInstance)
 
 const OverviewFlow = () => {
   const snippetId = useSnippetStore((store) => store.editor.snippet?.id)
-  const { addOrUpdateValBuffer } = useSnippetBuffer()
 
   const snippet = useSnippetStore((store) => store.snippets[snippetId])
   const metadata = snippet?.metadata ?? {}
 
-  const initialEdges = useMemo(() => transformTemplateToEdges(snippet, metadata), [snippetId])
-  const initialNodes = useMemo(() => transformTemplateToNodes(snippet), [snippetId])
+  const { initialEdges, initialNodes } = useMemo(() => {
+    return getLayoutedElements(transformTemplateToNodes(snippet), transformTemplateToEdges(snippet, metadata))
+  }, [snippetId])
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
@@ -52,7 +81,6 @@ const OverviewFlow = () => {
     setNodes(initialNodes)
     setEdges(initialEdges)
   }, [snippetId])
-
   const onConnect = useCallback(
     (connection) =>
       setEdges((eds) => {
