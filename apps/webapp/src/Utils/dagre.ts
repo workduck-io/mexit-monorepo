@@ -5,7 +5,7 @@ dagreGraph.setDefaultEdgeLabel(() => ({}))
 
 export const getLayoutedElements = (nodes, edges, direction = 'LR') => {
   const isHorizontal = direction === 'LR'
-  dagreGraph.setGraph({ rankdir: direction, nodesep: 500, edgesep: 20, ranksep: 500 })
+  dagreGraph.setGraph({ rankdir: direction, nodesep: 250, edgesep: 200, ranksep: 500 })
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: 0, height: 0 })
@@ -15,7 +15,7 @@ export const getLayoutedElements = (nodes, edges, direction = 'LR') => {
     dagreGraph.setEdge(edge.source, edge.target)
   })
 
-  dagre.layout(dagreGraph, { minlen: 20 })
+  dagre.layout(dagreGraph)
 
   nodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id)

@@ -26,8 +26,9 @@ export const evaluateDecisionTree = (
     let oldConditionMet = true
     const oldFieldValue = oldData[field]
     const newFieldValue = newData[field]
-    // Evaluate the conditions based on old and new values. Ignore old value if condition not given
-    if (oldValueCondition) oldConditionMet = evaluateCondition(oldFieldValue, oldValueCondition)
+    // Evaluate the conditions based on old and new values. Ignore old value if condition not given or is 'any'
+    if (oldValueCondition || oldValueCondition !== 'any')
+      oldConditionMet = evaluateCondition(oldFieldValue, oldValueCondition)
     const newConditionMet = evaluateCondition(newFieldValue, newValueCondition)
 
     // If both old and new conditions are met, perform the action

@@ -14,6 +14,9 @@ const propertyValueStoreConfig = (set, get) => ({
   setPropertyValues: (propertyValues: PropertyValues) => {
     set({ propertyValues })
   },
+  getPropertyList: () => {
+    return Object.keys(get().propertyValues)
+  },
   addPropertyValue: (property: string, value: string) => {
     set({
       propertyValues: { ...get().propertyValues, [property]: (get().propertyValues[property] ?? []).concat(value) }

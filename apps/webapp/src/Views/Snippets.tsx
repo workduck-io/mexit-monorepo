@@ -219,7 +219,7 @@ const Snippets = () => {
               <IconButton
                 size={16}
                 icon={deleteBin6Line}
-                title="delete"
+                title="Delete"
                 onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()

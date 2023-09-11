@@ -137,7 +137,8 @@ export const DefaultMIcons = {
   PEOPLE: getMIcon('ICON', 'bi:people'),
   NOTIFICATION: getMIcon('ICON', 'bx:notification'),
   CALENDAR: getMIcon('ICON', 'mdi:calendar'),
-  MENU: getMIcon('ICON', 'solar:menu-dots-bold')
+  MENU: getMIcon('ICON', 'solar:menu-dots-bold'),
+  RIGHT_ARROW: getMIcon('ICON', 'solar:arrow-right-outline')
 }
 
 export const ForwardlinkIcon = {

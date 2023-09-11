@@ -9,7 +9,8 @@ import { generateConditionId, useSnippetStore } from '@mexit/core'
 
 import { getLayoutedElements } from '../../Utils/dagre'
 
-import { CEdge, CNode } from './CustomBlock'
+import { CEdge } from './CustomEdge'
+import { CNode } from './CustomNode'
 import { transformTemplateToEdges, transformTemplateToNodes } from './templateTransformers'
 
 const nodeTypes = {
