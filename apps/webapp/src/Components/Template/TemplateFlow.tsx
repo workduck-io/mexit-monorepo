@@ -3,11 +3,11 @@ import './overview.css'
 
 import { useCallback, useEffect, useMemo } from 'react'
 
-import dagre from 'dagre'
-
 import ReactFlow, { addEdge, Controls, MiniMap, useEdgesState, useNodesState } from '@workduck-io/react-flow'
 
 import { generateConditionId, useSnippetStore } from '@mexit/core'
+
+import { getLayoutedElements } from '../../Utils/dagre'
 
 import { CEdge, CNode } from './CustomBlock'
 import { transformTemplateToEdges, transformTemplateToNodes } from './templateTransformers'
@@ -22,44 +22,6 @@ const edgeTypes = {
 
 const minimapStyle = {
   height: 120
-}
-
-const dagreGraph = new dagre.graphlib.Graph()
-dagreGraph.setDefaultEdgeLabel(() => ({}))
-
-const nodeWidth = 0
-const nodeHeight = 0
-
-const getLayoutedElements = (nodes, edges, direction = 'LR') => {
-  const isHorizontal = direction === 'LR'
-  dagreGraph.setGraph({ rankdir: direction, nodesep: 500, edgesep: 20, ranksep: 500, minlen: 2 })
-
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight })
-  })
-
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target)
-  })
-
-  dagre.layout(dagreGraph)
-
-  nodes.forEach((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id)
-    node.targetPosition = isHorizontal ? 'left' : 'top'
-    node.sourcePosition = isHorizontal ? 'right' : 'bottom'
-
-    // We are shifting the dagre node position (anchor=center center) to the top left
-    // so it matches the React Flow node anchor point (top left).
-    node.position = {
-      x: nodeWithPosition.x + (Math.random() * 6 - 3) * 25,
-      y: nodeWithPosition.y
-    }
-
-    return node
-  })
-
-  return { initialNodes: nodes, initialEdges: edges }
 }
 
 const onInit = (reactFlowInstance) => console.log('flow loaded:', reactFlowInstance)

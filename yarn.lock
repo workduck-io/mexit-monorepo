@@ -3124,6 +3124,11 @@
     "@types/d3-transition" "*"
     "@types/d3-zoom" "*"
 
+"@types/dagre@^0.7.49":
+  version "0.7.49"
+  resolved "https://registry.yarnpkg.com/@types/dagre/-/dagre-0.7.49.tgz#b6d3caecf4c1c090606b79f0cfd2df6da539a6c0"
+  integrity sha512-dlqM5cavmHC0FeBlVl1HPKE/12K3TcIsTeBpRwhkS2FYOmuk36ndI7AuGQjPJ/fJQTz8LjeaetSV/+dsJwB6Ow==
+
 "@types/escape-html@^1.0.0":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@types/escape-html/-/escape-html-1.0.2.tgz#072b7b13784fb3cee9c2450c22f36405983f5e3c"

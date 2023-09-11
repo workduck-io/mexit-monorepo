@@ -96,6 +96,7 @@
     "@swc/plugin-styled-components": "^1.5.41",
     "@types/chrome": "^0.0.203",
     "@types/compress.js": "^1.1.1",
+    "@types/dagre": "^0.7.49",
     "@types/flexsearch": "^0.7.2",
     "@types/mixpanel-browser": "^2.36.0",
     "@types/node": "^16.11.19",
