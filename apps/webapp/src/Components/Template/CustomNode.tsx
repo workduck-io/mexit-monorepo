@@ -35,22 +35,28 @@ function CustomNode({ id, data }) {
       <Handle type="target" position={Position.Left} />
       <CustomHeader>
         <FlexBetween>
-          <strong>{data.type}</strong>
+          <strong>
+            <i>{data.type}</i>
+          </strong>
           <strong>{data.title}</strong>
         </FlexBetween>
       </CustomHeader>
       <CustomBody>
-        {Object.keys(data)
-          .filter((item) => propertyKeys.includes(item))
-          .map((k) => {
-            return (
-              <FlowProperty>
-                <strong>{k}</strong>
-                {/* <p>:{JSON.stringify(data[k])}</p> */}
-                <Handle key={id + k} id={k} type="source" position={Position.Right} />
-              </FlowProperty>
-            )
-          })}
+        {Object.keys(data).filter((item) => propertyKeys.includes(item)).length > 0 ? (
+          Object.keys(data)
+            .filter((item) => propertyKeys.includes(item))
+            .map((k) => {
+              return (
+                <FlowProperty>
+                  <strong>{k}</strong>
+                  {/* <p>:{JSON.stringify(data[k])}</p> */}
+                  <Handle key={id + k} id={k} type="source" position={Position.Right} />
+                </FlowProperty>
+              )
+            })
+        ) : (
+          <span>No triggers available</span>
+        )}
       </CustomBody>
     </FlowNode>
   )
